@@ -1,0 +1,251 @@
+<!--{if $app->controller->id neq 'goods'}-->
+<div class="store-info border mb10">
+    <h3 class="border-b"><span>{$store.store_name|escape}</span></h3>
+    <div class="content">
+        <dl class="border-b total_evaluation w-full clearfix">
+            <dt>{$lang.all_evaluation}{$lang.colon}</dt>
+            <dd>
+                <div class="raty">
+                    <span style="width:{$store.dynamicEvaluation.comprehensive.percentage|default:0};"></span>
+                </div>
+                <b>{$store.dynamicEvaluation.comprehensive.value|default:0}</b>
+            </dd>
+        </dl>
+        <div class="rate-info">
+            <p> <strong> {$lang.store_evaluation} </strong> {$lang.compare_insdusty} </p>
+            <ul>
+                <li>
+                    {$lang.goods_evaluation}
+                    <span class="credit">{$store.dynamicEvaluation.goods.value}</span>
+                    <span class="{$store.dynamicEvaluation.goods.compare.name}">
+                        <i></i>
+                        {$lang.{$store.dynamicEvaluation.goods.compare.name}}
+                        <em>
+                            <!--{if $store.dynamicEvaluation.goods.compare.value eq 0}-->----
+                            <!--{else}-->{$store.dynamicEvaluation.goods.compare.value}
+                            <!--{/if}--></em>
+                    </span>
+                </li>
+                <li>
+                    {$lang.service_evaluation}
+                    <span class="credit">{$store.dynamicEvaluation.service.value}</span>
+                    <span class="{$store.dynamicEvaluation.service.compare.name}">
+                        <i></i>
+                        {$lang.{$store.dynamicEvaluation.service.compare.name}}
+                        <em>
+                            <!--{if $store.dynamicEvaluation.service.compare.value eq 0}-->----
+                            <!--{else}-->{$store.dynamicEvaluation.service.compare.value}
+                            <!--{/if}--></em>
+                    </span>
+                </li>
+                <li>
+                    {$lang.shipped_evaluation}
+                    <span class="credit">{$store.dynamicEvaluation.shipped.value}</span>
+                    <span class="{$store.dynamicEvaluation.shipped.compare.name}">
+                        <i></i>
+                        {$lang.{$store.dynamicEvaluation.shipped.compare.name}}
+                        <em>
+                            <!--{if $store.dynamicEvaluation.shipped.compare.value eq 0}-->----
+                            <!--{else}-->{$store.dynamicEvaluation.shipped.compare.value}
+                            <!--{/if}--></em>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <dl class="border-b contact_us dl-c-s clearfix">
+            <dt>{$lang.contact_style}{$lang.colon}</dt>
+            <dd>
+                <a href="javascript:;" class="J_StartLayim" data-toid="{$store.store_id}"><img
+                        src="{$siteUrl}/static/images/myim.png" width="17" height="17" /></a>
+            </dd>
+        </dl>
+        <dl class="dl-c-s w-full clearfix">
+            <dt>卖家名称：</dt>
+            <dd><a style="color: #005EA6;font-family:Georgia, 'Times New Roman', Times, serif;" target="_blank"
+                    href="{url route='my_message/send' to_id=$store.owner.userid}"
+                    title="给他（她）发站内信？">{$store.owner.username|escape}</a></dd>
+        </dl>
+        <dl style="padding-top:2px;" class="dl-c-s w-full clearfix">
+            <dt>{$lang.credit_value}{$lang.colon}</dt>
+            <dd>
+                <!--{if $store.credit_value ge 0}--><img src="{$store.credit_image|url_format}" alt=""
+                    align="absmiddle" />
+                <!--{/if}-->
+            </dd>
+        </dl>
+        <!--{if $store.certifications}-->
+        <dl style="padding-top:1px;" class="dl-c-s w-full clearfix">
+            <dt style="margin-top:2px;">{$lang.certification}{$lang.colon}</dt>
+            <dd>
+                <!--{foreach from=$store.certifications item=cert}-->
+                <!--{if $cert eq "autonym"}-->
+                <a href="{url route='article/system' code=cert_autonym}" target="_blank"
+                    title="{$lang.cert_autonym}"><img src="{res file='images/cert_autonym.gif' folder='store'}" /></a>
+                <!--{elseif $cert eq "material"}-->
+                <a href="{url route='article/system' code=cert_material}" target="_blank"
+                    title="{$lang.cert_material}"><img src="{res file='images/cert_material.gif' folder='store'}" /></a>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </dd>
+        </dl>
+        <!--{/if}-->
+        <dl style="padding-top:1px;" class="dl-c-s w-full clearfix">
+            <dt>{$lang.store_add_time}{$lang.colon}</dt>
+            <dd>{$store.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</dd>
+        </dl>
+        <!--{if $store.tel}-->
+        <dl style="padding-top:2px;" class="dl-c-s w-full clearfix">
+            <dt>{$lang.tel}{$lang.colon}</dt>
+            <dd>{$store.tel|escape}</dd>
+        </dl>
+        <!--{/if}-->
+        <!--{if $store.address}-->
+        <dl style="padding-top:2px;padding-bottom:10px;" class="dl-c-s border-b w-full clearfix">
+            <dt>{$lang.address}{$lang.colon}</dt>
+            <dd>{$store.address|escape}</dd>
+        </dl>
+        <!--{/if}-->
+        <div class="go2store">
+            <a href="{url route='store/index' id=$store.store_id}">{$lang.go2store}</a>
+            <a href="javascript:collect_store({$store.store_id})">{$lang.collect_the_store}</a>
+        </div>
+    </div>
+</div>
+<!--{/if}-->
+
+<div class="store-search mb10 border">
+    <h3 class="border-b"><span>{$lang.search}</span></h3>
+    <div class="content">
+        <form method="get" action="{url route='store/search'}">
+            <!--{if !$app->urlManager->enablePrettyUrl}-->
+            <input type="hidden" name="r" name="store/search" />
+            <!--{/if}-->
+            <input type="hidden" name="id" value="{$store.store_id}" />
+            <input class="text border" type="text" name="keyword" placeholder="输入搜索关键字" />
+            <input class="btn" type="submit" value="{$lang.search}"
+                style="padding:0 5px; background:#06F; border:0; color:#fff; cursor:pointer" />
+        </form>
+    </div>
+</div>
+
+<!--{if !in_array($app->controller->action->id, array('credit', 'article'))}-->
+<!--{if $store.gcategories}-->
+<div class="gcategroy mb10 border">
+    <h3 class="border-b title"><span>{$lang.gcategory}</span></h3>
+    <div class="content">
+        <div class="sort-by">
+            <p><a class="icon" href="{url route='store/search' id=$store.store_id}">查看全部商品</a></p>
+            <div class="order_type"><a
+                    href="{url route='store/search' id=$store.store_id orderby='sales|desc'}">按销量</a><a
+                    href="{url route='store/search' id=$store.store_id orderby='add_time|desc'}">按新品</a><a
+                    href="{url route='store/search' id=$store.store_id orderby='price|asc'}">按价格</a><a
+                    href="{url route='store/search' id=$store.store_id orderby='views|desc'}"
+                    style="margin-right:0px;">按人气</a></div>
+        </div>
+        <ul class="list">
+            <!--{foreach from=$store.gcategories item=item}-->
+            <li class="each">
+                <h3><a href="{url route='store/search' id=$store.store_id cate_id=$item.id}">{$item.value|escape}</a><i
+                        class="close"></i></h3>
+                <ul class="sub_gcate">
+                    <!--{foreach from=$item.children item=child}-->
+                    <li><a
+                            href="{url route='store/search' id=$store.store_id cate_id=$child.id}">{$child.value|escape}</a>
+                    </li>
+                    <!--{/foreach}-->
+                </ul>
+            </li>
+            <!--{/foreach}-->
+        </ul>
+    </div>
+</div>
+<!--{/if}-->
+<!--{/if}-->
+
+<!--{if $store.hot_saleslist || $store.collect_goodslist}-->
+<div class="hotsale border mb10 J_StoreLeftHotsale">
+    <h3 class="border-b"><span>{$lang.rank}</span></h3>
+    <div class="content">
+        <ul class="rank-nav">
+            <li class="curr"><a><span>热门销售排行</span></a></li>
+            <li><a><span>热门收藏排行</span></a></li>
+        </ul>
+        <ul class="rank-c clearfix">
+            <!--{foreach from=$store.hot_saleslist item=item name=fe_item}-->
+            <li {if $smarty.foreach.fe_item.last}style="border:0;" {/if} class="clearfix">
+                <div class="pic border"><a target="_blank" href="{url route='goods/index' id=$item.goods_id}">
+                        <img width="40" height="40" class="lazyload"
+                            initial-url="{$item.default_image|default:$app->params['default_goods_image']|url_format}"
+                            title="{$item.goods_name|escape}" /></a>
+                </div>
+                <div class="desc">
+                    <a target="_blank" href="{url route='goods/index' id=$item.goods_id}">{$item.goods_name|escape}</a>
+                </div>
+                <div class="price"><strong>{$item.price}元</strong></div>
+                <div class="sale">已售出 <strong>{$item.sales|default:0}</strong> 件</div>
+            </li>
+            <!--{/foreach}-->
+        </ul>
+        <ul class="rank-c clearfix" style="display:none;">
+            <!--{foreach from=$store.collect_goodslist item=item name=fe_item}-->
+            <li {if $smarty.foreach.fe_item.last}style="border:0;" {/if} class="clearfix">
+                <div class="pic border"><a target="_blank" href="{url route='goods/index' id=$item.goods_id}">
+                        <img width="40" height="40" class="lazyload"
+                            initial-url="{$item.default_image|default:$app->params['default_goods_image']|url_format}"
+                            title="{$item.goods_name|escape}" /></a>
+                </div>
+                <div class="desc"><a target="_blank"
+                        href="{url route='goods/index' id=$item.goods_id}">{$item.goods_name|escape}</a></div>
+                <div class="price"><strong>{$item.price}元</strong></div>
+                <div class="collecter">收藏人气 <strong>{$item.collects|default:0}</strong></div>
+            </li>
+            <!--{/foreach}-->
+        </ul>
+    </div>
+</div>
+<!--{/if}-->
+
+<!-- {if $goods.historys && $app->controller->id eq 'goods'} -->
+<div class="goods-history mb10 border">
+    <h3 class="border-b"><span>{$lang.goods_history}</span></h3>
+    <div class="content">
+        <ul class="clearfix">
+            <!--{foreach from=$goods.historys item=item}-->
+            <li><a href="{url route='goods/index' id=$item.goods_id}"><img src="{$item.default_image|url_format}"
+                        alt="{$item.goods_name|truncate:20|escape}" title="{$item.goods_name|escape}" /></a></li>
+            <!--{/foreach}-->
+        </ul>
+    </div>
+</div>
+<!-- {/if} -->
+
+<!--{if !in_array($app->controller->action->id, array('credit', 'article'))}-->
+<script type="text/javascript">
+    $(function () {
+        $('.gcategroy .content .list li h3 i').click(function () {
+            var c = $(this).attr('class');
+            if (c == 'expand') {
+                $(this).attr('class', 'close');
+            } else {
+                $(this).attr('class', 'expand');
+            }
+            $(this).parent('h3').parent('li').children('.sub_gcate').toggle();
+        })
+        $('.current').parent('.sub_gcate').show();
+    });
+</script>
+<!--{/if}-->
+<!--{if $store.hot_saleslist || $store.collect_goodslist}-->
+<script type="text/javascript">
+    $(function () {
+        $('.J_StoreLeftHotsale .rank-nav li').hover(function () {
+            var index = $(this).parent().children("li").index(this);
+            $(this).parent().find('li').removeClass('curr');
+            $(this).parent().find('li:eq(' + index + ')').addClass('curr');
+
+            $('.J_StoreLeftHotsale .rank-c').hide();
+            $('.J_StoreLeftHotsale').find('.rank-c:eq(' + index + ')').show();
+        });
+    });
+</script>
+<!--{/if}-->

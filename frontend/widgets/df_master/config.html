@@ -1,0 +1,102 @@
+<script type="text/javascript">
+var _d = DialogManager.get('config_dialog');
+_d.setWidth(440);
+_d.setPosition('center');
+</script>
+<div class="field_item">
+ <label>标题名称：</label>
+    <p><input type="text" name="model_name" value="{$options.model_name}" /></p>
+</div>
+
+<div class="field_item">
+    <label>广告图片(1)(<span>图片尺寸：100*90，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad1_image_file" /><input type="hidden" name="ad1_image_url" value="{$options.ad1_image_url}" /></p>
+    <!-- {if $options.ad1_image_url} --><p><img src="{$options.ad1_image_url|url_format}" height="20" /></p><!-- {/if} -->
+    <label>广告图片(1)链接地址:</label>
+    <p><input type="text" name="ad1_link_url" value="{$options.ad1_link_url}" /></p>
+    <label>广告图片(1)标题（每行用竖线隔开）</label>
+    <p><input type="text" name="model1_title" value="{$options.model1_title}" /></p>
+    <label>模块(1)背景颜色</label>
+    <p>
+    	<select name="model_style1">
+        	<option {if $options.model_style1 eq 'qing'} selected="selected"{/if} value="qing">背景颜色（青色）</option>
+            <option {if $options.model_style1 eq 'danzi'} selected="selected"{/if} value="danzi">背景颜色（淡紫色）</option>
+            <option {if $options.model_style1 eq 'danh'} selected="selected"{/if} value="danh">背景颜色（淡红色）</option>
+            <option {if $options.model_style1 eq 'lan'} selected="selected"{/if} value="lan">背景颜色（蓝色）</option>
+            <option {if $options.model_style1 eq 'tao'} selected="selected"{/if} value="tao">背景颜色（桃色）</option>
+        </select>
+    </p>        
+    
+    <label>广告图片(2)(<span>图片尺寸：100*90，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad2_image_file" /><input type="hidden" name="ad2_image_url" value="{$options.ad2_image_url}" /></p>
+    <!-- {if $options.ad2_image_url} --><p><img src="{$options.ad2_image_url|url_format}" height="20" /></p><!-- {/if} -->
+    <label>广告图片(2)链接地址:</label>
+    <p><input type="text" name="ad2_link_url" value="{$options.ad2_link_url}" /></p>
+    <label>广告图片(2)标题（每行用竖线隔开）</label>
+    <p><input type="text" name="model2_title" value="{$options.model2_title}" /></p>
+    <label>模块(2)背景颜色</label>
+    <p>
+    	<select name="model_style2">
+        	<option {if $options.model_style2 eq 'qing'} selected="selected"{/if} value="qing">背景颜色（青色）</option>
+            <option {if $options.model_style2 eq 'danzi'} selected="selected"{/if} value="danzi">背景颜色（淡紫色）</option>
+            <option {if $options.model_style2 eq 'danh'} selected="selected"{/if} value="danh">背景颜色（淡红色）</option>
+            <option {if $options.model_style2 eq 'lan'} selected="selected"{/if} value="lan">背景颜色（蓝色）</option>
+            <option {if $options.model_style2 eq 'tao'} selected="selected"{/if} value="tao">背景颜色（桃色）</option>
+        </select>
+    </p>    
+    
+    <label>广告图片(3)(<span>图片尺寸：100*90，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad3_image_file" /><input type="hidden" name="ad3_image_url" value="{$options.ad3_image_url}" /></p>
+    <!-- {if $options.ad3_image_url} --><p><img src="{$options.ad3_image_url|url_format}" height="20" /></p><!-- {/if} -->
+    <label>广告图片(3)链接地址:</label>
+    <p><input type="text" name="ad3_link_url" value="{$options.ad3_link_url}" /></p>
+    <label>广告图片(3)标题（每行用竖线隔开）</label>
+    <p><input type="text" name="model3_title" value="{$options.model3_title}" /></p>
+    <label>模块(3)背景颜色</label>
+    <p>
+    	<select name="model_style3">
+        	<option {if $options.model_style3 eq 'qing'} selected="selected"{/if} value="qing">背景颜色（青色）</option>
+            <option {if $options.model_style3 eq 'danzi'} selected="selected"{/if} value="danzi">背景颜色（淡紫色）</option>
+            <option {if $options.model_style3 eq 'danh'} selected="selected"{/if} value="danh">背景颜色（淡红色）</option>
+            <option {if $options.model_style3 eq 'lan'} selected="selected"{/if} value="lan">背景颜色（蓝色）</option>
+            <option {if $options.model_style3 eq 'tao'} selected="selected"{/if} value="tao">背景颜色（桃色）</option>
+        </select>
+    </p>
+    
+    <label>广告图片(4)(<span>图片尺寸：100*90，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad4_image_file" /><input type="hidden" name="ad4_image_url" value="{$options.ad4_image_url}" /></p>
+    <!-- {if $options.ad4_image_url} --><p><img src="{$options.ad4_image_url|url_format}" height="20" /></p><!-- {/if} -->
+    <label>广告图片(4)链接地址:</label>
+    <p><input type="text" name="ad4_link_url" value="{$options.ad4_link_url}" /></p>
+    <label>广告图片(4)标题（每行用竖线隔开）</label>
+    <p><input type="text" name="model4_title" value="{$options.model4_title}" /></p>
+    <label>模块(4)背景颜色</label>
+    <p>
+    	<select name="model_style4">
+        	<option {if $options.model_style4 eq 'qing'} selected="selected"{/if} value="qing">背景颜色（青色）</option>
+            <option {if $options.model_style4 eq 'danzi'} selected="selected"{/if} value="danzi">背景颜色（淡紫色）</option>
+            <option {if $options.model_style4 eq 'danh'} selected="selected"{/if} value="danh">背景颜色（淡红色）</option>
+            <option {if $options.model_style4 eq 'lan'} selected="selected"{/if} value="lan">背景颜色（蓝色）</option>
+            <option {if $options.model_style4 eq 'tao'} selected="selected"{/if} value="tao">背景颜色（桃色）</option>
+        </select>
+    </p>
+    
+    <label>广告图片(5)(<span>图片尺寸：100*90，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad5_image_file" /><input type="hidden" name="ad5_image_url" value="{$options.ad5_image_url}" /></p>
+    <!-- {if $options.ad5_image_url} --><p><img src="{$options.ad5_image_url|url_format}" height="20" /></p><!-- {/if} -->
+    <label>广告图片(5)链接地址:</label>
+    <p><input type="text" name="ad5_link_url" value="{$options.ad5_link_url}" /></p>
+    <label>广告图片(5)标题（每行用竖线隔开）</label>
+    <p><input type="text" name="model5_title" value="{$options.model5_title}" /></p>
+    <label>模块(5)背景颜色</label>
+    <p>
+    	<select name="model_style5">
+        	<option {if $options.model_style5 eq 'qing'} selected="selected"{/if} value="qing">背景颜色（青色）</option>
+            <option {if $options.model_style5 eq 'danzi'} selected="selected"{/if} value="danzi">背景颜色（淡紫色）</option>
+            <option {if $options.model_style5 eq 'danh'} selected="selected"{/if} value="danh">背景颜色（淡红色）</option>
+            <option {if $options.model_style5 eq 'lan'} selected="selected"{/if} value="lan">背景颜色（蓝色）</option>
+            <option {if $options.model_style5 eq 'tao'} selected="selected"{/if} value="tao">背景颜色（桃色）</option>
+        </select>
+    </p>   
+</div>
+

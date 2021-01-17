@@ -1,0 +1,34 @@
+{include file='user.header.html'} 
+<div id="main" class="clearfix"> {include file="user.menu.html"}
+  <div id="right"> {include file="user.curlocal.html"}
+    <div class="wrapful"> {include file="user.submenu.html"}
+      <div class="wrap">
+        <div class="public">
+          <div class="information_index">
+            <div class="templet">
+              <div class="nonce"><img src="{$siteUrl}/templates/store/{$curr_template_name}/styles/{$curr_style_name}/preview.jpg" width="160" height="110" /></div>
+              <div class="txt">
+                <p>{$lang.store_name}{$lang.colon}<span>{$store.store_name}</span><a href="{url route='store/index' id=$store.store_id}" target="_blank" class="btn">{$lang.store_index}</a></p>
+                <p>{$lang.curr_template_name}{$lang.colon}<b>{$curr_template_name}</b></p>
+                <p>{$lang.curr_style_name}{$lang.colon}<b>{$curr_style_name}</b></p> 
+              </div>
+            </div>
+            <h5 class="motif_title">{$lang.theme_list}</h5>
+            <div class="motif">
+              <ul>
+                <!--{foreach from=$themes item=theme}-->
+                <li>
+                  <p><a href="javascript:;"><img src="{$siteUrl}/templates/store/{$theme.template_name|escape}/styles/{$theme.style_name|escape}/preview.jpg"  width="200" height="140" ></a></p>
+                  <h2>{$lang.template_name}{$lang.colon}{$theme.template_name|escape}<br />
+                    {$lang.style_name}{$lang.colon}{$theme.style_name|escape}</h2>
+                  <span> <a href="javascript:;" class="employ J_AjaxRequest" uri="{url route='my_theme/used' template=$theme.template_name style=$theme.style_name}">{$lang.use}</a> </span> </li>
+                <!--{/foreach}-->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="user.footer.html"}

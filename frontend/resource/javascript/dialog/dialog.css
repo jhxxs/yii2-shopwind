@@ -1,0 +1,34 @@
+@charset "utf-8";
+
+.dialog_wrapper{ background-color:#fff; padding:0; box-shadow:0 4px 12px rgba(0, 0, 0, 0.15)}
+.dialog_wrapper .dialog_head { height: 40px; overflow: hidden;}
+.dialog_wrapper .dialog_title{ display:block; float:none;padding:0; line-height:40px; height:40px; font-size:14px; background:#f1f1f1;padding-left:10px;color:#3e3e3e; }
+.dialog_wrapper .dialog_content input[type="text"], 
+.dialog_wrapper .dialog_content input[type="password"], 
+.dialog_wrapper .dialog_content textarea {text-indent: 5px; border: 1px #7F9DB9 solid; height:28px; line-height:28px;padding:0;margin:0; background:none}
+.dialog_wrapper .dialog_content textarea{ height: 44px; width: 220px;}
+.dialog_wrapper .dialog_content select{border: 1px #7F9DB9 solid; height:30px;padding:0;}
+.dialog_wrapper .dialog_content .submit .btn,
+.dialog_wrapper .dialog_content .submit .btn1,
+.dialog_wrapper .dialog_content .submit .btn2{background:#0070CC; border:1px #0070CC solid; width:80px; height:32px; line-height:32px; text-align:center;font-size:14px;color:#fff; cursor:pointer;border:0;}
+.dialog_wrapper .dialog_content .submit .btn:hover,
+.dialog_wrapper .dialog_content .submit .btn1:hover{ background: #238dd9}
+.dialog_wrapper .dialog_content .submit .btn2{border:1px #ddd solid; background: #fafafa;color:#333;}
+.dialog_wrapper .dialog_content .submit .btn2:hover{border:1px #0070CC solid;background: #f1f1f1;}
+.dialog_wrapper .dialog_content .submit {border-top: 1px #E6EBEF solid;padding: 15px 0 15px 20px;}
+.dialog_wrapper .dialog_content .submit .btn, 
+.dialog_wrapper .dialog_content .submit .btn1,
+.dialog_wrapper .dialog_content .submit .btn2{float: right; margin-right: 15px;}
+.dialog_wrapper .dialog_content .submit::after{ content: '\20'; display: block; height: 0; overflow: hidden; clear: both;}
+.dialog_wrapper .dialog_close_button{width:25px; height:14px;top:13px; right:5px; background:url(images/dialog_close_button_blue.gif) left top no-repeat}
+.dialog_wrapper .dialog_close_button:hover { background-position: left -13.75px;}
+.dialog_wrapper .dialog_loading_text{ text-align: center; padding: 30px;font-size:16px;}
+
+
+
+
+
+
+
+
+

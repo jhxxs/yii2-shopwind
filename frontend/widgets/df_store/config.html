@@ -1,0 +1,61 @@
+<script type="text/javascript">
+var _d = DialogManager.get('config_dialog');
+_d.setWidth(440);
+_d.setPosition('center');
+</script>
+
+<div class="field_item">
+    <label>模块标题</label>
+    <p><input type="text" name="model_name" value="{$options.model_name}" /></p>  
+</div>
+<div class="field_item">
+    <label>店铺1广告图(<span>240*240px，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad1_image_file" /><input type="hidden" name="ad1_image_url" value="{$options.ad1_image_url}" /> <!-- {if $options.ad1_image_url} --><img src="{$options.ad1_image_url|url_format}" height="20" /><!-- {/if} --></p>
+    <label>店铺ID</label>
+    <p><input type="text" name="ad1_storeId" value="{$options.ad1_storeId}" /></p>
+    <label>店铺小标题</label>
+    <p><input type="text" name="ad1_title" value="{$options.ad1_title}" /></p>
+</div>
+<div class="field_item">
+    <label>店铺2广告图(<span>240*240，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad2_image_file" /><input type="hidden" name="ad2_image_url" value="{$options.ad2_image_url}" /> <!-- {if $options.ad2_image_url} --><img src="{$options.ad2_image_url|url_format}" height="20" /><!-- {/if} --></p>
+    <label>店铺ID</label>
+    <p><input type="text" name="ad2_storeId" value="{$options.ad2_storeId}" /></p>
+    <label>店铺小标题</label>
+    <p><input type="text" name="ad2_title" value="{$options.ad2_title}" /></p>
+</div>
+<div class="field_item">   
+    <label>店铺3广告图(<span>240*240，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad3_image_file" /><input type="hidden" name="ad3_image_url" value="{$options.ad3_image_url}" /> <!-- {if $options.ad3_image_url} --><img src="{$options.ad3_image_url|url_format}" height="20" /><!-- {/if} --></p>
+    <label>店铺ID</label>
+    <p><input type="text" name="ad3_storeId" value="{$options.ad3_storeId}" /></p>
+    <label>店铺小标题</label>
+    <p><input type="text" name="ad3_title" value="{$options.ad3_title}" /></p>
+</div>
+<div class="field_item"> 
+    <label>店铺4广告图(<span>240*240，支持 gif|jpg|jpeg|png 格式</span>)</label>
+    <p><input type="file" name="ad4_image_file" /><input type="hidden" name="ad4_image_url" value="{$options.ad4_image_url}" /> <!-- {if $options.ad4_image_url} --><img src="{$options.ad4_image_url|url_format}" height="20" /><!-- {/if} --></p>
+    <label>店铺ID</label>
+    <p><input type="text" name="ad4_storeId" value="{$options.ad4_storeId}" /></p>
+    <label>店铺小标题</label>
+    <p><input type="text" name="ad4_title" value="{$options.ad4_title}" /></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

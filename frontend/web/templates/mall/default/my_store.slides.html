@@ -1,0 +1,64 @@
+{include file="user.header.html"} 
+<div id="main" class="clearfix"> {include file="user.menu.html"}
+  <div id="right"> {include file="user.curlocal.html"}
+    <div class="wrapful"> {include file="user.submenu.html"}
+      <div class="wrap">
+        <div class="public">
+          <div class="information">
+            <form method="post" enctype="multipart/form-data" id="store_slides_form">
+              <div class="setup info shop">
+                <table style="width: 100%;">
+                  <tr>
+                    <th style="width:150px;">{$lang.store_slides_url}1{$lang.colon}(1920px * 510px)</th>
+                    <td style="width:250px;"><p class="td_block">
+                        <input type="file" class="text width_normal" name="store_slides_url[]" />
+                      </p></td>
+                    <td>{if $store.store_slides.0.url}<img align="absMiddle" src="{$store.store_slides.0.url|url_format}"  height="25"/> <a href="javascript:;" class="J_AjaxRequest" uri="{url route='my_store/deleteslides' id=0}" confirm="{$lang.drop_confirm}">{$lang.drop}</a>{/if}</td>
+                  </tr>
+                  <tr>
+                    <th class="width2">{$lang.store_slides_link}1{$lang.colon}</th>
+                    <td><p class="td_block">
+                        <input type="text" class="text width_normal" name="store_slides_link[]" value="{$store.store_slides.0.link}" />
+                      </p></td>
+                  </tr>
+                  <tr>
+                    <th style="width:150px;">{$lang.store_slides_url}2{$lang.colon}(1920px * 510px)</th>
+                    <td><p class="td_block">
+                        <input type="file" class="text width_normal" name="store_slides_url[]" />
+                      </p></td>
+                    <td>{if $store.store_slides.1.url}<img align="absMiddle" src="{$store.store_slides.1.url|url_format}"  height="25"/> <a href="javascript:;" class="J_AjaxRequest" uri="{url route='my_store/deleteslides' id=1}" confirm="{$lang.drop_confirm}">{$lang.drop}</a>{/if}</td>
+                  </tr>
+                  <tr>
+                    <th class="width2">{$lang.store_slides_link}2{$lang.colon}</th>
+                    <td><p class="td_block">
+                        <input type="text" class="text width_normal" name="store_slides_link[]" value="{$store.store_slides.1.link}"/>
+                      </p></td>
+                  </tr>
+                  <tr>
+                    <th style="width:150px;">{$lang.store_slides_url}3{$lang.colon}(1920px * 510px)</th>
+                    <td><p class="td_block">
+                        <input type="file" class="text width_normal" name="store_slides_url[]" />
+                      </p></td>
+                    <td>{if $store.store_slides.2.url}<img align="absMiddle" src="{$store.store_slides.2.url|url_format}"  height="25"/> <a href="javascript:;" class="J_AjaxRequest" uri="{url route='my_store/deleteslides' id=2}" confirm="{$lang.drop_confirm}">{$lang.drop}</a>{/if}</td>
+                  </tr>
+                  <tr>
+                    <th class="width2">{$lang.store_slides_link}3{$lang.colon}</th>
+                    <td><p class="td_block">
+                        <input type="text" class="text width_normal" name="store_slides_link[]" value="{$store.store_slides.2.link}"/>
+                      </p></td>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <td><input type="submit" class="btn" value="{$lang.submit}" /></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="user.footer.html"}

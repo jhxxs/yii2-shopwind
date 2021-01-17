@@ -1,0 +1,191 @@
+{include file="user.header.html"}
+<div id="main" class="w-full">
+  <div class="page-apply">
+    <div class="w content clearfix">
+      <div class="left">
+        <div class="steps">
+          <dl class="setpbox">
+            <dt>申请步骤</dt>
+            <dd>
+              <ul>
+                <li class="succeed">入驻指南</li>
+                <li class="succeed">签订入驻协议</li>
+                <li class="current">填写店铺信息</li>
+                <li>平台审核</li>
+                <li>店铺开通</li>
+              </ul>
+            </dd>
+          </dl>
+          <dl class="setpbox contact-mall mt10">
+            <dt>平台联系方式</dt>
+            <dd>
+              <p class="tel"><span>电话：</span>18176895410</p>
+              <p class="email mt10"><span>邮箱：</span>andcpp@qq.com</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="right">
+        <div class="title">填写店铺信息</div>
+        <div class="apply-submit">
+          <form method="post" enctype="multipart/form-data">
+            <div class="sgrade clearfix">
+              <div class="dt">{$lang.store_grade}{$lang.colon}</div>
+              <ul class="clearfix">
+                <!--{foreach from=$sgrades item=sgrade name=fe_sgrade}-->
+                <li class="each" sgid="{$sgrade.grade_id}" {if $smarty.foreach.fe_sgrade.iteration % 3 eq 0}style="margin-right:0"{/if}>
+                  <h2>{$sgrade.grade_name}</h2>
+                  <p> <span>{$lang.goods_limit}{$lang.colon}<em>{$sgrade.goods_limit}</em></span><br />
+                    <span>{$lang.space_limit}{$lang.colon}<em>{$sgrade.space_limit}</em></span> </p>
+                  <p> <span>{$lang.skin_limit}{$lang.colon}<em>{count(explode(';',$sgrade.skins))}</em></span><br />
+                    <span>{$lang.charge}{$lang.colon}<em>{$sgrade.charge}</em></span> </p>
+                  <p><span>{$lang.need_confirm}{$lang.colon}<em>{if $sgrade.need_confirm}{$lang.yes}{else}{$lang.no}{/if}</em></span></p>
+                </li>
+                <!--{/foreach}-->
+              </ul>
+              <input name="sgrade" type="hidden" value="{$store.sgrade}" />
+            </div>
+            <dl>
+              <dt><span class="f60">*</span>{$lang.owner_name}{$lang.colon}</dt>
+              <dd class="widdt7">
+                <input type="text" class="input border" name="owner_name" value="{$store.owner_name|escape}"/>
+              </dd>
+            </dl>
+            <dl>
+              <dt><span class="f60">*</span>{$lang.store_name}{$lang.colon}</dt>
+              <dd>
+                <input type="text" class="input border" name="store_name" id="store_name" value="{$store.store_name|escape}"/>
+              </dd>
+            </dl>
+            <dl>
+              <dt>{$lang.store_category}{$lang.colon}</dt>
+              <dd class="clearfix">
+                <div class="select_add">
+                  <select name="cate_id">
+                    <option value="0">{$lang.select_pls}</option>
+                    
+                    {html_options options=$scategories selected=$store.cate_id}
+                  
+                  </select>
+                </div>
+              </dd>
+              <dd></dd>
+            </dl>
+            <dl>
+              <dt>{$lang.region}{$lang.colon}</dt>
+              <dd class="clearfix">
+                <div class="select_add" id="region">
+                  <input type="hidden" name="region_id" value="{$store.region_id}" class="mls_id" />
+                  <input type="hidden" name="region_name" value="{$store.region_name}" class="mls_names" />
+                  {if $store.region_name} <span>{$store.region_name|escape}</span>
+                  <input type="button" value="{$lang.edit}" class="edit_region" />
+                  {/if}
+                  <select class="d_inline"{if $store.region_name} style="display:none;"{/if}>
+                    <option value="0">{$lang.select_pls}</option>
+                    
+                    {html_options options=$regions}
+                  
+                  </select>
+                </div>
+              </dd>
+            </dl>
+            <dl>
+              <dt>{$lang.address}{$lang.colon}</dt>
+              <dd>
+                <input type="text" class="input border" name="address" value="{$store.address|escape}"/>
+              </dd>
+            </dl>
+            <dl>
+              <dt>{$lang.zipcode}{$lang.colon}</dt>
+              <dd>
+                <input type="text" class="input border" name="zipcode" value="{$store.zipcode|escape}"/>
+              </dd>
+            </dl>
+            <dl>
+              <dt><span class="f60">*</span>{$lang.tel}{$lang.colon}</dt>
+              <dd>
+                <input type="text" class="input border" name="tel"  value="{$store.tel|escape}"/>
+              </dd>
+            </dl>
+            <dl>
+              <dt>{$lang.identity_card}{$lang.colon}</dt>
+              <dd>
+                <input type="text" class="input border" name="identity_card" value="{$store.identity_card|escape}" />
+              </dd>
+            </dl>
+            <dl class="clearfix">
+              <dt>{$lang.upload_image}{$lang.colon}</dt>
+              <dd class="pb10">
+                <div class="add-image-btn"> <em class="bg-img-1"></em>
+                  <input type="file" name="identity_front" />
+                </div>
+              </dd>
+              <dd class="depict">
+                <h2>身份证正面</h2>
+                <span class="gray">{$lang.note_for_image}</span> </dd>
+              <dd class="again-margin"> {if $store.identity_front}
+                <p class="d_inline"> <img src="{$store.identity_front|url_format}" width="50" style="vertical-align:middle;" /> <a href="{$store.identity_front}" target="_blank">{$lang.view}</a> </p>
+                <input type="hidden" name="identity_front" value="{$store.identity_front}" />
+                {/if} </dd>
+            </dl>
+            <dl class="clearfix">
+              <dt>{$lang.upload_image}{$lang.colon}</dt>
+              <dd>
+                <div class="add-image-btn"> <em class="bg-img-2"></em>
+                  <input type="file" name="identity_back" />
+                </div>
+              </dd>
+              <dd class="depict">
+                <h2>身份证反面</h2>
+                <span class="gray">{$lang.note_for_image}</span> </dd>
+              <dd class="again-margin"> {if $store.identity_back}
+                <p class="d_inline"> <img src="{$store.identity_back|url_format}" width="50" style="vertical-align:middle;" /> <a href="{$store.identity_back}" target="_blank">{$lang.view}</a> </p>
+                <input type="hidden" name="identity_back" value="{$store.identity_back}" />
+                {/if} </dd>
+            </dl>
+            <dl class="clearfix">
+              <dt>{$lang.upload_permit}{$lang.colon}</dt>
+              <dd>
+                <div class="add-image-btn"> <em class="bg-img-3"></em>
+                  <input type="file" name="business_license" />
+                </div>
+              </dd>
+              <dd class="depict">
+                <h2>营业执照</h2>
+                <span class="gray">{$lang.note_for_image}</span> </dd>
+              <dd class="again-margin"> {if $store.business_license}
+                <p class="d_inline"> <img src="{$store.business_license|url_format}" width="50" style="vertical-align:middle;" /> <a href="{$store.business_license}" target="_blank">{$lang.view}</a> </p>
+                <input type="hidden" name="business_license" value="{$store.business_license}" />
+                {/if} </dd>
+            </dl>
+            <dl class="mb20 clearfix" style="margin-top:30px;">
+              <dt>&nbsp;</dt>
+              <dd>
+                <input class="btn-apply border0 sdlong fff pointer" type="submit" value="{$lang.submit}" />
+              </dd>
+            </dl>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	regionInit("region");
+	
+	<!--{if $store && $store.sgrade}-->
+	$(".apply-submit li[sgid='{$store.sgrade}']").addClass('selected');
+	<!--{else}-->
+	$(".apply-submit .each:eq(0)").addClass('selected');
+	$('input[name="sgrade"]').val($(".apply-submit .each:eq(0)").attr('sgid'));
+	<!--{/if}-->
+
+	$(".apply-submit .each").click(function(){
+		$(this).addClass('selected');
+		$(this).siblings().removeClass('selected');
+		$('input[name="sgrade"]').val($(this).attr('sgid'));
+	});
+});
+</script> 
+{include file="user.footer.html"}

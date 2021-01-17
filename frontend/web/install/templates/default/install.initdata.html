@@ -1,0 +1,38 @@
+{include file="header.html"}
+<div id="main" class="w">
+  <div class="initdata">
+    <div class="title">安装测试数据</div>
+    <div class="content">
+      <p class="note"><strong style="color:#FF0000; margin-right: 5px;">声明 : </strong>如果您需要安装测试数据，我们建议您在安装ShopWind之后立即执行测试数据安装。如果您的商城已经正式运营，请谨慎执行，因为安装测试数据操作将会删除您商城现有的数据（包括地区、商品分类、店铺分类、店铺、商品等），届时造成的后果我们将不负任何责任，此步骤请务必谨慎操作！！！</p>
+      <p class="mt20">安装测试数据需要注册下面两个测试用户，默认为 seller 和 buyer ，如果您的用户系统中已有重名用户，请更换用户名。</p>
+      <p>
+      <form method="post">
+        <p class="mt10">
+          <label for="seller">卖家用户名 ： </label>
+          <input type="text" id="seller" name="seller" value="seller" class="input" />
+          密码 ： 123456789</p>
+        <p class="mt10">
+          <label for="buyer">买家用户名 ： </label>
+          <input type="text" id="buyer" name="buyer" value="buyer" class="input" />
+          密码 ： 123456789</p>
+        <p class="mt20 submit">
+          <input class="btn-normal J_Submit" type="button" value="开始安装" />
+        </p>
+      </form>
+      </p>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(this).attr('disabled', false);
+	$('.J_Submit').click(function(){
+		if(confirm(lang.initdata_confirm)) {
+			$(this).attr('disabled', true);
+			$(this).parents('form').submit();
+		}
+		return false;
+	});
+});
+</script>
+{include file="footer.html"} 

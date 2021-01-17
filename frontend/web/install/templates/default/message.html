@@ -1,0 +1,27 @@
+{include file="header.html"}
+<div id="main" class="main w clearfix">
+    <div class="particular">
+        <div class="particular_wrap message">
+            <p class="{if $notice.done}success{else}defeated{/if}">
+                <span></span>
+                <b>{$notice.msg}</b>
+                <!--{if !$notice.done}-->
+                <font style="clear: both; display:block; margin:40px 0 0 0; text-align: center; font-size: 16px;">
+                <!--{foreach from=$notice.links item=item}-->
+               	<a href="{$item.url}" class="mr10">>>{$item.label}</a>
+                <!--{/foreach}-->
+                </font>
+                <!--{/if}-->
+            </p>
+        </div>
+    </div>
+</div>
+<!--{if $notice.redirect}-->
+<script type="text/javascript">
+window.setTimeout(function(){
+	location.href = "{$notice.redirect}";
+}, 3000);
+</script>
+<!--{/if}-->
+{include file="footer.html"}
+
