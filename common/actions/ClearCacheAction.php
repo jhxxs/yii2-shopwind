@@ -41,8 +41,6 @@ class ClearCacheAction extends Action
 		{
 			FileHelper::removeDirectory(Yii::getAlias('@backend') . '/runtime/'.$folder);
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/runtime/'.$folder);
-			FileHelper::removeDirectory(Yii::getAlias('@mobile') . '/runtime/'.$folder);
-			FileHelper::removeDirectory(Yii::getAlias('@apiserver') . '/runtime/'.$folder);
 		}
 
 		// 删除临时资源文件

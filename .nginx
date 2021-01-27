@@ -7,14 +7,6 @@ location /backend {
   #Redirect everything that isn't a real file to index.php
   try_files $uri $uri/ /backend/web/index.php$is_args$args;
 }
-location /mobile {
-  #Redirect everything that isn't a real file to index.php
-  try_files $uri $uri/ /mobile/web/index.php$is_args$args;
-}
-location /apiserver {
-  #Redirect everything that isn't a real file to index.php
-  try_files $uri $uri/ /apiserver/web/index.php$is_args$args;
-}
 ## END
 
 ## 通用配置

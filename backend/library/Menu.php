@@ -132,7 +132,8 @@ class Menu
 					'report_manage' => array(
 						'text'  => Language::get('report_manage'),
 						'url'   => Url::toRoute('report/index'),
-						'ico'   => 'icon-jubao' 
+						'ico'   => 'icon-jubao',
+						'priv'  => ['key' => 'report|all'] 
 					)
 				)
 			),
@@ -318,7 +319,7 @@ class Menu
 						'text' => Language::get('plugin_sms'),
 						'url'  => Url::toRoute(['plugin/index', 'instance' => 'sms']),
 						'ico'  => 'icon-duanxin',
-						'priv' => ['key' => 'plugin|sms|all', 'label' => Language::get('plugin_sms')]
+						'priv' => ['key' => 'plugin|sms|all', 'label' => Language::get('plugin_sms'), 'depends' => 'msg|all']
 					),
 					'editor' => array(
 						'text'  => Language::get('plugin_editor'),
@@ -326,7 +327,12 @@ class Menu
 						'ico'   => 'icon-duanxin',
 						'priv'  => ['key' => 'plugin|editor|all', 'label' => Language::get('plugin_editor')]
 					),
-					
+					/*'uploader' => array(
+						'text'  => Language::get('plugin_uploader'),
+						'url'   => Url::toRoute(['plugin/index', 'instance' => 'uploader']),
+						'ico'   => 'icon-oss-upload',
+						'priv'  => ['key' => 'plugin|uploader|all', 'label' => Language::get('plugin_uploader')]
+					),*/
 				)
 			),  
 			// 微信
@@ -344,13 +350,13 @@ class Menu
 						'text'  => Language::get('weixin_reply'),
 						'url'   => Url::toRoute('weixin/index'),
 						'ico'   => 'icon-huifu',
-						'priv'  => ['key' => 'weixin|index']
+						'priv'  => ['key' => 'weixin|index', 'depends' => 'weixin|addreply,weixin|editreply,weixin|deletereply']
 					),
 					'wxmenu' => array(
 						'text'  => Language::get('weixin_menu'),
 						'url'   => Url::toRoute('weixin/menu'),
 						'ico'   => 'icon-zidingyicaidan',
-						'priv'  => ['key' => 'weixin|menu']
+						'priv'  => ['key' => 'weixin|menu', 'depends' => 'weixin|add,weixin|edit,weixin|delete,weixin|editcol,weixin|createmenu,weixin|child']
 					)
 				)
 			)

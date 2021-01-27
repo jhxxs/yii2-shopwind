@@ -61,7 +61,7 @@ class UserPrivModel extends ActiveRecord
 	{
 		// 不需要做权限判断的页面
 		$noPriv = ['default|index', 'default|welcome', 'default|clearCache', 'default|getipinfo', 'order|trend', 'user|trend', 'store|trend'];
-		if(in_array($controller.'|'.$action, $noPriv)) {
+		if(in_array($controller.'|'.$action, $noPriv) || $action == 'jslang') {
 			return true;
 		}
 

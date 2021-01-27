@@ -233,7 +233,7 @@ class WeixinController extends \common\controllers\BaseAdminController
 		if(!Yii::$app->request->isPost)
 		{
 			// 所见即所得编辑器
-			$this->params['build_editor'] = Plugin::getInstance('editor')->autoBuild(true)->create(['name' => 'description', 'theme' => 'mini'])->build();
+			$this->params['build_editor'] = Plugin::getInstance('editor')->autoBuild(true)->create(['name' => 'description', 'theme' => 'mini']);
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('weixin_addreply')]);
 			return $this->render('../weixin.replyform.html', $this->params);
