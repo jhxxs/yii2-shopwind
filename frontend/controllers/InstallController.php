@@ -86,10 +86,7 @@ class InstallController extends \common\controllers\BaseMallController
 			'../backend/web/assets',
 			'../frontend/runtime',
 			'../frontend/web/data',
-			'../frontend/web/assets',   
-			'../mobile/runtime',
-			'../mobile/web/data',
-			'../mobile/web/assets'
+			'../frontend/web/assets'
         ));
 		
 		$this->params['check_env'] = $check_env;
@@ -166,9 +163,7 @@ class InstallController extends \common\controllers\BaseMallController
 			if(!preg_match("/^http(s?):\/\//i", $post->site_url)) {
 				return Message::warning(Language::get('site_url_error'));
 			}
-			if(!preg_match("/^http(s?):\/\//i", $post->mobile_url)) {
-				return Message::warning(Language::get('mobile_url_error'));
-			}
+			
 			if(!preg_match("/^http(s?):\/\//i", $post->back_url)) {
 				return Message::warning(Language::get('back_url_error'));
 			}

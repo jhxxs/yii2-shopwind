@@ -298,9 +298,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 		$data = array();
 		
 		list($client, $template, $page) = $this->getClientParams();
-		$siteUrl = in_array($client, ['wap']) ? Yii::$app->params['mobileUrl'] : Yii::$app->params['frontendUrl'];
+		$siteUrl = Yii::$app->params['frontendUrl'];
 
-		// 首页（pc/wap）
+		// 首页
 		$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index', 'editmode' => true], $siteUrl), 'action' => array());
 		
 		if(in_array($client, array('pc')))
@@ -356,16 +356,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 
 		// web目录
 		$basePath = Yii::getAlias('@frontend').'/web';
-		$baseMPath = Yii::getAlias('@mobile').'/web';
 
 		// PC
 		$files = FileHelper::findFiles($basePath.'/data/page_config', ['recursive' => false]);
-		foreach($files as $file) {
-			$contents .= file_get_contents($file);
-		}
-
-		// H5
-		$files = FileHelper::findFiles($baseMPath.'/data/page_config');
 		foreach($files as $file) {
 			$contents .= file_get_contents($file);
 		}

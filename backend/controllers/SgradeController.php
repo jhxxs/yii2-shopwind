@@ -171,8 +171,8 @@ class SgradeController extends \common\controllers\BaseAdminController
 				$themes[$template] = $styles;
 			}
 			$this->params['themes'] = $themes;
-			$this->params['baseUrl'] = $get->client == 'wap' ? Yii::$app->params['mobileUrl'] : Yii::$app->params['frontendUrl'];
-			$this->params['skins'] = $get->client == 'wap' ? explode(',', $sgrade->wap_skins) : explode(',', $sgrade->skins);
+			$this->params['baseUrl'] = Yii::$app->params['frontendUrl'];
+			$this->params['skins'] = explode(',', $sgrade->skins);
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('sgrade_theme')]);
 			return $this->render('../sgrade.theme.html', $this->params);

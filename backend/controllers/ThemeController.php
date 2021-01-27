@@ -43,9 +43,9 @@ class ThemeController extends \common\controllers\BaseAdminController
 			$list[$template] = Page::listStyle('mall', $post->client, $template);
 		}
 		$this->params['templates'] = $list;
-		$this->params['cur_template_name'] = ($post->client == 'wap') ? Yii::$app->params['wap_template_name'] : Yii::$app->params['template_name'];
-		$this->params['cur_style_name'] = ($post->client == 'wap') ? Yii::$app->params['wap_style_name'] : Yii::$app->params['style_name'];
-		$this->params['webroot'] = ($post->client == 'wap') ? Yii::$app->params['mobileUrl'] : Yii::$app->params['frontendUrl'];
+		$this->params['cur_template_name'] = Yii::$app->params['template_name'];
+		$this->params['cur_style_name'] = Yii::$app->params['style_name'];
+		$this->params['webroot'] = Yii::$app->params['frontendUrl'];
 		
 		$this->params['page'] = Page::seo(['title' => Language::get('template_list')]);
 		return $this->render('../theme.index.html', $this->params);

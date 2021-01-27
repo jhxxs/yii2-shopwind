@@ -3,6 +3,7 @@
   <ul class="bd">
     <!-- {foreach from=$widget_data.ads item=image name=fe_image} -->
     <li style="height: 500px; background: url({$image.ad_image_url|url_format}) center center; background-size: 100% 100%;">
+    	<a href="{$image.ad_link_url}" target="_blank" style="display:block; height:500px; width:100%"></a>
     </li>					
     <!-- {/foreach} -->
   </ul>

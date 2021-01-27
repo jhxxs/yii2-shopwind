@@ -45,7 +45,6 @@ class ClearCacheAction extends Action
 
 		// 删除临时资源文件
 		$this->clearResourceFiles();
-
 		return Message::display(Language::get('clear_cache_ok'));
 	}
 
@@ -58,7 +57,7 @@ class ClearCacheAction extends Action
 	 */
 	private function clearResourceFiles($num = 20)
 	{
-		$folders = [Yii::getAlias('@backend').'/web/assets', Yii::getAlias('@frontend').'/web/assets', Yii::getAlias('@mobile').'/web/assets'];
+		$folders = [Yii::getAlias('@backend').'/web/assets', Yii::getAlias('@frontend').'/web/assets'];
 		foreach($folders as $folder) {
 			if(!is_dir($folder)) continue;
 			$list = FileHelper::findDirectories($folder, ['recursive' => false]);

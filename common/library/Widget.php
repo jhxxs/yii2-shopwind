@@ -32,9 +32,7 @@ class Widget
 				$this->$key = $val;
 			}
 		}
-		if($this->instance == 'wap') {
-			$this->clientPath = Yii::getAlias('@mobile');
-		} else $this->clientPath = Yii::getAlias('@frontend');
+		$this->clientPath = Yii::getAlias('@frontend');
 	}
 	/* 获取挂件基类 */
 	public static function getInstance($options = null)
