@@ -101,7 +101,7 @@ class Page
 	 */
 	public static function listTemplate($folder = 'mall', $client = 'pc')
 	{
-		$dir = Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $folder;
+		$dir = Yii::getAlias('@frontend') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $folder;
 		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
 	
 		$templates = array();
@@ -119,7 +119,7 @@ class Page
 	 */
 	public static function listStyle($folder = 'mall', $client = 'pc', $template = 'default')
 	{
-		$dir = Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
+		$dir = Yii::getAlias('@frontend') . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
 		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
 		
 		$styles = array();
