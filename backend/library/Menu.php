@@ -259,12 +259,12 @@ class Menu
 						'ico'   => 'icon-app',
 						'priv'  => ['key' => 'appmarket|all']
 					),
-					'webim'   => array(
-						'text'  => Language::get('webim'),
-						'url' 	=> Url::toRoute('webim/index'),
-						'ico'   => 'icon-kefu',
-						'priv'  => ['key' => 'webim|all']
-					)
+					// 'webim'   => array(
+					// 	'text'  => Language::get('webim'),
+					// 	'url' 	=> Url::toRoute('webim/index'),
+					// 	'ico'   => 'icon-kefu',
+					// 	'priv'  => ['key' => 'webim|all']
+					// )
 				)
 			), 
 			// 布局

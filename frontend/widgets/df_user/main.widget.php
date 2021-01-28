@@ -53,7 +53,7 @@ class Df_userWidget extends BaseWidget
 		{
 			$list[] = array(
 				'title'	=> $this->options['model'.$i.'_title'],
-				'list'	=> $this->getArticles($this->options['cate_id_'.$i]),
+				'list'	=> $this->getArticles(intval($this->options['cate_id_'.$i])),
 			);
 		}	
 		return $list;
@@ -65,10 +65,10 @@ class Df_userWidget extends BaseWidget
 		$this->params['acategories'] = AcategoryModel::getOptions(0, -1, null, 2);	
     }
 		
-	public function getArticles($num = 3)
+	public function getArticles($cate_id = 0, $num = 3)
     {
 		$query = ArticleModel::find()->select('article_id,title')->where(['if_show' => 1]);
-		if(($allId = AcategoryModel::getDescendantIds(intval($this->options['cate_id'])))) {
+		if(($allId = AcategoryModel::getDescendantIds($cate_id))) {
 			$query->andWhere(['in', 'cate_id', $allId]);
 		}
 		return $query->limit($num)->orderBy(['sort_order' => SORT_ASC, 'add_time' => SORT_DESC])->asArray()->all();
