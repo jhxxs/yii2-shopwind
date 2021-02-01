@@ -144,17 +144,19 @@ class Weixin
 	/* 获取用户向公众平台发送的信息 */
 	public function getPostData()
 	{
-		$xml = $GLOBALS["HTTP_RAW_POST_DATA"];
+		$xml = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
+		
 		// 禁止引用外部xml实体
 		libxml_disable_entity_loader(true);
 		$data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
 		return $data;
 	}
 	
-	/* 获取文本消息和图文消息XML模板 
+	/**
+	 * 获取文本消息和图文消息XML模板 
 	 * 从2018年10月12日起，微信公众平台图文消息被限制为1条
 	 */
-
     public function getMsgXML($ToUserName, $FromUserName, $param) 
 	{
 		if(empty($param)){
@@ -235,7 +237,7 @@ class Weixin
 		  "rawString" => $string
 		);
 		return json_encode($signPackage); 
-	  }
+	}
 	
 	private function createNonceStr($length = 16) 
 	{
@@ -258,5 +260,5 @@ class Weixin
 			return false;
 		}
 		return $result->ticket;
-	  }
+	}
 }

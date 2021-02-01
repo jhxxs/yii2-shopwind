@@ -20,6 +20,7 @@ use common\models\NavigationModel;
 
 use common\library\Language;
 use common\library\Message;
+use common\library\Resource;
 use common\library\Page;
 
 /**
@@ -52,6 +53,7 @@ class ChannelController extends \common\controllers\BaseMallController
 		
 		// 头部商品分类
 		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
+		$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.lazyload.js');
 		
 		$this->params['page'] = Page::seo(['title' => $channel['title']]);
 		return $this->render('../channel.style'.$channel['style'].'_'.$id.'.html', $this->params);

@@ -282,7 +282,7 @@ class Menu
 						'text'  => Language::get('template'),
 						'url'   => Url::toRoute('template/index'),
 						'ico'   => 'icon-moban',
-						'priv'  => ['key' => 'template|all']
+						'priv'  => ['key' => 'template|all', 'depends' => 'channel|all']
 					)
 				)
 			),

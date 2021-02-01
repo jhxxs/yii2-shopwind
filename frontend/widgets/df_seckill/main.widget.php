@@ -56,7 +56,7 @@ class Df_seckillWidget extends BaseWidget
 					$limitbuy_list[] = $item;
 				}
 			}
-			$time = [Timezone::gmtime() + 2 * 24 * 3600];
+			$time = [Timezone::gmtime() + 3600];
 			$promotool = Promotool::getInstance()->build();
 			foreach ($limitbuy_list as $key => $limitbuy)
 			{
