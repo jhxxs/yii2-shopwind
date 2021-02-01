@@ -57,13 +57,13 @@ class SDK
         }
 	}
 	
-	public function getAccessToken($auth_code = '')
+	public function getAccessToken($code = '')
 	{
 		$response = false;
 		
-		if($auth_code)
+		if($code)
 		{
-			if($result = Basewind::curl($this->getOpenIdUrl($auth_code))) {
+			if($result = Basewind::curl($this->getOpenIdUrl($code))) {
 				$response = json_decode($result);
 				$unionid = isset($response->unionid) ? $response->unionid : $response->openid;
 				$response->unionid = $unionid;
@@ -98,7 +98,7 @@ class SDK
 		);
 		if(Basewind::isWeixin())
 		{
-			// 读取 微信公众号的
+			// 读取微信公众号的
 			if(!($config = WeixinSettingModel::find()->select('appid,appsecret')->where(['userid' => 0])->asArray()->one())) {
 				$config = array();
 			}
@@ -115,18 +115,17 @@ class SDK
 		return $url;
 	}
 	
-	private function getOpenIdUrl($auth_code)
+	private function getOpenIdUrl($code = '')
 	{
 		$gateway = 'https://api.weixin.qq.com/sns/oauth2/access_token';
-		$url = $gateway.'?appid='.$this->config['appId'].'&secret='.$this->config['appKey'];
+		$url = $gateway.'?appid='.$this->appId.'&secret='.$this->appKey;
 		if(Basewind::isWeixin())
 		{
-			// 读取 微信公众号的
+			// 读取微信公众号的
 			if(($config = WeixinSettingModel::find()->select('appid,appsecret')->where(['userid' => 0])->asArray()->one())) {
 				$url = $gateway.'?appid='.$config['appid'].'&secret='.$config['appsecret'];
 			}
-			
 		}
-		return $url .'&code='.$auth_code.'&grant_type=authorization_code';
+		return $url .'&code='.$code.'&grant_type=authorization_code';
 	}
 }
