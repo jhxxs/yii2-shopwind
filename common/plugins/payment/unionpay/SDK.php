@@ -78,7 +78,7 @@ class SDK
         }
 	}
 	
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = array(), $post = null)
     {
 		// 该接口通过此参数区别电脑支付和手机支付
 		$channelType = Basewind::isMobileDevice() ? '08' : '07';

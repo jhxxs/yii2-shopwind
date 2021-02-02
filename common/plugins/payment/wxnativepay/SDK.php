@@ -78,7 +78,7 @@ class SDK
 		$this->config = $config;
 	}
 	
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = array(), $post = null)
 	{
 		// 使用统一支付接口
 		$unifiedOrder = new UnifiedOrder_pub($this->config);

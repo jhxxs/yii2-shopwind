@@ -18,10 +18,9 @@
         <div style="float:left;width:20%; padding:0 20px; height:25px; line-height:25px;color:#666; white-space:nowrap; overflow:hidden"> <span title="{$prop.value|escape}">{$prop.name}{$lang.colon}{$prop.value|escape|truncate:18}</span> </div>
         <!--{/foreach}--> 
       </div>
-      <!--{/if}--> 
-      <!-- sku psmb -->
+      <!--{/if}-->
       <div class="option_box">
-        <div class="default"> {$goods.description|escape:editor} </div>
+        <div class="detail-info clearfix"> {$goods.description|escape:editor} </div>
       </div>
       {include file="comments.html"} </div>
   </div>

@@ -86,7 +86,7 @@ class SDK
         }
 	}
 	
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = array(), $post = null)
     {
 		// 创建支付请求对象
 		$reqHandler = new RequestHandler();

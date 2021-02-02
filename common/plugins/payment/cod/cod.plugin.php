@@ -50,7 +50,7 @@ class Cod extends BasePayment
 	}
 	
 	/* 获取支付表单 */
-    public function getPayform(&$orderInfo = array())
+    public function getPayform(&$orderInfo = array(), $post = null)
     {
 		// 支付网关商户订单号
 		$payTradeNo = parent::getPayTradeNo($orderInfo);

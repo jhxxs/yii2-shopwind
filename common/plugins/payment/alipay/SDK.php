@@ -105,7 +105,7 @@ class SDK
         }
 	}
 	
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = array(), $post = null)
     {
 		$aop = new AopClient();
 		$aop->appId 				= $this->appId;

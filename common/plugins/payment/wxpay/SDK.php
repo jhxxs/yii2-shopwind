@@ -79,7 +79,7 @@ class SDK
 		$this->config = $config;
 	}
 	
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = array(), $post = null)
 	{
 		$jsApi = new JsApi_pub($this->config);
 		return $jsApi->createOauthUrlForCode($this->returnUrl);
