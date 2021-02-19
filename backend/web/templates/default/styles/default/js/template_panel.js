@@ -124,12 +124,10 @@ function save_page()
     /* 创建提交表单 */
     create_save_form();
 
-    /* 信息POST到处理脚本并显示结果*/
+    /* 信息POST到处理脚本并显示结果 */
     $.post(url(['template/save', {client:__CLIENT__, page:__PAGE__}, BACK_URL]), $('#_edit_page_form_').serialize(), function(rzt){
-        //d.setTitle(lang.save_successed);
-        //d.setContents('message', {text:rzt.msg});
         d.close();
-        layer.msg(rzt.msg);
+        layer.open({shadeClose: true, content: rzt.msg});
     }, 'json');
 }
 

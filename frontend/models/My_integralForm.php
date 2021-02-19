@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @link http://www.shopwind.net/
- * @copyright Copyright (c) 2018 shopwind, Inc. All Rights Reserved.
+ * @link https://www.shopwind.net/
+ * @copyright Copyright (c) 2018 ShopWind Inc. All Rights Reserved.
  *
  * This is not free software. Do not use it for commercial purposes. 
  * If you need commercial operation, please contact us to purchase a license.
- * @license http://www.shopwind.net/license/
+ * @license https://www.shopwind.net/license/
  */
 
 namespace frontend\models;
@@ -41,6 +41,11 @@ class My_integralForm extends Model
 	{
 		if(!IntegralSettingModel::getSysSetting('enabled')) {
 			$this->errors = Language::get('integral_disabled');
+			return false;
+		}
+
+		if(Yii::$app->user->isGuest) {
+			$this->errors = Language::get('login_please');
 			return false;
 		}
 		

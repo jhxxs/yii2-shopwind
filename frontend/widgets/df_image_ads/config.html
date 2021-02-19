@@ -41,7 +41,7 @@ $(function(){
     <label>是否启用关闭按钮</label>
     <p>
     	<select name="ad_button_close">
-        	<option value="" {if !$options.ad_button_close} selected="selected"{/if}>不需要</option>
+        	<option value="0" {if !$options.ad_button_close} selected="selected"{/if}>不需要</option>
             <option value="1" {if $options.ad_button_close eq 1} selected="selected"{/if}>需要</option>
         </select>
     </p>
