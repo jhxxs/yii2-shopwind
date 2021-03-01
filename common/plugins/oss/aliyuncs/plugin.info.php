@@ -20,7 +20,7 @@ return array(
     'name' => '阿里云OSS',
     'desc' => '阿里云OSS对象存储',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
 		'accessKeyId' => array(

@@ -21,7 +21,7 @@ return array(
     'name' => '快递100',
     'desc' => '快递100物流跟踪插件',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
 		'key' => array(

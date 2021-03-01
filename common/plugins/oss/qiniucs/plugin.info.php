@@ -20,7 +20,7 @@ return array(
     'name' => '七牛云OSS',
     'desc' => '七牛云OSS对象存储',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
 		'accessKey' => array(

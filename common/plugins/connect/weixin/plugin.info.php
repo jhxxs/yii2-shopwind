@@ -21,7 +21,7 @@ return array(
     'name' => '微信登录',
     'desc' => '微信PC端扫码登录、如果是微信公众号内微信登录，请同时配置微信-》微信设置-》公众号秘钥',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
         'appId' => array(

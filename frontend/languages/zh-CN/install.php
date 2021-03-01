@@ -46,7 +46,7 @@ return array(
     'init_info'          => '填写站点初始化信息',
     'site_url'          => '前台访问地址',
     'site_url_error'          => '网站访问地址输入有误，必须以http://或http://为开头',
-    'site_url_notice'          => '必须以http://或https://开头,例如：http://www.shopwind.net',
+    'site_url_notice'          => '必须以http://或https://开头,例如：https://www.shopwind.net',
 	'back_url'          => '后台访问地址',
     'back_url_notice'          => '必须以http://或https://开头,例如：http://admin.shopwind.net',
 	'mobile_url'          => '手机访问地址',

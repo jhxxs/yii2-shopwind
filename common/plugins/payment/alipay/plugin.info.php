@@ -28,7 +28,7 @@ return array(
     'desc'      => Language::get('alipay_desc'),
     'is_online' => '1',
     'author'    => 'SHOPWIND',
-    'website'   => 'http://www.shopwind.net',
+    'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',
     'currency'  => Language::get('alipay_currency'),
     'config'    => array(

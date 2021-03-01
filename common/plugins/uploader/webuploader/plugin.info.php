@@ -21,7 +21,7 @@ return array(
     'name' => 'WebUploader',
     'desc' => '百度文件上传组件WebUploader',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array()
 );

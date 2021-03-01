@@ -27,7 +27,7 @@ return array(
     'desc'      => Language::get('cod_desc'),
     'is_online' => '0',
     'author'    => 'SHOPWIND',
-    'website'   => 'http://www.shopwind.net',
+    'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',
     'currency'  => Language::get('cod_currency'),
     'config'    => array(),

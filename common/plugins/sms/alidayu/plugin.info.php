@@ -25,7 +25,7 @@ return array(
     'name' => '阿里云通信',
     'desc' => '阿里巴巴云通信（原阿里大鱼短信平台）',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'buttons' => array(
         array(

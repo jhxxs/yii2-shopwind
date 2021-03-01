@@ -26,8 +26,8 @@ return array(
 	'report_handle' => '举报信息，管理员已审核',
 	'msg_instruction' => '短消息使用格式?',
 	'receiver' => '接收会员',
-	'code_example' => '图片标签：[img]http://www.shopwind.net/images/logo.gif[/img]
-						超链接标签：[url=http://www.shopwind.net]官方网站[/url]',
+	'code_example' => '图片标签：[img]https://www.shopwind.net/images/logo.gif[/img]
+						超链接标签：[url=https://www.shopwind.net]官方网站[/url]',
 	'send_msg' => '发送信息',
 	'no_content' => '请填写通知内容',
 	'send_msg_ok' => '信息发送成功',

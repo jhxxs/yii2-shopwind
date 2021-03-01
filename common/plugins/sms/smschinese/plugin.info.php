@@ -25,7 +25,7 @@ return array(
     'name' => '网建短信通',
     'desc' => '中国网建SMS短信通',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'buttons' => array(
         array(

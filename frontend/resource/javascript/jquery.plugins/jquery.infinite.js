@@ -2,7 +2,7 @@
 
  @Name：ShopWind infinite js v0.1
  $Author：shopwind
- $Site：http://www.shopwind.net
+ $Site：https://www.shopwind.net
  @Date：2017-5-7
  @License：MIT
  $('.aa').infinite({url:'', params:{a:'a', b:'b'}})

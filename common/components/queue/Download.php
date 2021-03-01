@@ -27,7 +27,7 @@ use yii;
  * step2:
  * in Controller push task
  * Yii::$app->queue->push(new \common\components\queue\Download([
- *		'url' => 'http://www.shopwind.net/data/files/mall/settings/site_logo.png',
+ *		'url' => 'https://www.shopwind.net/data/files/mall/settings/site_logo.png',
  *		'file' => Yii::getAlias('@frontend') . '/image.jpg',
  * ]));
  *

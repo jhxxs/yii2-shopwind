@@ -21,7 +21,7 @@ return array(
     'name' => '新浪微博登录',
     'desc' => '新浪微博登录',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
         'WB_AKEY' => array(

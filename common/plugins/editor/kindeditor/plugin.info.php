@@ -21,7 +21,7 @@ return array(
     'name' => 'KindEditor',
     'desc' => 'KindEditor是一套开源的在线HTML编辑器，在网站上获得所见即所得编辑效果',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array()
 );

@@ -33,8 +33,12 @@ class Df_bag_brandWidget extends BaseWidget
 		$data = $cache->get($key);
         if($data === false)
         {
+            $query = BrandModel::find()->select('brand_logo, brand_id');
+            if(($btag = $this->options['btag'])) {
+                $query->where(['tag' => $btag]);
+            }
             $data = array(
-				'brandlist'		=> BrandModel::find()->select('brand_logo, brand_id')->limit(18)->asArray()->all(),
+				'brandlist'		=> $query->limit(18)->asArray()->all(),
 				'ad_image_url'	=> $this->options['ad_image_url'],
 				'ad_link_url'	=> $this->options['ad_link_url'],
 			);

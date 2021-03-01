@@ -21,7 +21,7 @@ return array(
     'name' => '腾讯QQ登录',
     'desc' => '腾讯QQ登录',
     'author' => 'SHOPWIND',
-	'website' => 'http://www.shopwind.net',
+	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
         'appId' => array(
