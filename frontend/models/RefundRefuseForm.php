@@ -32,8 +32,9 @@ class RefundRefuseForm extends Model
 	
 	public function formData($post = null)
 	{
+		// 退款成功或退款关闭的退款，不能通行
 		if(!$post->id || !($refund = RefundModel::find()->where(['refund_id' => $post->id, 'seller_id' => Yii::$app->user->id])->andWhere(['not in', 'status', ['SUCCESS','CLOSED']])->asArray()->one())) {
-			$this->errors = Language::get('refuse_disallow');
+			$this->errors = Language::get('refund_disallow');
 			return false;
 		}
 		$refund['status_label'] = Language::get('REFUND_'.$refund['status']);
@@ -43,6 +44,11 @@ class RefundRefuseForm extends Model
 	
 	public function valid($post = null)
 	{
+		// 退款成功或退款关闭的退款，不能通行
+		if(!$post->id || !($refund = RefundModel::find()->where(['refund_id' => $post->id, 'seller_id' => Yii::$app->user->id])->andWhere(['not in', 'status', ['SUCCESS','CLOSED']])->asArray()->one())) {
+			$this->errors = Language::get('refund_disallow');
+			return false;
+		}
 		return true;
 	}
 	
@@ -56,11 +62,9 @@ class RefundRefuseForm extends Model
 			return false;
 		}
 		
-		if(!RefundModel::updateAll(['status' => 'SELLER_REFUSE_BUYER'], ['refund_id' => $post->id])) {
-			$this->errors = Language::get('refuse_fail');
-			return false;
-		}
-		
+		// 修改状态
+		RefundModel::updateAll(['status' => 'SELLER_REFUSE_BUYER'], ['refund_id' => $post->id, 'seller_id' => Yii::$app->user->id]);
+
 		$model = new RefundMessageModel();
 		$model->owner_id = Yii::$app->user->id;
 		$model->owner_role = 'seller';

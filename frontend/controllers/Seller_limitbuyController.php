@@ -77,8 +77,8 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
 			$this->params['appAvailable'] = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js',
-            	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
+            	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 		
 			// 当前位置
@@ -117,8 +117,8 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
 			$this->params['appAvailable'] = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js',
-            	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
+            	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 		
 			// 当前位置

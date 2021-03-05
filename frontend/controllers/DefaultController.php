@@ -13,7 +13,7 @@ namespace frontend\controllers;
 
 
 use Yii;
-use yii\helpers\ArrayHelper;;
+use yii\helpers\ArrayHelper;
 
 use common\models\GcategoryModel;
 use common\models\NavigationModel;
@@ -46,7 +46,7 @@ class DefaultController extends \common\controllers\BaseMallController
 	{
 		// 首页标识
 		$this->params['index'] = true;
-		
+
 		// 头部商品分类
 		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
 

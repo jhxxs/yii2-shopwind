@@ -50,19 +50,14 @@ class Seller_limitbuyForm extends Model
 			$this->errors = Language::get('fill_pro_name');
 			return false;
 		}
-		if (Timezone::gmstr2time_end($post->start_time) <= Timezone::gmtime() && !$this->pro_id) {
-            $this->errors = Language::get('start_not_le_today');
-			return false;
-        }
-        else {
-            $post->start_time = Timezone::gmstr2time($post->start_time);
-        }
+
+        $post->start_time = Timezone::gmstr2time($post->start_time);
         if ($post->end_time) {
-			if(Timezone::gmstr2time_end($post->end_time) < Timezone::gmtime()) {
+			if(Timezone::gmstr2time($post->end_time) < Timezone::gmtime()) {
 				$this->errors = Language::get('end_not_le_today');
 				return false;
 			}
-			$post->end_time = Timezone::gmstr2time_end($post->end_time); // 前台时间允许到天
+			$post->end_time = Timezone::gmstr2time($post->end_time); // 前台时间允许到秒
         }
         else {
         	$this->errors = Language::get('fill_end_time');

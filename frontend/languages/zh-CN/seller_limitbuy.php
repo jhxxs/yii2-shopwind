@@ -25,7 +25,6 @@ return array(
    	'pro_type_discount'=>'折',
    	'fill_end_time' => '请填写结束时间',
    	'start_not_gt_end' => '开始时间不能大于结束时间',
-	'start_not_le_today' => '开始时间不能小于当前时间',
 	'end_not_le_today' => '结束时间不能小于当前时间',
    	'fill_goods' => '请选择要促销的商品',
    	'fill_spec' => '请先勾选限时打折商品规格',

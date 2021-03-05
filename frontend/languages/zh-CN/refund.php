@@ -76,7 +76,7 @@ return array(
 	'agree_disallow'			=> '您没有权限处理该退款申请',
 	'seller_agree_refund_ok' 	=> '您已经同意了买家的退款申请，退款成功！',
 	'refuse_fail'				=> '拒绝退款失败',	
-	'refuse_disallow'			=> '您无权处理该退款',
+	'refund_disallow'			=> '该退款不允许操作',
 	'refuse_content_change' 	=> '卖家拒绝了退款申请，拒绝理由为：%s',
 	'refuse_ok'					=> '您已拒绝了买家的退款申请',
 	'order_has_refund'			=> '该订单已申请了退款，无需重复提交',

@@ -44,13 +44,13 @@
                     <div class="assort">
                       <p class="txt" > {$lang.start_time}:</p>
                       <p>
-                        <input name="start_time" id="start_time" value='{$limitbuy.start_time|default:$now|date_format:"%Y-%m-%d"}' type="text" class="text width2" />
+                        <input name="start_time" id="start_time" value='{$limitbuy.start_time|default:$now|date_format:"%Y-%m-%d %H:%M:%S"}' type="text" class="text" />
                         <span class="red">*</span> </p>
                     </div>
                     <div class="assort">
                       <p class="txt"> {$lang.end_time}:</p>
                       <p>
-                        <input name="end_time" id="end_time" value='{$limitbuy.end_time|default:$now|date_format:"%Y-%m-%d"}' type="text" class="text width2" />
+                        <input name="end_time" id="end_time" value='{$limitbuy.end_time|default:$now|date_format:"%Y-%m-%d %H:%M:%S"}' type="text" class="text" />
                         <span class="red">*</span> </p>
                     </div>
                     <div class="assort">
@@ -118,10 +118,28 @@
 </div>
 <script>
 $(function(){
-	$('#start_time').datepicker({ dateFormat: 'yy-mm-dd'});
-    $('#end_time').datepicker({ dateFormat: 'yy-mm-dd'});
+    $('#start_time').datetimepicker({
+      timeText: '时间',
+      hourText: '小时',
+      minuteText: '分钟',
+      secondText: '秒',
+      currentText: '现在',
+      closeText: '完成',
+      showSecond: true, //显示秒  
+      timeFormat: 'HH:mm:ss' //格式化时间
+    });
+    $('#end_time').datetimepicker({
+      timeText: '时间',
+      hourText: '小时',
+      minuteText: '分钟',
+      secondText: '秒',
+      currentText: '现在',
+      closeText: '完成',
+      showSecond: true, //显示秒  
+      timeFormat: 'HH:mm:ss' //格式化时间
+    });
 	
-	gs_query_info1({$limitbuy.goods_id|default:0}, {$limitbuy.pro_id|default:0});
+	  gs_query_info1({$limitbuy.goods_id|default:0}, {$limitbuy.pro_id|default:0});
 });
 function gs_submit_check(id,name,callback)
 {

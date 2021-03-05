@@ -32,20 +32,16 @@ class RefundMessageForm extends Model
 {
 	public $errors = null;
 	
-	public function formData($post = null, $pageper = 4)
+	public function formData($post = null, $pageper = 10)
 	{
 		$query = RefundMessageModel::find()->where(['refund_id' => $post->id])->orderBy(['created' => SORT_DESC]);
-		$page = Page::getPage($query->count(), $post->pageper);
+		$page = Page::getPage($query->count(), $pageper);
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($recordlist as $key => $val)
 		{
 			if($val['owner_id'] == Yii::$app->user->id) $sender = Language::get('self');
 			else $sender = Language::get($val['owner_role']);
 			$recordlist[$key]['sender'] = $sender;
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['created'] = Timezone::localDate('Y-m-d H:i:s', $val['created']);
-			}
 		}
 					
 		return array($recordlist, $page);

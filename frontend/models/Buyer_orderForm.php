@@ -34,7 +34,7 @@ class Buyer_orderForm extends Model
 	
 	public function formData($post = null, $pageper = 4) 
 	{
-		$query = OrderModel::find()->alias('o')->where(['buyer_id' => Yii::$app->user->id])->orderBy(['o.order_id' => SORT_DESC]);
+		$query = OrderModel::find()->alias('o')->select('o.*,oe.shipping_fee')->where(['buyer_id' => Yii::$app->user->id])->orderBy(['o.order_id' => SORT_DESC])->joinWith('orderExtm oe', false);
 		$query = $this->getConditions($post, $query);
 		
 		$page = Page::getPage($query->count(), $pageper);
@@ -86,13 +86,13 @@ class Buyer_orderForm extends Model
 			$query->andWhere(['link', 'seller_name', $post->seller_name]);
 		}
 		if($post->add_time_from) {
-			$query->andWhere(['>=', 'add_time', Timezone::gmstr2time($post->add_time_from)]);
+			$query->andWhere(['>=', 'o.add_time', Timezone::gmstr2time($post->add_time_from)]);
 		}
 		if($post->add_time_to) {
-			$query->andWhere(['<=', 'add_time', Timezone::gmstr2time_end($post->add_time_to)]);
+			$query->andWhere(['<=', 'o.add_time', Timezone::gmstr2time_end($post->add_time_to)]);
 		}
 		if($post->order_sn) {
-			$query->andWhere(['order_sn' => $post->order_sn]);
+			$query->andWhere(['o.order_sn' => $post->order_sn]);
 		}
 		if(isset($post->evaluation_status)) {
 			$query->andWhere(['evaluation_status' => $post->evaluation_status]);
