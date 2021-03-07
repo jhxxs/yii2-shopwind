@@ -142,7 +142,7 @@ class Promotool
 				$limitbuy = LimitbuyModel::find()->select('start_time,end_time,pro_name')->where(['pro_id' => $id])->one();
 				$result['start_time'] = Timezone::localDate('Y-m-d H:i:s', $limitbuy->start_time);
 				$result['end_time'] = Timezone::localDate('Y-m-d H:i:s', $limitbuy->end_time);
-				$result['timestamp'] = $limitbuy->end_time - Timezone::localDate('H', true) * 3600 - Timezone::localDate('I', true) * 60 - Timezone::localDate('S', true);
+				$result['timestamp'] = $limitbuy->end_time - Timezone::gmtime();
 				$result['lefttime'] = Timezone::lefttime($limitbuy->end_time);
 				$result['name'] = $limitbuy->pro_name;
 			}

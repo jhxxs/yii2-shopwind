@@ -50,7 +50,7 @@ class LimitbuyController extends \common\controllers\BaseMallController
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['cate_id']);
 		
-		$query = LimitbuyModel::find()->alias('lb')->select('lb.pro_id,lb.goods_id,lb.pro_name,lb.start_time,lb.end_time,lb.store_id,lb.image,g.default_image,g.price,g.goods_name,g.default_spec,g.cate_id,s.store_name')->joinWith('goods g', false, 'INNER JOIN')->joinWith('store s', false)->where(['and', ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]])->orderBy(['pro_id' => SORT_DESC]);
+		$query = LimitbuyModel::find()->alias('lb')->select('lb.pro_id,lb.goods_id,lb.pro_name,lb.start_time,lb.end_time,lb.store_id,lb.image,g.default_image,g.price,g.goods_name,g.default_spec,g.cate_id,s.store_name')->joinWith('goods g', false, 'INNER JOIN')->joinWith('store s', false)->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]])->orderBy(['pro_id' => SORT_DESC]);
 		
 		if($post->cate_id) {
 			$childIds = GcategoryModel::getDescendantIds($post->cate_id);

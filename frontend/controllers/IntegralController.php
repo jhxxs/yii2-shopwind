@@ -51,7 +51,7 @@ class IntegralController extends \common\controllers\BaseMallController
 			return Message::warning(Language::get('integral_disabled'));
 		}
 
-		$query = GoodsModel::find()->alias('g')->joinWith('goodsIntegral gi', false)->select('g.goods_id,g.default_image,g.goods_name,g.price,gi.max_exchange')->where(['>', 'gi.max_exchange', 0])->orderBy(['goods_id' => SORT_DESC]);
+		$query = GoodsModel::find()->alias('g')->select('g.goods_id,g.default_image,g.goods_name,g.price,g.add_time,gi.max_exchange,s.store_id,s.store_name,gst.sales')->joinWith('goodsIntegral gi', false)->joinWith('store s', false)->joinWith('goodsStatistics gst', false)->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['>', 'gi.max_exchange', 0]])->orderBy(['g.add_time' => SORT_DESC]);
 		$page = Page::getPage($query->count(), 20);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		
