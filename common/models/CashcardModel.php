@@ -36,6 +36,11 @@ class CashcardModel extends ActiveRecord
 	{
 		return parent::hasOne(UserModel::className(), ['userid' => 'useId']);
 	}
+
+	// 关联表
+	public function getDepositTrade() {
+		return parent::hasOne(DepositTradeModel::className(), ['bizOrderId' => 'cardNo']);
+	}
 	
 	public static function genCardNo( $length = 0)
     {

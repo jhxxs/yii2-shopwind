@@ -404,6 +404,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_account` (
   `password` varchar(255) DEFAULT '',
   `money` decimal(10,2) DEFAULT '0',
   `frozen` decimal(10,2) DEFAULT '0',
+  `nodrawal` decimal(10,2) DEFAULT '0',
   `real_name` varchar(30) DEFAULT NULL,
   `pay_status` varchar(3) DEFAULT 'off',
   `add_time` int(11) DEFAULT NULL,

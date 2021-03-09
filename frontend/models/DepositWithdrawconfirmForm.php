@@ -31,36 +31,47 @@ class DepositWithdrawconfirmForm extends Model
 {
 	public $errors = null;
 
-	public function valid($post)
+	public function valid($post, $strict = true)
 	{
 		if (!($bank = BankModel::find()->where(['bid' => $post->bid])->exists())) {
 			$this->errors = Language::get('select_bank_error');
 			return false;
 		}
+
 		// 验证提现金额
 		if (empty($post->money) || !is_numeric($post->money) || ($post->money <= 0)) {
 			$this->errors = Language::get('money_error');
 			return false;
 		}
+
+		// 提现金额要减掉不可提现的部分
+		$query = DepositAccountModel::find()->select('money,nodrawal')->where(['userid' => Yii::$app->user->id])->one();
+		if(!$query || ($query->money - $query->nodrawal < $post->money)) {
+			$this->errors = Language::get('money_not_enough');
+			return false;
+		}
+
+		if($strict) {
+			if (Basewind::getCurrentApp() != 'api') {
+				$captchaValidator = new CaptchaValidator(['captchaAction' => 'default/captcha']);
+				if (!$captchaValidator->validate($post->captcha)) {
+					$this->errors = Language::get('captcha_failed');
+					return false;
+				}
+			}
+
+			if (!DepositAccountModel::checkAccountPassword($post->password, Yii::$app->user->id)) {
+				$this->errors = Language::get('password_error');
+				return false;
+			}
+		}
+
 		return true;
 	}
 
 	public function save($post, $valid = true)
 	{
 		if ($valid === true && !$this->valid($post)) {
-			return false;
-		}
-
-		if (Basewind::getCurrentApp() != 'api') {
-			$captchaValidator = new CaptchaValidator(['captchaAction' => 'default/captcha']);
-			if (!$captchaValidator->validate($post->captcha)) {
-				$this->errors = Language::get('captcha_failed');
-				return false;
-			}
-		}
-
-		if (!DepositAccountModel::checkAccountPassword($post->password, Yii::$app->user->id)) {
-			$this->errors = Language::get('password_error');
 			return false;
 		}
 

@@ -28,11 +28,11 @@ class My_cashcardForm extends Model
 {
 	public $errors = null;
 
-	public function formData($post = null, $pageper = 4) 
+	public function formData($post = null, $pageper = 4, $isAJax = false, $curPage = false) 
 	{
-		$query = CashcardModel::find()->where(['useId' => Yii::$app->user->id])->orderBy(['id' => SORT_DESC]);
+		$query = CashcardModel::find()->alias('c')->select('c.cardNo,c.id,c.name,c.money,c.add_time,c.active_time,c.expire_time, dt.tradeNo')->joinWith('depositTrade dt', false)->where(['useId' => Yii::$app->user->id])->orderBy(['id' => SORT_DESC]);
 	
-		$page = Page::getPage($query->count(), $pageper);
+		$page = Page::getPage($query->count(), $pageper, $isAJax, $curPage);
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($recordlist as $key => $record)
 		{
@@ -43,9 +43,10 @@ class My_cashcardForm extends Model
 					$recordlist[$key]['valid'] = 0;
 				}
 			}
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['active_time'] = Timezone::localDate('Y-m-d H:i:s', $record['active_time']);
+			 
+			if(in_array(Basewind::getCurrentApp(), ['api', 'wap'])) {
+				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
+				$record['active_time'] > 0 && $recordlist[$key]['active_time'] = Timezone::localDate('Y-m-d H:i:s', $record['active_time']);
 				$record['expire_time'] > 0 && $recordlist[$key]['expire_time'] = Timezone::localDate('Y-m-d H:i:s', $record['expire_time']);
 			}
 		}

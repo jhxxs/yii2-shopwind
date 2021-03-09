@@ -20,7 +20,7 @@ return array(
    'gatewayUrl' 		=> 'URL(服务器地址)',
    
    'weixin_menu'		=> '自定义菜单',
-   'menus_list' 		=> '菜单列表',
+   'menus_list' 		=> '列表',
    'menu_name'			=> '菜单名称',
    'parent' 			=> '上级菜单',
    'menu_type'			=> '菜单类型',
@@ -55,7 +55,7 @@ return array(
    'weixin_reply'		=> '自动回复',
    'textmsg' 			=> '文字消息',
    'imgmsg'				=> '图文消息',
-   'replys_list' 		=> '回复列表',
+   'replys_list' 		=> '列表',
    'rule_name'			=> '规则名称',
    'reply_type'			=> '回复类型',
    'rule_name_empty' 	=> '规则名称不能为空',

@@ -277,14 +277,11 @@ class DepositController extends \common\controllers\BaseUserController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			
 			$model = new \frontend\models\DepositCardrechargeForm();
-        	if (!$model->load(Yii::$app->request->post(), '') || !$model->validate()) {
+			if(!$model->submit($post)) {
 				return Message::warning($model->errors);
 			}
 			
-			$cashcard = CashcardModel::find()->where(['cardNo' => $post->cardNo])->one();
-			if(!$model->submit($post, $cashcard)) {
-				return Message::warning($model->errors);
-			}
+			$cashcard = CashcardModel::find()->select('money')->where(['cardNo' => $post->cardNo])->one();
 			return Message::display(sprintf(Language::get('cashcard_recharge_successed'), $cashcard->money), ['deposit/tradelist']);
 		}
 	}
@@ -321,7 +318,7 @@ class DepositController extends \common\controllers\BaseUserController
 	/* 提现申请 */
 	public function actionWithdraw()
 	{
-		$this->params['deposit_account'] = DepositAccountModel::find()->select('money')->where(['userid' => Yii::$app->user->id])->asArray()->one();
+		$this->params['deposit_account'] = DepositAccountModel::find()->select('money,nodrawal')->where(['userid' => Yii::$app->user->id])->asArray()->one();
 		$bankList = BankModel::find()->where(['userid' => Yii::$app->user->id])->asArray()->all();
 		$this->params['myBank'] = ['list' => $bankList, 'count' => count($bankList)];
 		
@@ -338,18 +335,17 @@ class DepositController extends \common\controllers\BaseUserController
 	/* 提现确认 */
 	public function actionWithdrawconfirm()
 	{
-		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['bid']);
-		
-		$model = new \frontend\models\DepositWithdrawconfirmForm();
-		if(!$model->valid($get)) {
-			return Message::warning($model->errors);
-		}
-
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['deposit_account'] = DepositAccountModel::find()->select('money')->where(['userid' => Yii::$app->user->id])->asArray()->one();
-			$this->params['bank'] = BankModel::find()->where(['bid' => $get->bid])->asArray()->one();
-			$this->params['withdraw'] = ['money' => $get->money];
+			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['bid']);
+			$model = new \frontend\models\DepositWithdrawconfirmForm();
+			if(!$model->valid($post, false)) {
+				return Message::warning($model->errors);
+			}
+
+			$this->params['deposit_account'] = DepositAccountModel::find()->select('money,nodrawal')->where(['userid' => Yii::$app->user->id])->asArray()->one();
+			$this->params['bank'] = BankModel::find()->where(['bid' => $post->bid])->asArray()->one();
+			$this->params['withdraw'] = ['money' => $post->money];
 
 			// 当前位置
 			$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('deposit_withdraw'));
@@ -364,7 +360,8 @@ class DepositController extends \common\controllers\BaseUserController
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['bid']);
 			
-			if(!$model->save($post, false)) {
+			$model = new \frontend\models\DepositWithdrawconfirmForm();
+			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('withdraw_ok_wait_verify'), ['deposit/tradelist']);

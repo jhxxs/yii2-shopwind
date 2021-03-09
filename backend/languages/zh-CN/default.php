@@ -94,7 +94,6 @@ return array(
     'plugin_sms'    => '手机短信',
 
 	'layout' => '布局',
-	'report_manage'	=> '举报管理',
 	'evaluation_manage'=>'评价管理',
 	'migration' => '网站搬家',
 	'get_region_fail' => '获取地区失败！',

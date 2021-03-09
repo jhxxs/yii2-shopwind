@@ -258,6 +258,6 @@ return array(
 	'access_limit' => '您没有被授予相应的权限，无权访问',
 	'handle_fail' => '操作失败',
 	'if_enabled'	=>'是否启用',
-	
+	'report_manage'	=> '举报管理',
     
 );

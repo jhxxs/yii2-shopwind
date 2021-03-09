@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\models\DepositTradeModel;
 use common\models\DepositRecordModel;
 use common\models\DepositRechargeModel;
@@ -65,18 +66,16 @@ class CardrechargeIncome extends IncomeDepopay
 	}
 	
 	/* 插入交易记录，充值记录 */
-	private function _insert_recharge_info($trade_info, $extra_info, $post)
+	private function _insert_recharge_info($trade_info, $extra_info, $post = null)
 	{
 		// 如果添加有记录，则不用再添加了
-		if(!DepositTradeModel::find()->where(['tradeNo' => $extra_info['tradeNo']])->exists())
+		if(!($tradeInfo = DepositTradeModel::find()->where(['tradeNo' => $extra_info['tradeNo']])->one()))
 		{
-			$bizOrderId	= DepositTradeModel::genTradeNo(12, 'bizOrderId');
-			
 			// 增加交易记录
 			$data_trade = array(
 				'tradeNo'		=> $extra_info['tradeNo'],
 				'payTradeNo'	=> DepositTradeModel::genPayTradeNo(),
-				'bizOrderId'	=> $bizOrderId,
+				'bizOrderId'	=> $extra_info['bizOrderId'],
 				'bizIdentity'	=> Def::TRADE_RECHARGE,
 				'buyer_id'		=> $trade_info['userid'],
 				'seller_id'		=> $trade_info['party_id'],
@@ -88,7 +87,7 @@ class CardrechargeIncome extends IncomeDepopay
 				'flow'     		=> $this->_flow_name,
 				'fundchannel'   => Language::get('rechargecard'),
 				'title'			=> Language::get('recharge') . ' - ' . Language::get('rechargecard'),
-				'buyer_remark'	=> $post->remark ? $post->remark : '',
+				'buyer_remark'	=> $extra_info['bizOrderId'],
 				'add_time'		=> Timezone::gmtime()
 			);
 			
@@ -97,24 +96,24 @@ class CardrechargeIncome extends IncomeDepopay
 				$model->$key = $val;
 			}
 		
-			if($model->save(false) == true)
+			if($model->save())
 			{
 				$query = new DepositRechargeModel();
-				$query->orderId = $bizOrderId;
+				$query->orderId = $extra_info['bizOrderId'];
 				$query->userid = $trade_info['userid'];
 				$query->is_online = 0;
 	
-				if($query->save() == true) {
-					$result = $model;
+				if($query->save()) {
+					$tradeInfo = $model;
 				}
 			}
 		}
 		
-		return $result;
+		return $tradeInfo;
 	}
 	
 	/* 充值卡充值 */
-	private function _insert_record_info($tradeInfo = array(), $post = null)
+	private function _insert_record_info($tradeInfo = null, $post = null)
 	{
 		$time = Timezone::gmtime();
 		
@@ -131,12 +130,16 @@ class CardrechargeIncome extends IncomeDepopay
 		$model->tradeTypeName = Language::get(strtoupper($this->_tradeType));
 		$model->flow = $this->_flow_name;
 		
-		if($model->save() == true) {
-			if($post->card_id) {
-				return CashcardModel::updateAll(['useId' => $tradeInfo->buyer_id, 'active_time' => Timezone::gmtime()], ['id' => $post->card_id]);
-			} else return true;
+		if(!$model->save()) {
+			return false;
+		}
+		if($post->card_id) {
+			CashcardModel::updateAll(['useId' => $model->userid, 'active_time' => Timezone::gmtime()], ['id' => $post->card_id]);
+
+			// 激活充值成功后，账户余额中该部分金钱设置为不可提现
+			DepositAccountModel::updateAllCounters(['nodrawal' => $tradeInfo->amount], ['userid' => $model->userid]);
 		}
 		
-		return false;
+		return true;
 	}
 }
