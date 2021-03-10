@@ -21,7 +21,7 @@
               <div class="title clearfix">
                 <h2 class="float-left">提取余额到银行卡</h2>
                 <p class="float-left">余额：<strong>{$deposit_account.money}</strong> 元</p>
-                <!--{if $deposit_account.nodrawal}-->
+                <!--{if $deposit_account.nodrawal gt 0}-->
                 <p class="float-left" style="margin-left: 0;">，不可提现金额：<strong>{$deposit_account.nodrawal}</strong> 元</p>
                 <!--{/if}-->
                 <div class="float-right link"> <a class="add-bank" href="{url route='bank/add' type=debit}">添加银行卡</a> <a href="{url route='deposit/drawlist'}">提现记录</a> </div>

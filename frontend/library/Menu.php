@@ -144,6 +144,12 @@ class Menu
 						'url'   => Url::toRoute(['buyer_order/index']),
 						'name'  => 'my_order',
 					),
+					// 我申请的退款
+					'refund' => array(
+						'text' => Language::get('refund_apply'),
+						'url'  => Url::toRoute(['refund/index']),
+						'name' => 'refund_apply',
+					),
 					'my_question' =>array(
 						'text'  => Language::get('my_question'),
 						'url'   => Url::toRoute(['my_question/index']),
@@ -163,13 +169,7 @@ class Menu
 						'text'  => Language::get('my_coupon'),
 						'url'   => Url::toRoute(['my_coupon/index']),
 						'name'  => 'my_coupon',
-					),
-					// 我申请的退款
-					'refund' => array(
-						'text' => Language::get('refund_apply'),
-						'url'  => Url::toRoute(['refund/index']),
-						'name' => 'refund_apply',
-					),
+					)
 				),
 			);
 			
@@ -215,6 +215,12 @@ class Menu
 						'url'   => Url::toRoute(['seller_order/index']),
 						'name'  => 'seller_order',
 				);
+				// 退款管理
+				$menu['im_seller']['submenu']['refund_receive']  = array(
+					'text' => Language::get('refund_receive'),
+					'url'  => Url::toRoute(['refund/receive']),
+					'name' => 'refund_receive',
+				);
 				$menu['im_seller']['submenu']['my_store']  = array(
 						'text'  => Language::get('my_store'),
 						'url'   => Url::toRoute(['my_store/index']),
@@ -247,12 +253,6 @@ class Menu
 						'text'  => Language::get('seller_coupon'),
 						'url'   => Url::toRoute(['seller_coupon/index']),
 						'name'  => 'seller_coupon',
-				);
-				// 退款管理
-				$menu['im_seller']['submenu']['refund_receive']  = array(
-						'text' => Language::get('refund_receive'),
-						'url'  => Url::toRoute(['refund/receive']),
-						'name' => 'refund_receive',
 				);
 				
 				// 营销中心
@@ -322,6 +322,11 @@ class Menu
 						'url'      => Url::toRoute('deposit/index'),
 						'name'     => 'my_capital',
 					),
+					'refund' => array(
+						'text' => Language::get('refund_apply'),
+						'url'  => Url::toRoute('refund/index'),
+						'name' => 'refund_apply',
+					),
 					'my_question' =>array(
 						'text'  => Language::get('my_question'),
 						'url'   => Url::toRoute(['my_question/index']),
@@ -346,11 +351,6 @@ class Menu
 						'text'  => Language::get('my_message'),
 						'url'   => Url::toRoute('my_message/index'),
 						'name'  => 'my_message',
-					),
-					'refund' => array(
-						'text' => Language::get('refund_apply'),
-						'url'  => Url::toRoute('refund/index'),
-						'name' => 'refund_apply',
 					),
 					'distribute' => array(
 						'text' => Language::get('distribute_apply'),
@@ -408,7 +408,11 @@ class Menu
 						'url'   => Url::toRoute(['my_goods/index']),
 						'name'  => 'my_goods',
 				); 
-				
+				$menu['im_seller']['submenu']['refund_receive']  = array(
+					'text' => Language::get('refund_receive'),
+					'url'  => Url::toRoute(['refund/receive']),
+					'name' => 'refund_receive',
+				);
 				$menu['im_seller']['submenu']['my_delivery'] = array(
 						'text'  => Language::get('my_delivery'),
 						'url'   => Url::toRoute(['my_delivery/index']),
@@ -424,11 +428,6 @@ class Menu
 						'text'  => Language::get('my_comment'),
 						'url'   => Url::toRoute(['my_comment/index']),
 						'name'  => 'my_comment',
-				);
-				$menu['im_seller']['submenu']['refund_receive']  = array(
-						'text' => Language::get('refund_receive'),
-						'url'  => Url::toRoute(['refund/receive']),
-						'name' => 'refund_receive',
 				);
 				$menu['im_seller']['submenu']['seller_coupon']  = array(
 						'text'  => Language::get('seller_coupon'),

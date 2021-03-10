@@ -282,7 +282,7 @@ class DepositController extends \common\controllers\BaseUserController
 			}
 			
 			$cashcard = CashcardModel::find()->select('money')->where(['cardNo' => $post->cardNo])->one();
-			return Message::display(sprintf(Language::get('cashcard_recharge_successed'), $cashcard->money), ['deposit/tradelist']);
+			return Message::display(sprintf(Language::get('cashcard_recharge_ok'), $cashcard->money), ['deposit/tradelist']);
 		}
 	}
 	

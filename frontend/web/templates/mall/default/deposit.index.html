@@ -43,7 +43,7 @@
                 <!--{foreach from=$recordlist item=record}-->
                 <ul class="clearfix" style="{if $record.refund} border-bottom:1px #ddd dotted;{/if}{if in_array($record.refund.status, array('CLOSED'))}color:gray{/if}">
                   <li class="time">{$record.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</li>
-                  <li class="info break-word">{$record.title|truncate:30}</li>
+                  <li class="info break-word">{$record.title|truncate:36}</li>
                   <li class="tradeNo break-word">{$record.bizOrderId} | {$record.tradeNo}</li>
                   <li class="party">{$record.partyInfo.name}</li>
                   <li class="amount"> {if $record.flow eq 'income'}<strong class="price green">+{$record.amount}</strong> {else} <strong class="price f60">-{$record.amount}</strong> {/if} </li>

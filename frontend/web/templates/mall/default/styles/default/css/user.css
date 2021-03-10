@@ -869,7 +869,7 @@ em {font-style: normal}
 a {text-decoration: none}
 a:hover {color: #108ee9;}
 
-.btn-alipay, .btn-alipay span, .btn-alipay input {display: inline-block;background:#19ACF7; font-weight:normal;height: 31px;line-height: 31px;border: 0;text-align: center;text-decoration: none;cursor: pointer;overflow: hidden; border-radius:4px; min-width:60px;}
+.btn-alipay, .btn-alipay span, .btn-alipay input {display: inline-block;background:#19ACF7; font-weight:normal;height: 31px;line-height: 31px;border: 0;text-align: center;text-decoration: none;cursor: pointer; border-radius:4px; min-width:60px;}
 .btn-alipay input {color: #fff;}
 .btn-alipay {color: #fff;position: relative;margin-right: 10px;}
 .btn-alipay:hover {background-position: 0 -392px;color: #fff;}
@@ -985,9 +985,9 @@ a:hover {color: #108ee9;}
 .tradelist li {float: left;width: 140px;padding: 5px 0 5px 0; text-align:center}
 .tradelist .list li {line-height: 20px; padding:10px 0 10px 0;}
 .tradelist li.tradeNo {word-wrap: break-word;word-break: break-all;width:145px;padding-right:7px;font-family: Tahoma, Geneva, sans-serif}
-.tradelist li.info {width: 140px; text-align:left;}
+.tradelist li.info {width: 140px; text-align:left;padding-right: 20px;}
 .tradelist li.party {}
-.tradelist li.amount {/*text-align: center;*/}
+.tradelist li.amount {/*text-align: center;*/ width: 120px;}
 .tradelist li.status {/*text-align: center;*/}
 .tradelist li.detail {text-align: center;width: 35px;}
 .tradelist .list-more {text-align: right;height: 40px;line-height: 40px;}
@@ -1095,7 +1095,7 @@ a:hover {color: #108ee9;}
 .recordlist li div {float: left;width: 95px;text-align: left;line-height: 18px;}
 .recordlist li .tradeNo {word-wrap: break-word;word-break: break-all;width: 145px;padding-right:7px;font-family: Tahoma, Geneva, sans-serif}
 .recordlist li .party{width:140px; text-align:center}
-.recordlist li .info {width: 200px;padding-right: 5px;}
+.recordlist li .info {width: 200px;padding-right: 20px;}
 .recordlist li .fundchannel, .recordlist li .defray, .recordlist li .income {width: 85px;}
 .recordlist li .detail {width: 35px;text-align: center}
 .recordlist .text {width: 100px;height: 12px;line-height: 12px;}

@@ -30,8 +30,14 @@ use common\library\Def;
  
 class RefundOutlay extends OutlayDepopay
 {	
-	// 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType = 'TRANSFER';
+	// 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	var $_tradeCat	   	= 'SHOPPING'; 
+	
+	// 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+    var $_tradeType 	= 'TRANSFER';
+	
+	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
+	var $_payType   	= 'SHIELD';	
 	
 	public function submit($data = array())
 	{
@@ -63,6 +69,11 @@ class RefundOutlay extends OutlayDepopay
 		/* 插入收支记录，并变更账户余额 */
 		if(!$this->_insert_record_info($trade_info, $extra_info, $post)) {
 			return false;
+		}
+
+		// 如果是购物订单且买家使用的是余额支付，则处理不可提现金额的额度
+		if($extra_info['chajia'] > 0) {
+			parent::relieveUserNodrawal($extra_info['tradeNo'], $trade_info['party_id'], $extra_info['chajia']);
 		}
 		
 		return true;

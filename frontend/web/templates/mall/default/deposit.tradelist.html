@@ -40,7 +40,7 @@
               <ul>
                 <li class="clearfix" style="{if $record.refund} border-bottom:1px #ddd dotted;{/if}{if in_array($record.refund.status, array('CLOSED'))}color:gray{/if}">
                   <div class="time">{$record.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</div>
-                  <div class="info break-word">{$record.title|truncate:30} <p class="gray">{$record.buyer_remark|truncate:12}</p></div>
+                  <div class="info break-word">{$record.title|truncate:50} <p class="gray">{$record.buyer_remark|truncate:30}</p></div>
                   <div class="tradeNo"><span class="break-word">{$record.bizOrderId} | {$record.tradeNo}</span></div>
                   <div class="party center">{$record.partyInfo.name}</div>
                   <div class="amount center"> <strong class="price"> 

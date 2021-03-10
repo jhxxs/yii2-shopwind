@@ -68,7 +68,7 @@ return array(
 	'select_account_yourself'	=>	'对不起，您不能向自己的账户转账',
 	'select_account_not_exist'	=>	'对不起，您所要转入的账户不存在',
 	'transfer_ok'				=>	'转账成功',
-	'downloadbill_fail'			=> '月账单下载失败',
+	'downloadbill_fail'			=>  '月账单下载失败',
 	
 	'add_recharge_ok'			=>	'线下充值申请已提交，等待管理员审核',
 	'payment_not_available'		=>  '抱歉！您选择的付款方式不可用',

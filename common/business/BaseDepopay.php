@@ -90,6 +90,9 @@ class BaseDepopay
 		return false;
 	}
 	
+	/**
+	 * 获取交易标题信息
+	 */
 	public function _get_intro_by_order($order_id = 0)
 	{
 		$intro = '';
@@ -180,6 +183,25 @@ class BaseDepopay
 		}
 	}
 	
+	/**
+	 * 如果是使用余额支付，且买家账户有不可提现金额
+	 * 则解除该部分金额的提现额度限制，避免不可提现金额一直存在
+	 */
+	public function relieveUserNodrawal($tradeNo, $userid = 0, $money = 0)
+	{
+		$query = DepositTradeModel::find()->select('payment_code')->where(['tradeNo' => $tradeNo])->one();
+		if(!$query || ($query->payment_code != 'deposit')) {
+			return true;
+		}
+
+		$model = DepositAccountModel::find()->select('account_id,nodrawal')->where(['userid' => $userid])->one();
+		if($model && ($model->nodrawal > 0)) {
+			$model->nodrawal = ($model->nodrawal - $money) > 0 ? $model->nodrawal - $money : 0;
+			return $model->save();
+		}
+		return false;
+	}
+
 	public function getErrors()
 	{
 		$ex = new DepopayException();

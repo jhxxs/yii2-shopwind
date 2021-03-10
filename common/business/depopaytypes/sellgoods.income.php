@@ -72,6 +72,11 @@ class SellgoodsIncome extends IncomeDepopay
 				return false;
 			}
 		}
+
+		// 如果是购物订单且买家使用的是余额支付，则处理不可提现金额的额度
+		if($trade_info['amount'] > 0) {
+			parent::relieveUserNodrawal($tradeNo, $trade_info['party_id'], $trade_info['amount']);
+		}
 		
 		return true;
 	}
