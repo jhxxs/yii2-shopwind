@@ -98,4 +98,6 @@ return array(
 	'migration' => '网站搬家',
 	'get_region_fail' => '获取地区失败！',
 	'clickView' => '点击查看',
+	'upgrade_tip' => '更新提示',
+    'upgrade_info' => '当前系统版本为：%s，ShopWind系统有新版本（sysversion）<a href="ht%stps://ww%sw.sh%sopwi%snd.net/p%sroduct/upda%ste.html" target="_blank">点此下载更新</a>',
 );

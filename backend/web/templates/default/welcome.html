@@ -3,6 +3,11 @@
 #rightCon{ background:#f2f2f2;font-family:'microsoft yahei';}
 </style>
 <div id="rightCon" class="clearfix welcome">
+  <div class="explanation hidden J_Upgrade" data-version="{$sys_info.version}">
+    <div class="title" style="margin: 0;"> <i class="fa fa-lightbulb-o"></i>
+      <h4>{$lang.upgrade_tip} <span class="ml10 gray">{sprintf($lang.upgrade_info,$sys_info.version,'','','','','','')}</span></h4>
+    </div>
+  </div>
   <div class="lp">
     <div class="box-s-1">
       <div class="box weekly-info J-slide">
@@ -205,6 +210,7 @@ $(function(){
 			}
 		});
 	});
+  systemUpgrade();
 });
 </script> 
 {include file="footer.html"} 

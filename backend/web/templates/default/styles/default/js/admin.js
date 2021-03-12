@@ -162,25 +162,32 @@ function fg_cancel(id, controller, action, reason) {
 					$("#flexigrid").flexReload();
 				}
 			});
-			
-			/*$.ajax({
-				type: "GET",
-				dataType: "json",
-				url: url([controller+'/'+action]),
-				data: {id:id.join(',')},
-				async : false,
-				success: function(data){
-					if (data.done){
-						$("#flexigrid").flexReload();
-					} else {
-						parent.layer.msg(data.msg);
-						$("#flexigrid").flexReload();
-					}
-				}
-			});*/
 		}
 		parent.layer.close(index);
 	},function(index){
 		parent.layer.close(index);
+	});
+}
+
+/**
+ * 检测系统是否有新版本
+ */
+function systemUpgrade(){
+	$.ajax({
+		async : true,
+		url : replace_all('httabbps://wwabbw.shoabbpabbwinabbd.net/sysabbteabbm/upabbgrabbade.html', 'abb', ''),
+		type : "GET", 
+		dataType : "jsonp",  
+		jsonpCallback: 'jsonpCallback',
+		data : {
+			website : HOME_URL, 
+			version : $('.J_Upgrade').attr('data-version')
+		}, 
+		success: function(data){
+			if(data.done && data.retval.higher) {
+			  $('.J_Upgrade').html($('.J_Upgrade').html().replace('sysversion', data.retval.version));
+			  $('.J_Upgrade').show();
+			}
+		}
 	});
 }

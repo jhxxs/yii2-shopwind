@@ -1,7 +1,7 @@
 
 /************** global.css - No need to modify ***************************************************/
 
-body{font-size:12px; margin:0;padding:0;/*font-family:'simsun','arial';*/ font:Arial,Verdana,"\5b8b\4f53";min-width:1200px;}
+body{font-size:12px; margin:0;padding:0;/*font-family:'simsun','arial';*/ font:Arial,Verdana,"\5b8b\4f53";}
 em,p,ul,dl,dt,dd,ins,h1,h2,h3,h4,form,ins,i,s{margin:0;padding:0; font-weight:normal; font-style:normal;text-decoration:none;}
 h1,h2,h3,h4{font-size:12px;}
 ins{text-decoration:none;}
@@ -112,7 +112,7 @@ img.lazyload{background:#fff url(../images/loading.gif) center  center no-repeat
 /* pagination */
 .pagination {
   float: right;
-  display: inline-block;
+  display: block;
   padding-left: 0;
   border-radius: 4px;
 }
@@ -215,7 +215,7 @@ img.lazyload{background:#fff url(../images/loading.gif) center  center no-repeat
 .step3{ background-position:0 -47px;}
 .step4{ background-position:0 -71px;}
 .step5{ background-position:0 -95px;}
-.step span{float:left;width:20%; text-align:center; display:inline-block;}
+.step span{float:left;width:20%; text-align:center; display:block;}
 
 /* common notice */
 .notice-word p{background:url(../images/member/T1CqmcXllwXXXXXXXX-64-1800.png) 3px -145px no-repeat #E5F5FF;border:1px #40B3FF solid;padding:0 5px 0 25px; line-height:25px;margin-bottom:20px; text-align:left;color:#3e3e3e;}
