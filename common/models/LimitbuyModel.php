@@ -130,7 +130,7 @@ class LimitbuyModel extends ActiveRecord
 			else $proPrice = round($spec->price * $specPrice[$spec_id]['price'] / 1000, 4) * 100;
 		}
 		
-		return array($proPrice, $limitbuy ? $limitbuy['pro_id'] : 0);
+		return array($proPrice, $limitbuy ? $limitbuy->pro_id : 0);
 	}
 	
 	/* 判断促销状态 */

@@ -73,11 +73,6 @@
               {if $site_url_error}<strong style="color:red">{$lang.site_url_error}</strong>{else}{$lang.site_url_notice}{/if}</td>
           </tr>
           <tr>
-            <th>{$lang.mobile_url}:</th>
-            <td class="clearfix"><input type="text" class="input_text" name="mobile_url" id="mobile_url" value="{$smarty.post.mobile_url|default:$mobile_url}" />
-              {if $site_url_error}<strong style="color:red">{$lang.site_url_error}</strong>{else}{$lang.mobile_url_notice}{/if}</td>
-          </tr>
-          <tr>
             <th>{$lang.back_url}:</th>
             <td class="clearfix"><input type="text" class="input_text" name="back_url" id="back_url" value="{$smarty.post.back_url|default:$back_url}" />
               {if $site_url_error}<strong style="color:red">{$lang.site_url_error}</strong>{else}{$lang.back_url_notice}{/if}</td>

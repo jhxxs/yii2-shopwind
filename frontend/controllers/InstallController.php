@@ -119,7 +119,6 @@ class InstallController extends \common\controllers\BaseMallController
 			if(($siteUrl = Basewind::siteUrl())) {
 				$this->params['site_url'] = $siteUrl;
 				if(stripos($siteUrl, 'frontend/web')) {
-					$this->params['mobile_url'] = str_replace('frontend/web', 'mobile/web', $siteUrl);
 					$this->params['back_url'] = str_replace('frontend/web', 'backend/web', $siteUrl);
 				}
 			}
@@ -166,10 +165,6 @@ class InstallController extends \common\controllers\BaseMallController
 			
 			if(!preg_match("/^http(s?):\/\//i", $post->back_url)) {
 				return Message::warning(Language::get('back_url_error'));
-			}
-			
-			if(count(array_unique([$post->site_url, $post->mobile_url, $post->back_url])) != 3) {
-				return Message::warning(Language::get('url_eq_error'));
 			}
 			
 			if ($post->admin_pass != $post->confirm_pass) {
