@@ -5,7 +5,7 @@
 .dialog_wrapper .dialog_title{ display:block; float:none;padding:0; line-height:40px; height:40px; font-size:14px; background:#f1f1f1;padding-left:10px;color:#3e3e3e; }
 .dialog_wrapper .dialog_content input[type="text"], 
 .dialog_wrapper .dialog_content input[type="password"], 
-.dialog_wrapper .dialog_content textarea {width:90%; text-indent: 5px; border: 1px #7F9DB9 solid; height:28px; line-height:28px;padding:0;margin:0; background:none}
+.dialog_wrapper .dialog_content textarea {text-indent: 5px; border: 1px #7F9DB9 solid; height:28px; line-height:28px;padding:0;margin:0; background:none}
 .dialog_wrapper .dialog_content textarea{ height: 44px; width: 220px;}
 .dialog_wrapper .dialog_content select{border: 1px #7F9DB9 solid; height:30px;padding:0;}
 .dialog_wrapper .dialog_content .submit .btn,

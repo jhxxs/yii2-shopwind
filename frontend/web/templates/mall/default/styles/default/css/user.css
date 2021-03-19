@@ -1470,7 +1470,7 @@ a:hover {color: #108ee9;}
 						  .lst-products .btn-add-product:hover{color:#3e3e3e; text-decoration:none}
 			
 .gselector-goods{padding:10px 15px}	
-.gselector-goods .form-filter .btn-gselector-small{ background:#09F; color:#fff; border-radius:4px; width:51px; height:21px; line-height:21px; display:inline-block;border:0; cursor:pointer}	  
+.gselector-goods .form-filter .btn-gselector-small{ background:#09F; color:#fff; border-radius:4px; width:51px; height:30px; line-height:30px; display:inline-block;border:0; cursor:pointer}	  
 .gselector-goods .traderates-index-col li{width:90px; text-align:center}	
 .gselector-goods .traderates-index-col li.col-1{width:340px; text-align:left;padding-left:10px}	
 .gselector-goods .content{width:660px;}	

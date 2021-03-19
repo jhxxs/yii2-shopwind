@@ -1,7 +1,7 @@
 
 /************** global.css - No need to modify ***************************************************/
 
-body{font-size:12px; margin:0;padding:0;/*font-family:'simsun','arial';*/ font:Arial,Verdana,"\5b8b\4f53";}
+body{font-size:12px; margin:0;padding:0;/*font-family:'simsun','arial';*/ font:Arial,Verdana,"\5b8b\4f53"; min-width: 1200px;}
 em,p,ul,dl,dt,dd,ins,h1,h2,h3,h4,form,ins,i,s{margin:0;padding:0; font-weight:normal; font-style:normal;text-decoration:none;}
 h1,h2,h3,h4{font-size:12px;}
 ins{text-decoration:none;}

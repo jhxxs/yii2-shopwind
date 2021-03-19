@@ -76,7 +76,7 @@
               <td valign="top" class="align2"><strong>{$goods.quantity}</strong></td>
               <!--{if $smarty.foreach.fe_goods.first}-->
               <td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"> {$order.payment_name|escape} </td>
-              <td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><a href="{url route='my_message/send' to_id=$order.buyer_id}" target="_blank">{$order.buyer_name|escape}</a> <br />
+              <td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><a title="{$order.buyer_name}" href="{url route='my_message/send' to_id=$order.buyer_id}" target="_blank">{$order.buyer_name|truncate:12}</a> <br />
                 <a href="javascript:;" class="J_StartLayim" data-toid="{$order.buyer_id}"><img src="{$siteUrl}/static/images/myim.png" width="17" height="17" style="vertical-align:middle" /></a> <a target="_blank" href="{url route='my_message/send' to_id=$order.buyer_id}" class="email"></a></td>
               <td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><strong>{$order.order_amount}</strong><br />
                 <span class="gray-color">(含运费:{$order.shipping_fee})</span>
