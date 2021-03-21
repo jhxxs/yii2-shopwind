@@ -63,7 +63,7 @@
                   <div class="add_wrap">
                     <div class="assort">
                       <p class="txt">{$lang.select_goods}:</p>
-                      <p class="lst-products" style="width:630px;"> <a href="javascript:;" gs_id="seller_limitbuy" gs_name="goods_name" gs_callback="gs_callback1" gs_title="{$lang.gselector}" gs_width="690" gs_type="goods" gs_store_id="{$visitor.store_id}" ectype="gselector" gs_uri="{url route='gselector/goods'}" class="btn-add-product">{$lang.gselector}</a> <span id="goods_name"></span>
+                      <p class="lst-products" style="width:630px;"> <a href="javascript:;" gs_id="seller_limitbuy" gs_name="goods_name" gs_callback="gs_callback1" gs_title="{$lang.gselector}" gs_width="690" gs_type="goods" gs_store_id="{$visitor.store_id}" ectype="gselector" gs_uri="{url route='gselector/goods'}" class="btn-add-product">{$lang.gselector}</a> <span class="block mt10" id="goods_name"></span>
                         <input type="hidden" id="seller_limitbuy" name="goods_id" value="{$limitbuy.goods_id}" />
                       </p>
                     </div>
@@ -71,7 +71,7 @@
                       <p class="txt float-left">{$lang.spec_price}: </p>
                       <div ectype="spec_list" class="spec float-left">
                         <ul class="th">
-                          <li id="spec_name" class="distance2"></li>
+                          <li id="spec_name" class="distance2">{$lang.spec}</li>
                           <li class="distance1">{$lang.stock}</li>
                           <li class="distance1">{$lang.price}</li>
                           <li class="distance2" style="width:130px;">{$lang.pro_price}</li>
@@ -88,7 +88,7 @@
                             <input ecname="price[[4]]" type="hidden" value="[5]" />
                             [6]</li>
                           <li class="distance1" style="width:130px;">
-                            <input ectype="pro_price" ecname="pro_price[[7]]" type="text" class="text width2" value="[8]" />
+                            <input ectype="pro_price" placeholder="0.01-9.99" ecname="pro_price[[7]]" type="text" class="text width2" value="[8]" />
                           </li>
                           <li class="distance1">
                             <select ectype="pro_type" ecname="pro_type[[9]]" >

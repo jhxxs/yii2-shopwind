@@ -113,8 +113,8 @@ CREATE TABLE IF NOT EXISTS `swd_apprenewal` (
   `rid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `appid` varchar(20) NOT NULL,
   `userid` int(11) NOT NULL DEFAULT '0',
-  `add_time` int(11) DEFAULT NULL,
-  `expired` int(11) DEFAULT NULL,
+  `add_time` int(11) unsigned DEFAULT NULL,
+  `expired` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`rid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -365,7 +365,7 @@ CREATE TABLE IF NOT EXISTS `swd_coupon_sn` (
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `coupon_sn` varchar(20) NOT NULL DEFAULT '',
   `coupon_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `remain_times` int(10) DEFAULT '0',
+  `remain_times` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`coupon_sn`),
   KEY `coupon_id` (`coupon_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -1003,12 +1003,12 @@ CREATE TABLE IF NOT EXISTS `swd_msg_log` (
   `code` varchar(20) NOT NULL,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `receiver` varchar(20) NOT NULL DEFAULT '',
-  `verifycode` int(10) unsigned NOT NULL DEFAULT '',
+  `verifycode` int(10) unsigned DEFAULT NULL,
   `codekey` varchar(32) NOT NULL DEFAULT '',
   `content` text,
-  `quantity` int(10) DEFAULT '0',
+  `quantity` int(10) unsigned DEFAULT '0',
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(3) unsigned DEFAULT '0',
+  `status` tinyint(3) DEFAULT '0',
   `message` varchar(100) DEFAULT NULL,
   `add_time` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
