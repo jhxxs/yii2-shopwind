@@ -34,6 +34,13 @@ ShopWind系统归属于广西南宁领众网络科技有限公司所有，早在
 
 参阅运营手册：[https://www.shopwind.net/forum/gid-14528-1.html](https://www.shopwind.net/forum/gid-14528-1.html)
 
+#### 开发文档
+
+官方开发文档：[https://developer.shopwind.net](https://developer.shopwind.net)
+
+#### API接口文档
+
+官方API接口文档：[http://docs.shopwind.net/dev-api](http://docs.shopwind.net/dev-api)
 
 #### 其他相关
 

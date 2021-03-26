@@ -146,7 +146,6 @@ class BaseInstall
 	{
 		$config = ArrayHelper::merge([
 			'frontendUrl' 	=> $post->site_url,
-			'mobileUrl'		=> $post->mobile_url,
 			'backendUrl'	=> $post->back_url
 		], Setting::getDefault());
 

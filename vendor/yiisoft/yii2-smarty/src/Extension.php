@@ -117,7 +117,7 @@ class Extension
 		if(!file_exists(Yii::getAlias('@frontend') . '/web/data/install.lock')) {
 			return Url::to($params);
 		}
-		return Url::to($params, true);
+		return Url::to($params);
     }
 
     /**
