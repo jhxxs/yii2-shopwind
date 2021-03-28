@@ -89,7 +89,7 @@ class NormalOrder extends BaseOrder
 
 	/** 
 	 * 提交生成的订单
-	 * @return int order_id
+	 * @return array $result 包含店铺和订单号的数组
 	 */
 	public function submit($data = array())
 	{
@@ -117,30 +117,7 @@ class NormalOrder extends BaseOrder
 		}
 
 		// 至此说明订单的信息都是可靠的，可以开始入库了
-		$insertFail = 0;
-		$result = array();
-		foreach ($base_info as $store_id => $store) {
-			if (!($order_id = parent::insertOrder($base_info[$store_id]))) {
-				$insertFail++;
-				$this->errors = Language::get('create_order_failed');
-				break;
-			}
-			if (!(parent::insertOrderGoods($order_id, $goods_info['orderList'][$store_id]))) {
-				$insertFail++;
-				$this->errors = Language::get('create_order_failed');
-				break;
-			}
-			if (!(parent::insertOrderExtm($order_id, $consignee_info[$store_id]))) {
-				$insertFail++;
-				$this->errors = Language::get('create_order_failed');
-				break;
-			}
-			$result[$store_id] = $order_id;
-		}
-
-		// 考虑合并付款的情况下（优惠，积分抵扣等问题），必须保证本批次的所有订单都插入成功，要不都删除本次订单
-		if ($insertFail > 0) {
-			parent::deleteOrderData($result);
+		if(($result = parent::insertOrderData($base_info, $goods_info, $consignee_info)) === false) {
 			return false;
 		}
 

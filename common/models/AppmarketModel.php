@@ -37,7 +37,7 @@ class AppmarketModel extends ActiveRecord
 	
 	public static function getList()
 	{
-		return ['limitbuy', 'meal', 'fullfree', 'fullprefer', 'exclusive', 'distribute'];
+		return ['teambuy', 'limitbuy', 'meal', 'fullfree', 'fullprefer', 'exclusive', 'distribute'];
 	}
 	
 	public static function getAppList($code = '')

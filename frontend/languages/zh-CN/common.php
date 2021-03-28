@@ -292,9 +292,10 @@ return array(
 	
 	// 针对订单的状态
     'order_pending'     => '等待买家付款',
-    'order_accepted'    => '买家已付款',
+	'order_teaming'		=> '待成团',
+    'order_accepted'    => '等待卖家发货',
     'order_canceled'    => '交易关闭',
-    'order_submitted'   => '等待卖家发货',//'已提交',
+	'order_submitted'   => '等待卖家发货',//'货到付款',
     'order_shipped'     => '卖家已发货',
     'order_finished'    => '交易完成',
 	'order_success'		=> '交易完成',
@@ -316,7 +317,7 @@ return array(
 	// 针对交易的状态
 	'TRADE_PENDING'				=> '等待买家付款',
 	'TRADE_ACCEPTED'    		=> '等待卖家发货',
-	'TRADE_SUBMITTED'			=> '货到付款待发货',
+	'TRADE_SUBMITTED'			=> '等待卖家发货',
 	'TRADE_SHIPPED'				=> '卖家已发货',
 	'TRADE_SUCCESS'				=> '交易完成',
 	'TRADE_CLOSED'				=> '交易关闭',
@@ -347,7 +348,7 @@ return array(
     'cancel_confirm' => '您确定要取消吗?',
     'cancel_reason' => '取消原因',
     'pending_orders'    => '待付款',
-    'submitted_orders'    => '货到付款待发货',//'已提交的',
+	'teaming_orders'	=> '待成团',
     'accepted_orders'    => '待发货',
     'shipped_orders'    => '已发货',
     'finished_orders'    => '已完成',
@@ -513,12 +514,13 @@ return array(
 	'exclusive'					=> '手机专享',
 	'limitbuy'					=> '限时打折',
 	'distribute'				=> '三级分销',
+	'teambuy'					=> '拼团',
 	
 	'appmarket'					=> '应用市场',
 	'my_appmarket' 				=> '我的应用',
 	'appDisAvailable'			=> '对不起，平台暂未开放此应用的使用权限',
-	'appHasExpired'				=> '对不起，您购买的该应用已过期，请重新到应用市场 <a href="%s" target="_blank">购买或续费</a>',
-	'appHasNotBuy'				=> '对不起，您还没有购买此应用，请到应用市场 <a href="%s" target="_blank">购买</a>',
+	'appHasExpired'				=> '对不起，您购买的该应用已过期，请重新到应用市场购买或续费',
+	'appHasNotBuy'				=> '对不起，您还没有购买此应用，请到应用市场购买',
 	'month'						=> '月',
 	
 	/* 在商品详情页显示 */

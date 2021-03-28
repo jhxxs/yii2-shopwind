@@ -36,6 +36,7 @@ class Def
 	/* 订单状态 */
 	const ORDER_SUBMITTED 		= 	10;              // 针对货到付款而言，他的下一个状态是卖家已发货
 	const ORDER_PENDING			=	11;              // 等待买家付款
+	const ORDER_TEAMING			=   19;			     // 买家已付款，待成团
 	const ORDER_ACCEPTED		=	20;              // 买家已付款，等待卖家发货
 	const ORDER_SHIPPED 		= 	30;              // 卖家已发货
 	const ORDER_FINISHED 		= 	40;              // 交易成功
@@ -122,6 +123,9 @@ class Def
 			case self::ORDER_SUBMITTED:
 				$lang_key = 'order_submitted';
 			break;
+			case self::ORDER_TEAMING: 
+				$lang_key = 'order_teaming';
+			break;
 			case self::ORDER_ACCEPTED:
 				$lang_key = 'order_accepted';
 			break;
@@ -159,7 +163,10 @@ class Def
 			case 'submitted':   //已提交的订单
 				return self::ORDER_SUBMITTED;
 			break;
-			case 'accepted':    //已确认的订单，待发货的订单
+			case 'teaming': // 已付款，待成团订单
+				return self::ORDER_TEAMING;
+			break;
+			case 'accepted': 	// 货到付款，待发货的订单
 				return self::ORDER_ACCEPTED;
 			break;
 			case 'shipped':     //已发货的订单

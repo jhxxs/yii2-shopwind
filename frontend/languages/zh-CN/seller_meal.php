@@ -24,6 +24,5 @@ return array(
 	'current_price' =>'当前状态',
 	'meal_list' => '套餐列表',
 	'add_records'   => '请添加搭配宝贝',
-	'add_records'   => '请添加搭配宝贝',
 	'records_error' => '您至少添加2个搭配商品，且数量不能操作10个',
 );

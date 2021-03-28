@@ -32,10 +32,14 @@ class RefundMessageForm extends Model
 {
 	public $errors = null;
 	
-	public function formData($post = null, $pageper = 10)
+	/**
+	 * 兼容API接口获取数据
+	 */
+	public function formData($post = null, $pageper = 10, $isAJax = false, $curPage = false)
 	{
 		$query = RefundMessageModel::find()->where(['refund_id' => $post->id])->orderBy(['created' => SORT_DESC]);
-		$page = Page::getPage($query->count(), $pageper);
+
+		$page = Page::getPage($query->count(), $pageper, $isAJax, $curPage);
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($recordlist as $key => $val)
 		{

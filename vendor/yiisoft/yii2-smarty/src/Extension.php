@@ -106,17 +106,13 @@ class Extension
 		
 		// @shopwind for Jump from one application to another, remain use the same tag
 		// It only needs add @var baseUrl
-		// use as {url route='default/index' baseUrl=''}
+		// use as {url route='default/index' baseUrl=$baseUrl}
 		if (isset($params['baseUrl'])) {
 			$baseUrl = $params['baseUrl'];
 			unset($params['baseUrl']);
         	return str_replace(Yii::$app->homeUrl, $baseUrl . '/', Url::to($params));
 		}
-		
-		// @shopwind installing
-		if(!file_exists(Yii::getAlias('@frontend') . '/web/data/install.lock')) {
-			return Url::to($params);
-		}
+	
 		return Url::to($params);
     }
 

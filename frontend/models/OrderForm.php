@@ -13,6 +13,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 use common\models\StoreModel;
 use common\models\IntegralModel;
@@ -27,7 +28,7 @@ use common\library\Business;
  */
 class OrderForm extends Model
 {
-	// order type, item data from where, eg: cart|meal ...
+	// order type, item data from where, eg: normal|meal ...
 	public $otype 	= 'normal';
 	
 	// goods type, eg: material|virtual 
@@ -48,6 +49,9 @@ class OrderForm extends Model
 		if($this->otype == 'meal') {
 			$extraParams = ['meal_id' => $post->id, 'specs' => explode('|', $post->sp)];
 		}
+		if($this->otype == 'teambuy') {
+			$extraParams = ArrayHelper::toArray($post->extraParams);
+		}
 
 		list($goodsList, $extra) = Business::getInstance('order')->build(['type' => $this->otype])->getOrderGoodsList($extraParams);
 		
@@ -58,8 +62,8 @@ class OrderForm extends Model
 		
 		// 按店铺归类商品，顺带验证库存够不够
 		$storeGoodsList = array();
-		foreach($goodsList as $rec_id => $goods) {
-			$storeGoodsList[$goods['store_id']][$rec_id] = $goods;
+		foreach($goodsList as $key => $goods) {
+			$storeGoodsList[$goods['store_id']][$key] = $goods;
 		}
 		
 		// 库存够不够
@@ -86,6 +90,9 @@ class OrderForm extends Model
 		return $this->formatDataOfNormal($storeGoodsList);
 	}
 	
+	/**
+	 * 普通订单/拼团订单数据
+	 */
 	private function formatDataOfNormal(array $storeGoodsList, $cart = array())
 	{
 		$result = array('amount' => 0);
@@ -112,6 +119,9 @@ class OrderForm extends Model
 		return $result;
 	}
 	
+	/**
+	 * 搭配套餐订单数据
+	 */
 	private function formatDataOfMeal(array $storeGoodsList, $meal = array())
 	{
 		$result = array('amount' => 0);
@@ -146,7 +156,7 @@ class OrderForm extends Model
 	private function checkBeyondStock(array $goodsList)
 	{
 		$message = '';
-		foreach($goodsList as $rec_id => $goods) {
+		foreach($goodsList as $key => $goods) {
 			if($goods['stock'] < $goods['quantity']) {
 				$message = '商品【'.$goods['goods_name'] . '】' . $goods['specification'] . '，' . Language::get('stock') . '仅剩' . $goods['stock'] . '件';
 				return $message;

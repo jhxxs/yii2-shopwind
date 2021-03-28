@@ -546,7 +546,7 @@ class UrlManager extends Component
         $url = $this->createUrl($params);
 		
 		// @shopwind for Jump from one application to another
-		if(in_array($scheme, [Yii::$app->params['frontendUrl'], Yii::$app->params['mobileUrl'], Yii::$app->params['backendUrl']])) {
+		if($scheme && in_array($scheme, [Yii::$app->params['frontendUrl'], Yii::$app->params['mobileUrl'], Yii::$app->params['backendUrl']])) {
 			return $this->_baseUrl ? str_replace($this->_baseUrl, $scheme, $url) : $scheme.$url;
 		}
 		

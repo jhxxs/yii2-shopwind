@@ -18,6 +18,7 @@ use common\models\AppmarketModel;
 use common\models\PromotoolSettingModel;
 use common\models\PromotoolItemModel;
 use common\models\LimitbuyModel;
+use common\models\TeambuyModel;
 use common\models\MealModel;
 use common\models\GoodsModel;
 use common\models\GoodsSpecModel;
@@ -57,6 +58,9 @@ class Promotool
 	
 	public function build($params = array())
 	{
+		if(in_array($this->instance, ['teambuy'])) {
+			return new Teambuy($this->instance, $params);
+		}
 		if(in_array($this->instance, ['limitbuy'])) {
 			return new Limitbuy($this->instance, $params);
 		}
@@ -112,8 +116,11 @@ class Promotool
 		return PromotoolItemModel::deleteAll(array_merge(['appid' => $this->instance], $params));
 	}
 	
-	/* 获取某个商品，某个规格的促销价格信息（如限时促销，会员价格，手机专享价） */
-	public function getItemProInfo($goods_id = 0, $spec_id = 0)
+	/**
+	 * 获取某个商品，某个规格的促销价格信息（如限时促销，会员价格，手机专享价） 
+	 * @param array $extra 其他参数
+	 */
+	public function getItemProInfo($goods_id = 0, $spec_id = 0, $extra = null)
 	{
 		// 返回结果数组
 		$result 	= false; 
@@ -182,17 +189,19 @@ class Promotool
 				} else {
 				    $config = $item_info['config'];
 				}
-					
+
+				// 读取该商品原始价格
+				$spec = GoodsSpecModel::find()->select('price')->where(['goods_id' => $goods_id, 'spec_id' => $spec_id])->one();
+				
+				// 手机专享优惠
 				if($this->instance == 'exclusive')
 				{
-				    // 读取该商品原始价格
-					$price = GoodsSpecModel::find()->select('price')->where(['goods_id' => $goods_id, 'spec_id' => $spec_id])->scalar();
 				    if(isset($config['discount']) && !empty($config['discount'])) {
-                        $proPrice = round($price * $config['discount'] / 1000, 4) * 100;
+                        $proPrice = round($spec->price * $config['discount'] / 1000, 4) * 100;
 				    }
 				    elseif(isset($config['decrease']) && !empty($config['decrease'])) {
-                        $proPrice = $price - $config['decrease'];
-	                   if($proPrice < 0) $proPrice = 0;
+        				$proPrice = $spec->price - $config['decrease'];
+	                   	if($proPrice < 0) $proPrice = 0;
 				    }
 				}
 			}
@@ -369,6 +378,7 @@ class Exclusive extends Promotool {
 		return PromotoolSettingModel::getExclusive($this->instance, $this->params['store_id'], $goods_id);
 	}
 }
+class Teambuy extends Promotool {}
 class Fullfree extends Promotool {}
 class Fullprefer extends Promotool {}
 class Distribute extends Promotool {}

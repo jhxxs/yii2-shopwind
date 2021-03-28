@@ -35,8 +35,8 @@ return [
                     'levels' => ['error', 'warning'],
 					'logFile' => '@runtime/logs/app-'.date('Y-m-d', time()).'.log',
 					'maxFileSize' => 512
-                ],
-            ],
+                ]
+            ]
         ],
         'errorHandler' => [
             'errorAction' => 'site/error'
@@ -46,16 +46,12 @@ return [
                 'basePath' => '@app/web/templates/mall/default',
                 'baseUrl' => '@web/templates/mall/default',
                 'pathMap' => [
-                    //'@app/views' => '@app/web/templates/mall/default',
 					'@app/views' => [
-        				'@app/web/templates/mall/default',
-        				//'@app/web/templates/store/default',  // 主题继承 
-    				],
-    				'@app/modules' => '@web/templates/mall/default/modules',
-    				'@app/widgets' => '@web/templates/mall/default/widgets'
-                ],
-            ],
-        ],
+        				'@app/web/templates/mall/default'
+    				]
+                ]
+            ]
+        ]
     ],
-    'params' => $params,
+    'params' => $params
 ];

@@ -53,5 +53,4 @@ return array(
 	'gselector' => '选择促销商品',
 	'add_records'   => '请选择需要参加促销活动的商品',
 	'records_error' => '每个促销活动只能选择一个商品',
-    
 );

@@ -275,8 +275,8 @@ class Seller_orderController extends \common\controllers\BaseSellerController
                 'url'   => Url::toRoute(['seller_order/index', 'type' => 'pending']),
             ),
 			array(
-                'name'  => 'submitted_orders',
-                'url'   => Url::toRoute(['seller_order/index', 'type' => 'submitted']),
+                'name'  => 'teaming_orders',
+                'url'   => Url::toRoute(['seller_order/index', 'type' => 'teaming']),
             ),
 			array(
                 'name'  => 'accepted_orders',

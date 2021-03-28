@@ -41,6 +41,7 @@ class Page
 					'@app/views' => [
 						'@app/web/templates/'.$folder. '/' .$template
 					],
+					//'@app/modules/teambuy/views' => '@app/web/templates/'.$folder. '/' .$template.'/modules',
 				],
 				'baseUrl' => '@web/templates/'.$folder. '/' .$template,
 			];
@@ -52,7 +53,7 @@ class Page
 				'pathMap' => [
 					'@app/views' => [
 						'@app/web/install/templates/default',
-					],
+					]
 				],
 				'baseUrl' => '@web/install/templates/default',
 			];
@@ -62,6 +63,7 @@ class Page
 			$theme = new \yii\base\Theme(array_merge(ArrayHelper::toArray(Yii::$app->view->theme), $setting));
 			Yii::$app->view->theme = $theme;
 		}
+		
 		return Yii::$app->view;
 	}
 	

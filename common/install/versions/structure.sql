@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `swd_appbuylog` (
   `bid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `orderId` varchar(20) NOT NULL,
   `appid` varchar(20) NOT NULL,
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `period` int(11) DEFAULT '0',
   `amount` decimal(10,2) DEFAULT '0',
   `status` tinyint(3) DEFAULT '0',
@@ -112,7 +112,7 @@ DROP TABLE IF EXISTS `swd_apprenewal`;
 CREATE TABLE IF NOT EXISTS `swd_apprenewal` (
   `rid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `appid` varchar(20) NOT NULL,
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `add_time` int(11) unsigned DEFAULT NULL,
   `expired` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`rid`)
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `swd_article` (
 DROP TABLE IF EXISTS `swd_bank`;
 CREATE TABLE IF NOT EXISTS `swd_bank` (
   `bid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `bank_name` varchar(100) NOT NULL,
   `short_name` varchar(20) DEFAULT NULL,
   `account_name` varchar(20) DEFAULT '',
@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `swd_bind` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `unionid` varchar(255) NOT NULL,
   `openid` varchar(255) DEFAULT '',
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `code` varchar(50) DEFAULT '',
   `token` varchar(255) DEFAULT '',
   `nickname` varchar(60) DEFAULT '',
@@ -399,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `swd_delivery_template` (
 DROP TABLE IF EXISTS `swd_deposit_account`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_account` (
   `account_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `account` varchar(100) NOT NULL,
   `password` varchar(255) DEFAULT '',
   `money` decimal(10,2) DEFAULT '0',
@@ -423,7 +423,7 @@ DROP TABLE IF EXISTS `swd_deposit_recharge`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_recharge` (
   `recharge_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `orderId` varchar(30) NOT NULL,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `examine` varchar(100) DEFAULT '',
   `is_online` int(1) DEFAULT '1',
   PRIMARY KEY (`recharge_id`),
@@ -440,7 +440,7 @@ DROP TABLE IF EXISTS `swd_deposit_record`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_record` (
   `record_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tradeNo` varchar(30) NOT NULL,
-  `userid` int(11) NOT NULL DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `amount` decimal(10,2) DEFAULT '0' COMMENT '收支金额',
   `balance` decimal(10,2) DEFAULT '0' COMMENT '账户余额',
   `flow` varchar(10) DEFAULT 'outlay' COMMENT '收支',
@@ -462,7 +462,7 @@ DROP TABLE IF EXISTS `swd_deposit_refund`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_refund` (
   `refund_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `record_id` int(11) NOT NULL,
-  `userid` int(11) DEFAULT '0' COMMENT '获得退款的用户ID',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `amount` decimal(10,2) DEFAULT '0',
   `status` varchar(30) DEFAULT '',
   `remark` varchar(255) DEFAULT '',
@@ -478,7 +478,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_refund` (
 DROP TABLE IF EXISTS `swd_deposit_setting`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_setting` (
   `setting_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `trade_rate` decimal(10,3) DEFAULT '0' COMMENT '交易手续费',
   `transfer_rate` decimal(10,3) DEFAULT '0' COMMENT '转账手续费',
   `regive_rate` decimal(10,3) DEFAULT '0' COMMENT '充值赠送金额比率',
@@ -532,7 +532,7 @@ DROP TABLE IF EXISTS `swd_deposit_withdraw`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_withdraw` (
   `draw_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `orderId` varchar(30) NOT NULL,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `card_info` text DEFAULT '',
   PRIMARY KEY (`draw_id`),
   KEY `orderId` (`orderId`),
@@ -547,7 +547,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_withdraw` (
 DROP TABLE IF EXISTS `swd_distribute`;
 CREATE TABLE IF NOT EXISTS `swd_distribute` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `amount` decimal(10,2) DEFAULT '0',
   `layer1` decimal(10,2) DEFAULT '0',
   `layer2` decimal(10,2) DEFAULT '0',
@@ -565,7 +565,7 @@ CREATE TABLE IF NOT EXISTS `swd_distribute` (
 DROP TABLE IF EXISTS `swd_distribute_items`;
 CREATE TABLE IF NOT EXISTS `swd_distribute_items` (
   `diid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `item_id` int(11) NOT NULL,
   `type` varchar(20) DEFAULT '',
   `created` int(11) DEFAULT NULL ,
@@ -582,7 +582,7 @@ CREATE TABLE IF NOT EXISTS `swd_distribute_items` (
 DROP TABLE IF EXISTS `swd_distribute_merchant`;
 CREATE TABLE IF NOT EXISTS `swd_distribute_merchant` (
   `dmid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `username` varchar(60) DEFAULT '',
   `parent_id` int(11) DEFAULT '0',
   `phone_mob` varchar(20) NOT NULL DEFAULT '',
@@ -602,7 +602,7 @@ DROP TABLE IF EXISTS `swd_distribute_order`;
 CREATE TABLE IF NOT EXISTS `swd_distribute_order` (
   `doid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `rec_id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `tradeNo` varchar(32) NOT NULL,
   `order_sn` varchar(20) DEFAULT '',
   `money` decimal(10,2) DEFAULT '0',
@@ -803,7 +803,7 @@ DROP TABLE IF EXISTS `swd_goods_qa`;
 CREATE TABLE IF NOT EXISTS `swd_goods_qa` (
   `ques_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `question_content` varchar(255) DEFAULT '',
-  `userid` int(10) unsigned NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `store_id` int(10) unsigned DEFAULT '0',
   `email` varchar(60) DEFAULT '',
   `item_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -863,7 +863,7 @@ CREATE TABLE IF NOT EXISTS `swd_goods_statistics` (
 --
 DROP TABLE IF EXISTS `swd_integral`;
 CREATE TABLE IF NOT EXISTS `swd_integral` (
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `amount` decimal(10,2) DEFAULT '0',
   PRIMARY KEY (`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -876,7 +876,7 @@ CREATE TABLE IF NOT EXISTS `swd_integral` (
 DROP TABLE IF EXISTS `swd_integral_log`;
 CREATE TABLE IF NOT EXISTS `swd_integral_log` (
   `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(10) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `order_id` int(10) NOT NULL DEFAULT '0',
   `order_sn` varchar(20) DEFAULT '',
   `changes` decimal(25,2) DEFAULT '0',
@@ -1344,7 +1344,7 @@ CREATE TABLE IF NOT EXISTS `swd_region` (
 DROP TABLE IF EXISTS `swd_report`;
 CREATE TABLE IF NOT EXISTS `swd_report` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(10) DEFAULT NULL COMMENT '举报人ID',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '举报人ID',
   `store_id` int(10) DEFAULT NULL COMMENT '被举报店铺ID',
   `goods_id` int(10) DEFAULT NULL COMMENT '被举报商品ID',
   `content` varchar(255) DEFAULT NULL COMMENT '举报内容',
@@ -1463,6 +1463,45 @@ CREATE TABLE IF NOT EXISTS `swd_store` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `swd_teambuy`
+--
+DROP TABLE IF EXISTS `swd_teambuy`;
+CREATE TABLE IF NOT EXISTS `swd_teambuy` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL,
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `status` tinyint(3) NOT NULL DEFAULT '1',
+  `store_id` int(11) DEFAULT '0',
+  `people` int(11) unsigned NOT NULL DEFAULT '2',
+  `specs` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `swd_teambuy_log`
+--
+DROP TABLE IF EXISTS `swd_teambuy_log`;
+CREATE TABLE IF NOT EXISTS `swd_teambuy_log` (
+  `logid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tbid` int(10) unsigned DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `order_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `teamid` varchar(32) NOT NULL DEFAULT '',
+  `leader` tinyint(3) unsigned DEFAULT '0',
+  `people` int(11) unsigned NOT NULL DEFAULT '2',
+  `status` tinyint(3) unsigned DEFAULT '0',
+  `created` int(11) unsigned NOT NULL,
+  `expired` int(11) unsigned NOT NULL,
+  `pay_time` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`logid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `swd_uploaded_file`
 --
 DROP TABLE IF EXISTS `swd_uploaded_file`;
@@ -1525,7 +1564,7 @@ CREATE TABLE IF NOT EXISTS `swd_user` (
 DROP TABLE IF EXISTS `swd_user_enter`;
 CREATE TABLE IF NOT EXISTS `swd_user_enter` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(10) DEFAULT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `username` varchar(50) DEFAULT NULL,
   `scene` varchar(20) DEFAULT '',
   `ip` varchar(50) DEFAULT NULL,
@@ -1603,7 +1642,7 @@ CREATE TABLE IF NOT EXISTS `swd_webim_online` (
 DROP TABLE IF EXISTS `swd_weixin_menu`;
 CREATE TABLE IF NOT EXISTS `swd_weixin_menu` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(10) unsigned DEFAULT '0',
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `parent_id` int(10) DEFAULT '0',
   `name` varchar(255) DEFAULT NULL,
   `type` varchar(20) DEFAULT NULL,
@@ -1622,7 +1661,7 @@ CREATE TABLE IF NOT EXISTS `swd_weixin_menu` (
 DROP TABLE IF EXISTS `swd_weixin_reply`;
 CREATE TABLE IF NOT EXISTS `swd_weixin_reply` (
   `reply_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `type` tinyint(1) unsigned DEFAULT '0' COMMENT '回复类型0文字1图文',
   `action` varchar(20) DEFAULT NULL COMMENT '回复命令 关注、消息、关键字',
   `title` varchar(255) DEFAULT NULL,
@@ -1643,7 +1682,7 @@ CREATE TABLE IF NOT EXISTS `swd_weixin_reply` (
 DROP TABLE IF EXISTS `swd_weixin_setting`;
 CREATE TABLE IF NOT EXISTS `swd_weixin_setting` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(11) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(100) DEFAULT NULL,
   `token` varchar(255) DEFAULT '',
   `appid` varchar(255) DEFAULT NULL,

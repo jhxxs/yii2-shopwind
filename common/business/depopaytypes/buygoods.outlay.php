@@ -14,6 +14,8 @@ namespace common\business\depopaytypes;
 use yii;
 
 use common\models\DepositTradeModel;
+use common\models\TeambuyModel;
+use common\models\TeambuyLogModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -99,6 +101,14 @@ class BuygoodsOutlay extends OutlayDepopay
 			$this->setErrors('50021');
 			return false;
 		}
+
+		// 如果是拼团订单
+		if($extra_info['otype'] == 'teambuy') {
+			if(!$this->updateTeamBuyInfo($trade_info['userid'], $extra_info['order_id'])) {
+				$this->setErrors('50025');
+				return false;
+			}
+		}
 	
 		return true;
 	}
@@ -123,5 +133,41 @@ class BuygoodsOutlay extends OutlayDepopay
 			$result = parent::_insert_deposit_record($data_record);
 		}
 		return $result;
+	}
+
+	/**
+	 * 修改拼团订单信息
+	 */
+	private function updateTeamBuyInfo($userid = 0, $order_id = 0) 
+	{
+		$query = TeambuyLogModel::find()->select('logid,teamid,people')->where(['userid' => $userid, 'order_id' => $order_id])->one();
+		if(!$query) {
+			return false;
+		}
+
+		// 付款时间
+		$query->pay_time = Timezone::gmtime();
+		$query->save();
+
+		// 找出已付款的拼单
+		$teambuylogs = TeambuyLogModel::find()->select('logid,order_id')->where(['and', ['teamid' => $query->teamid, 'status' => 0], ['>', 'pay_time', 0]]);
+
+		// 满足成团条件
+		if($teambuylogs->count() >= $query->people) {
+			foreach($teambuylogs->all() as $model) {
+				$model->status = 1; // 设置为成团状态
+				if($model->save()) {
+
+					// 修改状态为已付款待发货
+					parent::_update_order_status($model->order_id, array('status'=> Def::ORDER_ACCEPTED));
+				}
+			}
+		} else {
+			
+			//  如果不满足成团，把订单状态调整为待成团
+			parent::_update_order_status($order_id, array('status'=> Def::ORDER_TEAMING));
+		}
+
+		return true;
 	}
 }

@@ -4068,10 +4068,9 @@ else if (typeof define === 'function' && define.amd) {
 
       var rect = img[0].getBoundingClientRect();
 
-      //调整上下
-      if(rect.height < this.containerHeight) {  // 如果高度没容器高，则自动居中
+      if(rect.height < this.containerHeight) {
         this.imageTransform.y = this.imageLastTransform.y = 0;
-      } else {  //如果比容器高，那么要保证上下不能有空隙
+      } else {
         if(rect.top > 0) this.imageTransform.y = this.imageTransform.y - rect.top;
         else if(rect.bottom < this.containerHeight) this.imageTransform.y = this.imageTransform.y + this.containerHeight - rect.bottom;
       }
@@ -4123,10 +4122,10 @@ else if (typeof define === 'function' && define.amd) {
 
   defaults = Photos.prototype.defaults = {
     items: [],
-    autoOpen: false, //初始化完成之后立刻打开
+    autoOpen: false,
     onOpen: undefined,
     onClose: undefined,
-    initIndex: 0, //打开时默认显示第几张
+    initIndex: 0,
     maxScale: 3,
     onSlideChange: undefined,
     tpl: '<div class="weui-photo-browser-modal">\

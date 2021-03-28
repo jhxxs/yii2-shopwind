@@ -23,6 +23,7 @@ use common\models\DepositTradeModel;
 use common\models\DistributeModel;
 use common\models\IntegralModel;
 use common\models\GoodsStatisticsModel;
+use common\models\TeambuyLogModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -37,12 +38,17 @@ class Taskqueue
 {
 	public static function run()
 	{
-		self::autoconfirm();
-		self::autoclosed();
+		self::autoConfirm();
+		self::autoClosed();
+
+		// 针对拼团订单
+		self::autoTeambuy();
 	}
 	
-	/* 到期未付款，自动关闭订单 */
-	public static function autoclosed()
+	/**
+	 * 到期未付款，自动关闭订单 
+	 */
+	private static function autoClosed()
 	{
 		$today = Timezone::gmtime();
 		
@@ -78,8 +84,10 @@ class Taskqueue
 		}
 	}
 	
-	/* 自动确认收货 */
-	public static function autoconfirm()
+	/**
+	 * 自动确认收货 
+	 */
+	private static function autoConfirm()
 	{
 		$today = Timezone::gmtime();
 		
@@ -152,6 +160,28 @@ class Taskqueue
 			$model->remark = '';
 			$model->log_time = Timezone::gmtime();
 			$model->save();
+		}
+	}
+
+	/**
+	 * 到期未付款，自动删除拼团记录
+	 * 到期已支付未成团，设为自动成团
+	 */
+	private static function autoTeambuy()
+	{
+		$today = Timezone::gmtime();
+
+		// 到期未付款，自动删除拼团记录
+		TeambuyLogModel::deleteAll(['and', ['<=', 'expired', $today], ['pay_time' => 0]]);
+
+		// 已付款，到期未成团的订单，设置为自动成团（待发货）
+		$list = TeambuyLogModel::find()->select('logid,order_id')->where(['and', ['<=', 'expired', $today], ['>', 'pay_time', 0], ['status' => 0]])->all();
+		foreach($list as $model) {
+			$model->status = 1;
+			if($model->save()) {
+				// 从待成团状态设置为待发货状态
+				OrderModel::updateAll(['status' => Def::ORDER_ACCEPTED], ['status' => Def::ORDER_TEAMING, 'order_id' => $model->order_id]);
+			}
 		}
 	}
 }

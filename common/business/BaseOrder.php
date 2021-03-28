@@ -53,6 +53,7 @@ class BaseOrder
             }
 		}
     }
+	
 	/* 提交订单信息 */
 	public function submit($data = array()) {
 		return 0;
@@ -62,8 +63,8 @@ class BaseOrder
 	public function insertOrder($order_info = array())
 	{
 		$model = new OrderModel();
-		foreach($order_info as $key => $val) {
-			$model->$key = $val;
+		foreach($order_info as $key => $value) {
+			$model->$key = $value;
 		}
 		return $model->save() ? $model->order_id : 0;
 	}
@@ -98,18 +99,6 @@ class BaseOrder
 		return true;
 	}
 	
-	/* 插入合并付款提交订单过程中，如有插入失败的订单，则删除批次所有订单 */
-	public function deleteOrderData($result = array())
-	{
-		foreach($result as $order_id)
-		{
-			if(!$order_id) continue;
-			OrderModel::deleteAll(['order_id' => $order_id]);
-			OrderGoodsModel::deleteAll(['order_id' => $order_id]);
-			OrderExtmModel::deleteAll(['order_id' => $order_id]);
-		}
-	}
-	
 	/* 插入收货人信息 */
 	public function insertOrderExtm($order_id = 0, $consignee_info  = array())
 	{
@@ -120,6 +109,57 @@ class BaseOrder
 			$model->$key = $val;
 		}
 		return $model->save();
+	}
+
+	/**
+	 * 插入订单相关信息
+	 * @return int $insertFail 插入失败数
+	 * @return array $result 包含店铺和订单号的数组
+	 */
+	public function insertOrderData($base_info = array(), $goods_info = array(), $consignee_info = array()) 
+	{
+		$insertFail = 0;
+		$result = array();
+		foreach ($base_info as $store_id => $store) {
+			if (!($order_id = $this->insertOrder($base_info[$store_id]))) {
+				$insertFail++;
+				$this->errors = Language::get('create_order_failed');
+				break;
+			}
+			if (!($this->insertOrderGoods($order_id, $goods_info['orderList'][$store_id]))) {
+				$insertFail++;
+				$this->errors = Language::get('create_order_failed');
+				break;
+			}
+			if (!($this->insertOrderExtm($order_id, $consignee_info[$store_id]))) {
+				$insertFail++;
+				$this->errors = Language::get('create_order_failed');
+				break;
+			}
+			$result[$store_id] = $order_id;
+		}
+
+		// 考虑合并付款的情况下（优惠，积分抵扣等问题），必须保证本批次的所有订单都插入成功，要不都删除本次订单
+		if ($insertFail > 0) {
+			$this->deleteOrderData($result);
+			return false;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 插入合并付款提交订单过程中，如有插入失败的订单，则删除批次所有订单
+	 */
+	public function deleteOrderData($result = array())
+	{
+		foreach($result as $order_id)
+		{
+			if(!$order_id) continue;
+			OrderModel::deleteAll(['order_id' => $order_id]);
+			OrderGoodsModel::deleteAll(['order_id' => $order_id]);
+			OrderExtmModel::deleteAll(['order_id' => $order_id]);
+		}
 	}
 	
 	/* 处理订单基本信息，返回有效的订单信息数组 */

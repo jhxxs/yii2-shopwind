@@ -37,6 +37,9 @@ class RefundInterveneForm extends Model
 		return true;
 	}
 	
+	/**
+	 * 同时兼容API接口
+	 */
 	public function save($post = null, $valid = true)
 	{
 		if($valid === true && !$this->valid($post)) {

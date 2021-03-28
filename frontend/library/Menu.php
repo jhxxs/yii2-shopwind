@@ -261,6 +261,11 @@ class Menu
 					'text'  => Language::get('promotool'),
 					'submenu'   => array(),
 				);
+				$menu['promotool']['submenu']['teambuy'] = array(
+					'text'  => Language::get('teambuy'),
+					'url'   => Url::toRoute(['teambuy/index']),
+					'name'  => 'teambuy',
+				);
 				$menu['promotool']['submenu']['seller_limitbuy'] = array(
 						'text'  => Language::get('seller_limitbuy'),
 						'url'   => Url::toRoute(['seller_limitbuy/index']),
