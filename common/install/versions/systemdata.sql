@@ -40,6 +40,7 @@ INSERT INTO `swd_appmarket` (`aid`, `appid`, `title`, `summary`, `category`, `de
 (4, 'fullprefer', '满折满减', '满折满减', 1, '', 'data/files/mall/appmarket/fullprefer/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"12";}}', 0, 0, 0, 1, 1542904902),
 (5, 'exclusive', '手机专享', '手机下单立享折扣', 1, '', 'data/files/mall/appmarket/exclusive/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:4:{i:0;s:1:"1";i:1;s:1:"3";i:2;s:1:"6";i:3;s:2:"12";}}', 0, 0, 0, 1, 1542905072),
 (6, 'distribute', '三级分销', '三级分销', 1, '', 'data/files/mall/appmarket/distribute/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"11";}}', 0, 0, 0, 1, 1542905490);
+(7, 'teambuy', '拼团', '拼团模块', 1, '', 'data/files/mall/appmarket/teambuy/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"11";}}', 0, 0, 0, 1, 1542905490);
 
 --
 -- 转存表中的数据 `swd_article`
