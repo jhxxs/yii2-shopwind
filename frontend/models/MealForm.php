@@ -15,7 +15,7 @@ use Yii;
 use yii\base\Model; 
 
 use common\models\MealModel;
-use common\models\MealgoodsModel;
+use common\models\MealGoodsModel;
 use common\models\GoodsModel;
 use common\models\GoodsSpecModel;
 
@@ -43,7 +43,7 @@ class MealForm extends Model
 		// 点击的是某个商品所有的套餐
 		if($post->goods_id)
 		{
-			if(!($all = MealgoodsModel::find()->alias('mg')->select('mg.meal_id,title')->joinWith('meal m', false)->where(['status' => 1, 'goods_id' => $post->goods_id])->asArray()->all())){
+			if(!($all = MealGoodsModel::find()->alias('mg')->select('mg.meal_id,title')->joinWith('meal m', false)->where(['status' => 1, 'goods_id' => $post->goods_id])->asArray()->all())){
 				$this->errors = Language::get('not_existed_or_invalid');
 				return false;
 			}

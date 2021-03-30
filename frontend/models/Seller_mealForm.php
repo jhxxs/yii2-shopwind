@@ -84,7 +84,7 @@ class Seller_mealForm extends Model
 		}
 		$post->price = round($post->price, 2);
 		if($post->price - $allPrice > 0) {
-			$this->errors = Language::get('meal_price_error');
+			$this->errors = Language::get('meal_price_error') . Language::get('colon') . $allPrice . Language::get('yuan');
 			return false;
 		}
 		
