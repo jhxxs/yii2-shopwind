@@ -279,7 +279,7 @@ Dialog.prototype = {
                 }
                 _message_body = $('<div class="dialog_message_body"></div>');
                 _message_contents = $('<div class="dialog_message_contents dialog_message_' + type + '">' + options.text + '</div>');
-                _buttons_bar = $('<div class="dialog_buttons_bar"></div>');
+                _buttons_bar = $('<div class="submit dialog_buttons_bar"></div>');
                 switch (type){
                     case 'notice':
                     case 'warning':

@@ -61,10 +61,10 @@ INSERT INTO `swd_brand` (`brand_id`, `brand_name`, `brand_logo`, `brand_image`, 
 (14, '三星', 'data/files/mall/brand/28.jpg', '', 0, 255, 1, 0, 1, '', 'S', ''),
 (15, 'SONY', 'data/files/mall/brand/29.jpg', '', 0, 255, 1, 0, 1, '', 'S', ''),
 (16, '东芝', 'data/files/mall/brand/30.jpg', '', 0, 255, 1, 0, 1, '', 'D', ''),
-(17, '小米', 'data/files/mall/brand/31.jpg', '', 0, 255, 1, 0, 1, '', 'X', ''),
-(18, '飞利浦', 'data/files/mall/brand/32.jpg', '', 0, 255, 1, 0, 1, '', 'F', ''),
-(19, '海信', 'data/files/mall/brand/33.jpg', '', 0, 255, 1, 0, 1, '', 'H', ''),
-(20, '美的', 'data/files/mall/brand/34.jpg', '', 0, 255, 1, 0, 1, '', 'M', '');
+(17, '小米', 'data/files/mall/brand/31.jpg', 'data/files/mall/brand/17/brand_image.jpg', 0, 4, 1, 0, 1, '', 'X', 'Xiaomi/小米 小米电视4A 43英寸 青春版高清wifi智能电视40 50'),
+(18, '飞利浦', 'data/files/mall/brand/32.jpg', 'data/files/mall/brand/18/brand_image.png', 0, 3, 1, 0, 1, '', 'F', ''),
+(19, '海信', 'data/files/mall/brand/33.jpg', 'data/files/mall/brand/19/brand_image.jpg', 0, 2, 1, 0, 1, '', 'H', '海信电视国际知名品牌'),
+(20, '美的', 'data/files/mall/brand/34.jpg', 'data/files/mall/brand/20/brand_image.jpg', 0, 1, 1, 0, 1, '', 'M', '美的全球知名家电品牌');
 
 --
 -- 转存表中的数据 `swd_category_goods`
@@ -1385,6 +1385,31 @@ INSERT INTO `swd_goods` (`goods_id`, `store_id`, `type`, `goods_name`, `descript
 (26, {seller_id}, 'material', '【以旧换新 门店现货】Samsung/三星 Galaxy S9 SM-G9600曲屏手机', '<img src="{site_url}/data/files/store_2/goods/20181121224215347.jpg" alt="TB2wSJQqDlYBeNjSszcXXbwhFXa_!!2146022675.jpg" /><img src="{site_url}/data/files/store_2/goods/20181121224203282.jpg" alt="TB2VeVsqx9YBuNjy0FfXXXIsVXa_!!2146022675.jpg" />', 1239, '手机	手机通讯	以旧换新', 14, '三星', 0, '', '', 1, 0, NULL, 1542782543, 1542782543, 26, 'data/files/store_2/goods/20181121224125388.jpg', 1, '5499.00', '', '', 1);
 
 --
+-- 转存表中的数据 `swd_goods_integral`
+--
+delete from `swd_goods_integral`;
+INSERT INTO `swd_goods_integral` (`goods_id`, `max_exchange`) VALUES
+(1, 80),
+(2, 10),
+(3, 10),
+(4, 10),
+(5, 10),
+(6, 10),
+(7, 10),
+(8, 10),
+(10, 10),
+(11, 10),
+(12, 10),
+(13, 10),
+(14, 10),
+(15, 10),
+(16, 10),
+(17, 10),
+(18, 10),
+(19, 10),
+(21, 10);
+
+--
 -- 转存表中的数据 `swd_goods_image`
 --
 delete from `swd_goods_image`;
@@ -1473,11 +1498,11 @@ INSERT INTO `swd_goods_spec` (`spec_id`, `goods_id`, `spec_1`, `spec_2`, `price`
 --
 delete from `swd_navigation`;
 INSERT INTO `swd_navigation` (`nav_id`, `type`, `title`, `link`, `sort_order`, `if_show`, `open_new`, `hot`) VALUES
-(1, 'middle', '品牌女装', 'search/goods.html?cate_id=2', 255, 1, 0, 0),
-(2, 'middle', '家用电器', 'search/goods.html?cate_id=21', 255, 1, 0, 0),
-(3, 'middle', '手机数码', 'search/goods.html?cate_id=63', 255, 1, 0, 0),
-(4, 'middle', '家具家装', 'search/goods.html?cate_id=172', 255, 1, 0, 0),
-(5, 'middle', '店铺街', 'search/store.html', 255, 1, 0, 0),
+(1, 'middle', '品牌女装', 'channel/index.html?id=154318705971', 1, 1, 0, 0),
+(2, 'middle', '手机数码', 'channel/index.html?id=154318852528', 2, 1, 0, 0),
+(3, 'middle', '领券中心', 'coupon/index.html', 255, 1, 0, 0),
+(4, 'middle', '家用电器', 'search/goods.html?cate_id=21', 3, 1, 0, 0),
+(5, 'middle', '店铺街', 'search/store.html', 4, 1, 0, 0),
 (6, 'middle', '积分商城', 'integral/index.html', 255, 1, 0, 0),
 (7, 'middle', '限时促销', 'limitbuy/index.html', 255, 1, 0, 0),
 (8, 'middle', '品牌专区', 'brand/index.html', 255, 1, 0, 0);
@@ -2140,6 +2165,44 @@ INSERT INTO `swd_uploaded_file` (`file_id`, `store_id`, `file_type`, `file_size`
 delete from `swd_user_priv` where store_id > 0;
 INSERT INTO `swd_user_priv` (`userid`, `store_id`, `privs`) VALUES
 ({seller_id}, {seller_id}, 'all');
+
+--
+-- 转存表中的数据 `swd_integral_setting`
+--
+delete from `swd_integral_setting`;
+INSERT INTO `swd_integral_setting` (`setting_id`, `rate`, `register`, `signin`, `openshop`, `buygoods`, `enabled`) VALUES
+(1, '1.00', '50', '10', '100', 'a:2:{i:1;s:3:"0.1";i:2;s:3:"0.2";}', 1);
+
+--
+-- 转存表中的数据 `swd_limitbuy`
+--
+delete from `swd_limitbuy`;
+INSERT INTO `swd_limitbuy` (`pro_id`, `goods_id`, `pro_name`, `pro_desc`, `start_time`, `end_time`, `store_id`, `spec_price`, `image`) VALUES
+(1, 26, '春节大促', '', 1617065980, 1622422780, 2, 'a:1:{i:26;a:2:{s:5:"price";s:1:"9";s:8:"pro_type";s:8:"discount";}}', NULL),
+(2, 25, '春节大促', '', 1617066017, 1625014817, 2, 'a:1:{i:25;a:2:{s:5:"price";s:1:"9";s:8:"pro_type";s:8:"discount";}}', NULL),
+(3, 15, '年中大促', '', 1617066289, 1627693489, 2, 'a:1:{i:15;a:2:{s:5:"price";s:1:"6";s:8:"pro_type";s:8:"discount";}}', NULL),
+(4, 14, '年中大促', '', 1617066326, 1627693526, 2, 'a:1:{i:14;a:2:{s:5:"price";s:1:"6";s:8:"pro_type";s:8:"discount";}}', NULL),
+(5, 12, '春节大促', '', 1617066422, 1632964022, 2, 'a:1:{i:12;a:2:{s:5:"price";s:1:"8";s:8:"pro_type";s:8:"discount";}}', NULL),
+(6, 17, '春节大促', '', 1617066451, 1627693651, 2, 'a:1:{i:17;a:2:{s:5:"price";s:1:"7";s:8:"pro_type";s:8:"discount";}}', NULL),
+(7, 18, '春节大促', '', 1617066481, 1630372081, 2, 'a:1:{i:18;a:2:{s:5:"price";s:1:"8";s:8:"pro_type";s:8:"discount";}}', NULL),
+(8, 20, '春节大促', '', 1617066504, 1627693704, 2, 'a:1:{i:20;a:2:{s:5:"price";s:1:"5";s:8:"pro_type";s:8:"discount";}}', NULL);
+
+--
+-- 转存表中的数据 `swd_coupon`
+--
+delete from `swd_coupon`;
+INSERT INTO `swd_coupon` (`coupon_id`, `store_id`, `coupon_name`, `coupon_value`, `use_times`, `start_time`, `end_time`, `min_amount`, `if_issue`, `image`, `total`, `surplus`, `clickreceive`) VALUES
+(1, 2, '新春大促', '10.00', 1, 1617004800, 1625039999, '100.00', 1, NULL, 1000, 1000, 1),
+(2, 2, '年中大促', '5.00', 1, 1617004800, 1627718399, '50.00', 1, NULL, 999, 999, 1),
+(3, 2, '618活动', '18.00', 1, 1617004800, 1627718399, '88.00', 1, NULL, 999, 999, 1);
+
+--
+-- 转存表中的数据 `swd_channel`
+--
+delete from `swd_channel`;
+INSERT INTO `swd_channel` (`id`, `cid`, `title`, `style`, `cate_id`, `status`, `add_time`) VALUES
+(1, '154318705971', '品牌女装', 1, 0, 1, 1617045952),
+(2, '154318852528', '电器城', 2, 0, 1, 1617045962);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

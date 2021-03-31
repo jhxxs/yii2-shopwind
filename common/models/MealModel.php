@@ -37,6 +37,11 @@ class MealModel extends ActiveRecord
 	{
 		return parent::hasMany(MealGoodsModel::className(), ['meal_id' => 'meal_id']);
 	}
+	// 关联表
+	public function getStore()
+	{
+		return parent::hasMany(StoreModel::className(), ['store_id' => 'store_id']);
+	}
 	
 	public static function getList($appid, $store_id = 0, $params = array(), &$pagination = false)
 	{

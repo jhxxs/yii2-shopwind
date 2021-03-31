@@ -937,6 +937,7 @@ CREATE TABLE IF NOT EXISTS `swd_meal` (
   `price` decimal(10,2) DEFAULT '0',
   `description` text DEFAULT '',
   `status` int(1) DEFAULT '1',
+  `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`meal_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -950,8 +951,6 @@ CREATE TABLE IF NOT EXISTS `swd_meal_goods` (
   `mg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `meal_id` int(11) NOT NULL DEFAULT '0',
   `goods_id` int(11) NOT NULL DEFAULT '0',
-  `goods_name` varchar(255) DEFAULT '',
-  `sort_order` int(3) DEFAULT '255',
   PRIMARY KEY (`mg_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

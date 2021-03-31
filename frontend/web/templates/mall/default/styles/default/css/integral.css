@@ -43,7 +43,7 @@
 .hotsale h3{background-color: #F5F5F5;padding: 5px 10px; font-weight:normal}
 .hotsale h3 span{font: 400 14px/20px arial,"microsoft yahei";color: #555;}
 .hotsale .content{width:220px;}
-.hotsale .content .rank-nav{background: #FFF url(images/repeat_x.png) repeat-x center 0;height: 28px;}
+.hotsale .content .rank-nav{background: #FFF;height: 28px;}
 .hotsale .content .rank-nav li{float:left;}
 .hotsale .content .rank-nav li a{color: #777;line-height: 20px;text-decoration: none;background-color: #F7F7F7;text-align: center;width: 102px;height: 20px;float: left;margin: 4px 0 1px 4px;padding: 1px 0;border: solid #D8D8D8;border-width: 1px 1px 0 1px;border-radius: 4px 4px 0 0;text-shadow: 1px 1px 0 rgba(255,255,255,.75);}
 .hotsale .content .rank-nav .curr a{color: #000;background-color: #FFF;padding: 1px 0 2px 0;margin: 4px 0 0 4px;box-shadow: 0 -1px 1px rgba(0,0,0,.05);}

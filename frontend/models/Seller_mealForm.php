@@ -22,6 +22,7 @@ use common\models\GoodsSpecModel;
 use common\models\UploadedFileModel;
 
 use common\library\Language;
+use common\library\Timezone;
 use common\library\Promotool;
 
 /**
@@ -89,7 +90,6 @@ class Seller_mealForm extends Model
 		}
 		
 		return true;
-
 	}
 	
 	public function save($post, $valid = true)
@@ -100,11 +100,12 @@ class Seller_mealForm extends Model
 
 		if(!$this->meal_id || !($model = MealModel::find()->where(['meal_id' => $this->meal_id, 'store_id' => $this->store_id])->one())) {
 			$model = new MealModel();
+			$model->created = Timezone::gmtime();
 		}
 		
 		$model->store_id = $this->store_id;
 		$model->title = $post->title;
-		$model->price= $post->price;
+		$model->price = $post->price;
 		$model->description = $post->description ? $post->description : '';
 		$model->status = 1;
 
@@ -135,11 +136,10 @@ class Seller_mealForm extends Model
 		}
 		
 		$goodsList = GoodsModel::find()->select('goods_id,goods_name,price,default_image')->where(['store_id' => $this->store_id])->andWhere(['in', 'goods_id', explode(',', $id)])->asArray()->all();
-		
 		foreach($goodsList as $key => $goods)
 		{
 			$price_data = GoodsSpecModel::find()->select('min(price) as priceMin,max(price) as priceMax')->where(['goods_id' => $mg['goods_id']])->asArray()->one();
-			if($price_data && $price_data['priceMin'] != $price_data['priceMax']) {
+			if($price_data && ($price_data['priceMin'] != $price_data['priceMax'])) {
 				$goodsList[$key]['price'] = $price_data['priceMin'] . '-' . $price_data['priceMax'];
 			} else $goodsList[$key]['price'] = $goods['price'];
 				
