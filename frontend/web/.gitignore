@@ -5,4 +5,4 @@ data/initdata.lock
 data/install.lock
 data/setting.php
 data/files/store_*/
-assets/
+assets/*
