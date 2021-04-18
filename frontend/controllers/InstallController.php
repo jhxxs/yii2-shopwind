@@ -28,10 +28,12 @@ use common\library\Install;
  * @author mosir
  */
 
-class InstallController extends \common\controllers\BaseMallController
+class InstallController extends \common\controllers\BaseInstallController
 {
 	public function init()
 	{
+		// parent::init(); don't init
+
 		Basewind::environment(false);
 		$this->view  = Page::setView('install');
 		$this->params = [

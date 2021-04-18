@@ -6,7 +6,6 @@ return array(
     'delete' => '删除',
     'content' => '举报内容',
 	'notice_content' => '通知内容',
-    'wait_verify' => '待审核',
     'verify' => '已审核',
     'status' => '状态',
     'no_such_item' => '没有该举报项',
@@ -25,7 +24,7 @@ return array(
 	'tip' => '提示',
 	'report_handle' => '举报信息，管理员已审核',
 	'msg_instruction' => '短消息使用格式?',
-	'receiver' => '接收会员',
+	'receiver' => '接收用户',
 	'code_example' => '图片标签：[img]https://www.shopwind.net/images/logo.gif[/img]
 						超链接标签：[url=https://www.shopwind.net]官方网站[/url]',
 	'send_msg' => '发送信息',

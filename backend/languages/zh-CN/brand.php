@@ -25,7 +25,6 @@ return array(
 	
 	'letter' => '首字母',
 	'letter_desc' => '填写首字母导航,例如：A',
-    'wait_verify' => '待审核',
     'request_error' => '错误的请求',
     'content_required' => '拒绝原因不能为空',
 	'description' => '品牌描述',

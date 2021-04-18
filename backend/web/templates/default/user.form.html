@@ -62,10 +62,6 @@
           <td class="paddingT15 wordSpacing5"><input class="infoTableInput2" name="im_qq" type="text" id="im_qq" value="{$user.im_qq|escape}" /></td>
         </tr>
         <tr>
-          <th class="paddingT15"> {$lang.im_ww}:</th>
-          <td class="paddingT15 wordSpacing5"><input class="infoTableInput2" name="im_ww" type="text" id="im_ww" value="{$user.im_ww|escape}" /></td>
-        </tr>
-        <tr>
           <th class="paddingT15"> {$lang.locked}:</th>
           <td class="paddingT15"><span class="onoff">
             <label class="cb-enable {if $user.locked}selected{/if}">{$lang.yes}</label>
@@ -74,7 +70,7 @@
             <input name="locked" value="0" type="radio" {if !$user.locked}checked{/if}>
             </span> <span class="grey notice"></span></td>
         </tr>
-        <tr>
+        <!-- <tr>
           <th class="paddingT15"> {$lang.imforbid}:</th>
           <td class="paddingT15 wordSpacing5"><label>
               <input name="imforbid" type="radio" id="imforbid" value="0" {if !$user.imforbid} checked="checked" {/if} />
@@ -82,7 +78,7 @@
             <label>
               <input name="imforbid" type="radio" id="imforbid" value="1" {if $user.imforbid} checked="checked"{/if} />
               {$lang.yes}</label></td>
-        </tr>
+        </tr> -->
         <tr>
           <th class="paddingT15">{$lang.portrait}:</th>
           <td class="paddingT15 wordSpacing5"><div class="input-file-show"> <span class="show"><a href="javascript:;" class="show_image"><i class="fa fa-image"></i></a></span> <span class="type-file-box">

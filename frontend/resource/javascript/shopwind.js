@@ -602,6 +602,13 @@ $(function(){
 			$(this).addClass('active');
 			$(this).find('input[type="radio"]').prop('checked', true);
 		} else $(this).find('input[type="radio"]').prop('checked', false);
+
+		//  处理回调
+		var selected = $(this).find('input[type="radio"]:checked');
+		var opts = $.extend({}, evil($(this).parents('.pop-layer-common').attr('data-PopLayerItems')));
+		if(typeof opts.callback == 'function') {
+			opts.callback(selected);
+		}
 	});
 	
 	// 必须用body以便兼容dialog
@@ -610,6 +617,14 @@ $(function(){
 			$(this).toggleClass('active');
 			$(this).find('input[type="checkbox"]').prop('checked', $(this).find('input[type="checkbox"]').prop('checked') == false);
 		} else $(this).find('input[type="checkbox"]').prop('checked', false);
+
+		//  处理回调
+		var current = $(this).find('input[type="checkbox"]');
+		var selected = $(this).find('input[type="checkbox"]:checked');
+		var opts = $.extend({}, evil($(this).parents('.pop-layer-common').attr('data-PopLayerItems')));
+		if(typeof opts.callback == 'function') {
+			opts.callback(current, selected);
+		}
 	});
 	
 	// 通用popLayer弹出层触发
@@ -662,7 +677,9 @@ $(function(){
 			}
 			mlsIdInput.val(mls_id);
 
-			opts.callback();
+			if(typeof opts.callback == 'function') {
+				opts.callback();
+			}
 		})
 
 		$(document).on('click', (opts.model)+' .backToPrev', function(){
@@ -718,7 +735,9 @@ $(function(){
 			obj.click(function(){
 				if(!$(this).hasClass('disabled')) {
 					openLayer();
-					opts.callback(obj);
+					if(typeof opts.callback == 'function') {
+						opts.callback(obj);
+					}
 				
 					if(opts.fixedBody == true){
 						$('body').css({'position':'fixed', 'left' : 0, 'right' : 0, 'top' : 0});

@@ -98,6 +98,8 @@ class Seller_mealForm extends Model
 			return false;
 		}
 
+		// 搭配购商品ID
+		$selected = array_unique(ArrayHelper::toArray($post->selected));
 		if(!$this->meal_id || !($model = MealModel::find()->where(['meal_id' => $this->meal_id, 'store_id' => $this->store_id])->one())) {
 			$model = new MealModel();
 			$model->created = Timezone::gmtime();
@@ -106,6 +108,7 @@ class Seller_mealForm extends Model
 		$model->store_id = $this->store_id;
 		$model->title = $post->title;
 		$model->price = $post->price;
+		$model->keyword = $this->getKeywords($selected);
 		$model->description = $post->description ? $post->description : '';
 		$model->status = 1;
 
@@ -114,8 +117,8 @@ class Seller_mealForm extends Model
 			return false;
 		}
 
-		MealGoodsModel::deleteAll(['meal_id' => $this->meal_id]);
-		foreach(array_unique(ArrayHelper::toArray($post->selected)) as $goods_id) {
+		MealGoodsModel::deleteAll(['meal_id' => $model->meal_id]);
+		foreach($selected as $goods_id) {
 			$query = new MealGoodsModel();
 			$query->meal_id = $model->meal_id;
 			$query->goods_id = $goods_id;
@@ -128,14 +131,27 @@ class Seller_mealForm extends Model
 		
         return true;
 	}
+
+	/**
+	 * 获取搭配购商品关键词，用于搜索用途
+	 */
+	private function getKeywords($selected = [])
+	{
+		$all = GoodsModel::find()->select('goods_name')->where(['in', 'goods_id', $selected])->column();
+		return $all ? implode(',', $all) : '';
+	}
 	
 	public function queryInfo($id, $meal = null)
     {
-		if(!$id && $meal) {
-			$id = implode(',', MealGoodsModel::find()->select('goods_id')->where(['meal_id' => $meal['meal_id']])->column());
+		$allId = array();
+		
+		if($id) {
+			$allId = explode(',', $id);
+		} elseif($meal) {
+			$allId = MealGoodsModel::find()->select('goods_id')->where(['meal_id' => $meal['meal_id']])->column();
 		}
 		
-		$goodsList = GoodsModel::find()->select('goods_id,goods_name,price,default_image')->where(['store_id' => $this->store_id])->andWhere(['in', 'goods_id', explode(',', $id)])->asArray()->all();
+		$goodsList = GoodsModel::find()->select('goods_id,goods_name,price,default_image')->where(['store_id' => $this->store_id])->andWhere(['in', 'goods_id', $allId])->asArray()->all();
 		foreach($goodsList as $key => $goods)
 		{
 			$price_data = GoodsSpecModel::find()->select('min(price) as priceMin,max(price) as priceMax')->where(['goods_id' => $mg['goods_id']])->asArray()->one();

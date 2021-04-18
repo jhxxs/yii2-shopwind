@@ -21,7 +21,9 @@ use common\models\CategoryStoreModel;
 use common\models\IntegralModel;
 use common\models\IntegralSettingModel;
 use common\models\DeliveryTemplateModel;
+use common\models\RegionModel;
 
+use common\library\Basewind;
 use common\library\Language;
 use common\library\Timezone;
 use common\library\Def;
@@ -37,25 +39,30 @@ class ApplyForm extends Model
 	
 	public function valid($post = null)
 	{
+		if(empty($post->owner_name)) {
+			$this->errors = Language::get('owner_name_empty');
+			return false;
+		}
+		if($post->stype != 'company' && empty($post->identity_card)) {
+			$this->errors = Language::get('identity_card_empty');
+			return false;
+		} 
+		if(empty($post->tel)) {
+			$this->errors = Language::get('tel_empty');
+			return false;
+		}
+
 		if(empty($post->store_name)) {
 			$this->errors = Language::get('input_store_name');
 			return false;
 		}
 		if(($store = StoreModel::find()->select('store_id')->where(['store_name' => $post->store_name])->one())) {
 			if(!$this->store_id || ($this->store_id != $store->store_id)) {
-				$this->errors = Language::get('name_exist');
+				$this->errors = Language::get('store_name_existed');
 				return false;	
 			}
 		}
-		if(strlen($post->store_name) < 6 || strlen($post->store_name) > 60) {
-			$this->errors = Language::get('note_for_store_name');
-			return false;
-		}
-		
-		if(empty($post->owner_name)) {
-			$this->errors = Language::get('note_for_owner_name');
-			return false;
-		}
+	
 		return true;
 	}
 	
@@ -70,19 +77,49 @@ class ApplyForm extends Model
 			$model->store_id = Yii::$app->user->id;
 			$model->sort_order = 255;
 			$model->add_time = Timezone::gmtime();
-		}
-		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'region_name', 'address', 'zipcode', 'tel', 'sgrade'];
-		foreach($fields as $key => $val) {
-			$model->$val = $post->$val;
-		}
-		$model->state = SgradeModel::find()->select('need_confirm')->where(['grade_id' => $post->sgrade])->scalar() ? 0 : 1;
-		$model->apply_remark = '';// 以便再次审核
-		
-		$fields = ['identity_front', 'identity_back', 'business_license'];
-		foreach($fields as $key => $val) {
-			if(($image = UploadedFileModel::getInstance()->upload($val, $model->store_id, Def::BELONG_IDENTITY, 0, $val))) {
-				$model->$val = $image;
+			$model->stype = $post->stype != 'company' ? 'personal' : $post->stype;// 个人/企业
+		} 
+		else 
+		{
+			// 如果店铺被平台关闭，则不允许编辑
+			if($model->state == Def::STORE_CLOSED) {
+				$this->errors = Language::get('store_closed');
+				return false;
 			}
+
+			// 如果不是平台审核后未通过模式，则不允许编辑
+			if($model->state != Def::STORE_NOPASS) {
+				$this->errors = Language::get('store_verfiying');
+				return false;
+			}
+
+			// 编辑后，清空之前审核记录
+			$model->apply_remark = '';
+		}
+		$model->state = SgradeModel::find()->select('need_confirm')->where(['grade_id' => $post->sgrade])->scalar() ? Def::STORE_APPLYING : Def::STORE_OPEN;
+		if($model->state != Def::STORE_OPEN) {
+			$model->apply_remark = Language::get('apply_remark'); // 编辑后再次进入审核模式
+		}
+		
+		if($post->region_id) {
+			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
+		}
+		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'address', 'zipcode', 'tel', 'sgrade'];
+		foreach($fields as $key => $value) {
+			if(isset($post->$value)) {
+				$model->$value = $post->$value;
+			}
+		}
+		$fields = ['identity_front', 'identity_back', 'business_license'];
+		foreach($fields as $key => $value) {
+			if(($image = UploadedFileModel::getInstance()->upload($value, $model->store_id, Def::BELONG_IDENTITY, 0, $value))) {
+				$model->$value = $image;
+			}
+		}
+
+		//  验证证件上传完整性
+		if(!$this->checkIdentity($model)) {
+			return false;
 		}
 		
 		if(!$model->save()) {
@@ -100,7 +137,7 @@ class ApplyForm extends Model
 			$query->save();          
         }
 		
-		// 添加一条默认的运费模板（不用等开通后才添加，因为提交后，没有审核通过，也是可以编辑编辑信息的）
+		// 添加一条默认的运费模板（不用等开通后才添加，因为提交后，没有审核通过，也是可以编辑信息的）
 		DeliveryTemplateModel::addFirstTemplate($model->store_id);
 		
 		// 不需要审核，店铺直接开通
@@ -115,5 +152,24 @@ class ApplyForm extends Model
 		}
 		
 		return $model;
+	}
+
+	/**
+	 * 检测身份证、营业执照
+	 */
+	private function checkIdentity($post) {
+		if(empty($post->identity_front) || empty($post->identity_back)) {
+			$this->errors = Language::get('identity_empty');
+			return false;
+		}
+
+		if($post->stype == 'company') {
+			if(empty($post->business_license)) {
+				$this->errors = Language::get('business_license_empty');
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

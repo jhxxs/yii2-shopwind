@@ -3,7 +3,7 @@
     <!--{if $lnk.url}-->
     <a href="{$lnk.url}">{$lnk.text|escape}</a> <span>></span>
     <!--{else}-->
-    {if $app->controller->id eq 'goods'}{$goods.goods_name|escape}{else}{$lnk.text|escape}{/if}
+    {$lnk.text|escape}
     <!--{/if}-->
     <!--{/foreach}-->
 </div>

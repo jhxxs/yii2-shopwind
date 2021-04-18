@@ -20,6 +20,7 @@ use common\models\ArticleModel;
 use common\models\RegionModel;
 use common\models\ScategoryModel;
 use common\models\SgradeModel;
+use common\models\GoodsModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -27,7 +28,6 @@ use common\library\Message;
 use common\library\Resource;
 use common\library\Page;
 use common\library\Def;
-use common\models\GoodsModel;
 
 /**
  * @Id ApplyController.php 2018.10.20 $
@@ -86,6 +86,9 @@ class ApplyController extends \common\controllers\BaseUserController
         return $this->render('../apply.agreement.html', $this->params);
 	}
 	
+	/**
+	 * 填写店铺信息
+	 */
 	public function actionFill()
 	{
 		if($this->checkApply() !== true) {
@@ -112,7 +115,7 @@ class ApplyController extends \common\controllers\BaseUserController
 			// for edit
 			$this->params['store'] = StoreModel::find()->alias('s')->select('s.*,cs.cate_id')->joinWith('categoryStore cs',false)->where(['s.store_id' => Yii::$app->user->id])->asArray()->one();
 			
-			$this->params['_foot_tags'] = Resource::import('mlselection.js');
+			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.form.js,mlselection.js');
 			
 			// 当前位置
 			$this->params['_curlocal'] = Page::setLocal(Language::get('apply'), Url::toRoute('apply/index'), Language::get('apply_fill'));
@@ -134,9 +137,9 @@ class ApplyController extends \common\controllers\BaseUserController
 			
 			// 需要审核，跳转到显示审核进度的页面
 			if(!$store->state) {
-           		$this->redirect(['apply/verify']);   
+				return Message::display(Language::get('apply_ok'), ['apply/verify']);
          	}
-              
+			 
 			return Message::display(Language::get('store_opened'), ['store/index', 'id' => $store->store_id]);
 		}
 	}
@@ -172,15 +175,18 @@ class ApplyController extends \common\controllers\BaseUserController
 			return false;
         }
 		
-		if($this->action->id == 'fill') return true;
-		
 		// 已有店铺
 		if(($store = StoreModel::find()->select('state')->where(['store_id' => Yii::$app->user->id])->one())) {
 			if(in_array($store->state, [Def::STORE_OPEN, Def::STORE_CLOSED])) {
-				$this->redirect(['store/index', 'id' => Yii::$app->user->id]);
+				return $this->redirect(['store/index', 'id' => Yii::$app->user->id]);
 			}
 			if(in_array($store->state, [Def::STORE_APPLYING])) {
-				$this->redirect(['apply/verify']);
+				return $this->redirect(['apply/verify']);
+			}
+			if($store->state == Def::STORE_NOPASS) {
+				if($this->action->id != 'fill') {
+					return $this->redirect(['apply/fill']);
+				}
 			}
 		}
 		

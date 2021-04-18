@@ -32,6 +32,7 @@ class Def
 	const STORE_APPLYING 		= 	0; // 申请中
 	const STORE_OPEN 			= 	1; // 开启
 	const STORE_CLOSED  		= 	2; // 关闭
+	const STORE_NOPASS			=   3; // 审核不通过
 
 	/* 订单状态 */
 	const ORDER_SUBMITTED 		= 	10;              // 针对货到付款而言，他的下一个状态是卖家已发货
@@ -188,11 +189,12 @@ class Def
 	 */
 	public static function priceFormat($price, $price_format = NULL)
 	{
-		if (empty($price)) $price = '0.00';
+		if (empty($price)) {
+			$price = '0.00';
+		}
 		$price = number_format($price, 2);
 	
-		if ($price_format === NULL)
-		{
+		if ($price_format === NULL) {
 			$price_format = Yii::$app->params['price_format'];
 		}
 	

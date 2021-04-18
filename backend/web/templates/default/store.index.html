@@ -5,10 +5,10 @@
     <ul class="subnav">
       <!--{if $smarty.get.state eq 'applying'}-->
       <li><a class="btn1" href="{url route='store/index'}">{$lang.store_list}</a></li>
-      <li><span>{$lang.wait_verify}</span></li>
+      <li><span>{$lang.applying}</span></li>
       <!--{else}-->
       <li><span>{$lang.store_list}</span></li>
-      <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.wait_verify}</a></li>
+      <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.applying}</a></li>
       <!--{/if}-->
     </ul>
   </div>
@@ -20,12 +20,15 @@
       <input class="queryInput" type="text" name="owner_name" value="{$smarty.get.owner_name|escape}" />
       {$lang.store_name}
       <input class="queryInput" type="text" name="store_name" value="{$smarty.get.store_name|escape}" />
+	  {$lang.stype}
+      <select class="querySelect" name="stype">
+        <option value="">{$lang.select_pls}</option>
+        	{html_options options=$stypes selected=$smarty.get.stype}
+      </select>
       {$lang.sgrade}
       <select class="querySelect" name="sgrade">
         <option value="">{$lang.select_pls}</option>
-        
         	{html_options options=$sgrades selected=$smarty.get.sgrade}
-      	
       </select>
       <input type="submit" class="formbtn" value="{$lang.query}" />
       <!--{if $filtered}--> 
@@ -45,6 +48,7 @@ $(function(){
 			{ display: '{$lang.owner_name}', name : 'owner_name', width : 100, sortable : true, align: 'center'},
     		{ display: '{$lang.store_name}', name : 'store_name', width : 100, sortable : true, align: 'center'},
 			{ display: '{$lang.region_name}', name : 'region_name', width : 200, sortable : true, align: 'center'},
+			{ display: '{$lang.stype}', name : 'stype', width : 100, sortable : true, align: 'center'},
     		{ display: '{$lang.sgrade}', name : 'sgrade', width : 100, sortable : true, align: 'center'},
 			{ display: '{$lang.add_time}', name : 'add_time', width: 100, sortable : true, align : 'center'},
 			{ display: '{$lang.end_time}', name : 'end_time', width: 100, sortable : true, align : 'center'},

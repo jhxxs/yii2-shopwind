@@ -33,7 +33,7 @@ class Seller_orderForm extends Model
 	public $store_id = 0;
 	public $errors = null;
 	
-	public function formData($post = null, $pageper) 
+	public function formData($post = null, $pageper = 10) 
 	{
 		$query = OrderModel::find()->alias('o')->select('o.*, ex.shipping_fee')->where(['seller_id' => $this->store_id])->orderBy(['o.order_id' => SORT_DESC]);
 		$query = $this->getConditions($post, $query);

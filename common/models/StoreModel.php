@@ -69,6 +69,9 @@ class StoreModel extends ActiveRecord
 		return parent::hasOne(SgradeModel::className(), ['grade_id' => 'sgrade']);
 	}
 
+	/**
+	 * 不要加条件(state=1)，其他地方需要获取店铺状态参数
+	 */
 	public static function getInfo($store_id = 0)
 	{
 		$result = parent::find()->alias('s')->select('s.*,u.userid,u.username,u.email,u.phone_mob')->joinWith('user u', false)->where(['store_id' => $store_id])->asArray()->one();

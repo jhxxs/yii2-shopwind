@@ -29,7 +29,7 @@ class StoreForm extends Model
 {
 	public $errors = null;
 	
-	public function formData($post = null, $pageper = 20)
+	public function formData($post = null, $pageper = 10)
 	{
 		if(!$post->id || !($store = StoreModel::getStoreAssign($post->id))) {
 			$this->errors = Language::get('the_store_not_exist');

@@ -38,8 +38,6 @@ return array(
     'consignee_required'  => '请如实填写您的收货人姓名',
     'region_required'  => '请选择所在地区',
     'address_required'  => '请如实填写收货人详细地址',
-    'phone_tel_error'  => '电话号码由数字、加号、减号、空格、括号组成,并不能少于6位',
-    'phone_mob_error'  => '错误的手机号码,只能是数字,并且不能少于6位',
     'shipping_required'=> '请选择配送方式',
     'save_address' => '自动保存收货地址',
     'postscript_desc' => '对商品的特殊需求，如颜色、尺码等',

@@ -63,7 +63,10 @@ class StoreForm extends Model
 		}
 		
 		$model->end_time = Timezone::gmstr2time($post->end_time);
-		$model->state = in_array($post->state, [Def::STORE_OPEN, Def::STORE_CLOSED]) ? $post->state : Def::STORE_APPLYING;
+		if(in_array($post->state, [Def::STORE_OPEN, Def::STORE_CLOSED])) { // 其他状态值不要插值
+			$model->state = $post->state;
+			$model->apply_remark = '';
+		}
 		if($post->state == Def::STORE_CLOSED) {
 			$model->close_reason = isset($post->close_reason) ? $post->close_reason : '';
 		}

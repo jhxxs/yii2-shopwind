@@ -83,25 +83,27 @@ class UserController extends \common\controllers\BaseUserController
 		$this->params['buyer_stat'] = $model->getBuyerStat();
 		
 		// 卖家提醒
-        if(($store = StoreModel::getInfo($this->visitor['store_id'])))
+        if(($store = StoreModel::getInfo(Yii::$app->user->id)))
         {
-			// 店铺等级和动态评分
-			$this->params['store'] = array_merge($store, [
-				'credit_image' => Resource::getThemeAssetsUrl('images/credit/' . StoreModel::computeCredit($store['credit_value'])), 
-				'dynamicEvaluation' => StoreModel::dynamicEvaluation($store['store_id'])
-			]);
-			
-			// 卖家提醒：已提交、待发货、待回复
-            $this->params['seller_stat'] = $model->getSellerStat();
-			
-			// 店铺等级、有效期、商品数、空间
-			$this->params['sgrade'] = $model->getSgrade($store);	
-		
-			// 待审核提醒
-			if ($store['state'] != '' && $store['state'] == Def::STORE_APPLYING)
-			{
-				$this->params['apply_remark'] 	= $store['apply_remark'];
-				$this->params['applying'] 		= 1;
+			if(in_array($store['state'], [Def::STORE_OPEN, Def::STORE_CLOSED])) {
+
+				// 店铺等级和动态评分
+				$this->params['store'] = array_merge($store, [
+					'credit_image' => Resource::getThemeAssetsUrl('images/credit/' . StoreModel::computeCredit($store['credit_value'])), 
+					'dynamicEvaluation' => StoreModel::dynamicEvaluation($store['store_id'])
+				]);
+				
+				// 卖家提醒：已提交、待发货、待回复
+				$this->params['seller_stat'] = $model->getSellerStat();
+				
+				// 店铺等级、有效期、商品数、空间
+				$this->params['sgrade'] = $model->getSgrade($store);
+			} 
+			else {
+				$this->params['apply'] = [
+					'state' => $store['state'],
+					'remark' => $store['apply_remark']
+				];
 			}
 		}
 	

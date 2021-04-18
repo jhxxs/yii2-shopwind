@@ -7,9 +7,9 @@ a:hover{color:#DA542E; text-decoration:underline}
 
 
 /* location */
-.location{color:#E4393C; margin:15px auto 15px auto}
+.location{color:#666; margin:15px auto 15px auto}
 .location span {color: #666;font-family:simsun;margin:0;}
-.location a {color: #777; border:1px #ddd solid; padding:4px 5px; border-radius:2px;}
+.location a {color: #666; border:1px #666 solid; padding:4px 5px; border-radius:2px;}
 .location a:hover{ text-decoration:none; color:#E4393C; border:1px #E4393C solid}
 
 

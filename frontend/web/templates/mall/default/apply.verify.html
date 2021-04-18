@@ -20,7 +20,7 @@
             <dt>平台联系方式</dt>
             <dd>
               <p class="tel"><span>电话：</span>18176895410</p>
-              <p class="email mt10"><span>邮箱：</span>andcpp@qq.com</p>
+              <p class="email mt10"><span>邮箱：</span>shopwind@qq.com</p>
             </dd>
           </dl>
         </div>
@@ -28,13 +28,14 @@
       <div class="right">
       	<div class="title">店铺审核状态</div>
         <div class="apply-status">
-          <p class="clearfix"><i class="block float-left"></i> <span class="mt5 block float-left" style="width:500px;"> 
-            <!--{if $store.apply_remark}-->
-            审核不通过，原因为：<a href="{url route='apply/fill' id=$store.store_id}">{$store.apply_remark}</a> 
+          <p class="clearfix"><i class="block auto mb20"></i> <h3 class="mt10 auto center" style="width:500px;"> 
+            <!--{if $store.state eq 3}-->
+            审核结果：{$store.apply_remark}
+            <a href="{url route='apply/fill' id=$store.store_id}" class="f60">立即修改</a>
             <!--{else}--> 
-            {$lang.user_has_application} 
+            {$lang.apply_remark}
             <!--{/if}--> 
-            </span> </p>
+          </h3> </p>
         </div>
       </div>
     </div>

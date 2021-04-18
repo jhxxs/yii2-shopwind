@@ -2077,8 +2077,8 @@ INSERT INTO `swd_sgrade` (`grade_id`, `grade_name`, `goods_limit`, `space_limit`
 -- 转存表中的数据 `swd_store`
 --
 delete from `swd_store`;
-INSERT INTO `swd_store` (`store_id`, `store_name`, `owner_name`, `identity_card`, `region_id`, `region_name`, `address`, `zipcode`, `tel`, `sgrade`, `apply_remark`, `credit_value`, `praise_rate`, `domain`, `state`, `close_reason`, `add_time`, `end_time`, `certification`, `sort_order`, `recommended`, `theme`, `wap_theme`, `store_banner`, `wap_store_banner`, `store_logo`, `description`, `identity_front`, `identity_back`, `business_license`, `im_qq`, `im_ww`, `nav_color`, `nav_show_style`, `hot_search`, `business_scope`, `online_service`, `hotline`, `store_slides`, `wap_store_slides`, `longitude`, `latitude`, `zoom`) VALUES
-({seller_id}, '演示店铺', '测试卖家', '1234567890', 343, '广西壮族自治区	南宁', '民族大道110号', '', '18999999999', 1, '', 0, '0.00', NULL, 1, '', 1542757210, 1924934399, '', 255, 1, '', '', NULL, '', 'data/files/store_2/other/store_logo.png', '', '', '', '', '', '', '#0B3377', 0, '', '', '', '', '', '', '', '', 0);
+INSERT INTO `swd_store` (`store_id`, `store_name`, `owner_name`, `identity_card`, `region_id`, `region_name`, `address`, `zipcode`, `tel`, `sgrade`, `stype`, `apply_remark`, `credit_value`, `praise_rate`, `domain`, `state`, `close_reason`, `add_time`, `end_time`, `certification`, `sort_order`, `recommended`, `theme`, `wap_theme`, `store_banner`, `wap_store_banner`, `store_logo`, `nav_color`) VALUES
+({seller_id}, '演示店铺', '测试卖家', '1234567890', 343, '广西壮族自治区	南宁', '民族大道110号', '', '18999999999', 1, 'personal', '', 0, '0.00', NULL, 1, '', 1542757210, 1924934399, '', 255, 1, '', '', NULL, '', 'data/files/store_2/other/store_logo.png', '#0B3377');
 
 --
 -- 转存表中的数据 `swd_uploaded_file`

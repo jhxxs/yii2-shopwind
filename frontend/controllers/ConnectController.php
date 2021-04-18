@@ -57,6 +57,9 @@ class ConnectController extends \common\controllers\BaseMallController
 		$binds = array();
 		foreach($plugins as $key => $plugin)
 		{
+			if($key == 'weixinmp') {
+				continue;
+			}
 			$bind = BindModel::find()->select('enabled')->where(['userid' => Yii::$app->user->id, 'code' => $key])->one();
 			$binds[] = array('code' => $key, 'name' => $plugin['name'], 'enabled' => $bind->enabled ? 1 : 0);
 		}

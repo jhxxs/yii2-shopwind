@@ -35,7 +35,6 @@ class RegionModel extends ActiveRecord
 	
 	/**
      * 取得地区列表
-     *
      * @param int $parent_id 大于等于0表示取某个地区的下级地区，小于0表示取所有地区
 	 * @param bool $shown    只取显示的地区
      * @return array
@@ -63,7 +62,8 @@ class RegionModel extends ActiveRecord
         return $data;
     }
 	
-	/* 取得所有地区 
+	/**
+	 * 取得所有地区 
 	 * 保留级别缩进效果，一般用于select
 	 * @return array(21 => 'abc', 22 => '&nbsp;&nbsp;');
 	 */
@@ -116,7 +116,7 @@ class RegionModel extends ActiveRecord
 		return $data;
 	}
 	
-	/*
+	/**
 	 * 获取省市数据
 	 */
 	public static function getProvinceCity()
@@ -130,31 +130,92 @@ class RegionModel extends ActiveRecord
 		return $provinces;
 	}
 	
-	/*
+	/**
 	 * 获取省市区地址数组
+	 * 如果通过$address的方式解析地址效率和成功率不行，可以考虑通过百度API解析接口
+	 * 参考：http://lbsyun.baidu.com/index.php?title=webapi/address_analyze
+	 * @used：api.map.baidu.com/address_analyzer/v1?address=北京市海淀区信息路甲九号&ak=你的ak
 	 */
-	public static function getArrayRegion($region_id = 0, $region_name = '')
+	public static function getArrayRegion($region_id = 0, $address = '')
 	{
+		if(!$address && $region_id) {
+			$address = self::getRegionName(intval($region_id), true);
+		}
+		
+		$array = explode(' ', self::replaceAddress($address));
+		if(!$array) {
+			return array();
+		}
+
+		// 处理直辖市的情况
+		$directly = ['北京市', '上海市', '天津市', '重庆市'];
+		foreach($directly as $key => $value) {
+			$array[0] = str_replace(substr($value, 0, -3) . $value, $value, $array[0]); // example: 北京北京市=》北京市 
+			if($array[0] == $value) {
+				array_unshift($array, substr($value, 0, -3));// 把“市”去掉，中文是3个字符
+				break;
+			}
+		}
+
 		$result = array();
-		
-		// 先通过地区名称来获取
-		if($region_name) {
-			$array = explode(' ', preg_replace("/\s/"," ", $region_name));
-			
-		}
-		if(empty($array)) {
-			$string = self::getRegionName($region_id, true);
-			$array = explode(' ', $string);
-		}
-		
-		$fields = ['province', 'city', 'district', 'town'];
+		$fields = ['province', 'city', 'district'];
 		foreach($array as $key => $value) {
 			$result[$fields[$key]] = $value;
+			if($fields[$key] == 'district') {
+				break;
+			}
 		}
+
 		return $result;
 	}
+
+	/**
+	 * 获取省市区地址末级ID
+	 * @param array|string $address
+	 */
+	public static function getLastIdByName($address)
+	{
+		if(is_string($address)) {
+			$address = self::getArrayRegion(0, self::replaceAddress($address));
+		}
+
+		// 如果地址不到区，不做处理
+		if(isset($address['district']))
+		{
+			$district = str_replace(['区', '市'],['',''], $address['district']);
+			$query = parent::find()->select('region_id,parent_id')->where(['in', 'region_name', [$address['district'], $district]]);
+			if(!$query->exists()) {
+				return 0;
+			} 
+			
+			if($query->all()->count == 1) {
+				return $query->one()->region_id;
+			}
+			
+			$city = str_replace(['市'],[''], $address['city']);
+			foreach($query->all() as $key => $value) {
+				$parent = RegionModel::find()->select('region_id')->where(['in','region_name', [$address['city'], $city]])->andWhere(['region_id' => $value->parent_id])->one();
+				if($parent) {
+					return $value->region_id;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * 获取地址分组数据
+	 */
+	private static function replaceAddress($address = '')
+	{
+		$address = preg_replace("/\s/"," ", trim($address));
+		$address = str_replace('中国', '', $address);
+		$address = str_replace([' ', '省', '自治区', '市', '区','  '], ['', '省 ', '自治区 ',  '市 ', '区 ', ' '], $address);
+		return $address;
+	}
 	
-	/* 
+	/** 
 	 * 获取省ID的上级ID，考虑第一级是中国的情况 
 	 */
 	public static function getProvinceParentId($topIsCountry = false)
@@ -163,17 +224,17 @@ class RegionModel extends ActiveRecord
 		return parent::find()->select('region_id')->where(['parent_id' => 0])->limit(1)->orderBy(['region_id' => SORT_ASC])->scalar();
 	}
 	
-	/*
-	 * 获取多个/一个地区名称路径
-	 * 主要用于运费模板功能
+	/**
+	 * 获取多个/一个地区名称路径，主要用于运费模板功能
+	 * @param int|string $region_ids 1 或 "2|3|4"
 	 */
-	public static function getRegionName($region_id = 0, $full = false, $split = ',')
+	public static function getRegionName($region_ids = 0, $full = false, $split = ',')
 	{
-		if(in_array($region_id, [0])) {
+		if(in_array($region_ids, [0])) {
 			return '全国';
 		}
 		$str = '';
-		foreach(explode('|', $region_id) as $id)
+		foreach(explode('|', $region_ids) as $id)
 		{
 			$query = parent::find()->select('region_id,region_name,parent_id')->where(['region_id' => $id])->one();
 			if($query) 
@@ -189,7 +250,7 @@ class RegionModel extends ActiveRecord
 		return $str ? substr($str, 1) : $str;
 	}
 	
-	/*
+	/**
 	 * 通过IP自动获取本地城市id
 	 */
 	public static function getCityIdByIp($cached = true)
@@ -231,7 +292,7 @@ class RegionModel extends ActiveRecord
 			return ['city' => Language::get('local')];
 		}
 
-		$result = Basewind::curl('http://ip.taobao.com/outGetIpInfo.php?ip='.$ip);
+		$result = Basewind::curl('https://ip.taobao.com/outGetIpInfo.php?ip='.$ip);
 		$result = json_decode($result);
 		if($result->code == 0 && $result->data->city) {
 			return array_merge(
@@ -241,5 +302,26 @@ class RegionModel extends ActiveRecord
 		}
 		return array();
 	}
+	
+	/**
+	 * 使用百度API
+	 * 通过经纬度获取省市区数据
+	 */
+	public static function getAddressByCoord($latitude, $longitude)
+	{
+		$ak = Yii::$app->params['baidukey']['browser'];
+		$gateway = 'https://api.map.baidu.com/geocoder';
+		if($ak) {
+			$gateway = 'https://api.map.baidu.com/reverse_geocoding/v3/';
+		}
+		$result = Basewind::curl($gateway . '?ak='.$ak.'&output=json&location='.implode(',', [$latitude, $longitude]));
+		$result = json_decode($result);
+		if($result->status == 'OK' || $result->status == '0') {
+			return ['province' => $result->result->addressComponent->province,
+					'city' => $result->result->addressComponent->city,
+					'district' => $result->result->addressComponent->district];
+		}
+		
+		return array();
+	}
 }
-

@@ -98,7 +98,7 @@ class My_storeController extends \common\controllers\BaseSellerController
 			$store = StoreModel::find()->select('longitude,latitude,zoom')->where(['store_id' => $this->visitor['store_id']])->asArray()->one();
 			$this->params['store'] = $store;
 			
-			$this->params['_foot_tags'] = Resource::import(['remote' => 'http://api.map.baidu.com/api?v=2.0&ak='.Yii::$app->params['baidukey']['browser']]);
+			$this->params['_foot_tags'] = Resource::import(['remote' => '//api.map.baidu.com/api?v=2.0&ak='.Yii::$app->params['baidukey']['browser']]);
 			
 			// 当前位置
 			$this->params['_curlocal'] = Page::setLocal(Language::get('my_store'), Url::toRoute('my_store/index'), Language::get('store_map'));

@@ -63,7 +63,7 @@ class Xwb extends BaseConnect
 	
 	public function login()
 	{
-		return Yii::$app->controller->redirect($this->getClient()->getAuthorizeURL());
+		return Yii::$app->getResponse()->redirect($this->getClient()->getAuthorizeURL());
 	}
 	
 	public function callback($get, $post)

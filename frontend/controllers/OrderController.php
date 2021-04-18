@@ -113,14 +113,14 @@ class OrderController extends \common\controllers\BaseUserController
 			if(empty($result)) {
 				return Message::warning($order_type->errors);
 			}
-			
+	
 			// 清理购物车商品等操作
 			foreach($result as $store_id => $order_id) {
 				$order_type->afterInsertOrder($order_id,  $store_id, $goods_info['orderList'][$store_id]);
 			}
 			
 			// 有可能是支付多个订单
-			$bizOrderId = implode(',', OrderModel::find()->select('order_sn')->where(['in', 'order_id', implode(',', $result)])->column());
+			$bizOrderId = implode(',', OrderModel::find()->select('order_sn')->where(['in', 'order_id', array_values($result)])->column());
 			
 			// 到收银台付款
 			return $this->redirect(['cashier/gateway', 'bizOrderId' => $bizOrderId, 'bizIdentity' => Def::TRADE_ORDER]);

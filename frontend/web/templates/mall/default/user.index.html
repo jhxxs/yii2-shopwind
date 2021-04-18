@@ -134,16 +134,16 @@
             <div class="extra"> 
               <div class="notice-word">
                 <p class="yellow">
-              <!--{if $store && $store.state eq Def::STORE_APPLYING}--> 
-              <!--{if $store.apply_remark}--> 
-              {sprintf($lang.store_applying_reject, $apply_remark, Url::toRoute('apply/fill'))}
-              <!--{else}--> 
-              {sprintf($lang.store_applying, Url::toRoute('apply/fill'))}
-              <!--{/if}--> 
-              <!--{else}-->
-              {$lang.not_seller}{$lang.colon}<a href="{$_usermenu.menus.overview.url}" title="{$_usermenu.menus.overview.text}">{$_usermenu.menus.overview.text}</a>
-              <!--{/if}--> 
-              </p>
+                  <!--{if $apply}-->
+                  <!--{if $apply.state eq Def::STORE_APPLYING}-->
+                  {$lang.store_applying}
+                  <!--{elseif $apply.state eq Def::STORE_NOPASS}-->
+                  {sprintf($lang.store_applying_reject, $apply.remark, Url::toRoute('apply/fill'))}
+                  <!--{/if}-->
+                  <!--{else}-->
+                  {$lang.not_seller}{$lang.colon}<a href="{$_usermenu.menus.overview.url}" title="{$_usermenu.menus.overview.text}">{$_usermenu.menus.overview.text}</a>
+                  <!--{/if}-->
+                </p>
               </div>
             </div>
           </div>

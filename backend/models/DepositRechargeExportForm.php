@@ -37,7 +37,7 @@ class DepositRechargeExportForm extends Model
 			'name' 			=> '名称',
 			'amount' 		=> '金额',
 			'status' 		=> '状态',
-			'examine' 		=> '审批员',
+			'examine' 		=> '操作员',
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'RECHARGE_'.Timezone::localDate('Ymdhis', Timezone::gmtime());

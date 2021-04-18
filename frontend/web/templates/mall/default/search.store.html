@@ -72,9 +72,8 @@
               <div class="row_1 float-left"><a href="{url route='store/index' id=$store.store_id}" target="_blank"><img class="lazyload" initial-url="{$store.store_logo|url_format}" width="80" height="80" /></a></div>
               <div class="row_2 float-left">
                 <h2><a href="{url route='store/index' id=$store.store_id}" target="_blank">{$store.store_name|escape}</a></h2>
-                <div class="d-info"> <span>{$lang.business_scope}{$lang.colon}</span><span>{$store.business_scope}</span> </div>
                 <div class="d-info"> <span>{$lang.address}{$lang.colon}</span><em>{$store.address|escape}</em> </div>
-                <div class="owner_info"> <span>{$lang.owner}{$lang.colon}</span> <a href="{url route='store/index' id=$store.store_id}">{$store.owner_name|escape}</a> <a href="javascript:;" style="background:none;padding-left:10px" class="J_StartLayim" data-toid="{$store.store_id}"><img style="vertical-align:middle" src="{$siteUrl}/static/images/myim.png" width="17" height="17" /></a> </div>
+                <div class="owner_info"> <span>{$lang.owner}{$lang.colon}</span> <a href="{url route='store/index' id=$store.store_id}">{$store.owner_name|escape}</a> <a href="tencent://message/?uin={$store.im_qq|default:'561223725'}&Site={$homeUrl}&Menu=yes"><img border="0" align="absMiddle" src="http://wpa.qq.com/pa?p=2:{$store.im_qq|default:'561223725'}:41" /></a></div>
               </div>
               <div class="row_3 float-left">
                 <div class="rate-info">

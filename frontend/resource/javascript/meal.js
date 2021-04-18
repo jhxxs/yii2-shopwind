@@ -14,7 +14,7 @@ $(function(){
 		});
 		if(check == true) {
 			specs = specs.substr(1);
-			location.href = url(['order/meal', {id:$(this).attr('meal_id'), sp:specs}]);
+			location.href = url(['order/meal', {id:$(this).attr('meal_id'), specs:specs}]);
 		}		
 	});
 });

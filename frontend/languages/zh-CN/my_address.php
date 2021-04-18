@@ -15,8 +15,6 @@ return array(
     'consignee_required'  => '请填写收货人姓名',
     'region_required'  => '请选择所在地区',
     'address_required'  => '请填写详细地址',
-    'phone_tel_error'  => '电话号码由数字、加号、减号、空格、括号组成,并不能少于6位',
-    'phone_mob_error'  => '错误的手机号码,只能是数字,并且不能少于6位',
     'back_list' => '返回地址列表',
     'continue_add' => '继续新增地址',
     'edit_again' => '重新编辑该地址',

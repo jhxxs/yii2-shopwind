@@ -220,8 +220,8 @@ class Buyer_orderController extends \common\controllers\BaseUserController
                 'url'   => Url::toRoute(['buyer_order/index', 'type' => 'pending']),
             ),
 			array(
-                'name'  => 'submitted_orders',
-                'url'   => Url::toRoute(['buyer_order/index', 'type' => 'submitted']),
+                'name'  => 'teaming_orders',
+                'url'   => Url::toRoute(['buyer_order/index', 'type' => 'teaming']),
             ),
 			array(
                 'name'  => 'accepted_orders',

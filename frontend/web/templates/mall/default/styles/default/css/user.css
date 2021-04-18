@@ -1627,16 +1627,16 @@ border-radius: 4px; margin-top: 8px; color: #333; cursor: pointer;}
 
 
 .apply-submit{ padding:20px 0;}
-.apply-submit .sgrade{}
-.apply-submit .sgrade .dt{ float:left; width:80px; text-align:right;color:#666;}
-.apply-submit .sgrade ul{ overflow:hidden; float:left; width:630px; margin-left:20px;}
-.apply-submit .sgrade ul li.each{ float:left; margin-right:10px; margin-bottom:10px; width:180px; border:1px solid rgba(0,0,0,0.2); padding:10px; min-height:140px; position:relative;}
-.apply-submit .sgrade .each:hover,.apply-submit .sgrade ul li.selected{ border-color:#5DAEE5; background:#F2F9FD;cursor:pointer;}
-.apply-submit .sgrade .each h2{ text-align:center; padding-bottom:8px; margin-bottom:6px; border-bottom:1px dotted #D7D7D7;}
-.apply-submit .sgrade .each p{color:#888;line-height:20px;}
-.apply-submit dl{ width:100%; min-height:30px; line-height:30px; margin-top:10px;}
+.apply-submit .soptions .dt{ float:left; width:80px; line-height: 24px; text-align:right;color:#666;}
+.apply-submit .soptions ul{ overflow:hidden; float:left; width:630px; margin-left:20px;}
+.apply-submit .soptions ul li{ float:left; cursor:pointer;margin-right:10px; margin-bottom:10px; width:180px; border:1px solid rgba(0,0,0,0.2); padding:10px;  position:relative;}
+.apply-submit .soptions ul li.selected{ border-color:#5DAEE5; background:#F2F9FD;}
+.apply-submit .soptions ul li.disabled{color: #ccc}
+.apply-submit .soptions ul li h2{ text-align:center;}
+.apply-submit .soptions ul li p{color:#888;line-height:20px; border-top:1px dotted #D7D7D7; padding-top:8px;margin-top: 8px;}
+.apply-submit dl{ width:100%; min-height:30px; margin-top:10px;}
 .apply-submit dl .input{width:250px;border-radius:2px;}
-.apply-submit dl dt{ float:left; width:80px; text-align:right;color:#666;}
+.apply-submit dl dt{ float:left; width:80px; text-align:right;color:#666; padding-top:5px;}
 .apply-submit dl dd{ float:left; margin-left:20px; position:relative}
 .apply-submit dl dd i{background: url(../images/joinin_pic.png) no-repeat right -120px; margin-right:5px;display: inline-block;  width: 8px;  height: 8px;}
 .apply-submit dl dd .field_notice{ color:#999;}
@@ -1647,9 +1647,9 @@ border-radius: 4px; margin-top: 8px; color: #333; cursor: pointer;}
 .apply-submit label.error { color: #333; line-height: 18px; background: url(../images/joinin_pic.png) no-repeat -468px -134px; vertical-align: middle; display: inline-block; height: 18px; padding: 1px 5px 1px 20px; margin-left: 4px; color:red;*display: inline;}
 .apply-submit label.validate_right{border:0;width:16px; height:16px;background:#ffffff url(../images/sucess.png) no-repeat scroll center center; position:absolute;right:5px;top:8px;}
 
-.apply-status{ margin:151px auto;}
+.apply-status{ margin:110px 120px;}
 .apply-status p{ font-size:16px; padding:0 100px 0 100px;color:#333;}
-.apply-status p i{ display:block; width:50px; height:50px; background:url(../images/iwait.png) 0 0 no-repeat; float:left; margin-right:10px;}
+.apply-status p i{ display:block; width:60px; height:60px; margin-bottom: 50px; background:url(../images/iwait.png) 0 0 no-repeat; background-size: cover;}
 .apply-end p{ padding-left:150px;}
 .apply-end p i{background:url(../images/joined.png) no-repeat}
 .apply-end p a{font-weight:normal; margin-right:5px;font-size:12px;}

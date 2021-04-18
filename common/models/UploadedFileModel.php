@@ -212,7 +212,7 @@ class UploadedFileModel extends ActiveRecord
 			break;
 			case Def::BELONG_LIMITBUY   :	$savePath = 'data/files/store_' . $store_id . '/limitbuy';
 			break;
-			case Def::BELONG_IDENTITY	:	$savePath = 'data/files/store_' . $store_id . '/identity';
+			case Def::BELONG_IDENTITY	:	$savePath = 'data/files/store_' . ($store_id ? $store_id : $unionid) . '/identity';
 			break;
 			case Def::BELONG_PORTRAIT	:	$savePath = 'data/files/mall/profile/'.$unionid;
 			break;

@@ -53,6 +53,7 @@ class StoreController extends \common\controllers\BaseAdminController
 		
 		if(!Yii::$app->request->isAjax) 
 		{
+			$this->params['stypes'] = ['personal' => Language::get('personal'), 'company' => Language::get('company')];
 			$this->params['filtered'] = $this->getConditions($post);
 			
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
@@ -62,7 +63,7 @@ class StoreController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.sgrade,s.owner_name,s.region_name,s.add_time,s.end_time,s.state,s.recommended,s.sort_order,s.tel,u.username,u.phone_mob,u.phone_tel')->joinWith('user u', false)->indexBy('store_id');
+			$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.stype,s.sgrade,s.owner_name,s.region_name,s.add_time,s.end_time,s.state,s.recommended,s.sort_order,s.tel,u.username,u.phone_mob,u.phone_tel')->joinWith('user u', false)->indexBy('store_id');
 			$query = $this->getConditions($post, $query);
 			
 			$orderFields = ['username','owner_name','store_name','region_name','cate_name','sgrade','add_time','end_time','state','sort_order','recommended'];
@@ -90,6 +91,7 @@ class StoreController extends \common\controllers\BaseAdminController
 				$list['owner_name'] 	= $val['owner_name'];
 				$list['store_name'] 	= $val['store_name'];
 				$list['region_name'] 	= $val['region_name'];
+				$list['stype'] 			= Language::get($val['stype']);
 				$list['sgrade'] 		= $this->params['sgrades'][$val['sgrade']];
 				$list['add_time'] 		= Timezone::localDate('Y-m-d', $val['add_time']);
 				$list['end_time'] 		= $val['end_time'] > 0 ? Timezone::localDate('Y-m-d', $val['end_time']) :'-';
@@ -107,11 +109,6 @@ class StoreController extends \common\controllers\BaseAdminController
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		if(!$get->id || !($store = StoreModel::getInfo($get->id))) {
 			return Message::warning(Language::get('no_such_store'));
-		}
-		
-		// 正在审核中的店铺不允许编辑，避免编辑提交后修改状态为非审核状态
-		if($store['state'] == Def::STORE_APPLYING) {
-			return Message::warning(Language::get('store_disallow_edit'));
 		}
 		
 		if(!Yii::$app->request->isPost)
@@ -224,6 +221,7 @@ class StoreController extends \common\controllers\BaseAdminController
 					
 					$model = StoreModel::findOne($get->id);
 					$model->apply_remark = $post->reason;
+					$model->state = Def::STORE_NOPASS;
 					if(!$model->save()) {
 						return Message::warning(Language::get('reject_fail'));
 					}
@@ -234,7 +232,7 @@ class StoreController extends \common\controllers\BaseAdminController
 					}
 					return Message::display(Language::get('reject_ok'), ['store/index', 'state' => 'applying']);
 				}
-				return Message::warning(Language::get('Hacking Attempt'));	
+				return Message::warning(Language::get('handle_fail'));	
 			}
 			return Message::display(Language::get('agree_ok'), ['store/index']);
 		}
@@ -393,6 +391,7 @@ class StoreController extends \common\controllers\BaseAdminController
 	{
 		$result = array(
             Def::STORE_APPLYING  => Language::get('applying'),
+			Def::STORE_NOPASS	 => Language::get('nopass'),
             Def::STORE_OPEN      => Language::get('open'),
             Def::STORE_CLOSED    => Language::get('close'),
         );
@@ -406,7 +405,7 @@ class StoreController extends \common\controllers\BaseAdminController
 	{
 		if($query === null) {
 			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
-				if(in_array($field, ['store_name', 'sgrade', 'owner_name'])) {
+				if(in_array($field, ['store_name', 'stype', 'sgrade', 'owner_name'])) {
 					return true;
 				}
 			}
@@ -416,6 +415,9 @@ class StoreController extends \common\controllers\BaseAdminController
 		if($post->store_name) {
 			$query->andWhere(['like', 'store_name', $post->store_name]);
 		}
+		if($post->stype) {
+			$query->andWhere(['stype' => $post->stype]);
+		}
 		if($post->sgrade) {
 			$query->andWhere(['sgrade' => $post->sgrade]);
 		}
@@ -423,9 +425,9 @@ class StoreController extends \common\controllers\BaseAdminController
 			$query->andWhere(['or', ['owner_name' => $post->owner_name], ['username' => $post->owner_name]]);
 		}
 		if($post->state == 'applying') {
-			$query->andWhere(['state' => Def::STORE_APPLYING]);
+			$query->andWhere(['in', 'state', [Def::STORE_APPLYING, Def::STORE_NOPASS]]);
 		} else {
-			$query->andWhere(['in', 'state', [Def::STORE_OPEN,Def::STORE_CLOSED]]);
+			$query->andWhere(['in', 'state', [Def::STORE_OPEN, Def::STORE_CLOSED]]);
 		}
 
 		return $query;

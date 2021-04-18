@@ -392,8 +392,7 @@ class DepositController extends \common\controllers\BaseAdminController
 			$this->params['status_list'] = array(
 				'PENDING' => Language::get('TRADE_PENDING'),
 				'SUCCESS' => Language::get('TRADE_SUCCESS'),
-				'CLOSED'  => Language::get('TRADE_CLOSED'),
-				'WAIT_ADMIN_VERIFY' => Language::get('TRADE_WAIT_ADMIN_VERIFY')
+				'CLOSED'  => Language::get('TRADE_CLOSED')
 			);
 			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'orderId' => Language::get('orderId'), 'username' => Language::get('username'));
 		

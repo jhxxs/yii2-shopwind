@@ -36,7 +36,8 @@ class Menu
 		$userRole = array();
 		$userMenu = self::getUserMenus();
 	
-		if(!(StoreModel::find()->where(['and', ['store_id' => Yii::$app->user->id], ['!=', 'state', Def::STORE_APPLYING]])->exists())) 
+		// 包含关闭状态，是为了查看店铺历史数据
+		if(!(StoreModel::find()->where(['and', ['store_id' => Yii::$app->user->id], ['in', 'state', [Def::STORE_OPEN,Def::STORE_CLOSED]]])->exists())) 
 		{
 			unset($userMenu['im_seller'], $userMenu['promotool']);
 			$userRole = 'buyer';
@@ -173,8 +174,8 @@ class Menu
 				),
 			);
 			
-			// 我是卖家
-			if(StoreModel::find()->where(['and', ['store_id' => Yii::$app->user->id], ['!=', 'state', Def::STORE_APPLYING]])->exists())
+			// 我是卖家（包含关闭状态，是为了查看店铺历史数据）
+			if(StoreModel::find()->where(['and', ['store_id' => Yii::$app->user->id], ['in', 'state', [Def::STORE_OPEN,Def::STORE_CLOSED]]])->exists())
 			{
 				if(($smser = Plugin::getInstance('sms')->autoBuild())) {
 					$menu['my_account']['submenu']['msg'] = array(
@@ -381,7 +382,8 @@ class Menu
 				);
 			}
 			
-			if(StoreModel::find()->where(['and', ['store_id' => Yii::$app->user->id], ['!=', 'state', Def::STORE_APPLYING]])->exists())
+			// 包含关闭状态，是为了查看店铺历史数据
+			if(StoreModel::find()->where(['and', ['store_id' => Yii::$app->user->id], ['in', 'state', [Def::STORE_OPEN,Def::STORE_CLOSED]]])->exists())
 			{
 				// 指定了要管理的店铺
 				$menu['im_seller'] = array(

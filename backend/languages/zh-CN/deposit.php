@@ -72,7 +72,7 @@ return array(
 	
 	'refuse_remark_empty'  => '拒绝理由不能为空',
 	'refuse_draw_ok'=>	'您已成功拒绝本次提现，相关冻结金额已经退回给用户',
-	'examine'		=> 	'审批员',
+	'examine'		=> 	'操作员',
 	'money_error' => '充值金额错误',
 	'recharge_ok' => '充值成功',
 	'party' => '对方',

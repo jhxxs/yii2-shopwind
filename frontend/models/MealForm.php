@@ -18,8 +18,12 @@ use common\models\MealModel;
 use common\models\MealGoodsModel;
 use common\models\GoodsModel;
 use common\models\GoodsSpecModel;
+use common\models\GoodsStatisticsModel;
 
+use common\library\Basewind;
 use common\library\Language;
+use common\library\Timezone;
+use common\library\Page;
 
 /**
  * @Id MealForm.php 2018.10.23 $
@@ -29,137 +33,128 @@ class MealForm extends Model
 {
 	public $errors = null;
 	
-	public function formData($post = null)
+	/**
+	 * 兼容API接口获取数据
+	 */
+	public function formData($post = null, $queryitem = true, $orderBy = [], $ifpage = false, $pageper = 10, $isAJax = false, $curPage = false)
 	{
-		if (!$post->id && !$post->goods_id){
-			$this->errors = Language::get('Hacking Attempt');
-			return false;
-        }
-		
-		// 点击的的某个具体的套餐
+		// 缺省条件时，查询所有搭配购
+		$query = MealModel::find()->select('meal_id,created,title,price as mealPrice,status,store_id')->where(['status' => 1]);
+
+		// 查询的是某个具体的搭配购
 		if($post->id) {
-			$meal = MealModel::find()->with('mealGoods')->where(['status' => 1, 'meal_id' => $post->id])->asArray()->one();
+			$query->andWhere(['meal_id' => $post->id]);
 		}
-		// 点击的是某个商品所有的套餐
-		if($post->goods_id)
+		// 查询的是某个商品参与的所有搭配购
+		elseif($post->goods_id) {
+			$allId = MealGoodsModel::find()->select('meal_id')->where(['goods_id' => $post->goods_id])->column();
+			$query->andWhere(['in', 'meal_id', $allId]);
+		}
+		if($queryitem) {
+			$query->with(['mealGoods' => function($model) {
+				$model->alias('mg')->select('mg.meal_id,g.goods_id,g.goods_name,g.default_image as goods_image,price,spec_name_1,spec_name_2,default_spec as spec_id,spec_qty')->joinWith('goods g', false);
+			}]);
+		}
+		if($orderBy && !empty($orderBy)) {
+			$query->orderBy($orderBy);
+		}
+		if(!empty($post->keyword)) {
+			$query->andWhere(['or', ['like', 'title', $post->keyword], ['like', 'keyword', $post->keyword]]);
+		}
+		if($post->store_id) {
+			$query->andWhere(['store_id' => $post->store_id]);
+		}
+
+		if(!$ifpage) {
+			$list = $query->asArray()->all();
+		} else {
+			$page = Page::getPage($query->count(), $pageper, $isAJax, $curPage);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+		}
+
+		foreach($list as $key => $value)
 		{
-			if(!($all = MealGoodsModel::find()->alias('mg')->select('mg.meal_id,title')->joinWith('meal m', false)->where(['status' => 1, 'goods_id' => $post->goods_id])->asArray()->all())){
-				$this->errors = Language::get('not_existed_or_invalid');
-				return false;
+			$items = $value['mealGoods'];
+			unset($list[$key]['mealGoods']);
+			if($queryitem && empty($items)) {
+				$list[$key]['status'] = 0; // 设为失效
 			}
-			if(!$meal) {
-				$first = current($all);
-				$meal = MealModel::find()->with('mealGoods')->where(['status' => 1, 'meal_id' => $first['meal_id']])->asArray()->one();
+			if(!empty($items)) {
+				$allPrice = 0;
+				foreach($items as $k => $v) {
+					$allPrice += $v['price'];
+					$items[$k]['goods_image'] = Page::urlFormat($v['goods_image'], Yii::$app->params['default_goods_image']);
+					if(($specs = GoodsSpecModel::find()->select('goods_id,price,spec_1,spec_2,spec_id,spec_image as image')->where(['goods_id' => $v['goods_id']])->asArray()->all())) {
+						foreach($specs as $k1 => $v1) {
+							$specs[$k1]['image'] = Page::urlFormat($v1['image']);
+						}
+						$items[$k]['specs'] = $specs;
+						$items[$k]['sales'] = GoodsStatisticsModel::find()->select('sales')->where(['goods_id' => $v['goods_id']])->scalar();
+						$items[$k]['specification'] = $this->getDefaultSpecification($v, $specs);
+
+						if(Basewind::getCurrentApp() != 'api') {
+							$items[$k]['unispecs'] = $this->formatSpecs($specs);
+						}
+					}
+				}
+				$list[$key]['price'] = $allPrice;
 			}
+			$list[$key]['created'] = Timezone::localDate('Y-m-d H:i:s', $value['created']);
+			$list[$key]['items'] = $list[$key]['status'] ? $items : array();
 		}
-		
-		if(!$meal){
-			$this->errors = Language::get('not_existed_or_invalid');
-			return false;
-		}
-		
-		if(!isset($meal['mealGoods']) || empty($meal['mealGoods'])) {
-			$this->errors = Language::get('no_such_meal');
-			return false;
-		}
-		
-		$price_old_total = array('min' => 0, 'max' => 0);
-		$price_default_total = 0;	
-		foreach($meal['mealGoods'] as $key => $val)  
-		{
-			if(($goods = $this->getSpecs($val['goods_id']))) 
-			{
-				empty($goods['default_image']) && $goods['default_image'] = Yii::$app->params['default_goods_image'];
-				
-				// 去重复
-				$spec_1 = [];
-				$spec_2 = [];  
-				foreach($goods['goodsSpec'] as $k => $v)
-				{
-					$spec_1[$k] = $v['spec_1'];
-					$spec_2[$k] = $v['spec_2'];
-				}
-				$goods['spec_1'] = array_unique($spec_1);
-				$goods['spec_2'] = array_unique($spec_2);
-				
-				// 兼容规格图片功能，给每项增加图片路径，第二个规格不需要图片（BEGIN）
-				$format_spec = array();
-				foreach($goods['spec_1'] as $k => $v) {
-					$format_spec[$k] = array('name' => $v, 'image' => $goods['goodsSpec'][$k]['spec_image']); 
-				}
-				$goods['spec_1'] = $format_spec;
-				
-				$format_spec = array();
-				foreach($goods['spec_2'] as $k => $v) {
-					$format_spec[$k] = array('name' => $v);
-				}
-				$goods['spec_2'] = $format_spec;
-				// END
-				
-				// 找出这个商品的最高价与最低价
-				if(($price_data = $this->getSpecMinMax($goods['goods_id']))) {
-					$price_old_total['min'] += $price_data['min'];
-					$price_old_total['max'] += $price_data['max'];
-				}
-				
-				// 默认价格总计
-				$price_default_total += $goods['price'];
-				
-				$meal['mealGoods'][$key] = array_merge($meal['mealGoods'][$key], $goods);
-			}
-			else
-			{
-				$model = MealModel::findOne($post->id);
-				$model->status = 0;
-				if(!$model->save()) {
-					$this->errors = $model->errors;
-					return false;
-				}
-				$this->errors = Language::get('not_existed_or_invalid');
-				return false;
-			}	
-		}
-		
-		// 判断价格是否合适，如果套餐价格大于原商品总价的最小价格，则认为该套餐价格不合理，设置为无效套餐
-		if($meal['price'] > $price_old_total['min']) 
-		{
-			$model = MealModel::findOne($meal['meal_id']);
-			$model->status = 0;
-			if(!$model->save()) {
-				$this->errors = $model->errors;
-				return false;
-			}
-			$this->errors = Language::get('not_existed_or_invalid');
-			return false;
-		}
-		
-		$meal['default_save'] = $price_default_total - $meal['price'];
-		$meal['price_old_total'] = $price_old_total;
-		
-		return array($meal, $all);
+
+		return array($list, $page);
 	}
-	
-	private function getSpecs($goods_id = 0)
+
+	/**
+	 * 获取默认规格的组合值
+	 */
+	private function getDefaultSpecification($goods, $specs = [])
 	{
-		$goods = GoodsModel::find()->with('goodsSpec')->select('goods_id,goods_name,default_image,price,spec_name_1,spec_name_2,default_spec,spec_qty')->where(['goods_id' => $goods_id])->asArray()->one();
-		return $goods;
+		$specification = '';
+
+		if(empty($specs)) {
+			return $specification;
+		}
+		foreach($specs as $key => $value) {
+			if($value['spec_id'] == $goods['spec_id']) {
+				$specification = ($goods['spec_name_1'] ? $goods['spec_name_1'] . ':' . $value['spec_1'] : '') 
+					. ' ' . ($goods['spec_name_2'] ?  $goods['spec_name_2'] . ':' . $value['spec_2'] : '');
+			}
+		}
+
+		return $specification;
 	}
-	
-	private function getSpecMinMax($goods_id = 0)
-	{	
-		if(!($specs = GoodsSpecModel::find()->select('price')->where(['goods_id' => $goods_id])->orderBy(['spec_id' => SORT_ASC])->all())) {
-			return array();
-		}
-		
-		$result = array();
-		foreach($specs as $key => $item)
+
+	/**
+	 * 获取不重复的规格数组
+	 */
+	private function formatSpecs($specs = [])
+	{
+		// 去重复
+		$spec_1 = [];
+		$spec_2 = [];  
+		foreach($specs as $key => $value)
 		{
-			if(!isset($result['min'])) $result['min'] = $item->price;
-			if(!isset($result['max'])) $result['max'] = $item->price;
-			
-			if($result['min'] > $item->price) $result['min'] = $item->price;
-			if($result['max'] < $item->price) $result['max'] = $item->price;	
+			$spec_1[$key] = $value['spec_1'];
+			$spec_2[$key] = $value['spec_2'];
 		}
-		return $result;
+		$spec_1 = array_unique($spec_1);
+		$spec_2 = array_unique($spec_2);
+		
+		// 暂时不考虑规格图片问题
+		$format = array();
+		foreach($spec_1 as $key => $value) {
+			$format[$key] = array('name' => $value);
+		}
+		$spec_1 = $format;
+		
+		$format = array();
+		foreach($spec_2 as $key => $value) {
+			$format[$key] = array('name' => $value);
+		}
+		$spec_2 = $format;
+
+		return array('spec_1' => $spec_1, 'spec_2' => $spec_2);
 	}
 }

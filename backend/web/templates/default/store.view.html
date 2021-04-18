@@ -3,9 +3,9 @@
   <div id="rightTop">
     <p>{$lang.store_manage}</p>
     <ul class="subnav">
-      <li><a class="btn1" href="{url route='store/index'}">{$lang.manage}</a></li>
-      <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.wait_verify}</a></li>
-      <li><span>店铺审核</span></li>
+      <li><a class="btn1" href="{url route='store/index'}">{$lang.store_list}</a></li>
+      <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.applying}</a></li>
+      <li><span>审核</span></li>
     </ul>
   </div>
   <!-- 操作说明 -->
@@ -52,6 +52,10 @@
         <tr>
           <th class="paddingT15">{$lang.tel}:</th>
           <td class="paddingT15 wordSpacing5">{$store.tel|escape}</td>
+        </tr>
+        <tr>
+          <th class="paddingT15">{$lang.stype}:</th>
+          <td class="paddingT15 wordSpacing5">{$lang.{$store.stype}}</td>
         </tr>
         <tr>
           <th class="paddingT15">{$lang.sgrade}:</th>

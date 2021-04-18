@@ -16,6 +16,7 @@ use yii\helpers\ArrayHelper;
 
 use common\models\GoodsModel;
 use common\models\GcategoryModel;
+use common\models\MealGoodsModel;
 use common\models\NavigationModel;
 
 use common\library\Basewind;
@@ -50,16 +51,17 @@ class MealController extends \common\controllers\BaseMallController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		
 		$model = new \frontend\models\MealForm();
-		list($meal) = $model->formData($post);
-		if(!$meal) {
+		list($meals) = $model->formData($post, true, ['meal_id' => SORT_DESC]);
+		if($meals == false) {
 			return Message::warning($model->errors);
 		}
-		
-		$this->params['meal'] = $meal;
+		$this->params['meal'] = current($meals);
+		if($post->goods_id) {
+			$this->params['meals'] = MealGoodsModel::find()->alias('mg')->select('m.meal_id,m.title')->where(['goods_id' => $post->goods_id])->joinWith('meal m', false)->orderBy(['m.meal_id' => SORT_DESC])->asArray()->all();
+		}
 		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
 			
 		$this->params['_head_tags'] = Resource::import('meal.js');
-
 		$this->params['page'] = Page::seo(['title' => Language::get('meal_detail')]);
        	return $this->render('../meal.index.html', $this->params);	
 	}

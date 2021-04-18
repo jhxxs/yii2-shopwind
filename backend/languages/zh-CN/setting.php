@@ -8,7 +8,7 @@ return array(
     'price_format' =>'金额格式',
     'default_goods_image' => '默认商品图片',
     'default_store_logo' => '默认店铺标志',
-    'default_user_portrait' => '默认会员头像',
+    'default_user_portrait' => '默认用户头像',
     'limit_img' => '支持格式gif,jpg,jpeg,png',
     'time_zone' => '时区设置',
     'note_for_time_zone' => '设置系统使用的时区，中国为+8',
@@ -61,7 +61,7 @@ return array(
     'statistics_code' => '流量统计代码',
     'default_goods_image_desc' => '默认商品图片，最佳显示尺寸为300*300像素',
 	'default_store_logo_desc' => '默认店铺标志，最佳显示尺寸为100*100像素',
-	'default_user_portrait_desc' => '默认会员头像，最佳显示尺寸为50*50像素',
+	'default_user_portrait_desc' => '默认用户头像，最佳显示尺寸为50*50像素',
 	'site_logo_desc' => '默认网站LOGO,通用头部显示，最佳显示尺寸为240*60像素',
 	
 	'api_setting' => 'API设置',

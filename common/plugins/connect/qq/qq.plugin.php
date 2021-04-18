@@ -63,7 +63,7 @@ class Qq extends BaseConnect
 	public function login()
 	{
 		$url = $this->gateway.'?client_id='.$this->config['appId'].'&scope=&redirect_uri='.$this->getReturnUrl().'&state='.mt_rand().'&response_type=code';
-		return Yii::$app->controller->redirect($url);
+		return Yii::$app->getResponse()->redirect($url);
 	}
 	
 	public function callback($get, $post)

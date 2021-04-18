@@ -4,7 +4,7 @@
     <p>{$lang.store_manage}</p>
     <ul class="subnav">
       <li><a class="btn1" href="{url route='store/index'}">{$lang.manage}</a></li>
-      <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.wait_verify}</a></li>
+      <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.applying}</a></li>
       <li><span>{$lang.edit}</span></li>
     </ul>
   </div>
@@ -35,9 +35,7 @@
           <th class="paddingT15">{$lang.scategory}:</th>
           <td class="paddingT15 wordSpacing5" ><select name="cate_id">
               <option value="0">{$lang.select_pls}</option>
-              
                 {html_options options=$scategories selected=$store.scate_id}
-        
             </select></td>
         </tr>
         <tr>
@@ -118,9 +116,10 @@
         </tr>
         <tr>
           <th class="paddingT15">{$lang.uploaded_image}:</th>
-          <td class="paddingT15 wordSpacing5"> {if $store.identity_front}<a href="{$store.identity_front}" target="_blank">{$lang.view}</a>{/if}
-            {if $store.identity_back}<a href="{$store.identity_back}" target="_blank">{$lang.view}</a>{/if}
-            {if $store.business_license}<a href="{$store.business_license}" target="_blank">{$lang.view}</a>{/if} </td>
+          <td class="paddingT15 wordSpacing5">
+            {if $store.identity_front}<a href="{$store.identity_front|url_format}" target="_blank">{$lang.view}</a>{/if}
+            {if $store.identity_back}<a href="{$store.identity_back|url_format}" target="_blank">{$lang.view}</a>{/if}
+            {if $store.business_license}<a href="{$store.business_license|url_format}" target="_blank">{$lang.view}</a>{/if} </td>
         </tr>
         <tr>
           <th></th>
