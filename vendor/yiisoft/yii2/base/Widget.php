@@ -15,10 +15,11 @@ use Yii;
  *
  * For more details and usage information on Widget, see the [guide article on widgets](guide:structure-widgets).
  *
- * @property string $id ID of the widget.
+ * @property string|null $id ID of the widget. Note that the type of this property differs in getter and
+ * setter. See [[getId()]] and [[setId()]] for details.
  * @property \yii\web\View $view The view object that can be used to render views or view files. Note that the
  * type of this property differs in getter and setter. See [[getView()]] and [[setView()]] for details.
- * @property string $viewPath The directory containing the view files for this widget. This property is
+ * @property-read string $viewPath The directory containing the view files for this widget. This property is
  * read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -87,7 +88,7 @@ class Widget extends Component implements ViewContextInterface
         $config['class'] = get_called_class();
         /* @var $widget Widget */
         $widget = Yii::createObject($config);
-        static::$stack[] = $widget;
+        self::$stack[] = $widget;
 
         return $widget;
     }
@@ -101,8 +102,8 @@ class Widget extends Component implements ViewContextInterface
      */
     public static function end()
     {
-        if (!empty(static::$stack)) {
-            $widget = array_pop(static::$stack);
+        if (!empty(self::$stack)) {
+            $widget = array_pop(self::$stack);
             if (get_class($widget) === get_called_class()) {
                 /* @var $widget Widget */
                 if ($widget->beforeRun()) {
@@ -156,7 +157,7 @@ class Widget extends Component implements ViewContextInterface
     /**
      * Returns the ID of the widget.
      * @param bool $autoGenerate whether to generate an ID if it is not set previously
-     * @return string ID of the widget.
+     * @return string|null ID of the widget.
      */
     public function getId($autoGenerate = true)
     {

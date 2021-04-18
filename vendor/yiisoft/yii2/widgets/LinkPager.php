@@ -100,7 +100,7 @@ class LinkPager extends Widget
      */
     public $nextPageLabel = '&raquo;';
     /**
-     * @var string|bool the text label for the previous page button. Note that this will NOT be HTML-encoded.
+     * @var string|bool the text label for the "previous" page button. Note that this will NOT be HTML-encoded.
      * If this property is false, the "previous" page button will not be displayed.
      */
     public $prevPageLabel = '&laquo;';
@@ -147,8 +147,6 @@ class LinkPager extends Widget
 	 */
 	public $totalCountLabel = false;
 	
-
-
     /**
      * Initializes the pager.
      */
@@ -193,6 +191,7 @@ class LinkPager extends Widget
     protected function renderPageButtons()
     {
         $pageCount = $this->pagination->getPageCount();
+
 		// @shopwind add conditions for totalCount == 0
         if (($pageCount < 2 && $this->hideOnSinglePage) || ($this->pagination->totalCount == 0)) {
             return '';

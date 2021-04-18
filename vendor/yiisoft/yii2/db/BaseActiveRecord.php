@@ -23,19 +23,19 @@ use yii\helpers\ArrayHelper;
  *
  * See [[\yii\db\ActiveRecord]] for a concrete implementation.
  *
- * @property array $dirtyAttributes The changed attribute values (name-value pairs). This property is
+ * @property-read array $dirtyAttributes The changed attribute values (name-value pairs). This property is
  * read-only.
  * @property bool $isNewRecord Whether the record is new and should be inserted when calling [[save()]].
  * @property array $oldAttributes The old attribute values (name-value pairs). Note that the type of this
  * property differs in getter and setter. See [[getOldAttributes()]] and [[setOldAttributes()]] for details.
- * @property mixed $oldPrimaryKey The old primary key value. An array (column name => column value) is
+ * @property-read mixed $oldPrimaryKey The old primary key value. An array (column name => column value) is
  * returned if the primary key is composite. A string is returned otherwise (null will be returned if the key
  * value is null). This property is read-only.
- * @property mixed $primaryKey The primary key value. An array (column name => column value) is returned if
- * the primary key is composite. A string is returned otherwise (null will be returned if the key value is null).
- * This property is read-only.
- * @property array $relatedRecords An array of related records indexed by relation names. This property is
- * read-only.
+ * @property-read mixed $primaryKey The primary key value. An array (column name => column value) is returned
+ * if the primary key is composite. A string is returned otherwise (null will be returned if the key value is
+ * null). This property is read-only.
+ * @property-read array $relatedRecords An array of related records indexed by relation names. This property
+ * is read-only.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @author Carsten Brandt <mail@cebe.cc>
@@ -133,7 +133,7 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
     {
         $query = static::find();
 
-        if (!ArrayHelper::isAssociative($condition)) {
+        if (!ArrayHelper::isAssociative($condition) && !$condition instanceof ExpressionInterface) {
             // query by primary key
             $primaryKey = static::primaryKey();
             if (isset($primaryKey[0])) {
@@ -222,7 +222,9 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      *
      * 1. Create a column to store the version number of each row. The column type should be `BIGINT DEFAULT 0`.
      *    Override this method to return the name of this column.
-     * 2. Add a `required` validation rule for the version column to ensure the version value is submitted.
+     * 2. Ensure the version value is submitted and loaded to your model before any update or delete.
+     *    Or add [[\yii\behaviors\OptimisticLockBehavior|OptimisticLockBehavior]] to your model
+     *    class in order to automate the process.
      * 3. In the Web form that collects the user input, add a hidden field that stores
      *    the lock version of the recording being updated.
      * 4. In the controller action that does the data updating, try to catch the [[StaleObjectException]]
@@ -333,6 +335,8 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
     {
         try {
             return $this->__get($name) !== null;
+        } catch (\Throwable $t) {
+            return false;
         } catch (\Exception $e) {
             return false;
         }
@@ -458,6 +462,10 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      */
     public function populateRelation($name, $records)
     {
+        foreach ($this->_relationsDependencies as &$relationNames) {
+            unset($relationNames[$name]);
+        }
+
         $this->_related[$name] = $records;
     }
 
@@ -1564,9 +1572,9 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
                 throw new InvalidCallException('Unable to link models: the primary key of ' . get_class($primaryModel) . ' is null.');
             }
             if (is_array($foreignModel->$fk)) { // relation via array valued attribute
-                $foreignModel->$fk = array_merge($foreignModel->$fk, [$value]);
+                $foreignModel->{$fk}[] = $value;
             } else {
-                $foreignModel->$fk = $value;
+                $foreignModel->{$fk} = $value;
             }
         }
         $foreignModel->save(false);
@@ -1726,18 +1734,22 @@ abstract class BaseActiveRecord extends Model implements ActiveRecordInterface
      * Sets relation dependencies for a property
      * @param string $name property name
      * @param ActiveQueryInterface $relation relation instance
+     * @param string|null $viaRelationName intermediate relation
      */
-    private function setRelationDependencies($name, $relation)
+    private function setRelationDependencies($name, $relation, $viaRelationName = null)
     {
         if (empty($relation->via) && $relation->link) {
             foreach ($relation->link as $attribute) {
                 $this->_relationsDependencies[$attribute][$name] = $name;
+                if ($viaRelationName !== null) {
+                    $this->_relationsDependencies[$attribute][] = $viaRelationName;
+                }
             }
         } elseif ($relation->via instanceof ActiveQueryInterface) {
             $this->setRelationDependencies($name, $relation->via);
         } elseif (is_array($relation->via)) {
-            list(, $viaQuery) = $relation->via;
-            $this->setRelationDependencies($name, $viaQuery);
+            list($viaRelationName, $viaQuery) = $relation->via;
+            $this->setRelationDependencies($name, $viaQuery, $viaRelationName);
         }
     }
 }

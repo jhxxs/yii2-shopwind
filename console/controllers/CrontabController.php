@@ -22,7 +22,8 @@ use yii\console\Controller;
 class CrontabController extends Controller
 {
 	/**
-	 * 使用CMD命令执行：php yii crontab/index
+	 * 使用CMD命令执行计划任务
+	 * php yii crontab/index
 	 */
 	public function actionIndex() 
 	{
