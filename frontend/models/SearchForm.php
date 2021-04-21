@@ -21,11 +21,11 @@ use common\models\GoodsPropValueModel;
 use common\models\GcategoryModel;
 use common\models\ScategoryModel;
 use common\models\RegionModel;
+use common\models\StoreModel;
 
 use common\library\Basewind;
 use common\library\Language;
 use common\library\Def;
-use common\models\StoreModel;
 
 /**
  * @Id SearchForm.php 2018.4.17 $

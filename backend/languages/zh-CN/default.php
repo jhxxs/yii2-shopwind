@@ -81,7 +81,7 @@ return array(
 	'reminds.payment'   => '您还没有<span>启用支付方式</span>，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'payment\', \'plugin\');"><span style="color:#f60;">插件-支付方式插件</span></a>中启用',
  	'reminds.gcategory' => '您还没有<span>添加商品分类</span>，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'gcategory\', \'goods\');"><span style="color:#f60;">商品-分类管理</span></a>中添加',
   	'reminds.scategory' => '您还没有<span>添加店铺分类</span>，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'scategory\', \'store\');"><span style="color:#f60;">店铺-店铺分类</span></a>中添加',
-	'reminds.report' => '您有<b style="color:#f60;">%s</b>条举报信息待处理，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'goods_manage\', \'goods\');"><span style="color:#f60;">商品-举报管理</span></a>中处理',
+	'reminds.report' => '您有<b style="color:#f60;">%s</b>条举报信息待处理，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'report_manage\', \'goods\');"><span style="color:#f60;">商品-举报管理</span></a>中处理',
 	'reminds.refund' => '您有<b style="color:#f60;">%s</b>条退款申请待处理，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'refund_manage\', \'trade\');"><span style="color:#f60;">退款-退款管理</span></a>中处理',
 	'reminds.apply' => '您有<b style="color:#f60;">%s</b>条店铺申请待审核，请到<a uri="%s" href="javascript:parent.openItem(\'\', \'store_manage\', \'store\');"><span style="color:#f60;">店铺-店铺管理</span></a>中处理',
   

@@ -80,7 +80,7 @@ class Alipay extends BaseConnect
 		if(Basewind::getCurrentApp() == 'wap') {
 			$url = 'alipays://platformapi/startapp?appId=20000067&url='.urlencode($url);
 		}
-		return Yii::$app->getResponse()->redirect($url);
+		return Yii::$app->response->redirect($url);
 	}
 	
 	public function callback($get, $post)

@@ -284,7 +284,7 @@ class RegionModel extends ActiveRecord
 	
 	/**
 	 * 使用淘宝的IP库
-	 * @api http://ip.taobao.com
+	 * @api https://ip.taobao.com
 	 */
 	public static function getAddressByIp($ip = '')
 	{

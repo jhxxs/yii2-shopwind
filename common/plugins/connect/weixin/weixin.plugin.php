@@ -62,7 +62,7 @@ class Weixin extends BaseConnect
 	
 	public function login()
 	{
-		return Yii::$app->getResponse()->redirect($this->getClient()->getAuthorizeURL());
+		return Yii::$app->response->redirect($this->getClient()->getAuthorizeURL());
 	}
 	
 	public function callback($get, $post)

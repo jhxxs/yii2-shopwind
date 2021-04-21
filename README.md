@@ -1,4 +1,31 @@
-# yii2-shopwind
+<div align="center">&nbsp;</div>
+<div align="center">
+  <a href="https://www.shopwind.net">
+    <img width="300" src="https://www.shopwind.net/templates/mall/default/styles/default/images/logo.png">
+  </a>
+</div>
+<h2 align="center">ShopWind开源电商系统</h2>
+<div align="center">
+
+基于Yii2.0框架深度开发 • 免费开源的多店铺商城系统
+
+</div>
+<div align="center">
+
+[![php语言](https://img.shields.io/badge/language-php-red)](https://www.shopwind.net/)
+[![V3.3.0](https://img.shields.io/badge/release-3.3.0-blue)](https://www.shopwind.net/product/download.html)
+[![license](https://img.shields.io/badge/license-Apache2.0-green)](https://www.shopwind.net/license/)
+
+</div>
+<div align="center">
+
+  [官网](https://www.shopwind.net/) |
+  [在线体验](http://test.shopwind.net/) |
+  [一键安装](https://www.shopwind.net/forum/thread-282.html) |
+  [开源框架](https://www.yiichina.com/) 
+
+</div>
+<div align="center"><h2 align="center">&nbsp;</h2></div>
 
 #### 介绍
 
@@ -51,6 +78,9 @@ ShopWind架构介绍：[https://www.shopwind.net/product/system.html](https://ww
 ShopWind开源协议：[https://www.shopwind.net/license/](https://www.shopwind.net/license/)
 
 ShopWind开发交流：[https://www.shopwind.net/forum/portal.html](https://www.shopwind.net/forum/portal.html)
+
+#### 公众号
+<img width="150" src="https://www.shopwind.net/static/images/qrcode_for_gh_8658dbe202f2_258.jpg">
 
 #####
 #####

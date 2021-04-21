@@ -22,6 +22,7 @@ use common\models\IntegralModel;
 use common\models\IntegralSettingModel;
 use common\models\DeliveryTemplateModel;
 use common\models\RegionModel;
+use common\models\UserPrivModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -136,6 +137,9 @@ class ApplyForm extends Model
 			$query->cate_id = $post->cate_id;
 			$query->save();          
         }
+
+		// 添加店铺所有权
+		$this->insertStorePrivs($model->store_id);
 		
 		// 添加一条默认的运费模板（不用等开通后才添加，因为提交后，没有审核通过，也是可以编辑信息的）
 		DeliveryTemplateModel::addFirstTemplate($model->store_id);
@@ -171,5 +175,17 @@ class ApplyForm extends Model
 		}
 
 		return true;
+	}
+
+	/**
+	 * 添加店铺所有权
+	 */
+	private function insertStorePrivs($store_id = 0) 
+	{
+		$model = new UserPrivModel();
+		$model->userid = Yii::$app->user->id;
+		$model->store_id = $store_id;
+		$model->privs = 'all';
+		return $model->save();
 	}
 }
