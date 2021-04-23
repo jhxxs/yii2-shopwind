@@ -4,10 +4,10 @@
     <img width="300" src="https://www.shopwind.net/templates/mall/default/styles/default/images/logo.png">
   </a>
 </div>
-<h2 align="center">ShopWind开源电商系统</h2>
+<h1 align="center">yii2-shopwind</h1>
 <div align="center">
 
-基于Yii2.0框架深度开发 • 免费开源的多店铺商城系统
+基于Yii2框架开发 • 免费开源的B2B2C商城系统
 
 </div>
 <div align="center">
