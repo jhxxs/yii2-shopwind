@@ -13,6 +13,7 @@ namespace backend\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\FileHelper;
 
 use common\library\Timezone;
 
@@ -39,7 +40,7 @@ class DbForm extends Model
 	public function getBackUpPath() {
 		$path = Yii::getAlias('@frontend') . '/web/data/' . $this->dbdata_path;
 		if(!is_dir($path)) {
-			\yii\helpers\FileHelper::createDirectory($path);
+			FileHelper::createDirectory($path);
 		}
 		return $path;
 	}
@@ -57,7 +58,7 @@ class DbForm extends Model
 	{
 		$path = $this->getBackUpPath() . DIRECTORY_SEPARATOR . $folder;
 		if(!is_dir($path)) {
-			\yii\helpers\FileHelper::createDirectory($path);
+			FileHelper::createDirectory($path);
 		}
 		return $path . DIRECTORY_SEPARATOR;
 	}
@@ -90,7 +91,7 @@ class DbForm extends Model
 			{
 				while (($file = readdir($handle)) !== false)
 				{
-					if ($file{0} != '.' && filetype($path . $file) == 'dir')
+					if (!in_array($file, ['.', '..']) && filetype($path . $file) == 'dir')
 					{
 						$backup['name'] = $file;
 						$backup['date'] = filemtime($path . $file) - date('Z');
@@ -108,7 +109,10 @@ class DbForm extends Model
 			
 		return $backups;
 	}
-	/* 生成备份名字 */
+
+	/**
+	 * 生成备份名字
+	 */
     public function makeBackupName()
     {
         $str = Timezone::localDate('Ymd_', true); //日期前缀
@@ -122,7 +126,7 @@ class DbForm extends Model
             {
                 while (($file = readdir($handle)) !== false)
                 {
-                    if ($file{0} != '.' && filetype($fullpath . DIRECTORY_SEPARATOR . $file) == 'dir')
+                    if (!in_array($file, ['.', '..']) && filetype($fullpath . DIRECTORY_SEPARATOR . $file) == 'dir')
                     {
                         if (strpos($file, $str) === 0)
                         {
@@ -142,13 +146,15 @@ class DbForm extends Model
         }
         else
         {
-			//没有找到当天备份
+			// 没有找到当天备份
             $str .= '1';
         }
         return $str;
     }
 	
-	/* 获取备份文件信息 */
+	/**
+	 * 获取备份文件信息 
+	 */
     public function getHead($path = null)
     {
         /* 获取sql文件头部信息 */
@@ -223,9 +229,9 @@ class DbForm extends Model
 			{
 				while (false !== ($entry = $d->read()))
 				{
-				   if($entry!='.' && $entry!='..')
+				   if (!in_array($entry, ['.', '..']))
 				   {
-					   $entry = $dir.'/'.$entry;
+					   $entry = $dir .'/' . $entry;
 					   if(is_dir($entry))
 					   {
 						   rmdir($entry);

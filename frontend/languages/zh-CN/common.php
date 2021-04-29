@@ -459,7 +459,6 @@ return array(
 	'please_input_captcha'  => '请填写验证码',
 	'err_bad_url' => '非法参数',
 	'phone_mob_required' => '手机号码不能为空',
-	'phone_required' 	=> '固定电话和手机请至少填写一项',
 	'phone_mob_invalid' => '请输入正确的手机号',
 	'email_invalid'	  => '请输入正确的电子邮箱',
 	'edit_phone' => '修改手机号码',

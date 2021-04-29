@@ -74,6 +74,7 @@ class StoreExportForm extends Model
 	{
 		$result = array(
             Def::STORE_APPLYING  => Language::get('applying'),
+			Def::STORE_NOPASS	 => Language::get('nopass'),
             Def::STORE_OPEN      => Language::get('open'),
             Def::STORE_CLOSED    => Language::get('close'),
         );

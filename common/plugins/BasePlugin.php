@@ -109,7 +109,8 @@ class BasePlugin
             $dir = dir($plugin_dir);
             while (false !== ($entry = $dir->read()))
             {
-                if (in_array($entry, array('.', '..')) || $entry{0} == '.' || $entry{0} == '$') {
+                //if (in_array($entry, array('.', '..')) || $entry{0} == '.' || $entry{0} == '$') { // for php >= 7.4 disabled
+				if (in_array($entry, array('.', '..')) || !is_string($entry)) { 
                     continue;
                 }
 				$info = $this->getInfo($entry);
@@ -122,6 +123,7 @@ class BasePlugin
 					$plugins[$entry]['isInstall'] = $this->isInstall($entry);
 				}
             }
+			$dir->close();
         }
 
         return $plugins;

@@ -39,11 +39,11 @@ class MealForm extends Model
 	public function formData($post = null, $queryitem = true, $orderBy = [], $ifpage = false, $pageper = 10, $isAJax = false, $curPage = false)
 	{
 		// 缺省条件时，查询所有搭配购
-		$query = MealModel::find()->select('meal_id,created,title,price as mealPrice,status,store_id')->where(['status' => 1]);
+		$query = MealModel::find()->alias('m')->select('m.meal_id,m.created,m.title,m.price as mealPrice,m.status,s.store_id,s.store_name')->joinWith('store s', false)->where(['status' => 1]);
 
 		// 查询的是某个具体的搭配购
-		if($post->id) {
-			$query->andWhere(['meal_id' => $post->id]);
+		if($post->meal_id) {
+			$query->andWhere(['meal_id' => $post->meal_id]);
 		}
 		// 查询的是某个商品参与的所有搭配购
 		elseif($post->goods_id) {
@@ -62,7 +62,7 @@ class MealForm extends Model
 			$query->andWhere(['or', ['like', 'title', $post->keyword], ['like', 'keyword', $post->keyword]]);
 		}
 		if($post->store_id) {
-			$query->andWhere(['store_id' => $post->store_id]);
+			$query->andWhere(['s.store_id' => $post->store_id]);
 		}
 
 		if(!$ifpage) {

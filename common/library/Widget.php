@@ -72,8 +72,7 @@ class Widget
             $dir = dir($widget_dir);
             while (false !== ($entry = $dir->read()))
             {
-                if (in_array($entry, array('.', '..')) || $entry{0} == '.' || $entry{0} == '$')
-                {
+				if (in_array($entry, ['.', '..']) || in_array(substr($entry, 0, 1), ['.', '$'])) {
                     continue;
                 }
                 $widgets[$entry] = $this->getInfo($entry);
