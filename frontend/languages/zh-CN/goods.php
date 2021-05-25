@@ -79,4 +79,6 @@ return array(
 	'invalid_quantity' => '您输入的数量不正确',
 	'qa_friend' => '咨询网友',
 	'not_question_self'		=> '不能咨询自己店铺的商品',
+    'input_quantity' => '请输入购买数量',
+
 );

@@ -149,11 +149,10 @@ class RefundController extends \common\controllers\BaseAdminController
 			$chajia	= $refund['total_fee'] - $amount;
 			
 			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
-			$depopay_type    = \common\library\Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'refund']);
+			$depopay_type    = \common\library\Business::getInstance('depopay')->build('refund', $post);
 			$result = $depopay_type->submit(array(
 				'trade_info' => array('userid' => $orderInfo['seller_id'], 'party_id' => $orderInfo['buyer_id'], 'amount' => $amount),
-				'extra_info' => $orderInfo + array('tradeNo' => $refund['tradeNo'], 'chajia' => $chajia, 'refund_id' => $get->id, 'operator' => 'admin'),
-				'post'		 => $post
+				'extra_info' => $orderInfo + array('tradeNo' => $refund['tradeNo'], 'chajia' => $chajia, 'refund_id' => $get->id, 'operator' => 'admin')
 			));
 				
 			if($result !== true) {

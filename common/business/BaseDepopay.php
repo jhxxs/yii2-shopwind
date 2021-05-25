@@ -22,25 +22,48 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id depopay.base.php 2018.4.12 $
+ * @Id BaseDepopay.php 2018.4.12 $
  * @author mosir
  */
  
 class BaseDepopay
 {
+	/**
+	 * 交易类型
+	 * @var string $otype
+	 */
+	protected $otype = '';
+	
+	/**
+	 * 页面提交参数
+	 * @var object $post
+	 */
+	public $post = null;
+
+	/**
+	 * 其他额外参数
+	 * @var array $params
+	 */
+	public $params = array();
+
+	/**
+	 * 错误捕捉
+	 * @var object $errors
+	 */
 	public $errors = null;
+
+	/**
+	 * 错误代码集合
+	 * @var array $errorCode
+	 */
 	public $errorCode = [];
 	
-    public function __construct($params)
-    {
-        if (!empty($params))
-        {
-            foreach ($params as $key => $value)
-            {
-                $this->$key = $value;
-            }
-		}
-    }
+	public function __construct($otype, $post = null, $params = array())
+	{
+		$this->otype 	= $otype;
+		$this->post 	= $post;
+		$this->params 	= $params;
+	}
 	
 	/* 验证账户余额是否足够 */
 	public function _check_enough_money($money, $userid)
@@ -256,8 +279,7 @@ class DepopayException
 			"50021" => "交易异常！无法正确修改订单状态。",
 			"50022" => "操作异常！买家确认收货后无法正常修改交易状态。",
 			"50023" => "交易异常！取消订单中退回给买家款项时出现插入错误。",
-			"50024" => "交易异常！无法正确修改交易状态为已付款。",
-			"50025" => "交易异常！无法正确修改拼团订单状态信息。",
+			"50024" => "交易异常！无法正确修改交易状态信息。",
 			"60001" => "交易异常！购买应用中无法正常支付",
 			"60002" => "更新所购买应用的过期时间出现异常！",
 			"60003" => "无法正常变更购买应用记录中的状态",

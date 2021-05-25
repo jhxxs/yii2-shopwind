@@ -294,6 +294,8 @@ return array(
     'order_pending'     => '等待买家付款',
 	'order_teaming'		=> '待成团',
     'order_accepted'    => '等待卖家发货',
+	'order_picking'		=> '待配送',
+	'order_delivered'	=> '待取货',
     'order_canceled'    => '交易关闭',
 	'order_submitted'   => '等待卖家发货',//'货到付款',
     'order_shipped'     => '卖家已发货',

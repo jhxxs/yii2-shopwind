@@ -3,6 +3,7 @@
 	var addresses = {$addresses|default:'[]'};
 	var integralExchangeRate 	= {$goods_info.integralExchange.rate|default:0};
 	var integralMaxPoints 		= {$goods_info.integralExchange.maxPoints|default:0};
+	var allowIntegral			= {$goods_info.allow_integral|default:false};
 	$(function(){
 		
 		/* 订单总额初始化 */
@@ -76,25 +77,22 @@
 	/* 赋值收货地址 */
 	function fill_address_info(addr_id)
 	{
-		address = addresses[addr_id];
-		if(address) {
-			phone = address['phone_mob'];
-			if(phone=='') phone = address['phone_tel'];
-			$('.J_AddressDetail').html(address['region_name'] + ' ' + address['address']);
-			$('.J_Consignee').html(address['consignee'] + ' ' + phone);
-		}
+		var address = addresses[addr_id];
+		$('.J_AddressDetail').html(address['region_name'] + ' ' + address['address']);
+		$('.J_Consignee').html(address['consignee'] + ' ' + (address['phone_mob'] ? address['phone_mob'] : address['phone_tel']));
 	}
 				
 	/* 加载该收货地址对应的运费 */
 	function fill_logistic_fee_by_address(addr_id)
 	{
+		var address = addresses[addr_id];
 		$('.J_Store').each(function(){
 			store_id = $(this).attr('store_id');
 			$('.J_LogisticFeesSelect-' + store_id).children().remove();
-			shipping_data = shippings[store_id][addr_id];
+			shipping_data = shippings[store_id][address['region_id']];
 			
 			$.each(shipping_data,function(k,v) {
-				html = '<option value="'+k+'" price="'+v.logistic_fees+'">'+v.name+'：'+number_format(v.logistic_fees,2)+'</option>';
+				html = '<option value="'+v.type+'" price="'+v.logistic_fees+'">'+v.name+'：'+number_format(v.logistic_fees,2)+'</option>';
 				$('.J_LogisticFeesSelect-' + store_id).append(html);
 			});
 		});
@@ -151,26 +149,26 @@
 			
 		});
 
-		<!--{if $goods_info.allow_integral}-->
-		if($('.J_UseIntegralCheckbox').prop('checked')==true && $('.J_IntegralAmount').val()>0){
-			usePoints = parseFloat($('.J_IntegralAmount').val());
-			
-			if(usePoints > integralMaxPoints) {
-				usePoints = integralMaxPoints;
-				$('.J_IntegralAmount').val(usePoints);
-			}
-			
-			integral_value = (usePoints * integralExchangeRate).toFixed(4);
-			if(integral_value > order_amount) {
-				integral_value 	= order_amount;
-				usePoints		= number_format((integral_value / integralExchangeRate).toFixed(2), 2);
-				$('.J_IntegralAmount').val(usePoints);
-			} 
-			integral_value = parseFloat(integral_value).toFixed(2);
-			$('.J_IntegralPrice').html(number_format(integral_value, 2));
-			
-		} else $('.J_IntegralPrice').html('0.00');
-		<!--{/if}-->
+		if(allowIntegral) {
+			if($('.J_UseIntegralCheckbox').prop('checked') == true && $('.J_IntegralAmount').val() > 0){
+				usePoints = parseFloat($('.J_IntegralAmount').val());
+				
+				if(usePoints > integralMaxPoints) {
+					usePoints = integralMaxPoints;
+					$('.J_IntegralAmount').val(usePoints);
+				}
+				
+				integral_value = (usePoints * integralExchangeRate).toFixed(4);
+				if(integral_value > order_amount) {
+					integral_value 	= order_amount;
+					usePoints		= number_format((integral_value / integralExchangeRate).toFixed(2), 2);
+					$('.J_IntegralAmount').val(usePoints);
+				} 
+				integral_value = parseFloat(integral_value).toFixed(2);
+				$('.J_IntegralPrice').html(number_format(integral_value, 2));
+				
+			} else $('.J_IntegralPrice').html('0.00');
+		}
 	
 		$('.J_OrderAmount').html(number_format((order_amount-integral_value).toFixed(2), 2));
 	}
@@ -185,20 +183,19 @@
 		<dl class="f66 clearfix {if $smarty.foreach.fe_address.first} selected_address{/if} J_AddressEach" {if $smarty.foreach.fe_address.iteration % 4 eq 0} style="margin-right:0;"{/if}>
 			<dt>
 				<input type="checkbox" name="addr_id" value="{$address.addr_id}" {if $smarty.foreach.fe_address.first} checked="checked" {/if}/>
-				<b>{$address.region_name} ( {$address.consignee|escape}{$lang.shou} )</b> <ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
+				<b>{$address.region_name} ( {$address.consignee|escape} {$lang.shou} )</b> <ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
 			</dt>
-			<dd class="addr-bd"> {$address.address|escape}
-				<!--{if $address.phone_mob}-->{$address.phone_mob}<!--{else}-->{$address.phone_tel}<!--{/if}--> 
+			<dd class="addr-bd"> {$address.address|escape} {$address.phone_mob|default:$address.phone_tel} 
 			</dd>
 			<dd class="addr-toolbar">
 				<i class="curmarker"></i>
-				<a href="javascript:;" class="btn-modify" ectype="dialog" dialog_id="my_address_edit" dialog_title="{$lang.edit_address}" dialog_width="700" uri="{url route='my_address/edit' addr_id=$address.addr_id}">{$lang.modify}</a>
+				<a href="javascript:;" class="btn-modify" ectype="dialog" dialog_id="my_address_edit" dialog_title="{$lang.edit_address}" uri="{url route='my_address/edit' redirect=$redirect addr_id=$address.addr_id}">{$lang.modify}</a>
 			</dd>
 		</dl>
 		<!--{/foreach}-->
 	</div>
 	<!--{/if}-->
 	<div class="mb10 mt10 clearfix">
-		<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" dialog_width="600" uri="{url route='my_address/add'}" class="btn-new-addr">{$lang.use_new_address}</a>
+		<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" dialog_width="600" uri="{url route='my_address/add' redirect=$redirect}" class="btn-new-addr">{$lang.use_new_address}</a>
 	</div>
 </div>

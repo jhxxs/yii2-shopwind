@@ -4,7 +4,7 @@
 
 /* 挂件样式 */
 .widget .widget_icons { position:absolute; top:0px; right:0px; cursor:move; height:25px; z-index:999; }
-.widget .widget_icons span { position:absolute; top:5px; cursor:pointer; width:15px; height:15px; text-indent:-99999px; }
+.widget .widget_icons span { position:absolute; top:10px; cursor:pointer; width:15px; height:15px; text-indent:-99999px; }
 .widget .widget_icons .delete_widget { background:transparent url(../images/delete.gif) no-repeat center center; right:5px; }
 .widget .widget_icons .config_widget { background:transparent url(../images/config.gif) no-repeat center center; right:25px; }
 
@@ -15,7 +15,9 @@
 .widget_config_form_body .field_item label { padding:8px 0px;display:block; font-size: 14px;}
 .widget_config_form_body .field_item label span { font-weight:normal; color:#888; font-size: 14px; }
 .widget_config_form_body .field_item  p{font-size: 14px;}
-.widget_config_form_body input[type="button"]{ background: #3e6caa;border:0;color:#fff; padding:6px 10px; cursor: pointer;}
+.widget_config_form_body input[type="button"]{ background: #3e6caa;border:0;color:#fff; padding:6px 10px; cursor: pointer; }
+.widget_config_form_body #add_image {background: #ffcc00; width: 80px;}
+.widget_config_form_body input[type="text"]{border-radius: 0;}
 
 /* 面板的样式 */
 .handle {background: #cde4f6; padding-bottom: 10px; position: relative; width: 100%;}

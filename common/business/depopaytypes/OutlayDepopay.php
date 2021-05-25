@@ -16,15 +16,23 @@ use yii;
 use common\business\BaseDepopay;
 
 /**
- * @Id outlay.depopay.php 2018.4.15 $
+ * @Id OutlayDepopay.php 2018.4.15 $
  * @author mosir
  */
  
 class OutlayDepopay extends BaseDepopay
 {
-    var $_flow_name = 'outlay';
+	/**
+	 * 资金流出交易
+	 */
+    protected $_flow = 'outlay';
+
+	/**
+	 * 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
+	 */
+	public $_payType   	= 'INSTANT';
 	
-	public function _handle_trade_info($trade_info, $post = null, $checkAmount = true)
+	public function _handle_trade_info($trade_info, $checkAmount = true)
 	{
 		// 如果是退款操作，无需验证金额是否足够
 		if($checkAmount === false){

@@ -55,11 +55,10 @@ class RefundAgreeForm extends Model
 		$chajia	= round($refund['total_fee'] - $amount, 2);
 		
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
-		$depopay_type = \common\library\Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'refund']);
+		$depopay_type = \common\library\Business::getInstance('depopay')->build('refund', $post);
 		$result = $depopay_type->submit(array(
 			'trade_info' => array('userid' => $order['seller_id'], 'party_id' => $order['buyer_id'], 'amount' => $amount),
-			'extra_info' => $order + array('tradeNo' => $refund['tradeNo'], 'chajia' => $chajia, 'refund_id' => $post->id, 'operator' => 'seller'),
-			'post'		 => $post
+			'extra_info' => $order + array('tradeNo' => $refund['tradeNo'], 'chajia' => $chajia, 'refund_id' => $post->id, 'operator' => 'seller')
 		));
 			
 		if($result !== true) {

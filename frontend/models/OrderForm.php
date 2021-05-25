@@ -36,25 +36,26 @@ class OrderForm extends Model
 	
 	public $errors 	= null;
 	
-	/*
-	 * 从购物车/搭配套餐等实例中取商品
+	/**
+	 * 从购物车/搭配购等实例中取商品
 	 */
 	public function getGoodsInfo($post = null)
 	{
-		$extraParams = array();
-		
-		if($this->otype == 'normal') {
-			$extraParams = ['store_id' => isset($post->store_id) ? $post->store_id : 0]; // 如果传值只结算一个店铺
-		}
-		if($this->otype == 'meal') {
-			$extraParams = ['meal_id' => $post->id, 'specs' => explode('|', $post->sp)];
-		}
-		if($this->otype == 'teambuy') {
-			$extraParams = ArrayHelper::toArray($post->extraParams);
+		if(isset($post->specs) && is_string($post->specs)) {
+			$post->specs = json_decode($post->specs);
 		}
 
-		list($goodsList, $extra) = Business::getInstance('order')->build(['type' => $this->otype])->getOrderGoodsList($extraParams);
-		
+		// 购物车订单
+		if($this->otype == 'normal') {
+			$post->store_id = isset($post->store_id) ? intval($post->store_id) : 0; // 如果传值只结算一个店铺
+		}
+		if($this->otype == 'meal') {
+			if(isset($post->id)) {
+				$post->extraParams = (Object) array('meal_id' => $post->id); // for PC
+			}
+		}
+
+		list($goodsList, $extra) = Business::getInstance('order')->build($this->otype, $post)->getOrderGoodsList();
 		if(empty($goodsList)) {
 			$this->errors = Language::get('goods_empty');
 			return false;
@@ -146,13 +147,12 @@ class OrderForm extends Model
 			$result['amount'] += $meal['price'];
 		}
 		
-		// 可能没有什么作用，先暂时屏蔽
-		//$result['extId'] = $meal['meal_id'];
-		
 		return $result;
 	}
 	
-	/* 验证库存够不够 */
+	/**
+	 * 验证库存够不够 
+	 */
 	private function checkBeyondStock(array $goodsList)
 	{
 		$message = '';

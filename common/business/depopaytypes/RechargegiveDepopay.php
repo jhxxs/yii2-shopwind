@@ -21,20 +21,21 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id rechargegive.income.php 2018.7.22 $
+ * @Id RechargegiveDepopay.php 2018.7.22 $
  * @author mosir
  */
  
-class RechargegiveIncome extends IncomeDepopay
+class RechargegiveDepopay extends IncomeDepopay
 {
-	// 针对交易记录的交易类型，值有：购物：SHOPPING； 理财：FINANCE；缴费：PUC_CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat	= 'TRANSFER'; 
+	/**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat  = 'TRANSFER'; 
 	
-	// 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType = 'TRANSFER';
-	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   = 'INSTANT';
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType = 'TRANSFER';
 	
 	public function submit($data = array())
 	{
@@ -71,7 +72,7 @@ class RechargegiveIncome extends IncomeDepopay
 				'payment_code'	=> 'deposit',
 				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
-				'flow'     		=> $this->_flow_name,
+				'flow'     		=> $this->_flow,
 				'fundchannel'   => Language::get('deposit'),
 				'title'			=> Language::get('recharge_give'),
 				'buyer_remark'	=> '',
@@ -94,7 +95,7 @@ class RechargegiveIncome extends IncomeDepopay
 					'balance'		=>	parent::_update_deposit_money($data_trade['buyer_id'], $data_trade['amount']),// 增加后的余额
 					'tradeType'		=>  $this->_tradeType,
 					'tradeTypeName' => 	Language::get(strtoupper($this->_tradeType)),
-					'flow'			=>	$this->_flow_name,
+					'flow'			=>	$this->_flow,
 				);
 
 				$result = parent::_insert_deposit_record($data_record, false);

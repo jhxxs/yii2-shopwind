@@ -53,11 +53,10 @@ class CashierTradeOrderForm extends Model
 				}
 					
 				// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-				$depopay_type = Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'buygoods']);
+				$depopay_type = Business::getInstance('depopay')->build('buygoods', $post);
 				$result = $depopay_type->submit(array(
 					'trade_info' => array('userid' => $order['buyer_id'], 'party_id' => $order['seller_id'], 'amount' => $order['order_amount']),
-					'extra_info' => $order + array('tradeNo' => $tradeNo, 'bizOrderId' => $bizOrderId, 'bizIdentity' => Def::TRADE_ORDER, 'title' => OrderModel::getSubjectOfPay($order['order_id'])),
-					'post'		 =>	$post,
+					'extra_info' => $order + array('tradeNo' => $tradeNo, 'bizOrderId' => $bizOrderId, 'bizIdentity' => Def::TRADE_ORDER, 'title' => OrderModel::getSubjectOfPay($order['order_id']))
 				));
 				
 				if(!$result) {

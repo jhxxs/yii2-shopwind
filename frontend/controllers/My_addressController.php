@@ -73,12 +73,6 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0])->indexBy('region_id')->column();
 			$this->params['action'] = Url::toRoute('my_address/add');
 			$this->params['redirect'] = Yii::$app->request->get('redirect');
-			
-			// 当前位置
-			//$this->params['_curlocal'] = Page::setLocal(Language::get('my_address'), Url::toRoute('my_address/index'), Language::get('address_add'));
-			
-			// 当前用户中心菜单
-			//$this->params['_usermenu'] = Page::setMenu('my_address', 'address_add');
 
 			$this->params['page'] = Page::seo(['title' => Language::get('address_add')]);
 			return $this->render('../my_address.form.html', $this->params);
@@ -91,7 +85,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			if(!($address = $model->save($post, true))) {
 				return Message::popWarning($model->errors);
 			}
-			return Message::popSuccess(Language::get('address_add_successed'), Yii::$app->request->post('redirect', Url::toRoute('my_address/index')));
+			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
 	}
 	
@@ -108,12 +102,6 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['address'] = $address;
 			$this->params['action'] = Url::toRoute(['my_address/edit', 'addr_id' => $addr_id]);
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
-			
-			// 当前位置
-			//$this->params['_curlocal'] = Page::setLocal(Language::get('my_address'), Url::toRoute('my_address/index'), Language::get('address_list'));
-			
-			// 当前用户中心菜单
-			//$this->params['_usermenu'] = Page::setMenu('my_address', 'address_edit');
 
 			$this->params['page'] = Page::seo(['title' => Language::get('address_edit')]);
 			return $this->render('../my_address.form.html', $this->params);
@@ -126,7 +114,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			if(!($address = $model->save($post, true))) {
 				return Message::popWarning($model->errors);
 			}
-			return Message::popSuccess(Language::get('address_edit_successed'), Yii::$app->request->post('redirect', Url::toRoute('my_address/index')));
+			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
 	}
 	

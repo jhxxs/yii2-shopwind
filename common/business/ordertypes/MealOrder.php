@@ -16,27 +16,28 @@ use yii;
 use common\models\MealModel;
 use common\models\GoodsSpecModel;
 
+use common\library\Page;
+
 /**
- * @Id meal.otype.php 2018.7.12 $
- * @author   mosir
- * @desc  goods from meal
+ * @Id MealOrder.php 2018.7.12 $
+ * @author mosir
  */
  
 class MealOrder extends NormalOrder
 {
-	public $otype = 'meal';
+	protected $otype = 'meal';
 	
-	/* 获取搭配套餐中的商品数据，用来计算订单可使用的最大积分值 */
-	public function getOrderGoodsList($extraParams = array())
+	/**
+	 * 获取搭配套餐中的商品数据
+	 */
+	public function getOrderGoodsList()
 	{
-		extract($extraParams);
-		
 		$result = array();
-		if(!$meal_id || empty($specs)) {
+
+		if(!$this->post->extraParams->meal_id || empty($this->post->specs)) {
 			return false;
 		}
-
-		if(!($meal = MealModel::find()->select('meal_id,price,store_id,status,title')->with('mealGoods')->where(['meal_id' => $meal_id])->asArray()->one())) {
+		if(!($meal = MealModel::find()->select('meal_id,price,store_id,status,title')->with('mealGoods')->where(['meal_id' => $this->post->extraParams->meal_id])->asArray()->one())) {
 			return false;
 		}
 		
@@ -50,9 +51,9 @@ class MealOrder extends NormalOrder
 		}
 		
 		// 记录客户选中的商品规格
-		foreach($specs as $key => $spec_id)
+		foreach($this->post->specs as $key => $value)
 		{
-			if(($goods = GoodsSpecModel::find()->alias('gs')->select('gs.spec_id,gs.price,gs.spec_1,gs.spec_2,gs.stock,gs.spec_image,g.goods_id,g.store_id,g.goods_name,g.default_image as goods_image,g.spec_name_1,g.spec_name_2')->where(['spec_id' => $spec_id])->joinWith('goods g', false)->asArray()->one())) 
+			if(($goods = GoodsSpecModel::find()->alias('gs')->select('gs.spec_id,gs.price,gs.spec_1,gs.spec_2,gs.stock,gs.spec_image,g.goods_id,g.store_id,g.goods_name,g.default_image as goods_image,g.spec_name_1,g.spec_name_2')->where(['spec_id' => $value->spec_id])->joinWith('goods g', false)->asArray()->one())) 
 			{
 				$goods['quantity'] = 1;//  套餐商品默认都是购买一件
 				!empty($goods['spec_1']) && $goods['specification'] = $goods['spec_name_1'] . ':' . $goods['spec_1'];	
@@ -63,7 +64,7 @@ class MealOrder extends NormalOrder
 					$goods['goods_image'] = $goods['spec_image'];
 					unset($goods['spec_image']);
 				}
-				
+				$goods['goods_image'] = Page::urlFormat($goods['goods_image'], Yii::$app->params['default_goods_image']);
 				$result[$key] = $goods;
 				$check_goods_2[] = $goods['goods_id'];
 			}

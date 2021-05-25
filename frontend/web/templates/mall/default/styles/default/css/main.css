@@ -5368,8 +5368,7 @@
     height: 25px;
     line-height: 25px;
     font-weight: normal;
-    ;
-    text-decoration: none
+    text-decoration: none;
 }
 
 #select-address .deftip {
@@ -5384,7 +5383,7 @@
     background: #ccc;
     color: #fff;
     display: inline-block;
-    display: none
+    display: none;
 }
 
 #select-address dl .curmarker {
@@ -5754,7 +5753,7 @@
 }
 
 .eject_con .add .submit {
-    width: 458px;
+    /* width: 458px; */
     padding: 10px 0 0 80px;
 }
 

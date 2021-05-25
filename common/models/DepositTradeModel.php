@@ -54,6 +54,12 @@ class DepositTradeModel extends ActiveRecord
 	{
 		return parent::hasOne(DepositWithdrawModel::className(), ['orderId' => 'bizOrderId']);
 	}
+
+	// 关联表
+	public function getRefund()
+	{
+		return parent::hasOne(RefundModel::className(), ['tradeNo' => 'tradeNo', 'buyer_id' => 'buyer_id']);
+	}
 	
 	/**
      *  create unique tradeNo

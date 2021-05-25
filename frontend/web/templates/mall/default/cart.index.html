@@ -14,7 +14,7 @@
           <div class="store-each mb20 J_Store-{$store_id}">
             <div class="store-name pb10 clearfix">
               <label class="ml10 float-left">
-                <input id="{$store_id}" value="{$store_id}" type="checkbox" class="J_SelectStoreAll" {if !$selectedByUser}checked="checked"{elseif in_array($store_id, $selectedByUser.storeAll)} checked="checked"{/if} />
+                <input id="{$store_id}" value="{$store_id}" type="checkbox" class="J_SelectStoreAll" />
                 {$lang.store}{$lang.colon}<a href="{url route='store/index' id=$store_id}" target="_blank">{$cart.store_name|escape}</a></label>
               
               <!--{if $cart.couponReceive}-->
@@ -28,7 +28,7 @@
             <!--{foreach from=$cart.items item=goods name=fe_goods key=key}-->
             <dl class="goods-each clearfix J_CartItem-{$key} J_GoodsEach">
               <dd class="select">
-                <input type="checkbox" name="buy[{$key}]" store_id="{$store_id}" value="{$store_id}:{$key}:{$goods.goods_id}" class="J_SelectGoods" {if !$selectedByUser}checked="checked"{elseif in_array($key, $selectedByUser.goodsList)} checked="checked"{/if} />
+                <input type="checkbox" name="buy[{$key}]" store_id="{$store_id}" value="{$store_id}:{$key}:{$goods.goods_id}" class="J_SelectGoods" {if $goods.selected} checked{/if} />
               </dd>
               <dd class="pic"><a class="block" href="{url route='goods/index' id=$goods.goods_id}" target="_blank"><img src="{$goods.goods_image|default:$app->params['default_goods_image']|url_format}" width="48" height="48" class="block" /></a></dd>
               <dd class="desc">
@@ -50,7 +50,7 @@
           <div class="cart-amount mt20 w auto mb10 clearfix">
             <div class="btn-batch mt5 J_Batch">
               <label class="pl10">
-                <input type="checkbox" class="J_SelectAll" {if !$selectedByUser}checked="checked"{elseif $selectedByUser.All eq 'true'} checked="checked"{/if} />
+                <input type="checkbox" class="J_SelectAll" />
                 {$lang.sellectAll}</label>
               <a href="javascript:;" name="batch_del" class="center" title="{$lang.batch_del}">{$lang.batch_del}</a> <a href="javascript:;" name="batch_collect" class="center" title="{$lang.batch_collect}">{$lang.batch_collect}</a> </div>
             <div class="btn-amount">

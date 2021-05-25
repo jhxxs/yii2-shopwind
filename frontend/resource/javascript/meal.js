@@ -1,20 +1,19 @@
 $(function(){
 		
 	$('.J_SubmitMealOrder').click(function(){
-		specs = ''; check = true;
+		specs = []; check = true;
 		$('input[name="specs[]"]').each(function(index, element) {
 				
-			/* 如果不相等，说明规格没有选择完整，比如存在2个规格的情况下，只选中了一个规格 */
+			// 如果不相等，说明规格没有选择完整，比如存在2个规格的情况下，只选中了一个规格
 			if($(this).parent().find('.handle').children().length != $(this).parent().find('.handle').children().find('li.solid').length) {
 				alert(lang.select_specs);
 				check = false;
 				return false;
 			}
-			specs = specs + '|' + $(this).val();
+			specs.push({spec_id: $(this).val()});
 		});
 		if(check == true) {
-			specs = specs.substr(1);
-			location.href = url(['order/meal', {id:$(this).attr('meal_id'), specs:specs}]);
+			location.href = url(['order/meal', {id:$(this).attr('meal_id'), specs:JSON.stringify(specs)}]);
 		}		
 	});
 });

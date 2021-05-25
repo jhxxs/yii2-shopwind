@@ -12,6 +12,7 @@
 namespace common\business;
 
 use yii;
+use yii\helpers\ArrayHelper;
 
 use common\models\OrderModel;
 use common\models\OrderGoodsModel;
@@ -34,32 +35,53 @@ use common\library\Language;
 use common\library\Promotool;
 
 /**
- * @Id order.base.php 2018.7.12 $
- * @author   mosir
- * @desc The base Library of order
+ * @Id BaseOrder.php 2018.7.12 $
+ * @author mosir
  */
  
 class BaseOrder
 {
+	/**
+	 * 订单类型
+	 * @var string $otype
+	 */
+	protected $otype = '';
+	
+	/**
+	 * 页面提交参数
+	 * @var object $post
+	 */
+	public $post = null;
+
+	/**
+	 * 其他额外参数
+	 * @var array $params
+	 */
+	public $params = array();
+
+	/**
+	 * 错误捕捉
+	 * @var object $errors
+	 */
 	public $errors = null;
 	
-    public function __construct($params)
-    {
-        if (!empty($params))
-        {
-            foreach ($params as $key => $value)
-            {
-                $this->$key = $value;
-            }
-		}
-    }
+	public function __construct($otype, $post = null, $params = array())
+	{
+		$this->otype 	= $otype;
+		$this->post 	= $post;
+		$this->params 	= $params;
+	}
 	
-	/* 提交订单信息 */
+	/**
+	 * 提交订单信息 
+	 */
 	public function submit($data = array()) {
 		return 0;
 	}
 	
-	/* 插入订单表数据 */
+	/**
+	 * 插入订单表数据 
+	 */
 	public function insertOrder($order_info = array())
 	{
 		$model = new OrderModel();
@@ -69,7 +91,9 @@ class BaseOrder
 		return $model->save() ? $model->order_id : 0;
 	}
 	
-	/* 插入商品信息 */ 
+	/**
+	 * 插入商品信息 
+	 */ 
 	public function insertOrderGoods($order_id = 0, $list = array()) 
 	{
 		// 查验是否有邀请成交的商品
@@ -99,14 +123,16 @@ class BaseOrder
 		return true;
 	}
 	
-	/* 插入收货人信息 */
+	/**
+	 * 插入收货人信息 
+	 */
 	public function insertOrderExtm($order_id = 0, $consignee_info  = array())
 	{
 		$model = new OrderExtmModel();
 		
 		$model->order_id = $order_id;
-		foreach($consignee_info as $key => $val) {
-			$model->$key = $val;
+		foreach($consignee_info as $key => $value) {
+			$model->$key = $value;
 		}
 		return $model->save();
 	}
@@ -162,12 +188,15 @@ class BaseOrder
 		}
 	}
 	
-	/* 处理订单基本信息，返回有效的订单信息数组 */
-    public function handleOrderInfo($goods_info = array(), $post = array())
+	/**
+	 * 处理订单基本信息，返回有效的订单信息数组 
+	 */
+    public function handleOrderInfo($goods_info = array())
     {
         // 返回基本信息
 		$result = array();
 		
+		$post = ArrayHelper::toArray($this->post);
 		foreach($goods_info['orderList'] as $store_id => $order)
 		{
         	$result[$store_id] = array(
@@ -193,24 +222,23 @@ class BaseOrder
 		return $result;
     }
 	
-	/* 处理收货人信息，返回有效的收货人信息 */
-    public function handleConsigneeInfo($goods_info = array(), $post = array())
+	/**
+	 * 处理收货人信息，返回有效的收货人信息 
+	 */
+    public function handleConsigneeInfo($goods_info = array())
     {
 		$result = array();
-		
+
         // 验证收货人信息填写是否完整
-        if (!($consignee_info = $this->validConsigneeInfo($post))) {
+        if (!($consignee_info = $this->validConsigneeInfo())) {
             return false;
         }
 		// 验证配送方式信息填写是否完整
-		if(!($delivery_info = $this->validDeliveryInfo($post))) {
+		if(!($delivery_info = $this->validDeliveryInfo())) {
 			return false;
 		}
 		
-        // 计算配送费用 - 运费模板
-		$addr_id 		= intval($post['addr_id']);
-		$delivery_type 	= $post['delivery_type'];
-		
+        // 计算配送费用
 		$shipping_method = $this->getOrderShippings($goods_info);
 		foreach($shipping_method as $store_id => $shipping)
 		{
@@ -222,18 +250,23 @@ class BaseOrder
 				'zipcode'       =>  $consignee_info['zipcode'],
 				'phone_tel'     =>  $consignee_info['phone_tel'],
 				'phone_mob'     =>  $consignee_info['phone_mob'],
-				'shipping_name' =>  addslashes(Language::get($delivery_type[$store_id])),
-				'shipping_fee'  =>  $shipping[$addr_id][$delivery_type[$store_id]]['logistic_fees'],
+				'shipping_name' =>  addslashes(Language::get($delivery_info[$store_id])),
+				'shipping_fee'  =>  $shipping[$consignee_info['region_id']][$delivery_info[$store_id]]['logistic_fees'],
 			);
 		}
 		return $result;
     }
 	
-	/* 验证收货人信息是否合法 */
-    public function validConsigneeInfo($post = array())
+	/**
+	 * 验证收货人信息是否合法
+	 * 注意：因收货地址与运费计算有关，所以为了配合前端更好的显示订单金额，不建议在前端订单页设置表单提交收货地址
+	 * 但针对社区团购订单，将把门店自提地址作为收货地址，提货人作为收货人信息保存到数据库，故做好兼容处理
+	 */
+    public function validConsigneeInfo()
     {
-		if($post['addr_id']) {
-			$post = array_merge($post, $this->getMyAddress($post['addr_id']));
+		$post = ArrayHelper::toArray($this->post);
+		if(($address = $this->getAddressInfo($post['addr_id'], $post['region_id']))) {
+			$post = array_merge($post, $address);
 		}
         if (!$post['consignee']) {
        		$this->errors = Language::get('consignee_empty');
@@ -248,30 +281,37 @@ class BaseOrder
             return false;
         }
         if (!$post['phone_tel'] && !$post['phone_mob']) {
-            $this->errors = Language::get('phone_required');
+            $this->errors = Language::get('phone_mob_required');
             return false;
         }
+
 		return $post;
 	}
-	
-	/* 验证配送方式是否合法 */
-	public function validDeliveryInfo($post = array())
+
+	/**
+	 * 验证配送方式是否合法
+	 */
+	public function validDeliveryInfo()
 	{
-		if(!isset($post['delivery_type']) || !is_array($post['delivery_type'])) {
+		if(!isset($this->post->delivery_type) || !is_object($this->post->delivery_type)) {
 			$this->errors = Language::get('shipping_required');
 			return false;
 		}
-		foreach($post['delivery_type'] as $val) {
-			if (!$val || !in_array($val, array('express', 'ems', 'post'))) {
+		foreach($this->post->delivery_type as $value) {
+			if (!$value || !in_array($value, ['express', 'ems', 'post'])) {
 				$this->errors = Language::get('shipping_required');
 				return false;
 			}
 		}
-        return true;
+        return ArrayHelper::toArray($this->post->delivery_type);
     }
 	
-	/* 我的收货地址 */
-	public function getMyAddress($addr_id = 0) {
+	/**
+	 * 获取我的收货地址
+	 * @param int $addr_id 只查询指定记录
+	 */
+	public function getMyAddress($addr_id = 0) 
+	{
 		$query = AddressModel::find()->where(['userid' => Yii::$app->user->id])->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');
 		if($addr_id) {
 			return $query->andWhere(['addr_id' => intval($addr_id)])->asArray()->one();
@@ -279,7 +319,9 @@ class BaseOrder
 		return $query->asArray()->all();
 	}
 	
-	/* 获取本次订单的各个店铺的可用优惠券 */
+	/**
+	 * 获取本次订单的各个店铺的可用优惠券 
+	 */
 	public function getStoreCouponList($goods_info = array())
 	{
 		foreach($goods_info['orderList'] as $store_id => $order) {
@@ -290,8 +332,10 @@ class BaseOrder
 		return $goods_info;
 	}
 	
-	/* 取得有效的订单折扣信息，如积分抵扣，店铺优惠券的合理性，返回各个优惠减少的金额 */
-	public function getAllDiscountByPost($goods_info = array(), $post = array())
+	/**
+	 * 取得有效的订单折扣信息，如积分抵扣，店铺优惠券的合理性，返回各个优惠减少的金额 
+	 */
+	public function getAllDiscountByPost($goods_info = array())
 	{
 		$result = $discount_info = array();
 
@@ -300,16 +344,16 @@ class BaseOrder
 		{
 			$result = $goods_info['integralExchange'];
 			
-			!isset($post['exchange_integral']) && $post['exchange_integral'] = 0;
-			if($post['exchange_integral'] > $result['maxPoints'])
+			!isset($this->post->exchange_integral) && $this->post->exchange_integral = 0;
+			if($this->post->exchange_integral > $result['maxPoints'])
 			{
 				$this->errors = Language::get('order_can_use_max_integral').$result['maxPoints'];
 				return false;
 			} 
-			elseif($post['exchange_integral'] > 0) {		
+			elseif($this->post->exchange_integral > 0) {		
 				$discount_info['integral'] = array(
-					'amount' 		=> round($post['exchange_integral'] * $result['rate'], 2), 
-					'points' 		=> $post['exchange_integral'],
+					'amount' 		=> round($this->post->exchange_integral * $result['rate'], 2), 
+					'points' 		=> $this->post->exchange_integral,
 					'orderIntegral' => $result['orderIntegral']
 				);
 			}
@@ -319,18 +363,18 @@ class BaseOrder
 		$goods_info = $this->getStoreCouponList($goods_info);
 		$result = $goods_info['orderList'];
 				
-		if(!isset($post['coupon_sn'])) $post['coupon_sn'] = array();
-		
-		foreach($post['coupon_sn'] as $store_id => $coupon_sn)
-		{
-			if(isset($result[$store_id]['coupon_list']) && !empty($result[$store_id]['coupon_list']))
+		if(isset($this->post->coupon_sn) && !empty($this->post->coupon_sn)) {
+			foreach($this->post->coupon_sn as $store_id => $coupon_sn)
 			{
-				foreach($result[$store_id]['coupon_list'] as $key => $val)
+				if(isset($result[$store_id]['coupon_list']) && !empty($result[$store_id]['coupon_list']))
 				{
-					if($coupon_sn == $val['coupon_sn'])
+					foreach($result[$store_id]['coupon_list'] as $key => $value)
 					{
-						$discount_info['coupon'][$store_id] = array('coupon_value' => $val['coupon_value'], 'coupon_sn' => $coupon_sn);
-						break;
+						if($coupon_sn == $value['coupon_sn'])
+						{
+							$discount_info['coupon'][$store_id] = array('coupon_value' => $value['coupon_value'], 'coupon_sn' => $coupon_sn);
+							break;
+						}
 					}
 				}
 			}
@@ -349,7 +393,9 @@ class BaseOrder
 		return $discount_info;
 	}
 	
-	/* 检验折扣信息和订单总价的合理性 */
+	/**
+	 * 检验折扣信息和订单总价的合理性 
+	 */
 	public function checkAllDiscountForOrderAmount(&$base_info, &$discount_info, $consignee_info, $integralExchangeRate = 0)
 	{
 		$amount = 0;
@@ -404,8 +450,8 @@ class BaseOrder
 			$amount	+= $storeAmount;
 		}
 		
-		/*  情况一：所有订单减去折扣之后的总额为零，那么说明已经不能再使用积分来抵扣了 */
-		/*  情况二：所有订单减去折扣之后的总额不为零，则判断积分抵扣的金额是否合理（如使用积分抵扣后订单总额为负，则不合理）*/
+		// 情况一：所有订单减去折扣之后的总额为零，那么说明已经不能再使用积分来抵扣了
+		// 情况二：所有订单减去折扣之后的总额不为零，则判断积分抵扣的金额是否合理（如使用积分抵扣后订单总额为负，则不合理）
 		if(isset($discount_info['integral']['amount']) && ($discount_info['integral']['amount'] > 0)) 
 		{
 			if(($amount <= 0) || ($discount_info['integral']['amount'] > $amount))
@@ -415,8 +461,7 @@ class BaseOrder
 			}
 		}
 		
-		/* 至此说明所使用的积分抵扣值是合理的（不大于订单总价了，或者本次订单没有使用积分来抵扣，如果使用了积分抵扣，还要继续判断哪个订单使用了多少积分来抵扣，用分摊来计算） */
-		
+		// 至此说明所使用的积分抵扣值是合理的（不大于订单总价了，或者本次订单没有使用积分来抵扣，如果使用了积分抵扣，还要继续判断哪个订单使用了多少积分来抵扣，用分摊来计算）
 		if(($amount > 0) && (isset($discount_info['integral']['amount']) && ($discount_info['integral']['amount'] > 0)))
 		{
 			foreach($base_info as $store_id => $order_info)
@@ -437,16 +482,12 @@ class BaseOrder
 		return true;
 	}
 	
-	/* 获取本次订单的运费资费（多个店铺） */
+	/** 
+	 * 获取本次订单的运费资费（多个店铺）
+	 */
 	public function getOrderShippings($goods_info = array())
 	{
 		$shipping_methods = array();
-
-       	 // 获取我的收货地址
-        $my_address = $this->getMyAddress();
-		if(empty($my_address)) {
-			return array();
-		}
 
 		// 根据goods_info找出所有店铺每个商品的运费模板id
 		$base_deliverys = array();
@@ -469,15 +510,20 @@ class BaseOrder
 			}
 		}
 		
-		// 根据运送目的地，获取运费情况
-		foreach($my_address as $addr_id => $address)
+		// 获取配送目的地, 并计算每个目的地的运费
+		$deliverytos = $this->getDeliveryTos();
+		foreach($deliverytos as $key => $region_id)
 		{
-			$city_id = $address['region_id']; // 此处不是 city_id 的话，可能影响也不大。
 			foreach($base_deliverys as $store_id => $goods_deliverys)
 			{
+				// 相同配送地址的已经查过，无需再查询
+				if(isset($shipping_methods[$store_id][$region_id])) {
+					continue;
+				}
+
 				$deliverys = array();
-				foreach($goods_deliverys as $key => $delivery){
-					$deliverys[$key] = DeliveryTemplateModel::getCityLogistic($delivery, $city_id);
+				foreach($goods_deliverys as $key => $delivery) {
+					$deliverys[$key] = DeliveryTemplateModel::getCityLogistic($delivery, $region_id);
 				}
 		
 				// 一、如果每个商品可用的运送方式都一致，则统一计算；二、 如果有一个商品的运送方式不同，则进行组合计算
@@ -485,9 +531,9 @@ class BaseOrder
 
 				// 1. 分别计算每个运送方式的费用：找出首费最大的那个运费方式，作为首费，并且找出作为首费的那个商品id，便于在统计运费总额时，该商品使用首费，其他商品使用续费计算
 				$merge_info = array(
-					'express' => array('start_fees'=>0,'goods_id'=>0),
-					'ems'     => array('start_fees'=>0,'goods_id'=>0),
-					'post'    => array('start_fees'=>0,'goods_id'=>0),
+					'express' => array('start_fees' => 0, 'goods_id' => 0),
+					'ems'     => array('start_fees' => 0, 'goods_id' => 0),
+					'post'    => array('start_fees' => 0, 'goods_id' => 0),
 				);
 				foreach($deliverys as $goods_id	=> $delivery)
 				{
@@ -515,7 +561,8 @@ class BaseOrder
 				{
 					foreach($delivery as $template_types)
 					{
-						if($goods_id == $merge_info[$template_types['type']]['goods_id']){
+						$goods_fees = 0;
+						if($goods_id == $merge_info[$template_types['type']]['goods_id']) {
 							if($total_quantity > $template_types['start_standards'] && $template_types['add_standards'] > 0){
 								if($quantity[$goods_id] > $template_types['start_standards']) {
 									$goods_fees = $merge_info[$template_types['type']]['start_fees'] + ($quantity[$goods_id]- $template_types['start_standards'])/$template_types['add_standards'] * $template_types['add_fees'];
@@ -527,25 +574,22 @@ class BaseOrder
 							} else {
 								$goods_fees = $merge_info[$template_types['type']]['start_fees'];
 							}
-							//$logistic[$template_types['type']]['list_fee'][$goods_id]['logistic_fee'] +=  $goods_fees;	
 						}
 						else
 						{
-							if($template_types['add_standards']>0){
+							if($template_types['add_standards'] > 0){
 								$goods_fees = $quantity[$goods_id]/$template_types['add_standards'] * $template_types['add_fees'];
 							} else {
 								$goods_fees = $template_types['add_fees'];
 							}
-							//$logistic[$template_types['type']]['list_fee'][$goods_id]['logistic_fee'] += $goods_fees;
 						}
 						
 						!isset($logistic[$template_types['type']]['logistic_fees']) && $logistic[$template_types['type']]['logistic_fees'] = 0;
 						$logistic[$template_types['type']]['logistic_fees'] += round($goods_fees, 2);
-						$logistic[$template_types['type']]['addr_id'] = $addr_id;
 						$logistic[$template_types['type']] += $template_types;	
 					}
 				}
-				
+
 				// 检查是否满足满包邮条件
 				if(($result = Promotool::getInstance()->build(['store_id' => $store_id])->getOrderFullfree($goods_info['orderList'][$store_id])) !== false) {
 					foreach($logistic as $k => $v) {
@@ -553,7 +597,8 @@ class BaseOrder
 						$logistic[$k]['name'] = $v['name'].'('.$result['title'].')';
 					}
 				}
-				$shipping_methods[$store_id][$addr_id] = $logistic;
+
+				$shipping_methods[$store_id][$region_id] = $logistic;
 			}
 		}
 		
@@ -561,7 +606,9 @@ class BaseOrder
 		return $shipping_methods;
 	}
 	
-	/* 更新优惠券的使用次数 */
+	/**
+	 * 更新优惠券的使用次数 
+	 */
 	public function updateCouponRemainTimes($result = array(), $coupon = array())
 	{
 		foreach($result as $store_id => $order_id) {
@@ -574,7 +621,9 @@ class BaseOrder
 		}
 	}
 	
-	/* 保存订单使用的积分数额 */
+	/**
+	 * 保存订单使用的积分数额 
+	 */
 	public function saveIntegralInfoByOrder($result = array(), $integral = array())
 	{
 		if(!empty($result) && isset($integral['points']) && ($integral['points'] > 0))
@@ -609,8 +658,10 @@ class BaseOrder
 		}
 	}
 	
-	/* 下单完成后的操作，如清空购物车，更新库存等 */
-	public function afterInsertOrder($order_id, $store_id, $goods_info)
+	/**
+	 * 下单完成后的操作，如清空购物车，更新库存等
+	 */
+	public function afterInsertOrder($order_id, $store_id, $list, $sendNotify = true)
 	{
 		// 订单下完后清空指定购物车
 		if(in_array($this->otype, ['normal'])) {
@@ -621,22 +672,24 @@ class BaseOrder
 		OrderModel::changeStock('-', $order_id);
 
   		// 更新下单次数（非销量）
-    	foreach ($goods_info['items'] as $goods) {
+    	foreach ($list['items'] as $goods) {
 			GoodsStatisticsModel::updateAllCounters(['orders' => 1], ['goods_id' => $goods['goods_id']]);
      	}
 		
-		$orderInfo = OrderModel::find()->where(['order_id' => $order_id])->asArray()->one();
-		
-		// 邮件提醒： 买家已下单通知自己 
-		Basewind::sendMailMsgNotify($orderInfo, array('key' => 'tobuyer_new_order_notify', 'receiver' => Yii::$app->user->id));
-		
-		// 短信和邮件提醒： 买家已下单通知卖家 
-		Basewind::sendMailMsgNotify($orderInfo, array(
-				'key' => 'toseller_new_order_notify',
-			),
-			array(
-				'key' => 'toseller_new_order_notify', 
-			)
-		);
+		if($sendNotify === true) {
+			$orderInfo = OrderModel::find()->where(['order_id' => $order_id])->asArray()->one();
+			
+			// 邮件提醒： 买家已下单通知自己 
+			Basewind::sendMailMsgNotify($orderInfo, array('key' => 'tobuyer_new_order_notify', 'receiver' => Yii::$app->user->id));
+			
+			// 短信和邮件提醒： 买家已下单通知卖家 
+			Basewind::sendMailMsgNotify($orderInfo, array(
+					'key' => 'toseller_new_order_notify',
+				),
+				array(
+					'key' => 'toseller_new_order_notify', 
+				)
+			);
+		}
     }
 }

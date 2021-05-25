@@ -83,12 +83,11 @@ class Buyer_orderConfirmForm extends Model
 		}
 			
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
-		$depopay_type = \common\library\Business::getInstance('depopay')->build(['flow' => 'income', 'type' => 'sellgoods']);
+		$depopay_type = \common\library\Business::getInstance('depopay')->build('sellgoods', $post);
 			
 		$result = $depopay_type->submit(array(
 			'trade_info' => array('userid' => $orderInfo['seller_id'], 'party_id' => $orderInfo['buyer_id'], 'amount' => $orderInfo['order_amount']),
-			'extra_info' => $orderInfo + array('tradeNo' => $tradeInfo['tradeNo']),
-			'post'		 => $post
+			'extra_info' => $orderInfo + array('tradeNo' => $tradeInfo['tradeNo'])
 		));
 			
 		if($result !== true) {

@@ -1,18 +1,17 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
   <div id="rightTop">
-    <p>{$lang.cache_setting}</p>
+    <p>{$lang.manage}</p>
     <ul class="subnav">
       <li><span>{$lang.cache_file}</span></li>
       <li><a class="btn1" href="{url route='cache/redis'}">{$lang.cache_redis}</a></li>
       <li><a class="btn1" href="{url route='cache/memcache'}">{$lang.cache_memcache}</a></li>
     </ul>
   </div>
-  <!-- 操作说明 -->
   <div class="explanation" id="explanation">
     <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-      <h4 title="操作提示">提示</h4>
-      <span id="explanationZoom" title="收起提示"></span> </div>
+      <h4>{$lang.operation_tip}</h4>
+  	</div>
     <ul>
       <li>1. 默认缓存模式，无需配置服务器即可使用</li>
       <li>2. 文件缓存模式会在站点生成随机文件名文件，可通过后台-》更新缓存清除，不会一直占用空间</li>

@@ -34,4 +34,9 @@ class GoodsSpecModel extends ActiveRecord
 	{
 		return parent::hasOne(GoodsModel::className(), ['goods_id' => 'goods_id']);
 	}
+    // 关联表
+	public function getGoodsStatistics()
+	{
+		return parent::hasOne(GoodsStatisticsModel::className(), ['goods_id' => 'goods_id']);
+	}
 }

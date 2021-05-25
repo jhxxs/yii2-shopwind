@@ -110,7 +110,7 @@ class BasePlugin
             while (false !== ($entry = $dir->read()))
             {
                 //if (in_array($entry, array('.', '..')) || $entry{0} == '.' || $entry{0} == '$') { // for php >= 7.4 disabled
-				if (in_array($entry, array('.', '..')) || !is_string($entry)) { 
+				if (in_array($entry, ['.', '..']) || in_array(substr($entry, 0, 1), ['.', '$'])) {
                     continue;
                 }
 				$info = $this->getInfo($entry);

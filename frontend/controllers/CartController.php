@@ -116,9 +116,52 @@ class CartController extends \common\controllers\BaseMallController
 		if($post->selected) {
 			Yii::$app->cart->unchoses();
 			Yii::$app->cart->chose($product->product_id);
-			Yii::$app->cart->change($product->product_id, $post->quantity);
+			Yii::$app->cart->change($product->product_id, $post->quantity, $result['price']);
 		}
-		return Message::result(Yii::$app->cart->find(), Language::get('add_cart_successed'));		
+		return Message::result($model->getCart(), Language::get('add_cart_successed'));		
+	}
+
+	/**
+	 * 批量加入购物车
+	 */
+    public function actionMany()
+    {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['selected']);
+		$post->specs = json_decode($post->specs, true);
+		
+		
+		$list = array();
+		$model = new \frontend\models\CartForm();
+		foreach($post->specs as $key => $value) {
+			if(($value = intval($value)) && $value > 0) {
+				if(($list[] = $model->valid((Object)['spec_id' => $key, 'quantity' => $value])) === false) {
+					return Message::warning($model->errors);
+				}
+			}
+		}Page::writeLog('kkk', $list);
+		
+		foreach($list as $key => $result)
+		{
+			// 用于识别购物车产品唯一性的ID
+			$product_id = Yii::$app->cart->getId($result);
+			if(($product = Yii::$app->cart->getItem($product_id)->getProduct())) {
+				if($result['stock'] < $product->quantity + $result['quantity']) {
+					Yii::$app->cart->remove($product->product_id);
+				}
+			} else $product = Yii::$app->cart->createItem(array_merge($result, ['product_id' => $product_id]));
+			
+			// 放入购物车（自动判断是加入商品，还是增加已加入商品的数量）
+			Yii::$app->cart->put($product, $result['quantity']);
+
+			// 立即购买的操作（确保只购买的是当前立即购买的商品）
+			if($post->selected) {
+				if($key == 0) Yii::$app->cart->unchoses();
+				Yii::$app->cart->chose($product->product_id);
+				Yii::$app->cart->change($product->product_id, $result['quantity'], $result['price']);
+			}
+		}
+		
+		return Message::result($model->getCart(), Language::get('add_cart_successed'));
 	}
 	
 	/* 修改数量 */
@@ -132,34 +175,43 @@ class CartController extends \common\controllers\BaseMallController
 		}
 		
 		$product_id = Yii::$app->cart->getId($result);
+		Yii::$app->cart->change($product_id, $post->quantity, $result['price']);
 		
-		// 如果现在的价格跟购物车的价格不一致
-		if($model->ifchange($post->spec_id, $product_id))
-		{
-			$product = Yii::$app->cart->createItem(array_merge($result, ['product_id' => $product_id]));
-			Yii::$app->cart->put($product, $post->quantity);
-			
-			// 如果价格改变，则前端根据alertMsg参数刷新页面，显示最新数据
-			$this->params['alertMsg'] = Language::get('price_change_alert');
-		} 
-		else Yii::$app->cart->change($product_id, $post->quantity);
-		
-		$this->params = array_merge((array) $this->params,  Yii::$app->cart->find());
-		return Message::result($this->params, Language::get('update_item_successed'));
+		return Message::result($model->getCart(), Language::get('update_item_successed'));
 	}
 	
 	/* 删除购物车商品 */
 	public function actionDelete()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+
+		$model = new \frontend\models\CartForm();
 		if(!$post->product_id || !($product = Yii::$app->cart->getItem($post->product_id)->getProduct()) || ($product->userid != Yii::$app->user->id) || !(Yii::$app->cart->remove($post->product_id))) {
 			return Message::warning(Language::get('drop_item_failed'));
 		}
-		return Message::result(Yii::$app->cart->find(), Language::get('drop_item_successed'));
+		return Message::result($model->getCart(), Language::get('drop_item_successed'));
+	}
+
+	/**
+ 	 * 设置购物车商品为选中/取消状态
+	 */
+    public function actionChose()
+    {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['selected']);
+		$post->product_ids = json_decode($post->product_ids);
+
+		// 先全部取消
+		Yii::$app->cart->unchoses();
+		foreach($post->product_ids as $product_id) {
+			Yii::$app->cart->chose($product_id, $post->selected);
+		}
+
+		$model = new \frontend\models\CartForm();
+		return Message::result($model->getCart());
 	}
 	
 	/* 购物车为空 */
-    private function cartEmpty()
+    public function cartEmpty()
     {
 		$this->params['page'] = Page::seo(['title' => Language::get('cart')]);
 		return $this->render('../cart.empty.html', $this->params);

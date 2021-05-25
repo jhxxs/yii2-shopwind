@@ -31,6 +31,7 @@ use common\library\Page;
  */
 class MealForm extends Model
 {
+	public $id = 0;
 	public $errors = null;
 	
 	/**
@@ -42,8 +43,8 @@ class MealForm extends Model
 		$query = MealModel::find()->alias('m')->select('m.meal_id,m.created,m.title,m.price as mealPrice,m.status,s.store_id,s.store_name')->joinWith('store s', false)->where(['status' => 1]);
 
 		// 查询的是某个具体的搭配购
-		if($post->meal_id) {
-			$query->andWhere(['meal_id' => $post->meal_id]);
+		if($this->id) {
+			$query->andWhere(['meal_id' => $this->id]);
 		}
 		// 查询的是某个商品参与的所有搭配购
 		elseif($post->goods_id) {
@@ -93,7 +94,7 @@ class MealForm extends Model
 						$items[$k]['specification'] = $this->getDefaultSpecification($v, $specs);
 
 						if(Basewind::getCurrentApp() != 'api') {
-							$items[$k]['unispecs'] = $this->formatSpecs($specs);
+							$items[$k]['unispecs'] = $v['spec_qty'] > 0 ? $this->formatSpecs($specs) : array();
 						}
 					}
 				}

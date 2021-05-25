@@ -1,7 +1,7 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
   <div id="rightTop">
-    <p>{$lang.msg_manage}</p>
+    <p>{$lang.manage}</p>
     <ul class="subnav">
       <li><a class="btn1" href="{url route='msg/index'}">{$lang.sendlog}</a></li>
       <li><a class="btn1" href="{url route='msg/recharge'}">{$lang.msgrecharge}</a></li>
@@ -11,11 +11,9 @@
       <li><a class="btn1" href="{url route='msg/send'}">{$lang.sendmsg}</a></li>
     </ul>
   </div>
-  <!-- 操作说明 -->
   <div class="explanation" id="explanation">
     <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-      <h4 title="操作提示">提示</h4>
-      <span id="explanationZoom" title="收起提示"></span> </div>
+      <h4>{$lang.operation_tip}</h4></div>
     <ul>
       <li>1. 为避免短信被滥用，造成不必要的损失，需要平台分配给用户一定的短信数量，用户才能使用短信功能</li>
       <li>2. 如果用户短信消耗完毕，则无法发送如：下单提醒，付款提醒等的短信</li>

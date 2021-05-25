@@ -36,12 +36,12 @@
                             	<ul class="clearfix">
                             		<li class="handle_title">{$goods.spec_name_2|escape}{$lang.colon}</li>
                                 	<!--{foreach from=$goods.unispecs.spec_2 item=spec key=id}-->
-                                	<li onclick="selectSpec(2, this,{$goods.spec_qty},{$goods.goods_id},{$meal.mealPrice})" class="{if $id eq $goods.default_spec}solid{else}dotted{/if}"><a href="javascript:;"><span>{$spec.name}</span></a></li>
+                                	<li onclick="selectSpec(2, this,{$goods.spec_qty},{$goods.goods_id},{$meal.mealPrice})" class="{if $id eq $goods.spec_id}solid{else}dotted{/if}"><a href="javascript:;"><span>{$spec.name}</span></a></li>
                                 	<!--{/foreach}-->
                             	</ul>
                             	<!--{/if}-->
 							</div>
-							<input type="hidden" name="specs[]" value="{$goods.default_spec}" />
+							<input type="hidden" name="specs[]" value="{$goods.spec_id}" />
 						</dd>
 					</dl>
 					<!--{/foreach}-->

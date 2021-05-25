@@ -22,27 +22,28 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id recharge.income.php 2018.7.22 $
+ * @Id RechargeDepopay.php 2018.7.22 $
  * @author mosir
  */
  
-class RechargeIncome extends IncomeDepopay
+class RechargeDepopay extends IncomeDepopay
 {
-	// 针对交易记录的交易类型，值有：购物：SHOPPING； 理财：FINANCE；缴费：PUC_CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat	= 'RECHARGE'; 
+	/**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat  = 'RECHARGE'; 
 	
-	// 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType = 'RECHARGE';
-	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   = 'INSTANT';
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType = 'RECHARGE';
 	
 	public function submit($data = array())
 	{
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info, $post);
+        $base_info = parent::_handle_trade_info($trade_info);
 		if (!$base_info) {
             return false;
         }
@@ -50,7 +51,7 @@ class RechargeIncome extends IncomeDepopay
 		//$tradeNo = $extra_info['tradeNo'];
 		
 		// 插入充值记录
-		if(!$this->_insert_recharge_info($trade_info, $extra_info, $post)) {
+		if(!$this->_insert_recharge_info($trade_info, $extra_info)) {
 			$this->setErrors('50005');
 			return false;
 		}
@@ -59,7 +60,7 @@ class RechargeIncome extends IncomeDepopay
 	}
 	
 	/* 插入交易记录，充值记录 */
-	private function _insert_recharge_info($trade_info, $extra_info, $post)
+	private function _insert_recharge_info($trade_info, $extra_info)
 	{
 		// 如果添加有记录，则不用再添加了
 		if(!DepositTradeModel::find()->where(['tradeNo' => $extra_info['tradeNo']])->exists())
@@ -76,13 +77,13 @@ class RechargeIncome extends IncomeDepopay
 				'seller_id'		=> $trade_info['party_id'],
 				'amount'		=> $trade_info['amount'],
 				'status'		=> 'PENDING',
-				'payment_code'	=> $post->payment_code,
+				'payment_code'	=> $extra_info['payment_code'],
 				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
-				'flow'     		=> $this->_flow_name,
-				'fundchannel'   => Language::get($post->payment_code),
+				'flow'     		=> $this->_flow,
+				'fundchannel'   => Language::get($extra_info['payment_code']),
 				'title'			=> Language::get('recharge'),
-				'buyer_remark'	=> $post->remark ? $post->remark : '',
+				'buyer_remark'	=> $this->post->remark ? $this->post->remark : '',
 				'add_time'		=> Timezone::gmtime()
 			);
 			
@@ -118,10 +119,9 @@ class RechargeIncome extends IncomeDepopay
 			$tradeNo = $orderInfo['payTradeNo'];
 				
 			$trade_info = array('userid' => $orderInfo['buyer_id'], 'party_id' => 0, 'amount' => $orderInfo['amount']);
-			$extra_info = array('tradeNo' => $tradeNo);
-			$post		= (object)array('payment_code' => $orderInfo['payment_code']);
-				
-			if($this->_insert_recharge_info($trade_info, $extra_info, $post)) {
+			$extra_info = array('tradeNo' => $tradeNo, 'payment_code' => $orderInfo['payment_code']);
+			
+			if($this->_insert_recharge_info($trade_info, $extra_info)) {
 				$orderInfo['tradeList'] = DepositTradeModel::find()->where(['tradeNo' => $tradeNo])->indexBy('trade_id')->asArray()->all();
 			}
 		}
@@ -145,7 +145,7 @@ class RechargeIncome extends IncomeDepopay
 			$model->balance = parent::_update_deposit_money($tradeInfo['buyer_id'], $tradeInfo['amount']);
 			$model->tradeType = $this->_tradeType;
 			$model->tradeTypeName = Language::get(strtoupper($this->_tradeType));
-			$model->flow = $this->_flow_name;
+			$model->flow = $this->_flow;
 			
 			if($model->save() === false) {
 				return false;

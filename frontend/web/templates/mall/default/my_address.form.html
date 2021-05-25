@@ -56,7 +56,6 @@
           <h3>{$lang.phone_tel}:</h3>
           <p>
             <input type="text" class="text width_normal"  name="phone_tel" value="{$address.phone_tel}"/>
-            <label class="field_message"><span class="field_notice">{$lang.phone_format}</span></label>
           </p>
         </li>
         <li>
@@ -80,7 +79,7 @@
       </ul>
       <div class="submit">
       	<input type="hidden" name="redirect" value="{$redirect}" />
-        <input type="submit" class="btn" value="{if $address.addr_id}{$lang.edit_address}{else}{$lang.add_address}{/if}" />
+        <input type="submit" class="btn" value="{$lang.submit}" />
       </div>
     </form>
   </div>

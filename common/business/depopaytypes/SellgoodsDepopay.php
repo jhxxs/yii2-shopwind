@@ -19,27 +19,33 @@ use common\library\Language;
 use common\library\Timezone;
 
 /**
- * @Id sellgoods.income.php 2018.4.24 $
+ * @Id SellgoodsDepopay.php 2018.4.24 $
  * @author mosir
  */
  
-class SellgoodsIncome extends IncomeDepopay
+class SellgoodsDepopay extends IncomeDepopay
 {
-	// 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat	   	= 'SHOPPING'; 
+	/**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat	= 'SHOPPING'; 
 	
-	// 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType 	= 'PAY';
+	/**
+	 * 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType 	= 'PAY';
 	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   	= 'SHIELD';	
+	/**
+	 * 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
+	 */
+	public $_payType   	= 'SHIELD';	
 	
 	public function submit($data = array())
 	{
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = $this->_handle_trade_info($trade_info, $post);
+        $base_info = $this->_handle_trade_info($trade_info);
 		$order_info = $this->_handle_order_info($extra_info);
         if (!$base_info || !$order_info) {
             return false;
@@ -92,7 +98,7 @@ class SellgoodsIncome extends IncomeDepopay
 		
 		$data_record['tradeType']		=	$this->_tradeType;
 		$data_record['tradeTypeName'] 	= 	Language::get(strtoupper($this->_tradeType));
-		$data_record['flow']			=	$this->_flow_name;
+		$data_record['flow']			=	$this->_flow;
 			
 		// 插入卖家的收支记录
 		return parent::_insert_deposit_record($data_record, false);

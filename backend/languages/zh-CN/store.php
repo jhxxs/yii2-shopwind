@@ -76,7 +76,8 @@ return array(
 	'check_ok_to_next_step' => '验证完成，请填写店铺详细信息',
 	'region_name' => '所在地区',
 	'recommended' => '推荐',
-	'store_list' => '店铺列表',
+	'list' => '列表',
+    'detail' => '详情',
     'stype' => '主体类型',
     'company' => '企业',
     'personal' => '个人'

@@ -24,27 +24,33 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id  refund.outlay.php 2018.10.18 $
+ * @Id RefundDepopay.php 2018.10.18 $
  * @author mosir
  */
  
-class RefundOutlay extends OutlayDepopay
+class RefundDepopay extends OutlayDepopay
 {	
-	// 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat	   	= 'SHOPPING'; 
+	/**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat	= 'SHOPPING'; 
 	
-	// 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType 	= 'TRANSFER';
+	/**
+	 * 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType 	= 'TRANSFER';
 	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   	= 'SHIELD';	
+	/**
+	 * 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
+	 */
+	public $_payType   	= 'SHIELD';	
 	
 	public function submit($data = array())
 	{
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = $this->_handle_trade_info($trade_info, $post, false);
+        $base_info = $this->_handle_trade_info($trade_info, false);
         if (!$base_info){
             return false;
         }
@@ -52,7 +58,7 @@ class RefundOutlay extends OutlayDepopay
 		//$tradeNo = $extra_info['tradeNo'];
 		
 		/* 修改退款状态，并增加退款日志 */
-		if(!$this->_handle_refund_status($trade_info, $extra_info, $post)) {
+		if(!$this->_handle_refund_status($trade_info, $extra_info)) {
 			return false;
 		}
 		
@@ -67,7 +73,7 @@ class RefundOutlay extends OutlayDepopay
 		}
 		
 		/* 插入收支记录，并变更账户余额 */
-		if(!$this->_insert_record_info($trade_info, $extra_info, $post)) {
+		if(!$this->_insert_record_info($trade_info, $extra_info)) {
 			return false;
 		}
 
@@ -80,19 +86,19 @@ class RefundOutlay extends OutlayDepopay
 	}
 	
 	/* 修改退款状态，并增加退款日志 */
-	public function _handle_refund_status($trade_info, $extra_info, $post)
+	public function _handle_refund_status($trade_info, $extra_info)
 	{
 		RefundModel::updateAll(['status' => 'SUCCESS', 'end_time' => Timezone::gmtime()], ['refund_id' => $extra_info['refund_id']]);
 		
 		// 判断是平台客服处理退款，还是卖家同意退款
 		if(isset($extra_info['operator']) && ($extra_info['operator'] == 'admin')) 
 		{
-			$refund_goods_fee    = $post->refund_goods_fee ? round($post->refund_goods_fee, 2) : 0;
-			$refund_shipping_fee = $post->refund_shipping_fee ? round($post->refund_shipping_fee, 2) : 0;
+			$refund_goods_fee    = $this->post->refund_goods_fee ? round($this->post->refund_goods_fee, 2) : 0;
+			$refund_shipping_fee = $this->post->refund_shipping_fee ? round($this->post->refund_shipping_fee, 2) : 0;
 			$refund_total_fee    = $refund_goods_fee + $refund_shipping_fee;
 			
 			$content = sprintf(Language::get('admin_agree_refund_content_change'), 
-								Language::get('admin'), $refund_goods_fee, $refund_shipping_fee, $post->content);
+								Language::get('admin'), $refund_goods_fee, $refund_shipping_fee, $this->post->content);
 			
 			RefundModel::updateAll(['refund_total_fee' => $refund_total_fee, 'refund_goods_fee' => $refund_goods_fee, 'refund_shipping_fee' => $refund_shipping_fee, 'intervene' => 1], ['refund_id' => $extra_info['refund_id']]);
 			
@@ -161,7 +167,7 @@ class RefundOutlay extends OutlayDepopay
 	}
 	
 	/* 插入收支记录，并变更账户余额 */
-	public function _insert_record_info($trade_info, $extra_info, $post)
+	public function _insert_record_info($trade_info, $extra_info)
 	{
 		// 退款给买家
 		$data_record = array(

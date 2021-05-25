@@ -34,41 +34,41 @@ class CartForm extends Model
 	/**
 	 *  used in PC/H5/API
 	 */
-	public function formData($products = array())
+	public function formData($list = array())
 	{
-		$list = array();
-		if($products && $products['items']) {
-			foreach($products['items'] as $goods) {
+		$result = array();
+		if($list && $list['items']) {
+			foreach($list['items'] as $goods) {
 				$goods['subtotal'] = sprintf('%.2f', round($goods['price'] * $goods['quantity'], 2));
 				$goods['goods_image'] = Page::urlFormat($goods['goods_image']);
-				$list[$goods['store_id']]['items'][$goods['product_id']] = $goods;
-				$list[$goods['store_id']]['store_name'] = StoreModel::find()->select('store_name')->where(['store_id' => $goods['store_id']])->scalar();
-				$list[$goods['store_id']]['store_id'] = $goods['store_id'];
+				$result['list'][$goods['store_id']]['items'][$goods['product_id']] = $goods;
+				$result['list'][$goods['store_id']]['store_name'] = StoreModel::find()->select('store_name')->where(['store_id' => $goods['store_id']])->scalar();
+				$result['list'][$goods['store_id']]['store_id'] = $goods['store_id'];
 
 				// 店铺金额统计
-				if(!isset($list[$goods['store_id']]['total'])) $list[$goods['store_id']]['total'] = 0;
-				$list[$goods['store_id']]['total'] += $goods['subtotal'];
+				if(!isset($result['list'][$goods['store_id']]['total'])) $result['list'][$goods['store_id']]['total'] = 0;
+				$result['list'][$goods['store_id']]['total'] += $goods['subtotal'];
 			}
-			return array('list' => $list, 'amount' => sprintf('%.2f', $products ? $products['amount'] : 0));
+			$result['amount'] = sprintf('%.2f', $list ? $list['amount'] : 0);
 		}
-		return null;
+		return $result;
 	}
 	
 	/**
 	 * 店铺满折满减
 	 */
-	public function getCartFullprefer($carts = array())
+	public function getCartFullprefer($list = array())
 	{
-		if(empty($carts)) return null;
+		if(empty($list)) return null;
 		
-		foreach($carts as $store_id => $cart)
+		foreach($list as $store_id => $cart)
 		{
 			$fullpreferTool = Promotool::getInstance('fullprefer')->build(['store_id' => $store_id]);
 			if($fullpreferTool->checkAvailable()){
 				$fullprefer = $fullpreferTool->getInfo();
 				if(isset($fullprefer['status']) && $fullprefer['status']) {
 					if($fullprefer['rules']['type'] == 'discount') {
-						$carts[$store_id]['storeFullPreferInfo'] = array(
+						$list[$store_id]['storeFullPreferInfo'] = array(
 							'text' => sprintf('购满%s元可享%s折', $fullprefer['rules']['amount'], $fullprefer['rules']['discount']),
 							'amount' => $fullprefer['rules']['amount'],
 							'prefer' => ['label' => '满折', 'type' => 'discount', 'value' => sprintf('%.2f', $fullprefer['rules']['discount'])],
@@ -76,7 +76,7 @@ class CartForm extends Model
 					} 
 					else 
 					{
-						$carts[$store_id]['storeFullPreferInfo'] = array(
+						$list[$store_id]['storeFullPreferInfo'] = array(
 							'text' => sprintf('购满%s元可减%s元', $fullprefer['rules']['amount'], $fullprefer['rules']['decrease']),
 							'amount' => $fullprefer['rules']['amount'],
 							'prefer' => ['label' => '满减', 'type' => 'decrease', 'value' => sprintf('%.2f', $fullprefer['rules']['decrease'])],
@@ -85,29 +85,33 @@ class CartForm extends Model
 				}
 			}
 		}	
-		return $carts;
+		return $list;
 	}
 	
 	/**
 	 * 是否显示领取优惠券按钮
 	 */
-	public function getCouponEnableReceive($carts = array())
+	public function getCouponEnableReceive($list = array())
 	{
-		if(empty($carts)) return null;
+		if(empty($list)) return null;
 		
-		foreach($carts as $store_id => $cart)
+		foreach($list as $store_id => $cart)
 		{
 			if(CouponModel::find()->where(['clickreceive' => 1, 'if_issue' => 1, 'store_id' => $store_id])->andWhere(['>', 'end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->exists()) {
-				$carts[$store_id]['couponReceive'] = 1;
+				$list[$store_id]['couponReceive'] = 1;
 			}
 		}
-		return $carts;
+		return $list;
 	}
 	
-	public function valid($post)
+	public function valid($post, $extra = [])
 	{
-		if(!$post->spec_id || !$post->quantity) {
-			$this->errors = Language::get('no_such_goods');
+		if(!$post->spec_id) {
+			$this->errors = Language::get('select_specs');
+			return false;
+		}
+		if(!$post->quantity) {
+			$this->errors = Language::get('quantity_invalid');
 			return false;
 		}
 		
@@ -129,42 +133,21 @@ class CartForm extends Model
 
 		// 读取促销价格
 		$promotool = Promotool::getInstance()->build();
-		if(($result = $promotool->getItemProInfo($specInfo['goods_id'], $post->spec_id)) !== false) {
+		if(($result = $promotool->getItemProInfo($specInfo['goods_id'], $post->spec_id, $extra)) !== false) {
 			if($result['price'] != $specInfo['price']) {
 				$specInfo['price'] = $result['price'];
 			}
 		}
 		
-		return $specInfo;
+		return array_merge($specInfo, ['quantity' => $post->quantity]);
     }
-	
-	/**
-	 * 用于判断购物车的商品价格是否有过变更
-	 * 要考虑登录状态的下数据（DB） 和 未登录状态的数据（SESSION）
-	 * 所以不应该是从数据库购物车表去查找比对
-	 */
-	public function ifchange($spec_id = 0, $product_id)
-	{
-		$cart = Yii::$app->cart->find();
-		
-		if(($cart['kinds'] > 0)) {
-			if(isset($cart['items'][$product_id])) {
-				return false;
-			}
-			else
-			{
-				foreach($cart['items'] as $item)
-				{
-					if(($item['spec_id'] == $spec_id) && ($item['userid'] == intval(Yii::$app->user->id))) {
-						
-						// 从购物车删除该数据
-						Yii::$app->cart->remove($item['product_id']);
-						break;
-					}
-				}
-			}
-		}
 
-		return true;
+	/**
+	 * 返回购物车数据
+	 */
+	public function getCart()
+	{
+		// 如果需要执行不同的购买量实现不同的单价，则考虑该策略
+		return Yii::$app->cart->find();
 	}
 }

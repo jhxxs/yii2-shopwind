@@ -300,13 +300,11 @@ class TemplateController extends \common\controllers\BaseAdminController
 		list($client, $template, $page) = $this->getClientParams();
 		$siteUrl = Yii::$app->params['frontendUrl'];
 
-		// 首页
+		// 首页（pc/wap）
 		$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index', 'editmode' => true], $siteUrl), 'action' => array());
 		
-		if(in_array($client, array('pc')))
+		if(in_array($client, ['pc']))
 		{
-			$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index', 'editmode' => true], $siteUrl), 'action' => array());
-	
 			if(IntegralSettingModel::getSysSetting('enabled')) {
 				$data['integral'] = array('title' => Language::get('integral_mall'), 'url' => Url::toRoute(['integral/index', 'editmode' => true], $siteUrl),'action'=>array());
 			}

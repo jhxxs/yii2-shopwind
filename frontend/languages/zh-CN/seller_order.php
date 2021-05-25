@@ -45,12 +45,6 @@ return array(
     'change_status'  => '将订单状态从',
     'change_to'  => '改变为',
     'postscript' =>'买家附言',
-    /*'pending' => '待付款',
-    'submitted' => '货到付款待发货',
-    'accepted' => '待发货',
-    'shipped' => '已发货',
-    'finished' => '已完成',
-    'canceled' => '已取消',*/
     'order_detail' => '订单详情',
     'buyer_info' => '买家信息',
     'goods_price' => '单价',

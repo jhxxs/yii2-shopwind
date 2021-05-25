@@ -25,20 +25,21 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id distribute.income.php 2018.10.15 $
+ * @Id DistributeDepopay.php 2018.10.15 $
  * @author mosir
  */
 
-class DistributeIncome extends IncomeDepopay
+class DistributeDepopay extends IncomeDepopay
 {
-    // 针对交易记录的交易类型，值有：购物：SHOPPING； 理财：FINANCE；缴费：PUC_CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat	= 'TRANSFER'; 
+    /**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat  = 'TRANSFER'; 
 	
-	// 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType = 'TRANSFER';
-	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   = 'INSTANT';
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType = 'TRANSFER';
 	
 	public function submit($data = array())
 	{

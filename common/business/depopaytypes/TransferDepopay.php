@@ -21,27 +21,28 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id transfer.outlay.php 2018.4.15 $
+ * @Id TransferDepopay.php 2018.4.15 $
  * @author mosir
  */
 
-class TransferOutlay extends OutlayDepopay
+class TransferDepopay extends OutlayDepopay
 {
-    // 针对交易记录的交易类型，值有：购物：SHOPPING； 理财：FINANCE；缴费：PUC_CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat	= 'TRANSFER'; 
+    /**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat  = 'TRANSFER'; 
 	
-	// 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType = 'TRANSFER';
-	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   = 'INSTANT';
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType = 'TRANSFER';
 	
 	public function submit($data = array())
 	{
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info, $post);
+        $base_info = parent::_handle_trade_info($trade_info);
         if (!$base_info) {
             return false;
         }
@@ -49,7 +50,7 @@ class TransferOutlay extends OutlayDepopay
 		//$tradeNo = $extra_info['tradeNo'];
 		
 		// 开始插入收支记录
-		if(!$this->_insert_record_info($trade_info, $extra_info, $post)) {
+		if(!$this->_insert_record_info($trade_info, $extra_info)) {
 			return false;
 		}
 		
@@ -65,7 +66,7 @@ class TransferOutlay extends OutlayDepopay
 	}
 	
 	/* 插入收支记录，并变更账户余额 */
-	public function _insert_record_info($trade_info, $extra_info, $post)
+	public function _insert_record_info($trade_info, $extra_info)
 	{
 		$time = Timezone::gmtime();
 		$bizOrderId	= DepositTradeModel::genTradeNo(12, 'bizOrderId');
@@ -82,9 +83,9 @@ class TransferOutlay extends OutlayDepopay
 			'fundchannel'	=> 	Language::get('deposit'),
 			'tradeCat'		=>	$this->_tradeCat,
 			'payType'		=>  $this->_payType,
-			'flow'			=>	$this->_flow_name,
+			'flow'			=>	$this->_flow,
 			'title'			=>	Language::get(strtolower($this->_tradeType)),
-			'buyer_remark'	=>	$post->remark ? $post->remark : '',
+			'buyer_remark'	=>	$this->post->remark ? $this->post->remark : '',
 			'add_time'		=>	$time,
 			'pay_time'		=>	$time,
 			'end_time'		=>	$time
@@ -105,7 +106,7 @@ class TransferOutlay extends OutlayDepopay
 				'balance'		=>	parent::_update_deposit_money($trade_info['userid'], $trade_info['amount'], 'reduce'),// 减少后的余额
 				'tradeType'		=>  $this->_tradeType,
 				'tradeTypeName' => 	Language::get(strtoupper($this->_tradeType)),
-				'flow'			=>	$this->_flow_name,
+				'flow'			=>	$this->_flow,
 			);
 			
 			$step1 = parent::_insert_deposit_record($data_record, false);

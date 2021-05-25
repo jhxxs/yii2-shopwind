@@ -11,64 +11,35 @@ $(function(){
 	
 	// 页面加载完就执行（只在购物车页面需要）
 	if($('#page-cart').length > 0) {
-		
-		// 设置新的总金额
-		showCartAmountBySelected();
+		reBuildCheckboxBySelected();
+		showFullPerferPlusBySelected();
 	}
 	
 	// 全选
-	$('.J_SelectAll').click(function()
-	{ 
-		$('.J_SelectAll').prop("checked", $(this).prop('checked'));
-		$('.J_SelectStoreAll').prop("checked", $(this).prop('checked'));
-		$('.J_GoodsEach').find('.J_SelectGoods').prop('checked', $(this).prop('checked'));
-		
+	$('.J_SelectAll').click(function() { 
+		selectedAll($(this).prop('checked'));
+
 		// 设置新的总金额
 		showCartAmountBySelected();
 	});
 	
 	// 店铺全选
 	$('.J_SelectStoreAll').click(function() {
-		$('.J_Store-' + $(this).val()).find('.J_SelectGoods').prop('checked', $(this).prop('checked'));
-		
-		if($(this).prop('checked') == true)
-		{
-			// 全选判断
-			if($('.J_SelectStoreAll').not('input:checked').length == 0) {
-				$('.J_SelectAll').prop("checked", true);
-			}
-		}
-		else
-		{
-			// 全选判断
-			if($('.J_SelectStoreAll').not('input:checked').length != 0) {
-				$('.J_SelectAll').prop("checked", false);
-			}
-		}
-		
+		storeSelectedAll($(this).val(), $(this).prop('checked'));
+
 		// 设置新的总金额
 		showCartAmountBySelected();
 	});
 	
 	// 点击某个商品，改变全选和店铺全选的选中状态
-	$('.J_SelectGoods').click(function(){
+	$('.J_SelectGoods').click(function() {
 		$(this).prop("checked", $(this).prop("checked"));
 		
 		// 店铺全选判断
-		if($('.J_Store-' + $(this).attr('store_id')).find('.J_SelectGoods').not('input:checked').length == 0) {
-			$('.J_Store-' + $(this).attr('store_id')).find('.J_SelectStoreAll').prop('checked', true);
-		} else {
-			$('.J_Store-' + $(this).attr('store_id')).find('.J_SelectStoreAll').prop('checked', false);
-		}
+		$('.J_Store-' + $(this).attr('store_id')).find('.J_SelectStoreAll').prop('checked', $('.J_Store-' + $(this).attr('store_id')).find('.J_SelectGoods').not('input:checked').length == 0);
 		
 		// 全选判断
-		if($('.J_SelectGoods').not("input:checked").length == 0) {
-			$('.J_SelectAll').prop("checked", true);
-		}
-		else
-		{
-			$('.J_SelectAll').prop("checked", false);
-		}
+		$('.J_SelectAll').prop("checked", $('.J_SelectGoods').not("input:checked").length == 0);
 		
 		// 设置新的总金额
 		showCartAmountBySelected();
@@ -91,11 +62,39 @@ $(function(){
 		if(!checked) {
 			layer.msg(lang.select_empty);
 		}
-		
+
 		// 设置新的总金额
 		showCartAmountBySelected();
 	});
 });
+
+/**
+ * 购物车商品全选/反选
+ * @param {bool} checked 
+ */
+function selectedAll(checked)
+{
+	$('.J_SelectGoods').prop('checked', checked);
+	$('.J_SelectStoreAll').prop("checked", checked);
+	$('.J_SelectAll').prop("checked", checked);
+}
+
+/**
+ * 店铺全选/反选
+ * @param {int} store_id 
+ * @param {bool} checked 
+ */
+function storeSelectedAll(store_id, checked)
+{
+	$('.J_Store-' + store_id).find('.J_SelectGoods').prop('checked', checked);
+
+	// 全选/反选
+	if($('.J_SelectGoods:checked').length == (checked ? $('.J_SelectGoods').length : 0)) {
+		$('.J_SelectAll').prop("checked", checked);
+	} else {
+		$('.J_SelectAll').prop("checked", !checked);
+	}
+}
 
 // 显示满折满减的差额
 function showFullPerferPlusBySelected()
@@ -136,18 +135,48 @@ function showFullPerferPlusBySelected()
 	});
 }
 
+/**
+ * 显示购物车商品金额
+ * 同步选中到服务器的作用：保持前端和后台的购物车商品的选中状态是一致的，以便处理阶梯价格问题（根据不同的购买数量执行不同的单价）
+ */
 function showCartAmountBySelected()
 {
+	// 同步选中项到购物车数据库
+	var product_ids = [];
+	$('.J_SelectGoods:checked').each(function(index, item) {
+		srg = $(item).val().split(":");
+		product_ids[index] = srg[1];
+	});
+
 	var cartAllAmount = 0;
-	$('.J_SelectGoods').each(function(){
-		if($(this).prop('checked') == true) {
-			// 某个规格商品的小计
-			cartAllAmount += parseFloat($(this).parents('.J_GoodsEach').find('.J_GetSubtotal').attr('price'));	
+	$.getJSON(url(['cart/chose', {product_ids: JSON.stringify(product_ids), selected: 1}]), function(data){
+		if(data.done){
+			$.each(data.retval.items, function(k, v) {
+				$('.J_ItemPrice-' + k).html(price_format(v.price));		
+				$('.J_ItemQuantity-' + k).html(v.quantity);
+				$('.J_ItemSubtotal-' + k).html(price_format(v.subtotal));
+				$('.J_ItemSubtotal-' + k).attr('price', parseFloat(v.subtotal).toFixed(2));
+				$('.J_CartItem-' + k).find('.J_SelectGoods').prop(v.selected ? true : false);
+
+				if(v.selected) {
+					cartAllAmount += parseFloat(v.subtotal);
+				}
+			});
+		
+			$('.J_CartAllAmount').html(price_format(cartAllAmount.toFixed(2)));
+
+			reBuildCheckboxBySelected();
+			showFullPerferPlusBySelected();
 		}
 	});
-	$('.J_CartAllAmount').html(price_format(cartAllAmount.toFixed(2)));
-	
-	showFullPerferPlusBySelected();
+}
+
+function reBuildCheckboxBySelected() {
+	$('.J_SelectAll').prop("checked", $('.J_SelectGoods').not('input:checked').length == 0);
+	$('.J_SelectStoreAll').each(function(index, element) {
+		var o = $(this).parents('.J_Store-' + $(this).attr('id'));
+		$(this).prop("checked", o.find('.J_SelectGoods').not("input:checked").length == 0);
+	});
 }
 
 function drop_cart_item(store_id, product_id)
@@ -155,22 +184,20 @@ function drop_cart_item(store_id, product_id)
 	var tr = $('.J_CartItem-' + product_id);
 	//layer.open({content:lang.drop_confirm, btn:[lang.confirm,lang.cancel],
 		//yes:function(index){
-			$.getJSON(url(['cart/delete', {product_id: product_id}]), function(result){
-				if(result.done){
+			$.getJSON(url(['cart/delete', {product_id: product_id}]), function(data){
+				if(data.done){
 					
 					//删除成功
-					if(result.retval.kinds == 0){
+					if(data.retval.kinds == 0){
 						window.location.reload();    //刷新
 					}
 					else
 					{
+						$('.J_C_T_GoodsKinds').html(data.retval.kinds);
 						if(tr.parents('.J_Store-'+store_id).find('.J_GoodsEach').length == 1) {
 							tr.parents('.J_Store-'+store_id).remove();
 						}
 						tr.remove();
-						
-						$('.J_C_T_GoodsKinds').html(result.retval.kinds);
-						$('.J_C_T_Amount').html(price_format(result.retval.amount));
 					}
 					
 					// 设置新的总金额
@@ -194,37 +221,18 @@ function change_quantity(store_id, product_id, spec_id){
 		obj.val(obj.attr('orig'));
 		return false;
 	}
-    //$.getJSON(url(['cart/update', {product_id: product_id, spec_id: spec_id, quantity: _v}]), function(result){
-	$.getJSON(url(['cart/update', {spec_id: spec_id, quantity: _v}]), function(result){
-        if(result.done){
+	$.getJSON(url(['cart/update', {spec_id: spec_id, quantity: _v}]), function(data){
+        if(data.done){
 			
-			// 说明商品有变更，通过刷新页面来加载
-			if(result.retval.alertMsg != undefined && result.retval.alertMsg != null) {
-				layer.msg(result.retval.alertMsg);
-				window.location.reload();
-			}
-			// 说明商品没有变更，则通过JS修改，因不用刷新，体验更好
-			else 
-			{
-				//更新成功
-				obj.attr('changed', _v);
+			//更新成功
+			obj.attr('changed', _v);
 				
-				var changeItem = result.retval.items[product_id];
-				
-				$('.J_ItemPrice-' + product_id).html(price_format(changeItem.price));				
-				$('.J_ItemQuantity-' + product_id).html(changeItem.quantity);
-				$('.J_ItemSubtotal-' + product_id).html(price_format(changeItem.subtotal));
-				$('.J_ItemSubtotal-' + product_id).attr('price', parseFloat(changeItem.subtotal).toFixed(2));
-				$('.J_C_T_GoodsKinds').html(result.retval.kinds);
-				$('.J_C_T_Amount').html(price_format(result.retval.amount));
-				
-				// 设置新的总金额
-				showCartAmountBySelected();
-			}
+			// 设置新的总金额
+			showCartAmountBySelected();
         }
         else {
             //更新失败
-            layer.msg(result.msg);
+            layer.msg(data.msg);
             obj.val(obj.attr('changed'));
         }
     });
@@ -245,7 +253,8 @@ function add_quantity(product_id){
     obj.keyup();
 }
 
-/* 将商品加入到购物车（或立即购买）可在任何处调用此方法实现加入购物车功能 
+/**
+ * 将商品加入到购物车（或立即购买）可在任何处调用此方法实现加入购物车功能 
  * @var animate 开启动画（目前只适用商品详情页）
  */
 function add_to_cart(spec_id, quantity, toPay, animate, obj)
@@ -286,9 +295,8 @@ function add_to_cart(spec_id, quantity, toPay, animate, obj)
 						
 				}
 				setTimeout(function(){
-					$('.J_C_T_GoodsKinds').text(data.retval.kinds);
-					$('.J_C_T_Amount').html(price_format(data.retval.amount));
 					$('.J_NoGoods').hide();
+					$('.J_C_T_GoodsKinds').html(data.retval.kinds);
 					
 					var html = '';
 					var template = get_cart_item();
@@ -322,7 +330,6 @@ function add_to_cart(spec_id, quantity, toPay, animate, obj)
 		});
 	}
 }
-function get_cart_item()
-{
-	return $('<div class="cart-template"><h4>最新加入的商品</h4><div class="goods-list"><div class="clearfix list J_CartItem-[1]"><div class="goods-img"><a href="[2]" target="_blank"><img initial-url="[3]" width="40" height="40"></a></div><div class="goods-title"><a title="[4]" href="[5]" target="_blank">[6]</a></div><div class="goods-admin clearfix"><div class="mini-cart-count"><strong class="mini-cart-price">[7]</strong> x[8]</div></div></div></div><div class="total"> <span>共<strong class="J_C_T_GoodsKinds">[1]</strong>件商品</span><span>共计<strong class="J_C_T_Amount">[2]</strong></span><br /><a href="[3]">去购物车结算</a></div></div>').clone(true);
+function get_cart_item() {
+	return $('<div class="cart-template"><h4>最新加入的商品</h4><div class="goods-list"><div class="clearfix list J_CartItem-[1]"><div class="goods-img mt5"><a href="[2]" target="_blank"><img initial-url="[3]" width="40" height="40"></a></div><div class="goods-title"><a title="[4]" href="[5]" target="_blank">[6]</a></div><div class="goods-admin clearfix"><div class="mini-cart-count"><strong class="mini-cart-price">[7]</strong> x[8]</div></div></div></div><div class="total"> <a href="[3]">去购物车查看</a></div></div>').clone(true);
 }

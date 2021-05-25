@@ -43,11 +43,10 @@ class DepositCardrechargeForm extends Model
 		$cashcard = CashcardModel::find()->select('id,money')->where(['cardNo' => $post->cardNo])->one();
 
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-		$depopay_type = Business::getInstance('depopay')->build(['flow' => 'income', 'type' => 'cardrecharge']);
+		$depopay_type = Business::getInstance('depopay')->build('cardrecharge', (object)['card_id' => $cashcard->id]);
 		$result = $depopay_type->submit(array(
 			'trade_info' => array('userid' => Yii::$app->user->id, 'party_id' => 0, 'amount' => $cashcard->money),
-			'extra_info' => array('tradeNo' => $this->tradeNo, 'bizOrderId' => $post->cardNo),
-			'post' => (object)array('card_id' => $cashcard->id)
+			'extra_info' => array('tradeNo' => $this->tradeNo, 'bizOrderId' => $post->cardNo)
 		));
 		if(!$result) {
 			$this->errors = $depopay_type->errors;

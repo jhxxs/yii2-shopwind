@@ -25,5 +25,4 @@ return array(
     'confirm_goods' 		=> '确认购物清单',
     'select_empty_by_cart' 	=> '您尚未选中任何商品',
 	'invalid_quantity' 		=> '您输入的数量不正确',
-	'price_change_alert' 	=> '该商品价格已变更',
 );

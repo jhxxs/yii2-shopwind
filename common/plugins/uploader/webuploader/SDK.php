@@ -75,6 +75,9 @@ class SDK
 	// 是否引入CSS，同一个页面不用多次引入
 	public $ext_css = true;
 
+	// 是否压缩图片（默认最大1600x1600）
+	public $compress = true;
+
 	// 表单安全参数
 	private $csrfParam;
 	
@@ -155,7 +158,8 @@ $(function(){
  			id: ".{$this->obj}_filePicker",
    			label: "{$this->button_text}",
             multiple: "{$this->multiple}"
-		}
+		},
+		compress: "{$this->compress}"
     });
     $this->obj.on( 'fileQueued', function( file ) {
     	fileQueued(file, "{$this->progress_id}");

@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `swd_acategory` (
   `cate_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `cate_name` varchar(100) NOT NULL DEFAULT '',
   `parent_id` int(10) unsigned DEFAULT '0',
-  `store_id` int(11) DEFAULT '0',
+  `store_id` int(10) DEFAULT '0',
   `sort_order` tinyint(3) unsigned DEFAULT '255',
   `if_show` int(1) DEFAULT '1',
   PRIMARY KEY (`cate_id`)
@@ -306,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `swd_channel` (
 --
 DROP TABLE IF EXISTS `swd_cod`;
 CREATE TABLE IF NOT EXISTS `swd_cod` (
-  `store_id` int(11) NOT NULL,
+  `store_id` int(10) NOT NULL,
   `regions` text,
   `status` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`store_id`)
@@ -644,7 +644,7 @@ CREATE TABLE IF NOT EXISTS `swd_flagstore` (
   `brand_id` int(10) DEFAULT '0',
   `keyword` varchar(20) DEFAULT '',
   `cate_id` int(11) DEFAULT '0',
-  `store_id` int(11) DEFAULT '0',
+  `store_id` int(10) DEFAULT '0',
   `status` tinyint(1) DEFAULT '0',
   `description` varchar(255) DEFAULT NULL,
   `sort_order` int(11) DEFAULT '255',
@@ -745,7 +745,7 @@ CREATE TABLE IF NOT EXISTS `swd_goods_image` (
 --
 DROP TABLE IF EXISTS `swd_goods_integral`;
 CREATE TABLE IF NOT EXISTS `swd_goods_integral` (
-  `goods_id` int(11) NOT NULL,
+  `goods_id` int(10) NOT NULL,
   `max_exchange` int(11) DEFAULT '0',
   PRIMARY KEY (`goods_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -789,7 +789,7 @@ CREATE TABLE IF NOT EXISTS `swd_goods_prop_value` (
 --
 DROP TABLE IF EXISTS `swd_goods_pvs`;
 CREATE TABLE IF NOT EXISTS `swd_goods_pvs` (
-  `goods_id` int(11) NOT NULL,
+  `goods_id` int(10) NOT NULL,
   `pvs` text DEFAULT '',
   PRIMARY KEY (`goods_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -913,12 +913,12 @@ CREATE TABLE IF NOT EXISTS `swd_integral_setting` (
 DROP TABLE IF EXISTS `swd_limitbuy`;
 CREATE TABLE IF NOT EXISTS `swd_limitbuy` (
   `pro_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `goods_id` int(11) NOT NULL,
+  `goods_id` int(10) NOT NULL,
   `pro_name` varchar(50) NOT NULL DEFAULT '',
   `pro_desc` varchar(255) DEFAULT '',
   `start_time` int(11) DEFAULT NULL,
   `end_time` int(11) DEFAULT NULL,
-  `store_id` int(11) DEFAULT '0',
+  `store_id` int(10) DEFAULT '0',
   `spec_price` text DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pro_id`)
@@ -932,7 +932,7 @@ CREATE TABLE IF NOT EXISTS `swd_limitbuy` (
 DROP TABLE IF EXISTS `swd_meal`;
 CREATE TABLE IF NOT EXISTS `swd_meal` (
   `meal_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `store_id` int(11) NOT NULL,
+  `store_id` int(10) NOT NULL,
   `title` varchar(255) DEFAULT '',
   `price` decimal(10,2) DEFAULT '0',
   `keyword` varchar(255) DEFAULT '',
@@ -951,7 +951,7 @@ DROP TABLE IF EXISTS `swd_meal_goods`;
 CREATE TABLE IF NOT EXISTS `swd_meal_goods` (
   `mg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `meal_id` int(11) NOT NULL DEFAULT '0',
-  `goods_id` int(11) NOT NULL DEFAULT '0',
+  `goods_id` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`mg_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1093,6 +1093,7 @@ CREATE TABLE IF NOT EXISTS `swd_order` (
   `checkout` int(1) DEFAULT '0',
   `checkout_time` int(11) DEFAULT NULL,
   `adjust_amount` decimal(10,2) DEFAULT '0.00',
+  `guider_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`),
   KEY `order_sn` (`order_sn`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1221,9 +1222,9 @@ CREATE TABLE IF NOT EXISTS `swd_plugin` (
 DROP TABLE IF EXISTS `swd_promotool_item`;
 CREATE TABLE IF NOT EXISTS `swd_promotool_item` (
   `piid` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `goods_id` int(11) NOT NULL,
+  `goods_id` int(10) NOT NULL,
   `appid` varchar(20) NOT NULL,
-  `store_id` int(11) DEFAULT '0',
+  `store_id` int(10) DEFAULT '0',
   `config` text DEFAULT '',
   `status` int(1) DEFAULT '1',
   `add_time` int(11) DEFAULT NULL,
@@ -1239,7 +1240,7 @@ DROP TABLE IF EXISTS `swd_promotool_setting`;
 CREATE TABLE IF NOT EXISTS `swd_promotool_setting` (
   `psid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `appid` varchar(20) NOT NULL,
-  `store_id` int(11) DEFAULT '0',
+  `store_id` int(10) DEFAULT '0',
   `rules` text DEFAULT '',
   `status` tinyint(1) DEFAULT '0',
   `add_time` int(11) DEFAULT NULL,
@@ -1470,11 +1471,11 @@ CREATE TABLE IF NOT EXISTS `swd_store` (
 DROP TABLE IF EXISTS `swd_teambuy`;
 CREATE TABLE IF NOT EXISTS `swd_teambuy` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `goods_id` int(11) NOT NULL,
+  `goods_id` int(10) NOT NULL,
   `title` varchar(50) NOT NULL DEFAULT '',
   `status` tinyint(3) NOT NULL DEFAULT '1',
-  `store_id` int(11) DEFAULT '0',
-  `people` int(11) unsigned NOT NULL DEFAULT '2',
+  `store_id` int(10) DEFAULT '0',
+  `people` int(10) unsigned NOT NULL DEFAULT '2',
   `specs` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1493,7 +1494,7 @@ CREATE TABLE IF NOT EXISTS `swd_teambuy_log` (
   `goods_id` int(10) unsigned NOT NULL DEFAULT '0',
   `teamid` varchar(32) NOT NULL DEFAULT '',
   `leader` tinyint(3) unsigned DEFAULT '0',
-  `people` int(11) unsigned NOT NULL DEFAULT '2',
+  `people` int(10) unsigned NOT NULL DEFAULT '2',
   `status` tinyint(3) unsigned DEFAULT '0',
   `created` int(11) unsigned NOT NULL,
   `expired` int(11) unsigned NOT NULL,

@@ -16,15 +16,23 @@ use yii;
 use common\business\BaseDepopay;
 
 /**
- * @Id income.depopay.php 2018.4.17 $
+ * @Id IncomeDepopay.php 2018.4.17 $
  * @author mosir
  */
  
 class IncomeDepopay extends BaseDepopay
 {
-    var $_flow_name = 'income';
+	/**
+	 * 资金流入交易
+	 */
+    protected $_flow = 'income';
+
+	/**
+	 * 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
+	 */
+	public $_payType   	= 'INSTANT';
 	
-	public function _handle_trade_info($trade_info, $post = null)
+	public function _handle_trade_info($trade_info, $checkAmount = true)
 	{
 		// 验证金额
 		if(isset($trade_info['amount'])) {

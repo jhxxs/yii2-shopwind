@@ -1,13 +1,13 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
   <div id="rightTop">
-    <p>{$lang.store_manage}</p>
+    <p>{$lang.manage}</p>
     <ul class="subnav">
       <!--{if $smarty.get.state eq 'applying'}-->
-      <li><a class="btn1" href="{url route='store/index'}">{$lang.store_list}</a></li>
+      <li><a class="btn1" href="{url route='store/index'}">{$lang.list}</a></li>
       <li><span>{$lang.applying}</span></li>
       <!--{else}-->
-      <li><span>{$lang.store_list}</span></li>
+      <li><span>{$lang.list}</span></li>
       <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.applying}</a></li>
       <!--{/if}-->
     </ul>

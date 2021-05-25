@@ -236,6 +236,7 @@ class UploadedFileModel extends ActiveRecord
 			break;
 			case Def::BELONG_WEBIM			:	$savePath = 'data/files/mall/webim';
 			break;
+			case Def::BELONG_GUIDESHOP		:	$savePath = 'data/files/mall/guideshop/'.$unionid;
 			
 		}
 		$savePath = Def::fileSavePath() . '/' . $savePath;

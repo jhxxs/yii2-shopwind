@@ -1,18 +1,16 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
     <div id="rightTop">
-        <p>{$lang.db}</p>
+        <p>{$lang.manage}</p>
         <ul class="subnav">
             <li><span>{$lang.config}</span></li>
             <li><a class="btn1" href="{url route='db/backup'}">{$lang.backup}</a></li>
             <li><a class="btn1" href="{url route='db/recover'}">{$lang.recover}</a></li>
         </ul>
     </div>
-    <!-- 操作说明 -->
     <div class="explanation" id="explanation">
         <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-            <h4 title="操作提示">提示</h4>
-            <span id="explanationZoom" title="收起提示"></span> </div>
+             <h4>{$lang.operation_tip}</h4></div>
         <ul>
             <li>1. 可以配置一主多从数据库模式，主数据库即安装站点的数据库，无需配置。</li>
             <li>2. 主数据库完成插入/更新等操作，从数据库执行查询操作</li>

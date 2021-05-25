@@ -195,7 +195,6 @@ class Page
 		$params = [
 			'icp_number' => isset(Yii::$app->params['icp_number']) ? Yii::$app->params['icp_number'] : null,
 			'statistics_code' => isset(Yii::$app->params['statistics_code']) ? Yii::$app->params['statistics_code'] : null,
-			//'carts_top'	=> Yii::$app->cart->find()
 		];
 		
 		if(in_array($page, ['mall', 'store'])) {

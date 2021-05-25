@@ -89,6 +89,16 @@ class CartItem
     {
         $this->quantity = $quantity;
     }
+
+    /**
+     * Sets the price of the item
+     * @param integer $price
+     * @return void
+     */
+    public function setPrice($price) 
+    {
+        $this->product->price = $price;
+    }
 	
 	public static function createProduct($params = array())
 	{

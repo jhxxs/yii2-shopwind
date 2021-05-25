@@ -372,7 +372,7 @@ span[fieldname=closed].wrong_ico {display: block;width: 11px;height: 11px;overfl
 .table .line td, .table .line_bold td {border-bottom: 1px solid #f6f6f6; padding:16px 8px}
 .table .line:hover,.table .line_bold:hover{ background:#ecf6fd;}
 .table .pic-info img {display: inline-block;border: 1px #EEEEEE solid;margin-left: 5px;margin-right: 5px; vertical-align:middle}
-.table .txt-info {width: 288px;}
+.table .txt-info {width: 250px;}
 .table .txt-info .txt {line-height: 18px;height: 36px;}
 .table .txt-info p {color: #808080;}
 .line_head {background: url(../images/member/line_head.gif) repeat-x 0 bottom;}

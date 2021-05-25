@@ -22,28 +22,29 @@ use common\library\Timezone;
 use common\library\Def;
 
 /**
- * @Id withdraw.outlay.php 2018.4.16 $
+ * @Id WithdrawDepopay.php 2018.4.16 $
  * @author mosir
  */
 
-class WithdrawOutlay extends OutlayDepopay
+class WithdrawDepopay extends OutlayDepopay
 {
-    // 针对交易记录的交易类型，值有：购物：SHOPPING； 理财：FINANCE；缴费：PUC_CHARGE； 还款：CCR；转账：TRANSFER ...
-	var $_tradeCat		= 'WITHDRAW'; 
+    /**
+	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
+	 */
+	public $_tradeCat	= 'WITHDRAW'; 
 	
-	// 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
-    var $_tradeType 	= 'WITHDRAW';
-	
-	// 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
-	var $_payType   	= 'INSTANT';
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 */
+    public $_tradeType 	= 'WITHDRAW';
 	
 	public function submit($data = array())
 	{
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info, $post);
-		$bank_info = $this->_handle_bank_info($post->bid, $trade_info['userid']);
+        $base_info = parent::_handle_trade_info($trade_info);
+		$bank_info = $this->_handle_bank_info($this->post->bid, $trade_info['userid']);
         if (!$base_info || !$bank_info) {
             return false;
         }
@@ -51,7 +52,7 @@ class WithdrawOutlay extends OutlayDepopay
 		//$tradeNo = $extra_info['tradeNo'];
 		
 		// 开始插入收支记录
-		if(!$this->_insert_record_info($trade_info, $extra_info, $post)) {
+		if(!$this->_insert_record_info($trade_info, $extra_info)) {
 			$this->setErrors("50016");
 			return false;
 		}
@@ -63,7 +64,7 @@ class WithdrawOutlay extends OutlayDepopay
 		}
 		
 		// 插入提现银行的一些信息
-		if(!$this->_insert_withdraw_info($trade_info, $extra_info, $post)){
+		if(!$this->_insert_withdraw_info($trade_info, $extra_info)){
 			$this->setErrors("50019");
 			return false;
 		}
@@ -72,9 +73,9 @@ class WithdrawOutlay extends OutlayDepopay
 	}
 	
 	/* 插入收支记录，并变更账户余额 */
-	public function _insert_record_info($trade_info, $extra_info, $post)
+	public function _insert_record_info($trade_info, $extra_info)
 	{
-		$bank = BankModel::find()->where(['bid' => intval($post->bid)])->asArray()->one();
+		$bank = BankModel::find()->where(['bid' => intval($this->post->bid)])->asArray()->one();
 		
 		$time 				= Timezone::gmtime();
 		$bizOrderId			= DepositTradeModel::genTradeNo(12, 'bizOrderId');
@@ -91,9 +92,9 @@ class WithdrawOutlay extends OutlayDepopay
 			'fundchannel'  	=>  $bank['bank_name'],
 			'tradeCat'		=>	$this->_tradeCat,
 			'payType'		=>  $this->_payType,
-			'flow'			=>	$this->_flow_name,
+			'flow'			=>	$this->_flow,
 			'title'			=>  Language::get(strtoupper($this->_tradeType)),
-			'buyer_remark'	=>	$post->remark ? $post->remark : '',
+			'buyer_remark'	=>	$this->post->remark ? $this->post->remark : '',
 			'add_time'		=>	$time,
 			'pay_time'		=>	$time,
 		);
@@ -112,15 +113,15 @@ class WithdrawOutlay extends OutlayDepopay
 				'balance'		=>	parent::_update_deposit_money($trade_info['userid'], $trade_info['amount'], 'reduce'), // 扣除后的余额
 				'tradeType'		=>  $this->_tradeType,
 				'tradeTypeName' => 	Language::get(strtoupper($this->_tradeType)),
-				'flow'			=>	$this->_flow_name,
+				'flow'			=>	$this->_flow,
 			);
 			return parent::_insert_deposit_record($data_record, false);
 		}
 	}
 	
-	public function _insert_withdraw_info($trade_info, $extra_info, $post)
+	public function _insert_withdraw_info($trade_info, $extra_info)
 	{
-		$bank = BankModel::find()->where(['bid' => intval($post->bid)])->asArray()->one();
+		$bank = BankModel::find()->where(['bid' => intval($this->post->bid)])->asArray()->one();
 		unset($bank['bid'], $bank['userid']);
 		
 		$tradeInfo = DepositTradeModel::find()->select('bizOrderId')->where(['tradeNo' => $extra_info['tradeNo']])->one();

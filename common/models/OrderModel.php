@@ -70,6 +70,11 @@ class OrderModel extends ActiveRecord
 	{
 		return parent::hasOne(UserModel::className(), ['userid' => 'seller_id']);
 	}
+	// 关联表
+	public function getDepositTrade()
+	{
+		return parent::hasOne(DepositTradeModel::className(), ['bizOrderId' => 'order_sn', 'buyer_id' => 'buyer_id']);
+	}
 	
 	public static function genOrderSn($ext = '')
 	{

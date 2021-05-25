@@ -1,7 +1,7 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
   <div id="rightTop">
-    <p>{$lang.store_manage}</p>
+    <p>{$lang.manage}</p>
     <ul class="subnav">
       <li><a class="btn1" href="{url route='store/index'}">{$lang.manage}</a></li>
       <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.applying}</a></li>
@@ -10,8 +10,7 @@
   </div>
   <div class="explanation" id="explanation">
     <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-      <h4 title="操作提示">操作提示</h4>
-      <span id="explanationZoom" title="收起提示"></span> </div>
+      <h4>{$lang.operation_tip}</h4></div>
     <ul>
       <li><i class="fa fa-angle-double-right"></i> 请填写店铺信息,提交完成操作。</li>
     </ul>

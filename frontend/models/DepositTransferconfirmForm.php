@@ -76,11 +76,10 @@ class DepositTransferconfirmForm extends Model
 		$party = $this->getPartyInfo($post);
 		
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-		$depopay_type = Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'transfer']);
+		$depopay_type = Business::getInstance('depopay')->build('transfer', $post);
 		$result = $depopay_type->submit(array(
 			'trade_info' => array('userid' => Yii::$app->user->id, 'party_id' => $party['userid'], 'amount' => $post->money, 'fee' => $this->getTransferFee($post)),
-			'extra_info' => array('tradeNo' => DepositTradeModel::genTradeNo()),
-			'post'		 => $post
+			'extra_info' => array('tradeNo' => DepositTradeModel::genTradeNo())
 		));
 			
 		if(!$result) {

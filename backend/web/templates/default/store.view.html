@@ -1,21 +1,19 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
   <div id="rightTop">
-    <p>{$lang.store_manage}</p>
+    <p>{$lang.manage}</p>
     <ul class="subnav">
-      <li><a class="btn1" href="{url route='store/index'}">{$lang.store_list}</a></li>
+      <li><a class="btn1" href="{url route='store/index'}">{$lang.list}</a></li>
       <li><a class="btn1" href="{url route='store/index' state='applying'}">{$lang.applying}</a></li>
-      <li><span>审核</span></li>
+      <li><span>{$lang.detail}</span></li>
     </ul>
   </div>
-  <!-- 操作说明 -->
   <div class="explanation" id="explanation">
     <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-      <h4 title="操作提示">操作提示</h4>
-      <span id="explanationZoom" title="收起提示"></span> </div>
+      <h4>{$lang.operation_tip}</h4></div>
     <ul>
       <li><i class="fa fa-angle-double-right"></i> 点击同意，店铺即可正常运营。</li>
-      <li><i class="fa fa-angle-double-right"></i> 点击拒绝，须填写拒绝原因，拒绝后该店铺信息将被删除</li>
+      <li><i class="fa fa-angle-double-right"></i> 点击拒绝，须填写拒绝原因，拒绝后该店铺将允许申请者编辑后重新审核</li>
     </ul>
   </div>
   <div class="info">

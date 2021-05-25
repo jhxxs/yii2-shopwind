@@ -45,7 +45,7 @@ class DistributeModel extends ActiveRecord
 	public static function distributeInvite($order = array())
 	{
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
-		$depopay_type    = \common\library\Business::getInstance('depopay')->build(['flow' => 'income', 'type' => 'distribute']);
+		$depopay_type    = \common\library\Business::getInstance('depopay')->build('distribute');
 		$result = $depopay_type->distribute($order);
 		
 		if($result !== true) {

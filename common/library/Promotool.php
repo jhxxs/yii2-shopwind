@@ -120,7 +120,7 @@ class Promotool
 	 * 获取某个商品，某个规格的促销价格信息（如限时促销，会员价格，手机专享价） 
 	 * @param array $extra 其他参数
 	 */
-	public function getItemProInfo($goods_id = 0, $spec_id = 0, $extra = null)
+	public function getItemProInfo($goods_id = 0, $spec_id = 0, $extra = [])
 	{
 		// 返回结果数组
 		$result 	= false; 
@@ -141,17 +141,16 @@ class Promotool
 		if($result === false) {
 			list($proPrice, $id) = LimitbuyModel::getItemProPrice($goods_id, $spec_id);
 		 	if($proPrice !== false) {
+				$limitbuy = LimitbuyModel::find()->select('start_time,end_time,pro_name')->where(['pro_id' => $id])->one();
 				$result = array(
 					'price' => round($proPrice, 2),
 					'type' => 'limitbuy',
+					'name' => $limitbuy->pro_name,
+					'start_time' 	=> Timezone::localDate('Y-m-d H:i:s', $limitbuy->start_time),
+					'end_time' 		=> Timezone::localDate('Y-m-d H:i:s', $limitbuy->end_time),
+					'timestamp' 	=> $limitbuy->end_time - Timezone::gmtime(),
+					'lefttime' 		=> Timezone::lefttime($limitbuy->end_time)
 				);
-				// 获取倒计时时间
-				$limitbuy = LimitbuyModel::find()->select('start_time,end_time,pro_name')->where(['pro_id' => $id])->one();
-				$result['start_time'] = Timezone::localDate('Y-m-d H:i:s', $limitbuy->start_time);
-				$result['end_time'] = Timezone::localDate('Y-m-d H:i:s', $limitbuy->end_time);
-				$result['timestamp'] = $limitbuy->end_time - Timezone::gmtime();
-				$result['lefttime'] = Timezone::lefttime($limitbuy->end_time);
-				$result['name'] = $limitbuy->pro_name;
 			}
 		}
 		

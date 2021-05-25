@@ -1,18 +1,16 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
   <div id="rightTop">
-    <p>{$lang.cache_setting}</p>
+    <p>{$lang.manage}</p>
     <ul class="subnav">
       <li><a class="btn1" href="{url route='cache/index'}">{$lang.cache_file}</a></li>
       <li><a class="btn1" href="{url route='cache/redis'}">{$lang.cache_redis}</a></li>
       <li><span>{$lang.cache_memcache}</span></li>
     </ul>
   </div>
-  <!-- 操作说明 -->
   <div class="explanation" id="explanation">
     <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-      <h4 title="操作提示">提示</h4>
-      <span id="explanationZoom" title="收起提示"></span> </div>
+       <h4>{$lang.operation_tip}</h4></div>
     <ul>
       <li>1. MemCache是基于内存的，作为缓存使用可以有效提高页面访问速度，但如果缓存的数据量大不建议使用</li>
       <li>2. 在开启MemCache缓存之前，请确保在服务端已经安装了MemCache服务，否则会造成页面无法访问，请开放11211端口（默认）及设置好白名单</li>

@@ -57,7 +57,7 @@
 #header .header_cart .cart-list .total span{margin-left:10px;}
 #header .header_cart .cart-list .total span b{color:#C00;margin:0px 3px; font-weight:normal}
 #header .header_cart .cart-list .total span strong{font-weight:normal;color:#C00;font-size: 18px;font-family: Arial,Tahoma, Geneva, sans-serif;margin:0px 3px; vertical-align:middle}
-#header .header_cart .cart-list .total a{display: inline-block;width: 120px;height: 25px;margin:8px 0 8px 0;background: #E4393C;color: #fff;text-align: center;font-size:14px; line-height: 25px;}
+#header .header_cart .cart-list .total a{display: inline-block;width: 120px;height: 30px;line-height: 30px;margin:8px 0 8px 0;background: #E4393C;color: #fff;text-align: center;font-size:14px;}
 #header .header_cart .cart-list .total a:hover{ text-decoration:none; background:#B4393C;}
 
 #header .header_cart .hover{background:#fff;}

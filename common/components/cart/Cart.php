@@ -86,15 +86,13 @@ class Cart extends Component
 	}
 	
 	/**
-	 * id of item in cart
-	 * @param array $params
-	 * you can set any identification ID that is considered the same product in a shopping cart 
-	 * for example, the same specification is the same, but the price has changed as new goods are added to the shopping cart
+	 * you can set any identification ID that is considered the same product in a shopping cart  
+     * @param array $params
 	 */
 	public function getId($params = array())
 	{
-		// 注意避免数值型转为字符型的情况
-		return md5(serialize([intval($params['spec_id']), floatval($params['price']), intval(Yii::$app->user->id)]));
+		// 注意避免数值型转为字符型的情况,不要加入价格字段
+		return md5(serialize([intval($params['spec_id']), /*floatval($params['price']),*/ intval(Yii::$app->user->id)]));
 	}
 	
 	/**
@@ -112,6 +110,7 @@ class Cart extends Component
             $this->add($product, $quantity);
         }
     }
+
 	/**
      * Add an item to the cart
      * @param object $product
@@ -123,6 +122,7 @@ class Cart extends Component
 		$this->items[$product->product_id] = new CartItem($product, $quantity, $this->params);
 		$this->saveItems();
     }
+
 	/**
      * Adding item quantity in the cart
      * @param integer $id
@@ -136,16 +136,18 @@ class Cart extends Component
     }
 
     /**
-     * Change item quantity in the cart
+     * Change item quantity/price in the cart
      * @param integer $id
      * @param integer $quantity
+     * @param float $price
      * @return bool true|false
      */
-    public function change($id, $quantity)
+    public function change($id, $quantity, $price = null)
     {
         $this->loadItems();
         if (isset($this->items[$id])) {
             $this->items[$id]->setQuantity($quantity);
+            if($price !== null) $this->items[$id]->setPrice($price);
 			$this->saveItems();
 			return true;
         }
@@ -168,6 +170,7 @@ class Cart extends Component
         }
         return false;
     }
+    
 	/**
      * unchose all items in the cart
      * @return void
@@ -307,7 +310,7 @@ class Cart extends Component
 				$product = ArrayHelper::toArray($cartItem->getProduct());
 				$product['quantity'] = $cartItem->getQuantity();
 				
-				 // don't use object as: $product->subtotal
+				// don't use object as: $product->subtotal
 				$product['subtotal'] = sprintf('%.2f', round($product['price'] * $product['quantity'], 2));
 				$products[$key] = $product;
 			}

@@ -62,7 +62,8 @@ class My_storeController extends \common\controllers\BaseSellerController
 			$this->params['build_upload'] = Plugin::getInstance('uploader')->autoBuild(true)->create([
                 'belong' 		=> Def::BELONG_STORE,
                 'item_id' 		=> $this->visitor['store_id'],
-				'upload_url' 	=> Url::toRoute(['upload/add'])
+				'upload_url' 	=> Url::toRoute(['upload/add']),
+				'compress' 		=> false
 			]);
 			
 			// 所见即所得编辑器

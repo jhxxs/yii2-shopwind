@@ -93,7 +93,8 @@ class LimitbuyModel extends ActiveRecord
 		return $limitbuys;
 	}
 	
-	/* 获取促销价格
+	/**
+	 * 获取促销价格
 	 * @param $showInvalidPrice == false 没有促销价格，或者促销价格不合理，则返回false
 	 * @param $showInvalidPrice == true 有促销价格，但促销价格不合理时，依然返回促销价
 	 */
@@ -117,17 +118,22 @@ class LimitbuyModel extends ActiveRecord
 		if($showInvalidPrice == false) {
 			$query->andWhere(['<=', 'start_time', Timezone::gmtime()])->andWhere(['>=', 'end_time', Timezone::gmtime()]);
 		}
+		
 		if(($limitbuy = $query->one()))
 		{	
 			$specPrice = unserialize($limitbuy->spec_price);
-			if($specPrice[$spec_id]['pro_type'] == 'price') 
+			if(isset($specPrice[$spec_id]))
 			{
-				$proPrice = round($spec->price - $specPrice[$spec_id]['price'], 2);
-				if($proPrice < 0) {
-					$showInvalidPrice || $proPrice = 0;
-				}
+				if($specPrice[$spec_id]['pro_type'] == 'price') 
+				{
+					$proPrice = round($spec->price - floatval($specPrice[$spec_id]['price']), 2);
+					if($proPrice < 0) {
+						$showInvalidPrice || $proPrice = 0;
+					}
+				} else $proPrice = round($spec->price * floatval($specPrice[$spec_id]['price']) / 1000, 4) * 100;
+			} else {
+				$proPrice = $spec->price;
 			}
-			else $proPrice = round($spec->price * $specPrice[$spec_id]['price'] / 1000, 4) * 100;
 		}
 		
 		return array($proPrice, $limitbuy ? $limitbuy->pro_id : 0);

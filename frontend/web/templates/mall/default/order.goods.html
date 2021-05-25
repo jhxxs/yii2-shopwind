@@ -63,7 +63,7 @@ $(function(){
             <div class="subcontent float-left">
               <select name="delivery_type[{$store_id}]" class="J_LogisticFeesSelect J_LogisticFeesSelect-{$store_id}">
                 <!--{foreach from=$shipping_methods.$store_id item=logistic key=key name=fe_logistic}-->
-                <option value="{$key}" price="{$logistic.logistic_fees}">{$logistic.name}{$lang.colon}{$logistic.logistic_fees|default:0.00}</option>
+                <option value="{$logistic.type}" price="{$logistic.logistic_fees}">{$logistic.name}{$lang.colon}{$logistic.logistic_fees|default:0.00}</option>
                 <!--{/foreach}-->
               </select>
             </div>

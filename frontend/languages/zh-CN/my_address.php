@@ -19,6 +19,6 @@ return array(
     'continue_add' => '继续新增地址',
     'edit_again' => '重新编辑该地址',
     'no_such_address' => '没有该地址',
-    'phone_format' => '区号 - 电话号码 - 分机',
 	'region_name_required' => '所在地区不能为空',
+    'submit' => '保存提交',
 );

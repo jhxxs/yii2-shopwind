@@ -28,7 +28,7 @@ class Def
 	const ACATE_NOTICE			=	2; // 商城快讯（公告）
 	const ACATE_SYSTEM			=	3; // 内置文章
 
-	/* 店铺状态 */
+	/* 店铺/自提门店 状态 */
 	const STORE_APPLYING 		= 	0; // 申请中
 	const STORE_OPEN 			= 	1; // 开启
 	const STORE_CLOSED  		= 	2; // 关闭
@@ -37,21 +37,24 @@ class Def
 	/* 订单状态 */
 	const ORDER_SUBMITTED 		= 	10;              // 针对货到付款而言，他的下一个状态是卖家已发货
 	const ORDER_PENDING			=	11;              // 等待买家付款
-	const ORDER_TEAMING			=   19;			     // 买家已付款，待成团
+	const ORDER_TEAMING			=   19;			     // 针对拼团订单，买家已付款，待成团
 	const ORDER_ACCEPTED		=	20;              // 买家已付款，等待卖家发货
 	const ORDER_SHIPPED 		= 	30;              // 卖家已发货
+	const ORDER_PICKING			=	35;				 // 针对社区团购订单，买家已付款，待平台配送
+	const ORDER_DELIVERED       =   36;			     // 针对社区团购订单，平台已配送，待买家取货
 	const ORDER_FINISHED 		= 	40;              // 交易成功
-	const ORDER_CANCELED 		= 	0;               // 交易已取消
-
+	const ORDER_CANCELED 		= 	 0;              // 交易已取消
+	
 	/* 商户业务类型代码 */
-	const TRADE_ORDER 			= 	'trade10001';	 // 购物订单
-	const TRADE_RECHARGE 		= 	'trade20001';	 // 充值订单
-	const TRADE_REGIVE			=	'trade20002';	 // 充值返钱订单
-	const TRADE_DRAW 			= 	'trade30001';	 // 提现订单
-	const TRADE_CHARGE 			= 	'trade40001';	 // 系统扣费
-	const TRADE_BUYAPP 			= 	'trade50001';	 // 应用订单
-	const TRADE_TRANS 			= 	'trade60001';	 // 转账订单
-	const TRADE_FX 				= 	'trade70001';	 // 分销订单
+	const TRADE_ORDER 			= 	'ORDER';	 // 购物
+	const TRADE_RECHARGE 		= 	'RECHARGE';	 // 充值
+	const TRADE_REGIVE			=	'REGIVE';	 // 充值返钱
+	const TRADE_DRAW 			= 	'DRAW';	 	 // 提现
+	const TRADE_CHARGE 			= 	'CHARGE';	 // 系统扣费
+	const TRADE_BUYAPP 			= 	'BUYAPP';	 // 购买应用
+	const TRADE_TRANS 			= 	'TRANS';	 // 余额转账
+	const TRADE_FX 				= 	'FX';	 	 // 分销返佣
+	const TRADE_GUIDE			=	'GUIDE';     // 团长分成
 	
 	/* 上传文件归属 */
 	const BELONG_ARTICLE 		=	1;
@@ -74,6 +77,7 @@ class Def
 	const BELONG_IDENTITY		=   51;
 	const BELONG_WEBIM			=	52;
 	const BELONG_REPORT			=   53;
+	const BELONG_GUIDESHOP		=	61;		// 团长门店招牌
 	
 	/* 上传图片大小限制 */
 	const IMAGE_FILE_SIZE		=   2097152;   	// 普通图片大小限制2MB = 2*1024*1024
@@ -133,6 +137,12 @@ class Def
 			case self::ORDER_SHIPPED:
 				$lang_key = 'order_shipped';
 			break;
+			case self::ORDER_PICKING:
+				$lang_key = 'order_picking';
+			break;
+			case self::ORDER_DELIVERED: 
+				$lang_key = 'order_delivered';
+			break;
 			case self::ORDER_FINISHED:
 				$lang_key = 'order_finished';
 			break;
@@ -152,31 +162,37 @@ class Def
 	{
 		switch (strtolower($string))
 		{
-			case 'canceled':    //已取消的订单
+			case 'canceled':    // 已取消的订单
 				return self::ORDER_CANCELED;
 			break;
-			case 'all':         //所有订单
+			case 'all':         // 所有订单
 				return -1;
 			break;
-			case 'pending':     //待付款的订单
+			case 'pending':     // 待付款的订单
 				return self::ORDER_PENDING;
 			break;
-			case 'submitted':   //已提交的订单
+			case 'submitted':   // 货到付款，待发货的订单
 				return self::ORDER_SUBMITTED;
 			break;
 			case 'teaming': // 已付款，待成团订单
 				return self::ORDER_TEAMING;
 			break;
-			case 'accepted': 	// 货到付款，待发货的订单
+			case 'accepted': 	// 待发货的订单
 				return self::ORDER_ACCEPTED;
 			break;
-			case 'shipped':     //已发货的订单
+			case 'shipped':     // 已发货的订单
 				return self::ORDER_SHIPPED;
 			break;
-			case 'finished':    //已完成的订单
+			case 'picking':  // 买家已付款，待配送的订单（针对社区团购）
+				return self::ORDER_PICKING;
+			break;
+			case 'delivered': // 平台已配送，待取货的订单（针对社区团购）
+				return self::ORDER_DELIVERED;
+			break;
+			case 'finished':    // 已完成的订单
 				return self::ORDER_FINISHED;
 			break;
-			default:            //所有订单
+			default:            // 所有订单
 				return -1;
 			break;
 		}

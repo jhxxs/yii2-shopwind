@@ -21,13 +21,13 @@ use common\library\Timezone;
 use common\library\Page;
 
 /**
- * @Id teambuy.otype.php 2019.7.12 $
- * @author   mosir
+ * @Id TeambuyOrder.php 2019.7.12 $
+ * @author mosir
  */
  
 class TeambuyOrder extends NormalOrder
 {
-	public $otype = 'teambuy';
+	protected $otype = 'teambuy';
 	
 	/** 
 	 * 提交生成的订单
@@ -43,7 +43,7 @@ class TeambuyOrder extends NormalOrder
 
 		// 插入拼团订单信息（实际上有且只有一个拼团订单，不支持同时提交多个拼团订单，在合并付款才会可能有2笔拼团订单一起付款）
 		foreach ($result as $store_id => $order_id) {
-			$this->insertTeambuyInfo($order_id, $base_info[$store_id], $goods_info['orderList'][$store_id], $post);
+			$this->insertTeambuyInfo($order_id, $base_info[$store_id], $goods_info['orderList'][$store_id]);
 		}
 
 		return $result;
@@ -52,12 +52,11 @@ class TeambuyOrder extends NormalOrder
 	/**
 	 * 获取拼团商品数据 
 	 */
-	public function getOrderGoodsList($extraParams = array())
+	public function getOrderGoodsList()
 	{
-		extract($extraParams);
-		
 		$result = array();
-		if(!$spec_id) {
+
+		if(!($spec_id = $this->post->extraParams->spec_id)) {
 			return false;
 		}
 
@@ -90,10 +89,9 @@ class TeambuyOrder extends NormalOrder
 	 * 插入拼团订单信息
 	 * @param string $teamid 为参团成员关联ID
 	 */
-	private function insertTeambuyInfo($order_id, $order_info, $list, $post)
+	private function insertTeambuyInfo($order_id, $order_info, $list = array())
 	{
-		$extraParams = $post['extraParams'];
-		$checkTeamid = $this->checkTeamid($extraParams);
+		$checkTeamid = $this->checkTeamid();
 
 		// 实际上拼团订单只有一个商品
 		foreach($list['items'] as $value) 
@@ -109,7 +107,7 @@ class TeambuyOrder extends NormalOrder
 				$model->created = Timezone::gmtime();
 				$model->expired = $model->created + 24 * 3600; // 24小时未成团的设为过期
 				$model->leader = $checkTeamid ? 0 : 1; // 0 = 参团; 1=开团
-				$model->teamid = $checkTeamid ? $extraParams['teamid'] : $this->getTeamid();
+				$model->teamid = $checkTeamid ? $this->post->extraParams->teamid : $this->getTeamid();
 				$model->save();
 			}
 		}
@@ -118,15 +116,15 @@ class TeambuyOrder extends NormalOrder
 	/**
 	 * 检查参团ID是否还可用
 	 */
-	private function checkTeamid($extraParams = array())
+	private function checkTeamid()
 	{
 		// 如果是发起拼单
-		if(empty($extraParams) || !isset($extraParams['teamid']) || empty($extraParams['teamid'])) {
+		if(empty($this->post->extraParams) || !isset($this->post->extraParams->teamid) || empty($this->post->extraParams->teamid)) {
 			return false;
 		}
 
 		// 如果已成团
-		if(TeambuyLogModel::find()->where(['teamid' => $extraParams['teamid'], 'status' => 1])->exists()) {
+		if(TeambuyLogModel::find()->where(['teamid' => $this->post->extraParams->teamid, 'status' => 1])->exists()) {
 			return false;
 		}
 		return true;

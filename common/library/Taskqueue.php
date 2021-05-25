@@ -85,32 +85,26 @@ class Taskqueue
 	}
 	
 	/**
-	 * 自动确认收货 
+	 * 自动确认收货
 	 */
-	private static function autoConfirm()
+	private static function autoConfirm($otype = 'normal')
 	{
-		$today = Timezone::gmtime();
-		
-        // 默认15天
-        $interval = 15 * 24 * 3600;
-		
+		// 排除退款中的订单
+		$query = OrderModel::find()->alias('o')->where(['>', 'order_id', 0])->joinWith(['depositTrade' => function($model) {
+			$model->alias('dt')->select('dt.tradeNo,dt.buyer_id,dt.bizOrderId,r.status as refund_status')->joinWith('refund r', false)->where(['in', 'r.status',['CLOSED', null, '']]);
+		}]);
+		$query = self::getConditions($query, $otype);
+
 		// 每次仅处理2条记录，注意：处理太多会影响性能
-		$list = OrderModel::find()->where("ship_time + {$interval} < {$today}")->andWhere(['status' => Def::ORDER_SHIPPED])->indexBy('order_id')->orderBy(['order_id' => SORT_ASC])->limit(2)->asArray()->all();
-		
+		$list = $query->orderBy(['order_id' => SORT_ASC])->indexBy('order_id')->limit(2)->asArray()->all();
 		foreach($list as $orderInfo)
 		{
 			// 交易信息 
-			if(!($tradeInfo = DepositTradeModel::find()->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn']])->asArray()->one())) {
+			if(!($tradeInfo = DepositTradeModel::find()->select('tradeNo')->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn']])->asArray()->one())) {
 				continue;
 			}
 			
-			// 有退款功能： 如果该订单有退款商品（退款关闭的除外），则不允许确认收货
-			$refund = RefundModel::find()->select('refund_id,status')->where(['tradeNo' => $tradeInfo['tradeNo']])->asArray()->one();
-			if($refund && !in_array($refund['status'], array('CLOSED', 'SUCCESS'))) {
-				continue;
-			}
-				
-			// 如果订单中的商品为空，则认为订单信息不完整，不执行 
+			// 如果订单中的商品为空，则认为订单信息不完整，不执行
 			$ordergoods = OrderGoodsModel::find()->where(['order_id' => $orderInfo['order_id']])->asArray()->all();
 			if(empty($ordergoods)) {
 				continue;
@@ -125,22 +119,21 @@ class Taskqueue
 			}
 				
 			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
-			$depopay_type    = \common\library\Business::getInstance('depopay')->build(['flow' => 'income', 'type' => 'sellgoods']);
+			$depopay_type    = \common\library\Business::getInstance('depopay')->build('sellgoods');
 				
 			$result = $depopay_type->submit(array(
 				'trade_info' => array('userid' => $orderInfo['seller_id'], 'party_id' => $orderInfo['buyer_id'], 'amount' => $orderInfo['order_amount']),
-				'extra_info' => $orderInfo + array('tradeNo' => $tradeInfo['tradeNo']),
-				'post'		 => array()
+				'extra_info' => $orderInfo + array('tradeNo' => $tradeInfo['tradeNo'])
 			));
 				
 			if($result !== true) {
 				continue;
 			}
 			
-			// 买家确认收货后，即交易完成，处理订单商品三级返佣 
+			// 确认收货后，即交易完成，处理订单商品三级返佣 
 			DistributeModel::distributeInvite($orderInfo);
 				
-			// 买家确认收货后，即交易完成，将订单积分表中的积分进行派发 
+			// 确认收货后，即交易完成，将订单积分表中的积分进行派发
 			IntegralModel::distributeIntegral($orderInfo);
 			
 			// 更新累计销售件数 
@@ -183,5 +176,19 @@ class Taskqueue
 				OrderModel::updateAll(['status' => Def::ORDER_ACCEPTED], ['status' => Def::ORDER_TEAMING, 'order_id' => $model->order_id]);
 			}
 		}
+	}
+
+	/**
+	 * 针对普通订单，发货后默认8天自动收货
+	 * 针对社区团购订单，团长通知取货后默认2天自动完成订单
+	 */
+	private static function getConditions($query = null, $otype = 'normal')
+	{
+		$today = Timezone::gmtime();
+		$interval = 8 * 24 * 3600;
+		$status = Def::ORDER_SHIPPED;
+		$query->andWhere("ship_time + {$interval} < {$today}")->andWhere(['o.status' => $status]);
+
+		return $query;
 	}
 }

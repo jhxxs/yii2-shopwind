@@ -61,7 +61,7 @@ class OrderController extends \common\controllers\BaseUserController
 	public function actionMeal()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
-		return $this->build('meal', Url::toRoute(['order/meal', 'id' => $post->id, 'sp' => $post->sp]));
+		return $this->build('meal', Url::toRoute(['order/meal', 'id' => $post->id, 'specs' => $post->specs]));
 	}
 
 	private function build($otype = 'normal', $redirect = null)
@@ -86,13 +86,13 @@ class OrderController extends \common\controllers\BaseUserController
 		if(!Yii::$app->request->isPost)
 		{
 			// 获取订单模型
-            $order_type = Business::getInstance('order')->build(['type' => $otype]);
-
+            $order_type = Business::getInstance('order')->build($otype);
+			
             // 获取表单数据
             if(($form = $order_type->formData($goods_info)) === false) {
 				return Message::warning($order_type->errors);
 			}
-			$this->params = array_merge($this->params, ['goods_info' => $goods_info], $form);
+			$this->params = array_merge($this->params, ['goods_info' => $goods_info, 'redirect' => $redirect], $form);
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',
@@ -104,11 +104,12 @@ class OrderController extends \common\controllers\BaseUserController
 		}
 		else
 		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+
 			// 获取订单模型
-            $order_type = Business::getInstance('order')->build(['type' => $otype]);
+            $order_type = Business::getInstance('order')->build($otype, $post);
 			$result = $order_type->submit(array(
-				'goods_info' => $goods_info,
-				'post'		 => Yii::$app->request->post()
+				'goods_info' => $goods_info
 			));
 			if(empty($result)) {
 				return Message::warning($order_type->errors);

@@ -1,7 +1,7 @@
 {include file="header.html"}
 <div id="page_main" class="main-right">
     <div id="rightTop">
-        <p>{$lang.msg_manage}</p>
+        <p>{$lang.manage}</p>
         <ul class="subnav">
             <li><a class="btn1" href="{url route='msg/index'}">{$lang.sendlog}</a></li>
             <li><a class="btn1" href="{url route='msg/recharge'}">{$lang.msgrecharge}</a></li>
@@ -11,11 +11,9 @@
             <li><a class="btn1" href="{url route='msg/send'}">{$lang.sendmsg}</a></li>
         </ul>
     </div>
-    <!-- 操作说明 -->
     <div class="explanation" id="explanation">
-        <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-            <h4 title="操作提示">提示</h4>
-            <span id="explanationZoom" title="收起提示"></span> </div>
+    <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
+      <h4>{$lang.operation_tip}</h4></div>
         <ul>
             <li>1. 只有设置了短信模板内容，才能正常的发送短信。</li>
             <li>2. 如果是阿里云通信平台，则短信签名、短信模板ID、短信模板内容必须填写，且跟阿里云短信平台上设置的要完全一致，需要阿里云审核通过才可用。但

@@ -62,7 +62,7 @@ class AppmarketCashierForm extends Model
 			$time = Timezone::gmtime();
 			
 			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-			$depopay_type = Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'buyapp']);
+			$depopay_type = Business::getInstance('depopay')->build('buyapp');
 			
 			// 修改购买应用状态为交易完成
 			if(!$depopay_type->_update_order_status($post->id, array('status'=> Def::ORDER_FINISHED, 'pay_time' => $time, 'end_time' => $time))) {

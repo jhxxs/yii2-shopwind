@@ -50,7 +50,7 @@ class MealController extends \common\controllers\BaseMallController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		
-		$model = new \frontend\models\MealForm();
+		$model = new \frontend\models\MealForm(['id' => $post->id]);
 		list($meals) = $model->formData($post, true, ['meal_id' => SORT_DESC]);
 		if($meals == false) {
 			return Message::warning($model->errors);

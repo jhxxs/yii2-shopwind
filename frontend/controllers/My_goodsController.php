@@ -160,6 +160,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
                 'multiple' 		=> true,
                 'ext_js' 		=> false,
                 'ext_css' 		=> false,
+				'compress'		=> false
 			]);
 			
 			// 所见即所得编辑器
@@ -660,6 +661,8 @@ class My_goodsController extends \common\controllers\BaseSellerController
 	/* 检查提交的数据 */
     private function checkPostData($data, $id = 0)
     {
+		$data['max_exchange'] = intval($data['max_exchange']);
+
 		// 最低抵扣不能超过商品的最大价格
 		$max_exchange = IntegralSettingModel::getSysSetting('rate') * $data['max_exchange'];
 		$spec = array();

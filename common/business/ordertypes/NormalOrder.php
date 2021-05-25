@@ -16,6 +16,7 @@ use yii\helpers\Json;
 
 use common\models\CartModel;
 use common\models\RegionModel;
+use common\models\WholesaleModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -25,13 +26,13 @@ use common\library\Page;
 use common\business\BaseOrder;
 
 /**
- * @Id normal.otype.php 2018.7.12 $
+ * @Id NormalOrder.php 2018.7.12 $
  * @author mosir
  */
 
 class NormalOrder extends BaseOrder
 {
-	public $otype = 'normal';
+	protected $otype = 'normal';
 
 	/**
 	 * 显示订单表单
@@ -42,10 +43,10 @@ class NormalOrder extends BaseOrder
 		$result = array();
 
 		// 获取我的收货地址
-		$result['my_address'] = parent::getMyAddress();
+		$result['my_address'] = $this->getMyAddress();
 
 		// 配送方式
-		$shipping_method = parent::getOrderShippings($goods_info);
+		$shipping_method = $this->getOrderShippings($goods_info);
 		$result['shipping_methods'] = $shipping_method;
 
 		// API接口数据，把收货地址的省市区格式一下
@@ -63,7 +64,7 @@ class NormalOrder extends BaseOrder
 			// 获取一级地区（用于多级地区选择）
 			$result['regions'] = RegionModel::find()->select('region_id,region_name')->where(['parent_id' => 0])->indexBy('region_id')->column();
 
-			if (!($shipping_method = parent::getOrderShippings($goods_info))) {
+			if (!($shipping_method = $this->getOrderShippings($goods_info))) {
 				$this->errors = Language::get('no_shipping_methods');
 				return false;
 			}
@@ -72,8 +73,8 @@ class NormalOrder extends BaseOrder
 			$result['shippings'] = Json::encode($result['shipping_methods']);
 
 			// 取默认（第一条地区对应的运费），此作用为：取每个店铺的第一个收货地址各个运送方式的资费，以便第一次加载时显示
-			foreach ($shipping_method as $key => $val) {
-				$result['shipping_methods'][$key] = current($val);
+			foreach ($shipping_method as $key => $value) {
+				$result['shipping_methods'][$key] = current($value);
 			}
 		}
 		// 获取店铺可用优惠券
@@ -96,17 +97,17 @@ class NormalOrder extends BaseOrder
 		extract($data);
 
 		// 处理订单基本信息
-		if (!($base_info = parent::handleOrderInfo($goods_info, $post))) {
+		if (!($base_info = parent::handleOrderInfo($goods_info))) {
 			return false;
 		}
 
 		// 处理订单收货人信息
-		if (!($consignee_info = parent::handleConsigneeInfo($goods_info, $post))) {
+		if (!($consignee_info = $this->handleConsigneeInfo($goods_info))) {
 			return false;
 		}
 
 		// 获取订单折扣信息
-		if (($discount_info = $this->getAllDiscountByPost($goods_info, $post)) === false) {
+		if (($discount_info = $this->getAllDiscountByPost($goods_info)) === false) {
 			return false;
 		}
 
@@ -138,14 +139,12 @@ class NormalOrder extends BaseOrder
 	 * 获取购物车中的商品数据
 	 * 用来计算订单可使用的最大积分值等
 	 */
-	public function getOrderGoodsList($extraParams = array())
+	public function getOrderGoodsList()
 	{
-		extract($extraParams);
-
-		$query = CartModel::find()->alias('c')->select('gs.spec_id,gs.spec_1,gs.spec_2,gs.stock,c.rec_id,c.userid,c.store_id,c.goods_id,c.goods_name,c.goods_image,c.specification,c.price,c.quantity,c.product_id')->joinWith('goodsSpec gs', false)
-			->where(['userid' => Yii::$app->user->id, 'selected' => 1])->indexBy('rec_id');
-		if ($store_id) {
-			$query->andWhere(['store_id' => $store_id]);
+		$query = CartModel::find()->alias('c')->select('gs.spec_id,gs.spec_1,gs.spec_2,gs.stock,c.rec_id,c.userid,c.store_id,c.goods_id,c.goods_name,c.goods_image,c.specification,c.price,c.quantity,c.product_id,c.selected')->joinWith('goodsSpec gs', false)
+			->where(['userid' => Yii::$app->user->id, 'selected' => 1])->indexBy('product_id');
+		if ($this->post->store_id) {
+			$query->andWhere(['store_id' => $this->post->store_id]);
 		}
 
 		$result = $query->asArray()->all();
@@ -159,6 +158,37 @@ class NormalOrder extends BaseOrder
 			}
 		}
 
-		return $result ? array($result, null) : array(null, null);
+		$list = WholesaleModel::reBuildByQuantity(['items' => $result]);
+		$result = $list['items'];
+
+		return array($result, null);
+	}
+
+	/**
+	 * 通过收货人或地区ID获取地址信息
+	 * @param int $addr_id 针对发货订单
+	 * @param int $region_id 针对社区团购，买家自提模式
+	 */
+	public function getAddressInfo($addr_id = 0, $region_id = 0) {
+		return parent::getMyAddress($addr_id);
+	}
+
+	/**
+	 * 获取我的所有配送目的地列表，用于计算每个地址的运费
+	 * 对于普通订单，配送目的地为收货地址
+	 */
+	public function getDeliveryTos()
+	{
+		$list = parent::getMyAddress();
+		if(empty($list)) {
+			return array();
+		}
+
+		$result = [];
+		foreach($list as $key => $value) {
+			$result[] = $value['region_id'];
+		}
+		
+		return array_values(array_unique($result));
 	}
 }

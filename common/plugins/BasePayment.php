@@ -390,7 +390,7 @@ class BasePayment extends BasePlugin
 		}
 			
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-		$depopay_type = Business::getInstance('depopay')->build(['flow' => 'income', 'type' => 'recharge']);
+		$depopay_type = Business::getInstance('depopay')->build('recharge');
 		if(!$depopay_type->respond_notify($orderInfo, $notify_result, $outTradeNo)) {
 			return false;
 		}
@@ -399,7 +399,7 @@ class BasePayment extends BasePlugin
 		if(in_array($orderInfo['bizIdentity'], array(Def::TRADE_RECHARGE))) {
 			
 			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-			$depopay_type = Business::getInstance('depopay')->build(['flow' => 'income', 'type' => 'rechargegive']);
+			$depopay_type = Business::getInstance('depopay')->build('rechargegive');
 			$depopay_type->rechargegive($orderInfo);
 		}
 		
@@ -424,7 +424,7 @@ class BasePayment extends BasePlugin
 		}
 			
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-		$depopay_type = Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'buygoods']);
+		$depopay_type = Business::getInstance('depopay')->build('buygoods');
 		
 		foreach($orderInfo['tradeList'] as $tradeInfo)
 		{
@@ -469,7 +469,7 @@ class BasePayment extends BasePlugin
 		}
 		
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-		$depopay_type = Business::getInstance('depopay')->build(['flow' => 'outlay', 'type' => 'buyapp']);
+		$depopay_type = Business::getInstance('depopay')->build('buyapp');
 		
 		// 目前暂不考虑同时支付多个购买APP的交易，所以循环只有一次
 		foreach($orderInfo['tradeList'] as $tradeInfo)

@@ -36,7 +36,7 @@
 				<div class="goods-list">
 					<!--{foreach from=$carts_top.items item=cart name=fe_cart key=key}-->
 					<div {if $smarty.foreach.fe_cart.last}style="border:0px;"{/if} class="clearfix list J_CartItem-{$key}">
-						<div class="goods-img"> <a target="_blank" href="{url route='goods/index' id=$cart.goods_id}"><img src="{$cart.goods_image|url_format}" width="40" height="40"></a> </div>
+						<div class="goods-img mt5"> <a target="_blank" href="{url route='goods/index' id=$cart.goods_id}"><img src="{$cart.goods_image|url_format}" width="40" height="40"></a> </div>
 						<div class="goods-title"> <a target="_blank" href="{url route='goods/index' id=$cart.goods_id}">{$cart.goods_name}</a> </div>
 						<div class="goods-admin clearfix">
 							<div class="mini-cart-count"><strong class="mini-cart-price J_ItemPrice-{$key}">{$cart.price|price_format}</strong> ×<span class="J_ItemQuantity-{$key}">{$cart.quantity|default:1}</span></div>
@@ -44,8 +44,7 @@
 					</div>
 					<!--{/foreach}--> 
 				</div>
-				<div class="total"> <span>共<strong class="J_C_T_GoodsKinds">{$carts_top.kinds|default:0}</strong>件商品</span><span>共计<strong class="J_C_T_Amount">{$carts_top.amount|price_format}</strong></span><br />
-					<a href="{url route='cart/index'}">去购物车结算</a> </div>
+				<div class="total"><a href="{url route='cart/index'}">去购物车查看</a> </div>
 				<!--{else}-->
 				<div class="nogoods clearfix J_NoGoods"> <b></b>购物车中还没有商品，赶紧选购吧！ </div>
 				<!--{/if}--> 
