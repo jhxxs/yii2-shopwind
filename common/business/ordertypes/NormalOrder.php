@@ -158,7 +158,8 @@ class NormalOrder extends BaseOrder
 			}
 		}
 
-		$list = WholesaleModel::reBuildByQuantity(['items' => $result]);
+		$model = new \frontend\models\CartForm();
+		$list = $model->reBuildByQuantity(['items' => $result]);
 		$result = $list['items'];
 
 		return array($result, null);

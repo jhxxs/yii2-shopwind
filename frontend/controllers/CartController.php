@@ -138,7 +138,7 @@ class CartController extends \common\controllers\BaseMallController
 					return Message::warning($model->errors);
 				}
 			}
-		}Page::writeLog('kkk', $list);
+		}
 		
 		foreach($list as $key => $result)
 		{

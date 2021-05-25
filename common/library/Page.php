@@ -199,7 +199,9 @@ class Page
 		
 		if(in_array($page, ['mall', 'store'])) {
 			$params['hot_keywords'] = explode(',', Yii::$app->params['hot_keywords']);
-			$params['carts_top'] = Yii::$app->cart->find();
+
+			$model = new \frontend\models\CartForm();
+			$params['carts_top'] = $model->getCart();
 		}
 	
 		if(in_array($page, ['user'])) {

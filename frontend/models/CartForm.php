@@ -148,6 +148,42 @@ class CartForm extends Model
 	public function getCart()
 	{
 		// 如果需要执行不同的购买量实现不同的单价，则考虑该策略
-		return Yii::$app->cart->find();
+		return $this->reBuildByQuantity(Yii::$app->cart->find());
+	}
+	public function reBuildByQuantity($list = array(), $otype = 'normal')
+	{
+		if(empty($list) && ($otype == 'normal')) {
+			$list = Yii::$app->cart->find();
+		}
+		
+		if(empty($list) || !isset($list['items']) || empty($list['items'])) {
+			return $list;
+		}
+		
+		$result = [];
+		foreach($list['items'] as $key => $value) {
+
+			// 对于购物车商品，没有选中的不做统计
+			if((!isset($value['selected']) || !$value['selected']) && ($otype == 'normal')) continue;
+
+			if(!isset($result[$value['goods_id']])) {
+				$result[$value['goods_id']]['quantity'] = 0;
+			}
+			$result[$value['goods_id']]['quantity'] += intval($value['quantity']);
+		}
+		
+	
+
+		// 重置支付金额
+		$list['amount'] = 0;
+		foreach($list['items'] as $k => $v) 
+		{
+			// 统计购物车选中的商品金额
+			if((isset($v['selected']) && $v['selected']) || ($otype != 'normal')) {
+				$list['amount'] += $v['subtotal'];
+			}
+		}
+		
+		return $list;
 	}
 }
