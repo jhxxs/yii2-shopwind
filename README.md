@@ -79,8 +79,7 @@ ShopWind开源协议：[https://www.shopwind.net/license/](https://www.shopwind.
 
 ShopWind开发交流：[https://www.shopwind.net/forum/portal.html](https://www.shopwind.net/forum/portal.html)
 
-#### 公众号
-<img width="150" src="https://www.shopwind.net/static/images/qrcode_for_gh_8658dbe202f2_258.jpg">
+<img src="https://www.shopwind.net/static/images/3qrcode.png">
 
 #####
 #####
