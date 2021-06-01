@@ -126,6 +126,9 @@ class SDK
 		if(!$this->swf) {
 			$this->swf = Resource::getResourceUrl(['file' => 'webuploader/Uploader.swf']);
 		}
+		if($this->compress != false) {
+			$this->compress = "";
+		}
 
         $str = <<<EOT
 {$include_js}

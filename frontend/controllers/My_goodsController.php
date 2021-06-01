@@ -258,6 +258,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
                 'multiple' 		=> true,
                 'ext_js' 		=> false,
                 'ext_css' 		=> false,
+				'compress'		=> false
 			]);
 			
 			// 所见即所得编辑器
