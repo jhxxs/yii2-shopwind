@@ -87,10 +87,8 @@ class ConnectController extends \common\controllers\BaseMallController
 		if($connect->errors) {
 			return Message::warning($connect->errors);
 		}
-		if (!Yii::$app->getUser()->login(UserModel::findOne($connect->userid))) {
-         	return Message::display(Language::get('login_fail'));
-        }
-		return Message::display(Language::get('login_successed'), ['user/index']);
+
+		return $this->doLogin($connect->userid);
 	}
 
     public function actionAlipay()
@@ -105,10 +103,8 @@ class ConnectController extends \common\controllers\BaseMallController
 		if($connect->errors) {
 			return Message::warning($connect->errors);
 		}
-		if (!Yii::$app->getUser()->login(UserModel::findOne($connect->userid))) {
-         	return Message::display(Language::get('login_fail'));
-        }
-		return Message::display(Language::get('login_successed'), ['user/index']);
+		
+		return $this->doLogin($connect->userid);
 	}
 	
 	public function actionWeixin()
@@ -123,10 +119,8 @@ class ConnectController extends \common\controllers\BaseMallController
 		if($connect->errors) {
 			return Message::warning($connect->errors);
 		}
-		if (!Yii::$app->getUser()->login(UserModel::findOne($connect->userid))) {
-         	return Message::display(Language::get('login_fail'));
-        }
-		return Message::display(Language::get('login_successed'), ['user/index']);
+
+		return $this->doLogin($connect->userid);
 	}
 	
 	public function actionXwb()
@@ -141,10 +135,8 @@ class ConnectController extends \common\controllers\BaseMallController
 		if($connect->errors) {
 			return Message::warning($connect->errors);
 		}
-		if (!Yii::$app->getUser()->login(UserModel::findOne($connect->userid))) {
-         	return Message::display(Language::get('login_fail'));
-        }
-		return Message::display(Language::get('login_successed'), ['user/index']);
+		
+		return $this->doLogin($connect->userid);
 	}
 	
 	public function actionBind()
@@ -240,6 +232,23 @@ class ConnectController extends \common\controllers\BaseMallController
 			return Message::warning(Language::get('unbind_fail'));
 		}
 		return Message::display(Language::get('unbind_ok'));
+	}
+	
+	protected function doLogin($userid, $redirect = null)
+	{
+		$identity = UserModel::findOne($userid);
+
+		if($identity->locked) {
+			return Message::warning(Language::get('userlocked'));
+		}
+
+		// 登录用户
+		if(!Yii::$app->user->login($identity)) {
+			return Message::warning(Language::get('login_fail'));
+		}
+		UserModel::afterLogin($identity);
+	
+		return Message::display(Language::get('login_successed'), $redirect ? $redirect : ['user/index']);
 	}
 
 	/* 三级菜单 */

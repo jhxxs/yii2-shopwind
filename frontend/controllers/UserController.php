@@ -157,10 +157,13 @@ class UserController extends \common\controllers\BaseUserController
 			if(!$identity->validatePassword($post->password)) {
 				return Message::warning(Language::get('username_password_error'), ['user/login']);
 			}
+			if($identity->locked) {
+				return Message::warning(Language::get('userlocked'));
+			}
 			
 			// 登录用户
 			if(!Yii::$app->user->login($identity, $rememberMe)) {
-				return Message::warning(Language::get('login_failure'));
+				return Message::warning(Language::get('login_fail'));
 			}
 			UserModel::afterLogin($identity);
 			return Message::display(Language::get('login_successed'), $post->redirect);

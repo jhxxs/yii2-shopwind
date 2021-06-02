@@ -70,10 +70,9 @@
 		
 		function getCompress()
 		{
-			var compress = false;
 			if(opts.compress != false) 
 			{
-				compress =  {
+				return  {
 					
 					width: opts.compressWidth,
 					height: opts.compressHeight,
@@ -99,7 +98,7 @@
 				}
 			}
 			
-			return compress;
+			return false;
 		}
   };
 	

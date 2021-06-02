@@ -131,4 +131,5 @@ return array(
 	'unbind_ok'  => '解绑成功',
 	'unbind_fail'  => '解绑失败',
 	'view_allapp' => '查看所有应用',
+	'userlocked' => '您的账户已被锁定无法登录，请联系平台处理。',
 );
