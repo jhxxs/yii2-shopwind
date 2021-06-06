@@ -5,17 +5,17 @@ return array (
   array (
     '_widget_693' => 
     array (
-      'name' => 'df_image_ads',
+      'name' => 'df_image_ad',
       'options' => 
       array (
         'ad_image_url' => 'data/files/mall/template/20181212172931441.jpg',
         'ad_link_url' => 'http://test.shopwind.net/channel/index.html?id=154318852528',
-        'ad_width' => '',
-        'ad_height' => '80',
-        'ad_border' => '0',
-        'ad_margin' => '0',
-        'ad_background_color' => 'rgb(219, 0, 28)',
-        'ad_button_close' => '1',
+        'width' => '',
+        'height' => '80',
+        'border' => '0',
+        'margin' => '0',
+        'background' => 'rgb(219, 0, 28)',
+        'closeButton' => '1',
       ),
     ),
     '_widget_684' => 

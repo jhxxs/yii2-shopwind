@@ -14,6 +14,7 @@
     'mall_index'  => '商城首页',
     'template_setting'  => '模板编辑',
     'index' => '首页',
+    'community' => '社区团购',
     'recommend_new' => '最新商品',
     'gcategory' => '商品分类页',
 	'scategory'=>'店铺分类页',

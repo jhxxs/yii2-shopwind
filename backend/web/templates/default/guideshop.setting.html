@@ -1,0 +1,43 @@
+{include file="header.html"}
+<div id="page_main" class="main-right">
+  <div id="rightTop">
+    <p>{$lang.guideshop}</p>
+    <ul class="subnav">
+      <li><span>{$lang.config}</span></li>
+      <li><a class="btn1" href="{url route='guideshop/index'}">{$lang.shoplist}</a></li>
+    </ul>
+  </div>
+  <div class="explanation" id="explanation">
+    <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
+      <h4>{$lang.operation_tip}</h4></div>
+    <ul>
+      <li><i class="fa fa-angle-double-right"></i> 此处设置的团长佣金率为全店通用，如果需要单独设置每个团长不同的佣金，可以进入门店列表处配置</li>
+      <li><i class="fa fa-angle-double-right"></i> 由于社区团购商品由平台来统一完成配送，所以平台需要评估是否有能力对指定类目下的商品具有发货能力，请正确选择门店自提类目</li>
+    </ul>
+  </div>
+  <div class="info">
+    <form method="post">
+      <table class="infoTable">
+        <tr>
+          <th class="paddingT15"> {$lang.guider_rate}:</th>
+          <td class="paddingT15 wordSpacing5"><input class="infoTableInput2" type="text" name="guider_rate" value="{$setting.guider_rate|escape}" />
+            <label class="field_notice">{$lang.note_guider_rate}</label></td>
+        </tr>
+        <tr>
+          <th class="paddingT15"> {$lang.gcategory_allow}:</th>
+          <td class="paddingT15 wordSpacing5">
+            <select name="cate_id">
+              <option value="0">{$lang.select_pls}</option>
+                {html_options options=$gcategories selected=$setting.cateId}
+            </select>
+            <label class="field_notice">{$lang.note_gcategory_allow}</label></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td class="ptb20"><input class="formbtn J_AjaxSubmit" type="submit" value="{$lang.submit}" /></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+{include file="footer.html"}

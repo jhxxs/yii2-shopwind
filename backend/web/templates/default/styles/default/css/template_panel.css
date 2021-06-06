@@ -26,6 +26,10 @@
 .handle_top ul {position: relative; top: 2px; margin: 1px 0 0 0px; height: 31px; _top: 3px; overflow:hidden}
 .handle_top ul li {float: left;}
 
+#page-layout-community-index.editTmplateMode .handle {
+    margin-top: 60px;
+}
+
 .handle_hover {border:1px solid #b2d7f1; border-bottom:0;display: block; font-size: 14px; text-decoration: none; color:#3e6caa; }
 .handle_hover span {background: #fff; padding: 5px 20px 5px 18px; display: block;}
 

@@ -7,6 +7,7 @@ return array(
 	'description'				=>	'介绍',
 	'limitbuy'					=> 	'秒杀',
 	'teambuy'					=> 	'拼团',
+	'wholesale'					=>	'批发价',
 	'meal'						=>	'搭配套餐',
 	'fullfree'					=>	'满包邮',
 	'fullprefer'				=>	'满折满减',

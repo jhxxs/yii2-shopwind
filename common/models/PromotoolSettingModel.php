@@ -65,10 +65,9 @@ class PromotoolSettingModel extends ActiveRecord
 				// 如果购买了，那么检查是否到期
 				if($apprenewal && ($apprenewal->expired > Timezone::gmtime())) {
 			
-					/* 没有到期，则检查卖家是否启用/配置了该营销工具 
-					 * 限时打折、搭配套餐和三级分销没有该配置
-					 */
-					if(in_array($appid, ['limitbuy', 'meal', 'distribute'])) return true;
+					// 没有到期，则检查卖家是否启用/配置了该营销工具 
+					// 限时打折、搭配套餐、批发价和三级分销没有该配置
+					if(in_array($appid, ['limitbuy', 'wholesale', 'meal', 'distribute'])) return true;
 					elseif(parent::find()->where(['appid' => $appid, 'store_id' => $store_id, 'status' => 1])->exists()) {
 						$result = true;
 					}

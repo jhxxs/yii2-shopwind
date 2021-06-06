@@ -38,7 +38,7 @@ class Basewind
 	 */
 	public static function getVersion()
 	{
-		return '3.3.0';	
+		return '3.3.1';	
 	}
 	
 	/**
@@ -444,7 +444,7 @@ class Basewind
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(  
 				"Content-Type: application/json; charset=utf-8",
 				"Content-Length: " . strlen($post))  
-			); 
+			);
 		}
 		
 		//设置超时

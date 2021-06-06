@@ -165,6 +165,12 @@ class Menu
 						'url'   => Url::toRoute('flagstore/index'),
 						'ico'   => 'icon-qijiandian',
 						'priv'  => ['key' => 'flagstore|all']
+					),
+					'guideshop'  =>array(
+						'text'  => Language::get('guideshop'),
+						'url'   => Url::toRoute('guideshop/index'),
+						'ico'   => 'icon-mendian',
+						'priv'  => ['key' => 'guideshop|all']
 					)
 				)
 			),
@@ -357,6 +363,12 @@ class Menu
 						'url'   => Url::toRoute('weixin/menu'),
 						'ico'   => 'icon-zidingyicaidan',
 						'priv'  => ['key' => 'weixin|menu', 'depends' => 'weixin|add,weixin|edit,weixin|delete,weixin|editcol,weixin|createmenu,weixin|child']
+					),
+					'wxapplet' => array(
+						'text' => Language::get('weixin_applet'),
+						'url'  => Url::toRoute(['weixin/applet']),
+						'ico' => 'icon-weixinxiaochengxu',
+						'priv' => ['key' => 'weixin|applet']
 					)
 				)
 			)

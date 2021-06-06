@@ -430,8 +430,8 @@ return array(
 	'go2store'=>'进入商家店铺',
 	'rank' =>'商品排行榜',
 	'my_comment'=>'评价管理',
-	'limitbuy_list' => '限时打折',
-	'no_limitbuy_goods' => '没有限时打折商品',
+	'limitbuy_list' => '秒杀',
+	'no_limitbuy_goods' => '没有秒杀商品',
 	'evaluation'=>'评价',
 
 	'msg' => '手机短信',
@@ -503,19 +503,20 @@ return array(
 	
 	/* 营销中心 */
 	'promotool'  				=> '营销中心',
-	'seller_meal'   			=> '搭配套餐',
+	'seller_meal'   			=> '搭配购',
 	'seller_fullfree'			=> '满包邮',
-	'seller_fullprefer'    		=> '满折满减',
+	'seller_fullprefer'    		=> '满优惠',
 	'seller_exclusive'			=> '手机专享',
-	'seller_limitbuy'			=> '限时打折',
+	'seller_limitbuy'			=> '秒杀',
 
-	'meal'   					=> '搭配套餐',
+	'meal'   					=> '搭配购',
 	'fullfree'					=> '满包邮',
-	'fullprefer'    			=> '满折满减',
+	'fullprefer'    			=> '满优惠',
 	'exclusive'					=> '手机专享',
-	'limitbuy'					=> '限时打折',
+	'limitbuy'					=> '秒杀',
 	'distribute'				=> '三级分销',
 	'teambuy'					=> '拼团',
+	'wholesale'					=> '批发价',
 	
 	'appmarket'					=> '应用市场',
 	'my_appmarket' 				=> '我的应用',

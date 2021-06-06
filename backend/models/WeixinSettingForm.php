@@ -25,6 +25,12 @@ use common\library\Language;
 class WeixinSettingForm extends Model
 {
 	public $id = 0;
+
+	/**
+	 * mp/applet
+	 */
+	public $code = 'mp'; 
+
 	public $errors = null;
 	
 	public function valid($post)
@@ -41,7 +47,7 @@ class WeixinSettingForm extends Model
 			$this->errors = Language::get('appsecret_empty');
 			return false;
 		}
-		if(empty($post->token)) {
+		if($this->code == 'mp' && empty($post->token)) {
 			$this->errors = Language::get('token_empty');
 			return false;
 		}
@@ -55,14 +61,15 @@ class WeixinSettingForm extends Model
 		}
 
 		if(!$this->id || !($model = WeixinSettingModel::findOne($this->id))) {
-			if(!($model = WeixinSettingModel::find()->where(['userid' => 0])->orderBy(['id' => SORT_DESC])->one())) {
+			if(!($model = WeixinSettingModel::find()->where(['userid' => 0, 'code' => $this->code])->orderBy(['id' => SORT_DESC])->one())) {
 				$model = new WeixinSettingModel();
+				$model->code = $this->code;
 			}
 		}
 		
-		$fields = ['name', 'appid', 'appsecret', 'token', 'auto_login'];
-		foreach($post as $key => $val) {
-			if(in_array($key, $fields)) $model->$key = $val;
+		$fields = ['name', 'appid', 'appsecret', 'token', 'autologin'];
+		foreach($post as $key => $value) {
+			if(in_array($key, $fields)) $model->$key = $value;
 		}
 		$model->if_valid = 0;
 		$model->userid = 0;

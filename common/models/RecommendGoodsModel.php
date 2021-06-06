@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 
 use common\models\GoodsModel;
 use common\models\GcategoryModel;
+use common\models\GuideshopModel;
 
 use common\library\Promotool;
 
@@ -55,12 +56,17 @@ class RecommendGoodsModel extends ActiveRecord
 			{
 				if ($mall_cate_id > 0){
 					$query->andWhere(['in', 'g.cate_id', GcategoryModel::getDescendantIds($mall_cate_id)]);
-				}	
+				}
 			}
 			// 推荐类型商品
 			else {
 				$query->andWhere(['recom_id' => $recom_id]);
 				$query->joinWith('recommendGoods rg', false);
+			}
+
+			// 因社区团购购买流程只在移动端体现，所以PC端排除社区团购商品，如果无需排除，可注释该代码
+			if(($childs = GuideshopModel::getCategoryId(true)) !== false) {
+				$query->andWhere(['not in', 'g.cate_id', $childs]);
 			}
 			
 			// 时间段

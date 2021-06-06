@@ -65,7 +65,7 @@ class Def
 	const BELONG_BRAND_IMAGE	=   81;
 	const BELONG_WEIXIN			=  	9;
 	const BELONG_SETTING		=  	10;
-	const BELONG_GOODS_SPEC     =  	11;
+	const BELONG_GOODS_SPEC     =  	11;		//  商品规格图
 	const BELONG_TEMPLATE		=  	12;
 	const BELONG_REFUND_MESSAGE =  	13;
 	const BELONG_LIMITBUY		=  	20;
@@ -78,6 +78,7 @@ class Def
 	const BELONG_WEBIM			=	52;
 	const BELONG_REPORT			=   53;
 	const BELONG_GUIDESHOP		=	61;		// 团长门店招牌
+	const BELONG_POSTER 		=  	70;		// 商品海报图
 	
 	/* 上传图片大小限制 */
 	const IMAGE_FILE_SIZE		=   2097152;   	// 普通图片大小限制2MB = 2*1024*1024
@@ -91,7 +92,7 @@ class Def
 
 	/* 媒体类型 */
 	//const IMAGE_MIME_TYPE		=	'image/jpg,image/jpeg,image/png';
-	//const ARCHIVE_MIME_TYPE		=	'application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf';
+	//const ARCHIVE_MIME_TYPE	=	'application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf';
 
 	const GOODS_COLLECT			= 	50;	// 商品最大收藏量（浏览历史）
 	

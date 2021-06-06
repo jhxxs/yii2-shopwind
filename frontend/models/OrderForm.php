@@ -28,7 +28,7 @@ use common\library\Business;
  */
 class OrderForm extends Model
 {
-	// order type, item data from where, eg: normal|meal ...
+	// order type, item data from where, eg: normal|meal|teambuy|guidebuy ...
 	public $otype 	= 'normal';
 	
 	// goods type, eg: material|virtual 
@@ -37,7 +37,7 @@ class OrderForm extends Model
 	public $errors 	= null;
 	
 	/**
-	 * 从购物车/搭配购等实例中取商品
+	 * 从购物车/搭配购/拼团/社区团购等实例中取商品
 	 */
 	public function getGoodsInfo($post = null)
 	{
@@ -92,7 +92,7 @@ class OrderForm extends Model
 	}
 	
 	/**
-	 * 普通订单/拼团订单数据
+	 * 购物车订单/拼团订单/社区团购订单数据
 	 */
 	private function formatDataOfNormal(array $storeGoodsList, $cart = array())
 	{

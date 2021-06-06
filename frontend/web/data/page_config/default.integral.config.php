@@ -13,15 +13,15 @@ return array (
     ),
     '_widget_204' => 
     array (
-      'name' => 'df_image_ads',
+      'name' => 'df_image_ad',
       'options' => 
       array (
         'ad_image_url' => 'data/files/mall/template/201407310739598313.gif',
         'ad_link_url' => '',
-        'ad_width' => '222',
-        'ad_height' => '100',
-        'ad_border' => '',
-        'ad_margin' => '0px 0px 10px 0px',
+        'width' => '222',
+        'height' => '100',
+        'border' => '',
+        'margin' => '0px 0px 10px 0px',
       ),
     ),
     '_widget_992' => 
@@ -63,17 +63,17 @@ return array (
     ),
     '_widget_519' => 
     array (
-      'name' => 'df_image_ads',
+      'name' => 'df_image_ad',
       'options' => 
       array (
         'ad_image_url' => 'data/files/mall/template/201506010730314880.jpg',
         'ad_link_url' => '',
-        'ad_width' => '1200',
-        'ad_height' => '',
-        'ad_border' => '',
-        'ad_margin' => '0px 0px 10px 0px',
-        'ad_background_color' => '',
-        'ad_button_close' => '',
+        'width' => '1200',
+        'height' => '',
+        'border' => '',
+        'margin' => '0px 0px 10px 0px',
+        'background' => '',
+        'closeButton' => '',
       ),
     ),
     '_widget_849' => 
@@ -83,15 +83,15 @@ return array (
     ),
     '_widget_222' => 
     array (
-      'name' => 'df_image_ads',
+      'name' => 'df_image_ad',
       'options' => 
       array (
         'ad_image_url' => 'data/files/mall/template/201407310933137440.jpg',
         'ad_link_url' => '',
-        'ad_width' => '222',
-        'ad_height' => '327',
-        'ad_border' => '',
-        'ad_margin' => '0px 0px 10px 0px',
+        'width' => '222',
+        'height' => '327',
+        'border' => '',
+        'margin' => '0px 0px 10px 0px',
       ),
     ),
   ),

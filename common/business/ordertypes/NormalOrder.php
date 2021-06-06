@@ -16,7 +16,6 @@ use yii\helpers\Json;
 
 use common\models\CartModel;
 use common\models\RegionModel;
-use common\models\WholesaleModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -158,8 +157,7 @@ class NormalOrder extends BaseOrder
 			}
 		}
 
-		$model = new \frontend\models\CartForm();
-		$list = $model->reBuildByQuantity(['items' => $result]);
+		$list = CartModel::reBuildByQuantity(['items' => $result]);
 		$result = $list['items'];
 
 		return array($result, null);

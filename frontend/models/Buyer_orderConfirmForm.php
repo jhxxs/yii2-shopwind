@@ -22,6 +22,7 @@ use common\models\IntegralModel;
 use common\models\DistributeModel;
 use common\models\OrderLogModel;
 use common\models\GoodsStatisticsModel;
+use common\models\GuideshopModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -97,6 +98,9 @@ class Buyer_orderConfirmForm extends Model
 		
 		// 买家确认收货后，即交易完成，处理订单商品三级返佣 
 		DistributeModel::distributeInvite($orderInfo);
+
+		// 如果是社区团购订单，给团长分成
+		GuideshopModel::distributeProfit($orderInfo);
 			
 		// 买家确认收货后，即交易完成，将订单积分表中的积分进行派发 
 		IntegralModel::distributeIntegral($orderInfo);

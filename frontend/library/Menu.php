@@ -287,15 +287,20 @@ class Menu
 						'url'   => Url::toRoute(['seller_fullprefer/index']),
 						'name'  => 'seller_fullprefer',
 				);
-				$menu['promotool']['submenu']['seller_exclusive'] = array(
-						'text'  => Language::get('seller_exclusive'),
-						'url'   => Url::toRoute(['seller_exclusive/index']),
-						'name'  => 'seller_exclusive',
+				$menu['promotool']['submenu']['wholesale'] = array(
+					'text' => Language::get('wholesale'),
+					'url' => Url::toRoute(['wholesale/index']),
+					'name' => 'wholesale',
 				);
 				$menu['promotool']['submenu']['distribute'] = array(
-						'text' => Language::get('distribute'),
-						'url' => Url::toRoute(['distribute/index']),
-						'name' => 'distribute',
+					'text' => Language::get('distribute'),
+					'url' => Url::toRoute(['distribute/index']),
+					'name' => 'distribute',
+				);
+				$menu['promotool']['submenu']['seller_exclusive'] = array(
+					'text'  => Language::get('seller_exclusive'),
+					'url'   => Url::toRoute(['seller_exclusive/index']),
+					'name'  => 'seller_exclusive',
 				);
 			}
 			elseif(Yii::$app->params['store_allow'])

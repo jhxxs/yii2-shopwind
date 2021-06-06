@@ -17,6 +17,7 @@ use yii\helpers\ArrayHelper;
 use common\models\GoodsModel;
 use common\models\LimitbuyModel;
 use common\models\GoodsStatisticsModel;
+use common\models\GuideshopModel;
 
 use common\library\Timezone;
 use common\library\Promotool;
@@ -43,6 +44,12 @@ class Df_seckillWidget extends BaseWidget
 			
 			$query = LimitbuyModel::find()->alias('lb')->select('lb.*,g.goods_name,g.default_image,g.price,g.default_spec')->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0])->andWhere(['and', ['<=', 'start_time', Timezone::gmtime()], ['>=', 'end_time', Timezone::gmtime()]]);
 			
+			// 因社区团购购买流程只在移动端体现，所以PC端排除社区团购商品，如果无需排除，可注释该代码
+			$childs = GuideshopModel::getCategoryId(true);
+			if($childs !== false) {
+				$query->andWhere(['not in', 'cate_id', $childs]);
+			}
+
 			if($this->options['goods_id']) {
 				$query->andWhere(['in','g.goods_id', explode('|',$this->options['goods_id'])]);
 			}
@@ -51,7 +58,7 @@ class Df_seckillWidget extends BaseWidget
 			
 			// 如果没有促销商品（补够）
 			if(empty($limitbuy_list) || (count($limitbuy_list) < 5)) {
-				$list = GoodsModel::find()->select('goods_id,goods_name,price,default_image')->where(['if_show' => 1, 'closed' => 0])->limit(6 - count($limitbuy_list))->asArray()->all();
+				$list = GoodsModel::find()->select('goods_id,goods_name,price,default_image')->where(['if_show' => 1, 'closed' => 0])->andWhere(['not in', 'cate_id', $childs !== false ? $childs : [0]])->limit(6 - count($limitbuy_list))->asArray()->all();
 				foreach($list as $item) {
 					$limitbuy_list[] = $item;
 				}

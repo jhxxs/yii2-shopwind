@@ -5,7 +5,7 @@ return array (
   array (
     '_widget_166' => 
     array (
-      'name' => 'df_image_ads',
+      'name' => 'df_image_ad',
       'options' => NULL,
     ),
     '_widget_263' => 

@@ -56,7 +56,27 @@ function goodsspec(specs, specQty, defSpec)
 			}
         }
         return (values);
-    }	
+    }
+	
+	 // 根据spec1取得 spec2的内容
+	 this.getSpecValues = function(spec1)
+	 {
+		 var values = new Array();
+		 if(!spec1){
+			 return null;
+		 }
+		 for (var i = 0; i < this.specs.length; i++)
+		 {
+			 var value = this.specs[i];
+			 if (spec1 == this.specs[i].spec1){
+				 if ($.inArray(value, values) < 0)
+				 {
+					 values.push(value);
+				 }
+			 }
+		 }
+		 return (values);
+	 }
 
     // 取得选中的spec
     this.getSpec = function()

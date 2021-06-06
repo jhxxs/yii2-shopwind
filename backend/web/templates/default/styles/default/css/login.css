@@ -1,5 +1,6 @@
-input, button, select, textarea{outline: none;background-color:transparent; }
-input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;}
+input, button, select, textarea{outline: none;background-color:transparent;filter: none !important;}
+input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
+
 .float-left {
 	float: left;
 }

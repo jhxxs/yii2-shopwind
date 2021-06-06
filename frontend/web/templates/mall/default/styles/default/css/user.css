@@ -1685,3 +1685,13 @@ border-radius: 4px; margin-top: 8px; color: #333; cursor: pointer;}
 .report .content .upload-area .explain-box dd{ margin-left:20px; height:30px; line-height:30px;}
 .report .content .upload-area .upload-box span{ line-height:60px; display:block; height:60px;}
 .report .issuance{text-align:center;margin-top:50px;}
+
+/*  批发价格 */
+.price_intervals{float:left;}
+.price_intervals .arrange{border:1px #ddd solid;padding:5px;width:350px;}
+.price_intervals a{ text-decoration:none;color:#0066CC}
+.price_intervals a:hover{ color:#ff6600}
+.price_intervals .each{color:#666;width:350px;margin-bottom:5px;}
+.price_intervals .each input{ height:18px; line-height:18px; vertical-align:middle}
+.price_intervals .each a{margin-left:5px;}
+.price_intervals .add{margin-top:5px;}

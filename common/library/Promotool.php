@@ -20,6 +20,7 @@ use common\models\PromotoolItemModel;
 use common\models\LimitbuyModel;
 use common\models\TeambuyModel;
 use common\models\MealModel;
+use common\models\WholesaleModel;
 use common\models\GoodsModel;
 use common\models\GoodsSpecModel;
 
@@ -58,6 +59,9 @@ class Promotool
 	
 	public function build($params = array())
 	{
+		if(in_array($this->instance, ['wholesale'])) {
+			return new Wholesale($this->instance, $params);
+		}
 		if(in_array($this->instance, ['teambuy'])) {
 			return new Teambuy($this->instance, $params);
 		}
@@ -117,7 +121,8 @@ class Promotool
 	}
 	
 	/**
-	 * 获取某个商品，某个规格的促销价格信息（如限时促销，会员价格，手机专享价） 
+	 * 获取某个商品，某个规格的促销价格信息（如限时促销，会员价格，手机专享价）
+	 * 特别注意：此处不应考虑批发价，因批发价跟购买数量有关，避免在达到购买量后修改了购物车单价，当减少购买量后无法恢复到最初加入购物的价格的问题 
 	 * @param array $extra 其他参数
 	 */
 	public function getItemProInfo($goods_id = 0, $spec_id = 0, $extra = [])
@@ -136,7 +141,7 @@ class Promotool
 			}
 			!$spec_id && $spec_id = $query->default_spec;
 		}
-		
+
 		// 优先级一：限时促销功能
 		if($result === false) {
 			list($proPrice, $id) = LimitbuyModel::getItemProPrice($goods_id, $spec_id);
@@ -381,3 +386,11 @@ class Teambuy extends Promotool {}
 class Fullfree extends Promotool {}
 class Fullprefer extends Promotool {}
 class Distribute extends Promotool {}
+class Wholesale extends Promotool {
+	
+	public function getList($params = array(), &$pagination = false)
+	{
+		return WholesaleModel::getList($this->instance, $this->params['store_id'], $params, $pagination);
+	}
+	public function getInfo($params = array(), $format = false) {}
+}

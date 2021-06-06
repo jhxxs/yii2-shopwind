@@ -46,7 +46,7 @@ class GoodsController extends \common\controllers\BaseAdminController
 		
 		if(!Yii::$app->request->isAjax) 
 		{
-			$this->params['gcategories'] = GcategoryModel::find()->select('cate_name')->where(['parent_id' => 0, 'store_id' => 0])->indexBy('cate_id')->orderBy(['sort_order' => SORT_ASC, 'cate_id' => SORT_ASC])->column();
+			$this->params['gcategories'] = GcategoryModel::getOptions(0, -1, null, 2);
 			$this->params['filtered'] = $this->getConditions($post);
 			
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');

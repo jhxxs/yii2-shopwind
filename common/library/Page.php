@@ -350,10 +350,12 @@ class Page
 	 * 生成宣传海报
 	 * @param array  参数,包括图片和文字
 	 * @param string  $filename 生成海报文件名,不传此参数则不生成文件,直接输出图片
+	 * @param boolean $overlay 是否覆盖
 	 * @return [type] [description]
 	 */
-	public static function createPoster($config = array(), $filename = ""){
-	  if (file_exists($filename)) return $filename;
+	public static function createPoster($config = array(), $filename = "", $overlay = false){
+	  if (file_exists($filename) && !$overlay) return $filename;
+	  
 	  //如果要看报什么错，可以先注释调这个header
 	  if(empty($filename)) header("content-type: image/png");
 	  $imageDefault = array(
@@ -367,11 +369,10 @@ class Page
 	  );
 	  $textDefault = array(
 		'text'=>'',
-		'left'=>0,
 		'top'=>0,
-		'fontPath'=> Yii::getAlias('@common') . '/font/simhei.ttf',     //字体文件
+		'fontPath'=> Yii::getAlias('@common') . '/font/yahei.ttf',     //字体文件
 		'fontSize'=>32,       //字号
-		'fontColor'=>'0,0,255', //字体颜色
+		'fontColor'=>'0,0,0', //字体颜色
 		'angle'=>0,
 	  );
 	  $background = $config['background'];//海报最底层得背景
@@ -386,6 +387,7 @@ class Page
 	  imagefill($imageRes, 0, 0, $color);
 	  // imageColorTransparent($imageRes, $color);  //颜色透明
 	  imagecopyresampled($imageRes,$background,0,0,0,0,imagesx($background),imagesy($background),imagesx($background),imagesy($background));
+	  
 	  //处理了图片
 	  if(!empty($config['image'])){
 		foreach ($config['image'] as $key => $val) {
@@ -416,11 +418,19 @@ class Page
 		  $val = array_merge($textDefault,$val);
 		  list($R,$G,$B) = explode(',', $val['fontColor']);
 		  $fontColor = imagecolorallocate($imageRes, $R, $G, $B);
-		  $val['left'] = $val['left']<0?$backgroundWidth- abs($val['left']):$val['left'];
-		  $val['top'] = $val['top']<0?$backgroundHeight- abs($val['top']):$val['top'];	
-		  imagettftext($imageRes,$val['fontSize'],$val['angle'],$val['left'],$val['top'],$fontColor,$val['fontPath'],$val['text']);
+		  
+		  if(isset($val['left'])) {
+		  	$val['left'] = $val['left'] < 0 ? $backgroundWidth - abs($val['left']) : $val['left'];
+		  } else {
+			$fontBox = imagettfbbox($val['fontSize'], $val['angle'], $val['fontPath'], $val['text']);//文字水平居中设置
+			$val['left'] = ceil(($backgroundWidth - $fontBox[2]) / 2);
+		  }
+
+		  $val['top'] = $val['top'] < 0 ? $backgroundHeight - abs($val['top']) : $val['top'];	
+		  imagettftext($imageRes, $val['fontSize'], $val['angle'], $val['left'], $val['top'], $fontColor, $val['fontPath'], $val['text'] );
 		}
 	  }
+
 	  //生成图片
 	  if(!empty($filename)){
 		$res = imagejpeg($imageRes,$filename,90); //保存到本地

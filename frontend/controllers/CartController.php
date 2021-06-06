@@ -128,8 +128,7 @@ class CartController extends \common\controllers\BaseMallController
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['selected']);
 		$post->specs = json_decode($post->specs, true);
-		
-		
+
 		$list = array();
 		$model = new \frontend\models\CartForm();
 		foreach($post->specs as $key => $value) {

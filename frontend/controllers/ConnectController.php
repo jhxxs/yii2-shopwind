@@ -159,7 +159,9 @@ class ConnectController extends \common\controllers\BaseMallController
 			if(BindModel::bindUser($bind, Yii::$app->user->id) == false) {
 				return Message::warning(Language::get('bind_fail'));
 			}
-			echo '<script>parent.layer.closeAll();</script>';
+			if(Basewind::getCurrentApp() == 'wap') {
+				echo '<script>parent.layer.closeAll();</script>';
+			}
 			return Message::display(Language::get('bind_ok'), ['connect/index']);
 		}
 		// 绑定指定的账户（只考虑手机绑定，不考虑邮箱绑定）

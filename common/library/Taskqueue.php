@@ -24,6 +24,7 @@ use common\models\DistributeModel;
 use common\models\IntegralModel;
 use common\models\GoodsStatisticsModel;
 use common\models\TeambuyLogModel;
+use common\models\GuideshopModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -43,6 +44,9 @@ class Taskqueue
 
 		// 针对拼团订单
 		self::autoTeambuy();
+
+		// 针对社区团购订单
+		self::autoConfirm('guidebuy');
 	}
 	
 	/**
@@ -132,6 +136,9 @@ class Taskqueue
 			
 			// 确认收货后，即交易完成，处理订单商品三级返佣 
 			DistributeModel::distributeInvite($orderInfo);
+
+			// 如果是社区团购订单，给团长分成
+			GuideshopModel::distributeProfit($orderInfo);
 				
 			// 确认收货后，即交易完成，将订单积分表中的积分进行派发
 			IntegralModel::distributeIntegral($orderInfo);
@@ -185,8 +192,8 @@ class Taskqueue
 	private static function getConditions($query = null, $otype = 'normal')
 	{
 		$today = Timezone::gmtime();
-		$interval = 8 * 24 * 3600;
-		$status = Def::ORDER_SHIPPED;
+		$interval = ($otype == 'guidebuy') ? 2 * 24 * 3600 : 8 * 24 * 3600;
+		$status = ($otype == 'guidebuy') ? Def::ORDER_DELIVERED : Def::ORDER_SHIPPED;
 		$query->andWhere("ship_time + {$interval} < {$today}")->andWhere(['o.status' => $status]);
 
 		return $query;

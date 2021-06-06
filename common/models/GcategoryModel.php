@@ -123,7 +123,7 @@ class GcategoryModel extends ActiveRecord
      * 取得某分类的子孙分类id
      * @param int  $id     分类id
      * @param bool $cached 是否缓存
-	 * @param bool $shown  只取要显示的分类
+	 * @param bool $shown  只取显示的分类
 	 * @param bool $selfin 是否包含自身id
 	 * @return array(1,2,3,4...)
 	 */

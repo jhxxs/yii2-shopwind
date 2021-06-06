@@ -27,22 +27,21 @@ use common\library\Timezone;
 class Weixin
 {
 	public $userid = 0;
+	public $code = 'mp';
 	public $config = null;
 	public $errors = null;
 	
-	public function __construct($config = null, $userid = 0)
+	public function __construct($config = null, $userid = 0, $code = 'mp')
 	{
 		$this->userid = $userid;
-		if($config !== null) {
-			$this->config = $config;
-		} else {
-			$this->config = WeixinSettingModel::getConfig($userid);
-		}
+		$this->code  = $code;
+
+		$this->config = ($config !== null) ? $config : WeixinSettingModel::getConfig($userid, $code);
 	}
 	
-	public static function getInstance($config = null, $userid = 0)
+	public static function getInstance($config = null, $userid = 0, $code = 'mp')
 	{
-		return new Weixin($config, $userid);
+		return new Weixin($config, $userid, $code);
 	}
 	
 	/* 生成自定义菜单 */
@@ -77,7 +76,7 @@ class Weixin
 			$this->errors = Language::get('signature invalid');
 			return false;
 		}
-		if(!($model = WeixinSettingModel::find()->where(['userid' => $this->userid, 'id' => $this->config['id']])->one())) {
+		if(!($model = WeixinSettingModel::find()->where(['userid' => $this->userid, 'code' => $this->code, 'id' => $this->config['id']])->one())) {
 			$this->errors = Language::get('config invalid');
 			return false;
 		}
@@ -114,17 +113,34 @@ class Weixin
 	public function apiList($api = null)
 	{
 		$list = array(
-			'AccessToken' 	=> 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential',
-			'weixinMenus' 	=> 'https://api.weixin.qq.com/cgi-bin/menu/create?',
-			'userInfo'	  	=> 'https://api.weixin.qq.com/cgi-bin/user/info?',
-			'createQrcode' 	=> 'https://api.weixin.qq.com/cgi-bin/qrcode/create?',
-			'showQrcode' 	=> 'https://mp.weixin.qq.com/cgi-bin/showqrcode?',
-			'getTicket'		=> 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?',
+			'AccessToken' 		=> 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential',
+			'weixinMenus' 		=> 'https://api.weixin.qq.com/cgi-bin/menu/create?',
+			'userInfo'	  		=> 'https://api.weixin.qq.com/cgi-bin/user/info?',
+			'createQrcode' 		=> 'https://api.weixin.qq.com/cgi-bin/qrcode/create?',
+			'showQrcode' 		=> 'https://mp.weixin.qq.com/cgi-bin/showqrcode?',
+			'getTicket'			=> 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?',
+			'getWxaCodeUnlimit' => 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?'
 		);
 		if($api !== null) {
 			return isset($list[$api]) ? $list[$api] : '';
 		}
 		return $list;
+	}
+
+	/**
+	 * 获取小程序码，没有数量限制
+	 */
+	public function getWxaCode($post = [])
+	{
+		$api = $this->apiList('getWxaCodeUnlimit');
+		$param = array('access_token' => $this->getAccessToken());
+		
+		if(!($buffer = Basewind::curl($this->combineUrl($api, $param), 'post', json_encode($post), true))) {
+			return false;
+		}
+
+		// 返回的图片Buffer
+		return $buffer;
 	}
 	
 	public function combineUrl($url, $param)

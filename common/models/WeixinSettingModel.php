@@ -39,8 +39,11 @@ class WeixinSettingModel extends ActiveRecord
 		return $token;  
 	}
 	
-	public static function getConfig($userid = 0)
+	/**
+	 * @param string $code  微信公众号(mp)或小程序(applet) 
+	 */
+	public static function getConfig($userid = 0, $code = 'mp')
 	{
-		return parent::find()->where(['userid' => $userid])->orderBy(['id' => SORT_DESC])->asArray()->one();
+		return parent::find()->where(['userid' => $userid, 'code' => $code])->orderBy(['id' => SORT_DESC])->asArray()->one();
 	} 
 }

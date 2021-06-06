@@ -5,17 +5,17 @@ return array (
   array (
     '_widget_164' => 
     array (
-      'name' => 'df_image_ads',
+      'name' => 'df_image_ad',
       'options' => 
       array (
         'ad_image_url' => 'data/files/mall/template/201608051534251029.png',
         'ad_link_url' => '',
-        'ad_width' => '',
-        'ad_height' => '',
-        'ad_border' => '',
-        'ad_margin' => '',
-        'ad_background_color' => '#FFF3B5',
-        'ad_button_close' => '',
+        'width' => '',
+        'height' => '',
+        'border' => '',
+        'margin' => '',
+        'background' => '#FFF3B5',
+        'closeButton' => '',
       ),
     ),
   ),

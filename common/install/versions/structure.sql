@@ -482,6 +482,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_setting` (
   `trade_rate` decimal(10,3) DEFAULT '0' COMMENT '交易手续费',
   `transfer_rate` decimal(10,3) DEFAULT '0' COMMENT '转账手续费',
   `regive_rate` decimal(10,3) DEFAULT '0' COMMENT '充值赠送金额比率',
+  `guider_rate` decimal(10,3) DEFAULT '0' COMMENT '团长返佣比率',
   PRIMARY KEY (`setting_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -855,6 +856,31 @@ CREATE TABLE IF NOT EXISTS `swd_goods_statistics` (
   `comments` int(11) unsigned DEFAULT '0',
   PRIMARY KEY (`goods_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `swd_guideshop`
+--
+DROP TABLE IF EXISTS `swd_guideshop`;
+CREATE TABLE IF NOT EXISTS `swd_guideshop` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `owner` varchar(50) NOT NULL DEFAULT '',
+  `phone_mob` varchar(20) NOT NULL DEFAULT '',
+  `region_id` int(11) unsigned DEFAULT 0,
+  `region_name` varchar(100) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `banner` varchar(255) DEFAULT NULL,
+  `longitude` varchar(20) DEFAULT '',
+  `latitude` varchar(20) DEFAULT '',
+  `created` int(11) DEFAULT NULL,
+  `status` tinyint(3) unsigned DEFAULT '0',
+  `remark` varchar(255) DEFAULT NULL,
+  `inviter` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1686,12 +1712,27 @@ DROP TABLE IF EXISTS `swd_weixin_setting`;
 CREATE TABLE IF NOT EXISTS `swd_weixin_setting` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `code` varchar(30) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `token` varchar(255) DEFAULT '',
   `appid` varchar(255) DEFAULT NULL,
   `appsecret` varchar(255) DEFAULT NULL,
   `if_valid` tinyint(1) unsigned DEFAULT '0',
-  `auto_login` int(1) DEFAULT '0',
+  `autologin` int(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- 表的结构 `swd_wholesale`
+--
+DROP TABLE IF EXISTS `swd_wholesale`;
+CREATE TABLE IF NOT EXISTS `swd_wholesale` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `store_id` int(10) unsigned DEFAULT '0',
+  `price` decimal(10,2) unsigned DEFAULT '0.00',
+  `quantity` int(10) unsigned DEFAULT '1',
+  `closed` int(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

@@ -42,7 +42,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		parent::init();
 	}
 	
-	/* 自动回复列表 */
+	/**
+	 * 微信公众号
+	 * 自动回复列表 
+	 */
 	public function actionIndex()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
@@ -80,12 +83,15 @@ class WeixinController extends \common\controllers\BaseAdminController
 			return Page::flexigridXML($result);
 		}
 	}
-	/* 微信设置 */
+
+	/**
+	 * 微信公众号设置 
+	 */
 	public function actionSetting()
 	{
 		if(!Yii::$app->request->isPost) 
 		{
-			if(!($setting = WeixinSettingModel::find()->where(['userid' => 0])->orderBy(['id' => SORT_DESC])->asArray()->one()) || empty($setting['token'])) {
+			if(!($setting = WeixinSettingModel::find()->where(['userid' => 0, 'code' => 'mp'])->orderBy(['id' => SORT_DESC])->asArray()->one()) || empty($setting['token'])) {
 				$setting['token'] = WeixinSettingModel::genToken(32);
 			}
 			$setting['gatewayUrl'] = Url::toRoute('weixin/index', Yii::$app->params['mobileUrl']);
@@ -96,9 +102,9 @@ class WeixinController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['auto_login']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['autologin']);
 			
-			$model = new \backend\models\WeixinSettingForm();
+			$model = new \backend\models\WeixinSettingForm(['code' => 'mp']);
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
@@ -106,7 +112,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	/* 自定义菜单 */
+	/**
+	 * 微信公众号
+	 * 自定义菜单 
+	 */
 	public function actionMenu()
 	{
 		$menus = WeixinMenuModel::getList(0);
@@ -125,7 +134,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		return $this->render('../weixin.menu.html', $this->params);
 	}
 	
-	/* 生成菜单 */
+	/**
+	 * 微信公众号
+	 * 生成菜单 
+	 */
 	public function actionCreatemenu()
 	{
 		if(!($menus = WeixinMenuModel::getMenus())) {
@@ -139,7 +151,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('createmenu_successed'));
 	}
 	
-	/* 添加菜单 */
+	/**
+	 * 微信公众号
+	 * 添加菜单 
+	 */
 	public function actionAdd()
 	{
 		$pid = intval(Yii::$app->request->get('pid', 0));
@@ -164,7 +179,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	/* 编辑菜单 */
+	/**
+	 * 微信公众号
+	 * 编辑菜单 
+	 */
 	public function actionEdit()
 	{
 		$id = intval(Yii::$app->request->get('id', 0));
@@ -192,7 +210,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	/* 删除菜单 */
+	/**
+	 * 微信公众号
+	 * 删除菜单 
+	 */
 	public function actionDelete()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
@@ -205,7 +226,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('drop_ok'));
 	}
 	
-	/* 异步取所有菜单下级 */
+	/**
+	 * 微信公众号
+	 * 异步取所有菜单下级 
+	 */
    	public function actionChild()
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
@@ -227,7 +251,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		return Message::result(array_values($menus));
     }
 	
-	/* 添加自动回复 */
+	/**
+	 * 微信公众号
+	 * 添加自动回复 
+	 */
 	public function actionAddreply()
 	{
 		if(!Yii::$app->request->isPost)
@@ -250,7 +277,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	/* 编辑自动回复 */
+	/**
+	 * 微信公众号
+	 * 编辑自动回复 
+	 */
 	public function actionEditreply()
 	{
 		$id = intval(Yii::$app->request->get('id', 0));
@@ -280,7 +310,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	/* 删除自动回复 */
+	/**
+	 * 微信公众号
+	 * 删除自动回复 
+	 */
 	public function actionDeletereply()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
@@ -299,7 +332,10 @@ class WeixinController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('drop_ok'));
 	}
 
-	/* 异步修改数据 */
+	/**
+	 * 微信公众号
+	 * 异步修改数据 
+	 */
     public function actionEditcol()
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'sort_order']);
@@ -310,4 +346,29 @@ class WeixinController extends \common\controllers\BaseAdminController
 			return Message::display(Language::get('edit_ok'));	
 		}
     }
+
+	/**
+	 * 微信小程序设置 
+	 */
+	public function actionApplet()
+	{
+		if(!Yii::$app->request->isPost) 
+		{
+			$setting = WeixinSettingModel::find()->where(['userid' => 0, 'code' => 'applet'])->orderBy(['id' => SORT_DESC])->asArray()->one();
+			$this->params['weixin'] = $setting;
+			
+			$this->params['page'] = Page::seo(['title' => Language::get('weixin_applet')]);
+			return $this->render('../weixin.applet.html', $this->params);
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['autologin']);
+			
+			$model = new \backend\models\WeixinSettingForm(['code' => 'applet']);
+			if(!$model->save($post, true)) {
+				return Message::warning($model->errors);
+			}
+			return Message::display(Language::get('setting_successed'));
+		}
+	}
 }

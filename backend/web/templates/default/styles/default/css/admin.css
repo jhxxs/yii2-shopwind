@@ -9,6 +9,8 @@ h1,h2,h3,h4,h5,h6 {
     font-size: 14px;
     font-weight: normal;
 }
+input, button, select, textarea{outline: none;background-color:transparent;filter: none !important;}
+input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
 
 img,table,td,th {
     border: 0;

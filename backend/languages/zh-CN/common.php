@@ -70,6 +70,7 @@ return array(
 	'admin_agree_refund_content_change' => '%s已处理本次退款，处理结果为：商品退款金额为：%s 元，退运费金额: %s 元。<br> %s',
 	'admin_agree_refund_order_status_change' => '平台客服处理退款，该订单中的所有商品都处于处理完毕状态，故订单状态自动转为已完成',
 	
+	'guideshop' => '门店自提',
 	'flagstore'=>'旗舰店管理',
 	'prop_manage'=>'属性管理',  
     'distribution_prop' => '分配属性',
@@ -229,7 +230,8 @@ return array(
 	'imforbid' => '禁用IM',
 	
 	'weixin' 	=> '微信',
-	'weixin_setting' 	=> '微信设置',
+	'weixin_setting' 	=> '公众号设置',
+	'weixin_applet'	=> '小程序设置',
 	'wxbind'		=> '微信绑定',
 	'weixin_menu' 		=> '自定义菜单',
 	'weixin_reply' 		=> '自动回复',

@@ -204,6 +204,8 @@ class UploadedFileModel extends ActiveRecord
 			break;
 			case Def::BELONG_GOODS 		:  	$savePath = 'data/files/store_' . $store_id . '/goods';
 			break;
+			case Def::BELONG_POSTER		:	$savePath = 'data/files/store_' . $store_id . '/poster';
+			break;
 			case Def::BELONG_MEAL  		: 	$savePath = 'data/files/store_' . $store_id . '/meal';
 			break;
 			case Def::BELONG_GOODS_SPEC	:  	$savePath = 'data/files/store_' . $store_id . '/spec';
@@ -237,7 +239,7 @@ class UploadedFileModel extends ActiveRecord
 			case Def::BELONG_WEBIM			:	$savePath = 'data/files/mall/webim';
 			break;
 			case Def::BELONG_GUIDESHOP		:	$savePath = 'data/files/mall/guideshop/'.$unionid;
-			
+			break;
 		}
 		$savePath = Def::fileSavePath() . '/' . $savePath;
 		if(!is_dir($savePath)) {
@@ -259,7 +261,7 @@ class UploadedFileModel extends ActiveRecord
 
 		// 允许的类型
 		$allow = [IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG,IMAGETYPE_BMP];
-
+	
 		if (!function_exists('exif_imagetype')) {
 			list($width, $height, $type, $attr) = getimagesize($file->tempName);
 			return in_array($type, $allow);

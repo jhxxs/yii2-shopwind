@@ -1,12 +1,12 @@
 <?php
 return array(
    'name' 				=> '公众账号名称',
-   'name_desc' 			=> '填写公众账号名称',
+   'appletname'      => '小程序名称',
    'appid' 				=> 'AppID(应用ID)',
    'appsecret' 			=> 'AppSecret(应用密钥)',
    'token'				=> 'Token(令牌)',
-   'appid_desc' 		=> 'AppID(应用ID)，微信公众平台获取',
-   'appsecret_desc' 	=> 'AppSecret(应用密钥)，微信公众平台获取',
+   'appid_desc' 		=> 'AppID(应用ID)',
+   'appsecret_desc' 	=> 'AppSecret(应用密钥)',
    'url_desc'			=> '填写在微信公众平台->服务器配置',
    'token_desc' 		=> '令牌对应的是微信公众平台的token，要保持一致',
    'name_empty'			=> '公众账号名称不能为空',
@@ -15,8 +15,8 @@ return array(
    'token_empty'		=> 'Token（令牌）不能为空',
    'weixin_setting'		=> '微信接口配置',
    'setting_successed'	=> '微信接口配置成功',
-   'auto_login' 		=> '关注自动登陆',
-   'auto_login_desc' 	=> '关注公众号后自动注册登陆',
+   'autologin' 		=> '关注自动登陆',
+   'autologin_desc' 	=> '关注公众号后自动注册登陆',
    'gatewayUrl' 		=> 'URL(服务器地址)',
    
    'weixin_menu'		=> '自定义菜单',
