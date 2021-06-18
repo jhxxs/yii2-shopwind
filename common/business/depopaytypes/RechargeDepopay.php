@@ -77,11 +77,11 @@ class RechargeDepopay extends IncomeDepopay
 				'seller_id'		=> $trade_info['party_id'],
 				'amount'		=> $trade_info['amount'],
 				'status'		=> 'PENDING',
-				'payment_code'	=> $extra_info['payment_code'],
+				'payment_code'	=> $this->post->payment_code,
 				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
 				'flow'     		=> $this->_flow,
-				'fundchannel'   => Language::get($extra_info['payment_code']),
+				'fundchannel'   => Language::get($this->post->payment_code),
 				'title'			=> Language::get('recharge'),
 				'buyer_remark'	=> $this->post->remark ? $this->post->remark : '',
 				'add_time'		=> Timezone::gmtime()
