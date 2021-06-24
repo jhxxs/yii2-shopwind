@@ -157,7 +157,7 @@ class IntegralModel extends ActiveRecord
 				OrderIntegralModel::deleteAll(['order_id' => $order_info['order_id']]);
 				
 				// 把冻结的记录状态改为完成
-				OrderLogModel::updateAll(['state' => 'finished'], ['order_id' => $order_info['order_id']]); 
+				IntegralLogModel::updateAll(['state' => 'finished'], ['order_id' => $order_info['order_id']]); 
 			}
 		}
 	}
