@@ -25,17 +25,20 @@ class DistributeTeamForm extends Model
 {
 	public $errors = null;
 	
-	public function formData($post = null, $pageper = 4)
+	public function formData($post = null, $pageper = 4, $isAJax = false, $curPage = false) 
 	{
 		$post->id = $post->id ? $post->id : Yii::$app->user->id;
-		$query = DistributeMerchantModel::find()->alias('dm')->select('dm.userid,dm.username,u.portrait')->joinWith('user u', false)->where(['parent_id' => $post->id])->orderBy(['add_time' => SORT_DESC]);
-			
-		$page = Page::getPage($query->count(), $pageper);
+
+		// 找出当前用户的所有下级团队
+		$childs = DistributeMerchantModel::getChilds($post->id);
+
+		$query = DistributeMerchantModel::find()->alias('dm')->select('dm.userid,dm.username,u.portrait')->joinWith('user u', false)->where(['in', 'dm.userid', $childs])->orderBy(['add_time' => SORT_DESC]);
+		$page = Page::getPage($query->count(), $pageper, $isAJax, $curPage);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
 		{
-			$list[$key]['portrait'] = empty($val['portrait']) ? Yii::$app->params['default_user_portrait'] : $val['portrait']; 
-			$list[$key]['childcount'] = DistributeMerchantModel::find()->select('dmid')->where(['parent_id' => $val['userid']])->count();
+			$list[$key]['portrait'] = empty($val['portrait']) ? Yii::$app->params['default_user_portrait'] : $value['portrait']; 
+			$list[$key]['childcount'] = DistributeMerchantModel::find()->select('dmid')->where(['parent_id' => $value['userid']])->count();
 		}
 		return array($list, $page);
 	}

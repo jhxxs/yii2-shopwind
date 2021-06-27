@@ -12,7 +12,7 @@ input,button,select,textarea{outline:none}
 textarea{resize:none}
 img{border:0;}
 a{text-decoration:none;blr:expression(this.onFocus=this.blur());outline:none; font-style:normal}
-input, button, select, textarea{outline: none;background-color:transparent;filter: none !important;}
+input, button, select, textarea{outline: none;filter: none !important;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
 
 .w-full{width:100%;}

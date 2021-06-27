@@ -78,7 +78,7 @@ class Def
 	const BELONG_WEBIM			=	52;
 	const BELONG_REPORT			=   53;
 	const BELONG_GUIDESHOP		=	61;		// 团长门店招牌
-	const BELONG_POSTER 		=  	70;		// 商品海报图
+	const BELONG_POSTER 		=  	70;		// 海报图
 	
 	/* 上传图片大小限制 */
 	const IMAGE_FILE_SIZE		=   2097152;   	// 普通图片大小限制2MB = 2*1024*1024

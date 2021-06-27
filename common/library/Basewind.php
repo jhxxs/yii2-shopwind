@@ -126,9 +126,7 @@ class Basewind
 		}
 
 		// 分销功能，此处抓取访客的邀请并保存
-		if(($invites = DistributeSettingModel::getInvite(Yii::$app->request->get('invite')))) {
-			Yii::$app->session->set('invite', $invites);
-		}
+		DistributeSettingModel::saveInvites();
 		
 		return $visitor;
 	}

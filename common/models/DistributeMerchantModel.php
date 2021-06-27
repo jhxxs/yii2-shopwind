@@ -36,8 +36,43 @@ class DistributeMerchantModel extends ActiveRecord
 	{
 		return parent::hasOne(UserModel::className(), ['userid' => 'userid']);
 	}
+
+	/**
+	 * 获取邀请人的下三级用户
+	 * 确保用户是存在的，且还得确保每个下级都是分销商
+	 */
+	public static function getChilds($inviteUid = 0)
+	{
+		$result = array();
+
+		// 一级
+		$firsts = parent::find()->alias('dm')->select('dm.userid')->joinWith('user', false, 'INNER JOIN')->where(['dm.parent_id' => $inviteUid])->column();
+		if(!$firsts) {
+			return $result;
+		}
+		$result = $firsts;
+
+		// 二级
+		foreach($firsts as $key => $value) {
+			$seconds = parent::find()->alias('dm')->select('dm.userid')->joinWith('user', false, 'INNER JOIN')->where(['dm.parent_id' => $value])->column();
+			if($seconds) {
+				$result = array_merge($result, $seconds);
+
+				// 三级
+				foreach($seconds as $key => $value) {
+					$thirds = parent::find()->alias('dm')->select('dm.userid')->joinWith('user', false, 'INNER JOIN')->where(['dm.parent_id' => $value])->column();
+					if($thirds) {
+						$result = array_merge($result, $thirds);
+					}
+				}
+			}
+		}
+		
+		return $result;
+	}
 	
-	/* 获取邀请人的三级用户
+	/**
+	 * 获取邀请人的上三级用户
 	 * 确保用户是存在的，且还得确保每个上级都是分销商
 	 */
 	public static function getParents($inviteUid = 0)
@@ -45,7 +80,7 @@ class DistributeMerchantModel extends ActiveRecord
 		$result = array();
 		
 		// 一级
-		$query =  parent::find()->alias('dm')->select('dm.userid,dm.parent_id')->joinWith('user', false, 'INNER JOIN')->where(['dm.userid' => $inviteUid])->one();
+		$query = parent::find()->alias('dm')->select('dm.userid,dm.parent_id')->joinWith('user', false, 'INNER JOIN')->where(['dm.userid' => $inviteUid])->one();
 		if(!$query || !$query->userid) {
 			return $result;
 		}

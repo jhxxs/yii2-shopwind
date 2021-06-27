@@ -204,8 +204,6 @@ class UploadedFileModel extends ActiveRecord
 			break;
 			case Def::BELONG_GOODS 		:  	$savePath = 'data/files/store_' . $store_id . '/goods';
 			break;
-			case Def::BELONG_POSTER		:	$savePath = 'data/files/store_' . $store_id . '/poster';
-			break;
 			case Def::BELONG_MEAL  		: 	$savePath = 'data/files/store_' . $store_id . '/meal';
 			break;
 			case Def::BELONG_GOODS_SPEC	:  	$savePath = 'data/files/store_' . $store_id . '/spec';
@@ -239,6 +237,8 @@ class UploadedFileModel extends ActiveRecord
 			case Def::BELONG_WEBIM			:	$savePath = 'data/files/mall/webim';
 			break;
 			case Def::BELONG_GUIDESHOP		:	$savePath = 'data/files/mall/guideshop/'.$unionid;
+			break;
+			case Def::BELONG_POSTER			:	$savePath = 'data/files/mall/qrcode/poster';
 			break;
 		}
 		$savePath = Def::fileSavePath() . '/' . $savePath;

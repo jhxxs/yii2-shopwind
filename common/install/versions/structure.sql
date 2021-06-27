@@ -587,7 +587,7 @@ CREATE TABLE IF NOT EXISTS `swd_distribute_merchant` (
   `username` varchar(60) DEFAULT '',
   `parent_id` int(11) DEFAULT '0',
   `phone_mob` varchar(20) NOT NULL DEFAULT '',
-  `store_name` varchar(100) NOT NULL DEFAULT '',
+  `name` varchar(100) NOT NULL DEFAULT '',
   `logo` varchar(255) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
   `add_time` int(11) DEFAULT NULL,

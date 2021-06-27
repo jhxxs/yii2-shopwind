@@ -43,8 +43,15 @@ class ClearCacheAction extends Action
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/runtime/'.$folder);
 		}
 
+		// 删除二维码/海报图片（图片很多，可以定时删除，以免占用太多服务器资源）
+		$folders = ['goods', 'poster'];
+		foreach($folders as $folder) {
+			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/web/data/files/mall/qrcode/'.$folder);
+		}
+
 		// 删除临时资源文件
 		$this->clearResourceFiles();
+
 		return Message::display(Language::get('clear_cache_ok'));
 	}
 

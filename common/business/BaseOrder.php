@@ -96,10 +96,8 @@ class BaseOrder
 	 */ 
 	public function insertOrderGoods($order_id = 0, $list = array()) 
 	{
-		// 查验是否有邀请成交的商品
-		if(Yii::$app->session->get('invite')) {
-			$list = DistributeSettingModel::orderInvite($list);
-		}
+		// 是否有邀请成交的商品
+		$list = DistributeSettingModel::orderInvite($list);
 		
 		foreach($list['items'] as $value) 
 		{

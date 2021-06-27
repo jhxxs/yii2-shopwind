@@ -55,8 +55,8 @@ class DistributeModel extends ActiveRecord
 	}
 	
 	/**
-	 *  获取可用于返佣的金额基数（如有退款，退款金额不参与返佣）
-	 *  支付金额-运费金额-退款金额（不含退运费金额）
+	 * 获取可用于返佣的金额基数（如有退款，退款金额不参与返佣）
+	 * 支付金额-运费金额-退款金额（不含退运费金额）
 	 */
 	public static function getDistributeAmount($order = array())
 	{
@@ -99,5 +99,14 @@ class DistributeModel extends ActiveRecord
 		}
 		
 		return array($each, $total);
+	}
+
+	/**
+	 * 获取商品/店铺等的分销邀请码
+	 */
+	public static function getInviteCode($params = [])
+	{
+		// CODE太长会导致小程序中无法生成小程序码
+		return base64_encode(implode('-', [$params['type'], $params['id'], $params['uid']]));
 	}
 }

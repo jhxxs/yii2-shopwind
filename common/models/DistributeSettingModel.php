@@ -63,32 +63,56 @@ class DistributeSettingModel extends ActiveRecord
 		return true;
 	}
 	
-	/* 三级分销邀请数据 */
-	public static function getInvite($invite = '')
+	/**
+	 * 获取三级分销邀请数据
+	 * @param string $type 指定获取类型 goods|register|store 
+	 */
+	public static function getInvites($type = '')
 	{
-		if(empty($invite) || !($invite = json_decode(base64_decode($invite)))) {
+		if(!($invites = Yii::$app->session->get('invite'))) {
+			return array();
+		}
+
+		if($type && isset($invites[$type])) {
+			return $invites[$type];
+		}
+
+		return $invites;
+	}
+
+	/**
+	 * 抓取访客的邀请数据并合并保存
+	 */
+	public static function saveInvites($invite = '')
+	{
+		if(!$invite) {
+			$invite = Yii::$app->request->get('invite', '');
+		}
+
+		if(!$invite || !($invite = base64_decode($invite))) {
 			return false;
 		}
-	
-		if(!in_array($invite->type, ['goods', 'store', 'register'])) {
+
+		list($type, $id, $uid) = explode('-', $invite);
+		if(!in_array($type, ['goods', 'store', 'register'])) {
 			return false;
 		}
 		
-		if(!self::isAvailable($invite->type)) {
+		if(!self::isAvailable($type)) {
 			return false;
 		}
-		
-		// $invite = ['type' => 'goods', 'id' => 3, 'uid' => 1]
-		// $invite = ['type' => 'register', 'id' => 0, 'uid' => 2] ...
+
+		// 合并
 		if(($invites = Yii::$app->session->get('invite'))) {
-			$invites[$invite->type][$invite->id] = $invite->uid;
+			$invites[$type][$id] = $uid;
 		} 
 		else {
 			$invites = array();
-			$invites[$invite->type][$invite->id] = $invite->uid;
+			$invites[$type][$id] = $uid;
 		}
-		
-		return $invites;
+
+		// 保存
+		Yii::$app->session->set('invite', $invites);
 	}
 	
 	/* 获取返佣比率 */
@@ -111,14 +135,15 @@ class DistributeSettingModel extends ActiveRecord
 		return ArrayHelper::toArray($query);
 	}
 	
-	/** 获取三级分销数据，以此作为订单成交后，进行返佣 
-	 *  先查询订单中的商品，是否有哪个商品是通过分销商品推广链接进来的，
-	 *  如果是，则取这个商品的三级返佣比率
-	 *  如果不是，查询是不是通过分销店铺推广链接进来的，如果是，则所有订单中的商品取分销店铺的三级返佣比率 
+	/**
+	 * 获取三级分销数据，以此作为订单成交后，进行返佣 
+	 * 先查询订单中的商品，是否有哪个商品是通过分销商品推广链接进来的
+	 * 如果是，则取这个商品的三级返佣比率
+	 * 如果不是，查询是不是通过分销店铺推广链接进来的，如果是，则所有订单中的商品取分销店铺的三级返佣比率 
 	 */
 	public static function orderInvite($list = array())
 	{
-		$invites = Yii::$app->session->get('invite');
+		$invites = self::getInvites();
 		if(!$invites || (!isset($invites['goods']) && !isset($invites['store']))) {
 			return $list;
 		}

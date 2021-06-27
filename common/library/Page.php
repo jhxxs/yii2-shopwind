@@ -17,6 +17,8 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 
+use common\models\DistributeModel;
+
 use common\library\Basewind;
 use common\library\Setting;
 
@@ -319,16 +321,16 @@ class Page
 			
 		}
 		elseif($qrType == 'distgoods') {
-			$text = Url::toRoute(['goods/index', 'id' => $params['id'], 'invite' => base64_encode(json_encode($params))], true);
+			$text = Url::toRoute(['goods/index', 'id' => $params['id'], 'invite' => DistributeModel::getInviteCode($params)], true);
 			
 		}
 		elseif($qrType == 'distapply') {
-			$text = Url::toRoute(['distribute/apply', 'invite' => base64_encode(json_encode($params))], true);
+			$text = Url::toRoute(['distribute/apply', 'invite' => DistributeModel::getInviteCode($params)], true);
 		}
 		
 		// 二维码都是使用移动设备访问，所以修改访问地址为移动端
 		$text = str_replace(Basewind::siteUrl(), Yii::$app->params['mobileUrl'], $text);
-		$outfile = Yii::getAlias('@frontend') . '/web/data/files/mall/phpqrcode/';
+		$outfile = Yii::getAlias('@frontend') . '/web/data/files/mall/qrcode/goods/';
 		if(!is_dir($outfile)) {
 			FileHelper::createDirectory($outfile);
 		}
@@ -442,7 +444,7 @@ class Page
 		imagedestroy($imageRes);
 	  }
 	}
-	
+
 	public static function flexigridXML($flexigridXML)
 	{
 		$page = $flexigridXML['page'];

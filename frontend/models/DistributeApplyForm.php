@@ -16,6 +16,7 @@ use yii\base\Model;
 
 use common\models\UserModel;
 use common\models\DistributeMerchantModel;
+use common\models\DistributeSettingModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -31,8 +32,8 @@ class DistributeApplyForm extends Model
 
 	public function valid($post)
 	{
-		if(empty($post->store_name)) {
-			$this->errors = Language::get('store_name_required');
+		if(empty($post->name)) {
+			$this->errors = Language::get('name_required');
 			return false;
 		}
 		if(empty($post->phone_mob)) {
@@ -62,13 +63,13 @@ class DistributeApplyForm extends Model
 		$model->userid 		= Yii::$app->user->id;
 		$model->username 	= Yii::$app->user->identity->username;
 		$model->phone_mob 	= $post->phone_mob;
-		$model->store_name 	= $post->store_name;
+		$model->name 		= $post->name;
 		$model->status		= 1;
 		$model->add_time	= Timezone::gmtime();
 		
 		// 如果有推荐人，构建上下级分销商关系
-		if(($invites = Yii::$app->session->get('invite'))) {
-			$parent_id = isset($invites['register'][0]) ? intval($invites['register'][0]) : 0;
+		if(($invites = DistributeSettingModel::getInvites('register'))) {
+			$parent_id = isset($invites[0]) ? intval($invites[0]) : 0;
 			if(($parent_id != $model->userid) && (UserModel::find()->where(['userid' => $parent_id])->exists())) {
 				$model->parent_id = $parent_id;
 			}

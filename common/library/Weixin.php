@@ -119,7 +119,9 @@ class Weixin
 			'createQrcode' 		=> 'https://api.weixin.qq.com/cgi-bin/qrcode/create?',
 			'showQrcode' 		=> 'https://mp.weixin.qq.com/cgi-bin/showqrcode?',
 			'getTicket'			=> 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?',
-			'getWxaCodeUnlimit' => 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?'
+			'getWxaCodeUnlimit' => 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?',
+			'getWxaCode' 		=> 'https://api.weixin.qq.com/wxa/getwxacode?',
+			'getWxaUrlLink'		=> 'https://api.weixin.qq.com/wxa/generate_urllink?'
 		);
 		if($api !== null) {
 			return isset($list[$api]) ? $list[$api] : '';
@@ -129,10 +131,66 @@ class Weixin
 
 	/**
 	 * 获取小程序码，没有数量限制
+	 * 但是参数scene支持的最大长度是32个字符
 	 */
-	public function getWxaCode($post = [])
+	public function getWxaCodeUnlimit($post = [], $savePath = null)
 	{
 		$api = $this->apiList('getWxaCodeUnlimit');
+		$param = array('access_token' => $this->getAccessToken());
+		
+		$buffer = Basewind::curl($this->combineUrl($api, $param), 'post', json_encode($post), true);
+		$result = json_decode($buffer);
+		if($result->errcode) {
+			$this->errors = $result->errmsg;
+			return false;
+		}
+
+		// 保存图片
+		if($savePath) {
+			if(file_put_contents($savePath, $buffer, LOCK_EX) === false) {
+				return false;
+			}
+			return true;
+		}
+	
+		// 返回的图片Buffer
+		return $buffer;
+	}
+
+	/**
+	 * 获取小程序码，数量限制100000个
+	 * 页面路径，最大长度 128 字节
+	 */
+	public function getWxaCode($post = [], $savePath = null)
+	{
+		$api = $this->apiList('getWxaCode');
+		$param = array('access_token' => $this->getAccessToken());
+		
+		$buffer = Basewind::curl($this->combineUrl($api, $param), 'post', json_encode($post), true);
+		$result = json_decode($buffer);
+		if($result->errcode) {
+			$this->errors = $result->errmsg;
+			return false;
+		}
+
+		// 保存图片
+		if($savePath) {
+			if(file_put_contents($savePath, $buffer, LOCK_EX) === false) {
+				return false;
+			}
+			return true;
+		}
+	
+		// 返回的图片Buffer
+		return $buffer;
+	}
+
+	/**
+	 * 获取小程序 URL Link
+	 */
+	public function getWxalink($post = [])
+	{
+		$api = $this->apiList('getWxaUrlLink');
 		$param = array('access_token' => $this->getAccessToken());
 		
 		if(!($buffer = Basewind::curl($this->combineUrl($api, $param), 'post', json_encode($post), true))) {
