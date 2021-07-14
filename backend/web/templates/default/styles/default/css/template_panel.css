@@ -26,7 +26,7 @@
 .handle_top ul {position: relative; top: 2px; margin: 1px 0 0 0px; height: 31px; _top: 3px; overflow:hidden}
 .handle_top ul li {float: left;}
 
-#page-layout-community-index.editTmplateMode .handle {
+#page-layout-community-index.editTmplateMode .handle,#page-layout-default-newindex.editTmplateMode .handle {
     margin-top: 60px;
 }
 

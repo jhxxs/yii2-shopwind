@@ -361,12 +361,36 @@ class Basewind
 	}
 	
 	/**
-	 * 判断是否为微信端
+	 * 判断是否为微信客户端
 	 * @return bool
 	 */
 	public static function isWeixin()
 	{
 		if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) {
+			return true;
+		}	
+		return false;
+	}
+
+	/**
+	 * 判断是否为QQ内置浏览器
+	 * @return bool
+	 */
+	public static function isQqbrowser()
+	{
+		if ( strpos($_SERVER['HTTP_USER_AGENT'], 'QQ') !== false ) {
+			return true;
+		}	
+		return false;
+	}
+
+	/**
+	 * 判断是否为支付宝客户端
+	 * @return bool
+	 */
+	public static function isAlipay()
+	{
+		if ( strpos($_SERVER['HTTP_USER_AGENT'], 'AlipayClient') !== false ) {
 			return true;
 		}	
 		return false;
@@ -385,7 +409,7 @@ class Basewind
 	}
 	
 	/**
-	 * 判断是否为移动端
+	 * 判断是否为移动设备
 	 * @return bool
 	 */
 	public static function isMobileDevice()
@@ -416,7 +440,23 @@ class Basewind
 			} 
 		} 
 		return false;
-	} 
+	}
+
+	/**
+	 * 判断是是否为浏览器访问（区别于移动端APP）
+	 */
+	public static function isBrowser()
+	{
+		// 脑残法，判断手机发送的客户端标志,兼容性有待提高
+		if (isset ($_SERVER['HTTP_USER_AGENT'])){
+			$clientkeywords = array ('mozilla', 'ie', 'safari'); 
+			// 从HTTP_USER_AGENT中查找手机浏览器的关键字
+			if (preg_match("/(" . implode('|', $clientkeywords) . ")/i",strtolower($_SERVER['HTTP_USER_AGENT']))){
+				return true;
+			} 
+		} 	
+		return false;
+	}
 	
 	/**
 	 * 发送CURL请求

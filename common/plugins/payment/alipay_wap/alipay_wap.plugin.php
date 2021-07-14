@@ -44,16 +44,8 @@ class Alipay_wap extends BasePayment
      */
 	private $client = null;
 	
-	/**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-	
 	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $post = null)
+	public function getPayform(&$orderInfo = array(), $redirect = true)
     {
 		// 支付网关商户订单号
 		$payTradeNo = parent::getPayTradeNo($orderInfo);
@@ -70,8 +62,16 @@ class Alipay_wap extends BasePayment
 		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
 	
-		$params = $this->createPayform($sdk->getPayform($orderInfo), $this->gateway, 'post');
-        return array($payTradeNo, $params);
+		if(($url = $sdk->getPayform($orderInfo)) === false) {
+			$this->errors = $sdk->errors;
+			return false;
+		}
+		if($redirect) {
+			header("location:$url"); // don't use Yii::$app->response->redirect($url); 
+			exit();
+		}
+
+		return array($payTradeNo, ['redirect' => $url]);
     }
 	
 	/* 获取通知地址（不支持带参数，另：因为电脑支付和手机支付参数一致，所以可以使用相同的通知地址） */

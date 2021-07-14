@@ -61,11 +61,11 @@ class SDK
 		$this->error = new ErrorCase();
 	}
 	
-	public function getAccessToken($auth_code = '')
+	public function getAccessToken($code = '')
 	{
 		$response = false;
 		
-		if($auth_code) 
+		if($code) 
 		{
 			//-------请求参数列表
 			$keysArr = array(
@@ -73,7 +73,7 @@ class SDK
 				"client_id" 	=> $this->appId,
 				"redirect_uri" 	=> $this->redirect_uri,
 				"client_secret" => $this->appKey,
-				"code" 			=> $auth_code
+				"code" 			=> $code
 			);
 			
 			//------构造请求access_token的url

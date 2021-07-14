@@ -58,11 +58,13 @@ class Weixin
 	{
 		$api = $this->apiList('AccessToken');
 		$param = array('appid' => $this->config['appid'], 'secret' => $this->config['appsecret']);
-		
-		if(!($reponse = json_decode(Basewind::curl($this->combineUrl($api, $param))))) {
+
+		$response = json_decode(Basewind::curl($this->combineUrl($api, $param)));
+		if($response->errcode) {
+			$this->errors = $response->errmsg;
 			return false;
 		}
-		return $reponse->access_token;
+		return $response->access_token;
 	}
 	
 	/* 微信配置验证 */
@@ -286,13 +288,17 @@ class Weixin
 	}
 	
 	/*  微信分享JSSDK */
-	public function getSignPackage() 
+	public function getSignPackage($post = null) 
 	{
 		$jsapiTicket = $this->getJsApiTicket();
 	
-		// 注意 URL 一定要动态获取，不能 hardcode.
-		$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-		$url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		if($post->url) {
+			$url = $post->url;
+		} else {
+			// 注意 URL 一定要动态获取，不能 hardcode.
+			$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+			$url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+		}
 	
 		$timestamp = Timezone::gmtime();
 		$nonceStr = $this->createNonceStr();
@@ -327,12 +333,12 @@ class Weixin
 	{
 		$api = $this->apiList('getTicket');
 		$param = array('type' => 'jsapi', 'access_token' => $this->getAccessToken());
-		$result = Basewind::curl($this->combineUrl($api, $param));
-		$result = json_decode($result);
-		
-		if(!$result) {
+		$response = json_decode(Basewind::curl($this->combineUrl($api, $param)));
+
+		if($response->errcode) {
+			$this->errors = $response->errmsg;
 			return false;
 		}
-		return $result->ticket;
+		return $response->ticket;
 	}
 }

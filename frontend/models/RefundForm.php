@@ -104,7 +104,7 @@ class RefundForm extends Model
 				return false;
 			}	
 			
-			if(!($trade = DepositTradeModel::find()->select('tradeNo,bizOrderId,bizIdentity')->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $order->order_sn])->one())) {
+			if(!($trade = DepositTradeModel::find()->select('tradeNo,bizOrderId,bizIdentity,payment_code')->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $order->order_sn])->one())) {
 				$this->errors = Language::get('such_order_no_trade');
 				return false;
 			}

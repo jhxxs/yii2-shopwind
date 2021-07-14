@@ -59,17 +59,15 @@ class SDK
 	
 	public function getAccessToken($code = '')
 	{
-		$response = false;
-		
-		if($code)
-		{
-			if($result = Basewind::curl($this->getOpenIdUrl($code))) {
-				$response = json_decode($result);
-				$unionid = isset($response->unionid) ? $response->unionid : $response->openid;
-				$response->unionid = $unionid;
+		if($code && ($result = Basewind::curl($this->getOpenIdUrl($code)))) {
+			$result = json_decode($result);
+			if(!$result->errcode) {
+				$response = $result;
+				$response->unionid = isset($result->unionid) ? $result->unionid : $result->openid;
 			}
 		}
-		return $response;
+		
+		return $response ? $response : false;
 	}
 	
 	public function getUserInfo($resp = null)
@@ -80,7 +78,7 @@ class SDK
 		{
 			$url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$resp->access_token."&openid=".$resp->openid;
 			$response = Basewind::curl($url);
-			$response = (object)json_decode($response, true);
+			$response = json_decode($response);
 		}
 		return $response;
 	}
@@ -99,7 +97,7 @@ class SDK
 		if(Basewind::isWeixin())
 		{
 			// 读取微信公众号的
-			if(!($config = WeixinSettingModel::find()->select('appid,appsecret')->where(['userid' => 0])->asArray()->one())) {
+			if(!($config = WeixinSettingModel::find()->select('appid,appsecret')->where(['userid' => 0, 'code' => 'mp'])->asArray()->one())) {
 				$config = array();
 			}
 			
@@ -122,7 +120,7 @@ class SDK
 		if(Basewind::isWeixin())
 		{
 			// 读取微信公众号的
-			if(($config = WeixinSettingModel::find()->select('appid,appsecret')->where(['userid' => 0])->asArray()->one())) {
+			if(($config = WeixinSettingModel::find()->select('appid,appsecret')->where(['userid' => 0, 'code' => 'mp'])->asArray()->one())) {
 				$url = $gateway.'?appid='.$config['appid'].'&secret='.$config['appsecret'];
 			}
 		}

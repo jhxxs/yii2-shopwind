@@ -45,15 +45,23 @@ class BasePlugin
 	 * @var string $errors
 	 */
 	public $errors = null;
+
+	/**
+	 * 页面提交参数
+	 * @var object $params
+	 */
+	public $params = null;
 	
 	/**
 	 * 构造函数
 	 */
-	public function __construct() 
+	public function __construct($params = null) 
 	{
 		if($this->config === null) {
 			$this->config = $this->getConfig();
 		}
+
+		$this->params = $params;
 	}
 	
 	/**

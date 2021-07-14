@@ -19,7 +19,7 @@ namespace common\plugins\connect\weixin;
 return array(
     'code' => 'weixin',
     'name' => '微信登录',
-    'desc' => '微信PC端扫码登录、如果是微信公众号内微信登录，请同时配置微信-》微信设置-》公众号秘钥',
+    'desc' => '适用于微信PC端扫码登录（使用微信开发平台的秘钥）、如果是微信公众号内微信登录，请同时配置微信-》微信设置-》公众号秘钥',
     'author' => 'SHOPWIND',
 	'website' => 'https://www.shopwind.net',
     'version' => '1.0',

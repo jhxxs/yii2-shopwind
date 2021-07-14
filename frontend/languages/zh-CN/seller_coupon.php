@@ -16,7 +16,6 @@ return array(
     'limit_desc' => '一次购物满 %s',
     'extend' => '发放',
     'coupon_extend' => '发放优惠券号码',
-    'if_issue' => '发布',
     'coupon_list' => '优惠券列表',
     'coupon_add' => '新增优惠券',
     'coupon_edit' => '编辑优惠券',

@@ -42,16 +42,8 @@ class Deposit extends BasePayment
 	 */
 	protected $code = 'deposit';
 
-	/**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
 	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $post = null)
+	public function getPayform(&$orderInfo = array(), $redirect = true)
 	{
 		// 支付网关商户订单号
 		$payTradeNo = parent::getPayTradeNo($orderInfo);

@@ -53,7 +53,7 @@ class Plugin
 	 * 获取插件基类或者插件实例类
 	 * @var string $code
 	 */
-	public function build($code = null)
+	public function build($code = null, $params = null)
 	{
 		$base_file = Yii::getAlias('@common') . '/plugins/Base' . ucfirst($this->instance) . '.php';
 		if(!is_file($base_file)) {
@@ -66,7 +66,7 @@ class Plugin
 
 			// 插件基类
 			$base_class = sprintf("common\plugins\Base%s", ucfirst($this->instance));
-			return new $base_class();
+			return new $base_class($params);
 		}
 
 		if(($plugin_file = self::isExisted($this->instance, $code)) === false) {
@@ -78,7 +78,7 @@ class Plugin
 		$plugin_class = sprintf("common\plugins\%s\%s\%s", $this->instance, $code, ucfirst($code));
 
 		//  创建插件实例类
-		return new $plugin_class();
+		return new $plugin_class($params);
 	}
 
 	/** 

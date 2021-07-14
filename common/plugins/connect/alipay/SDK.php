@@ -13,6 +13,8 @@ namespace common\plugins\connect\alipay;
 
 use yii;
 
+use common\library\Basewind;
+
 use common\plugins\connect\alipay\lib\AopClient;
 use common\plugins\connect\alipay\lib\SignData;
 use common\plugins\connect\alipay\lib\request\AlipaySystemOauthTokenRequest;
@@ -87,11 +89,11 @@ class SDK
 	 * 换取授权访问令牌
 	 * alipay.system.oauth.token
 	 */
-	public function getAccessToken($auth_code = '')
+	public function getAccessToken($code = '')
 	{
 		$response = false;
 		
-		if($auth_code) 
+		if($code) 
 		{
 			$aop = new AopClient();
 			$aop->gatewayUrl = $this->gateway;
@@ -104,12 +106,12 @@ class SDK
 			$aop->format = $this->format;
 			$request = new AlipaySystemOauthTokenRequest();
 			$request->setGrantType("authorization_code");
-			$request->setCode($auth_code);
+			$request->setCode($code);
 			//$request->setRefreshToken("上一次的access_token"); // 可选
 			$result = $aop->execute($request); 
 			
 			/**
-			 *  responseNode （字段可能有变化，请参照具体的返回值）
+			 * responseNode （字段可能有变化，请参照具体的返回值）
 			 * user_id: "2088102150477652",
 			 * access_token: "20120823ac6ffaa4d2d84e7384bf983531473993",
 			 * expires_in: "3600",
@@ -151,7 +153,7 @@ class SDK
 			$result = $aop->execute ( $request , $resp->access_token ); 
 			
 			/**
-			 *  responseNode （字段可能有变化，请参照具体的返回值）
+			 * responseNode （字段可能有变化，请参照具体的返回值）
 			 * user_id: "2088102104794936",
 			 * avatar: "http://tfsimg.alipay.com/images/partner/T1uIxXXbpXXXXXXXX",
 			 * nick_name: "支付宝小二",

@@ -36,7 +36,7 @@ class Wxpay extends BasePayment
      * 支付插件实例
 	 * @var string $code
 	 */
-	protected $code    = 'wxpay';
+	protected $code = 'wxpay';
 	
 	/**
      * SDK实例
@@ -44,16 +44,8 @@ class Wxpay extends BasePayment
      */
 	private $client = null;
 	
-	/**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-	
 	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $post = null)
+	public function getPayform(&$orderInfo = array(), $redirect = true)
     {
 		// 支付网关商户订单号
 		$payTradeNo = parent::getPayTradeNo($orderInfo);
@@ -70,12 +62,16 @@ class Wxpay extends BasePayment
 		//$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
 		
-		if(($redirect = $sdk->getPayform($orderInfo)) === false) {
+		if(($url = $sdk->getPayform($orderInfo)) === false) {
 			$this->errors = $sdk->errors;
 			return false;
 		}
-		header("Location:$redirect");
-		exit();
+		if($redirect) {
+			header("location:$url"); // don't use Yii::$app->response->redirect($url); 
+			exit();
+		}
+		
+		return array($payTradeNo, ['redirect' => $url]);
     }
 	
 	public function getParameters($wxcode, $orderInfo, $payTradeNo = '')
@@ -95,6 +91,11 @@ class Wxpay extends BasePayment
 	/* 获取返回地址 */
 	public function createReturnUrl($payTradeNo = '')
 	{
+		// for API
+		if($this->params->callback) {
+			return $this->params->callback . '?payTradeNo='.$payTradeNo;
+		}
+
 		return Url::toRoute(['cashier/wxpay', 'payTradeNo' => $payTradeNo], true);
 	}
 	

@@ -51,7 +51,7 @@ class CouponController extends \common\controllers\BaseMallController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		
-		$query = CouponModel::find()->alias('c')->select('c.*,s.store_name,s.store_logo')->joinWith('store s', false)->where(['clickreceive' => 1, 'if_issue' => 1])->andWhere(['>', 'c.end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->orderBy(['coupon_id' => SORT_DESC]);
+		$query = CouponModel::find()->alias('c')->select('c.*,s.store_name,s.store_logo')->joinWith('store s', false)->where(['clickreceive' => 1, 'available' => 1])->andWhere(['>', 'c.end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->orderBy(['coupon_id' => SORT_DESC]);
 		$coupons = $query->asArray()->all();
 		foreach($coupons as $key => $val) 
 		{
@@ -73,7 +73,7 @@ class CouponController extends \common\controllers\BaseMallController
 	public function actionSearch()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['store_id']);
-		$coupons = CouponModel::find()->where(['clickreceive' => 1, 'if_issue' => 1, 'store_id' => $post->store_id])->andWhere(['>', 'end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->orderBy(['coupon_id' => SORT_DESC])->asArray()->all();
+		$coupons = CouponModel::find()->where(['clickreceive' => 1, 'available' => 1, 'store_id' => $post->store_id])->andWhere(['>', 'end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->orderBy(['coupon_id' => SORT_DESC])->asArray()->all();
 		$this->params['coupons'] = $coupons;
 		
 		$this->params['page'] = Page::seo(['title' => Language::get('coupon_list')]);
@@ -88,7 +88,7 @@ class CouponController extends \common\controllers\BaseMallController
 		}
 		
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
-		if(!($coupon = CouponModel::find()->where(['coupon_id' => $post->id, 'clickreceive' => 1, 'if_issue' => 1])->andWhere(['>', 'end_time', Timezone::gmtime()])->one())) {
+		if(!($coupon = CouponModel::find()->where(['coupon_id' => $post->id, 'clickreceive' => 1, 'available' => 1])->andWhere(['>', 'end_time', Timezone::gmtime()])->one())) {
 			return Message::warning(Language::get('no_such_coupon'));
 		}
 		if($coupon->store_id == Yii::$app->user->id) {

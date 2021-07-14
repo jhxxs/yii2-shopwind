@@ -54,18 +54,20 @@ class SDK
         }
 	}
 	
-	public function getAccessToken($auth_code = '')
+	public function getAccessToken($code = '')
 	{
-		$response = false;
-		
-		if($auth_code) 
+		if($code) 
 		{
 			$o = new SaeTOAuthV2($this->WB_AKEY, $this->WB_SKEY);
-			$token = $o->getAccessToken('code', array('code' => $auth_code, 'redirect_uri' => $this->redirect_uri));
-			
-			$response = (object)array_merge($token, ['unionid' => $token['access_token']]);
+			$token = $o->getAccessToken('code', array('code' => $code, 'redirect_uri' => $this->redirect_uri));
+			if(isset($token['access_token'])) {
+				$token['unionid'] = $token['access_token'];
+			}
+
+			return (object) $token;
 		}
-		return $response;
+
+		return false;
 	}
 	
 	public function getUserInfo($resp = null)

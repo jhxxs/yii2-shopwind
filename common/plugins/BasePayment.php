@@ -39,16 +39,6 @@ class BasePayment extends BasePlugin
 	 */
 	protected $instance = 'payment';
 	
-	/**
-	 * 构造函数
-	 */
-	public function __construct() 
-	{
-		if($this->config === null) {
-			$this->config = $this->getConfig();
-		}
-	}
-	
 	/* 获取支付表单 */
     public function getPayform()
     {
@@ -89,6 +79,11 @@ class BasePayment extends BasePlugin
 	 */
     public function createReturnUrl($payTradeNo = '')
     {
+		// for API
+		if($this->params->callback) {
+			return $this->params->callback . '?payTradeNo='.$payTradeNo;
+		}
+
 		return Url::toRoute(['paynotify/index', 'payTradeNo' => $payTradeNo], true);
 	}
 	
@@ -166,42 +161,57 @@ class BasePayment extends BasePlugin
 			// 如果是H5端
 			if(Basewind::getCurrentApp() == 'wap') {
 				
+				// 微信公众号内访问
 				if(Basewind::isWeixin()) {
-					
-					// 是H5端且是微信端
-					$suitable = array('cod', 'deposit', 'tenpay_wap', 'unionpay', 'wxpay');
+					$suitable = ['deposit', 'cod', 'tenpay_wap', 'unionpay', 'wxpay'];
+				}
+				// 支付宝内嵌浏览器
+				elseif(Basewind::isAlipay()) {
+					$suitable = ['deposit', 'cod', 'alipay_wap', 'unionpay'];
 				}
 				else {
-					
-					// 是H5端，但不是微信端
-					$suitable = array('cod', 'deposit', 'alipay_wap', 'tenpay_wap', 'unionpay', 'wxh5pay'); 
+					$suitable = ['deposit', 'cod', 'alipay_wap', 'tenpay_wap', 'unionpay', 'wxh5pay']; 
 				}
 			}
 
 			// 如果是接口调用
 			elseif(Basewind::getCurrentApp() == 'api') {
 
-				// 如果是微信端(即：微信小程序)
+				// 如果是微信端(即：微信小程序, 微信公众号)
 				if(Basewind::isWeixin()) {
-					$suitable = array('deposit', 'wxmppay');
+					$suitable = ['deposit', 'wxmppay', 'wxpay'];
 				}
 				// 如果是头条端（即：头条小程序）
 				elseif(Basewind::isToutiao()) {
-					$suitable = array('deposit', 'alipay_app');
+					$suitable = ['deposit', 'alipay_app'];
 				}
-				// 如果是APP端
-				elseif(Basewind::isMobileDevice()) {
-					$suitable = array('deposit', 'alipay_app', 'wxapppay');
+				// 如果是移动设备
+				elseif(Basewind::isMobileDevice()) 
+				{
+					// 如果是移动设备的浏览器
+					if(Basewind::isBrowser()) {
+
+						// 如果是在支付宝内嵌浏览器
+						if(Basewind::isAlipay()) {
+							$suitable = ['deposit', 'alipay_wap'];
+						}
+						// 普通浏览器
+						else {
+							$suitable = ['deposit', 'alipay_wap', 'wxh5pay'];
+						}
+					}
+					
+					// APP
+					else {
+						$suitable = ['deposit', 'alipay_app', 'wxapppay'];
+					}
 				}
-				// 其他，如H5
-				else {
-					$suitable = array('deposit');
-				}
+				// 其他（可能是PC）
 			}
 			else {
 				
 				// 如果是PC端
-				$suitable = array('cod', 'deposit', 'alipay', 'tenpay', 'unionpay', 'wxnativepay');
+				$suitable = ['deposit', 'cod', 'alipay', 'tenpay', 'unionpay', 'wxnativepay'];
 			}
 			
 			foreach($payments as $key => $payment) {

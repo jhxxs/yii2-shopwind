@@ -35,20 +35,21 @@ class BaseConnect extends BasePlugin
 	/**
 	 * 检测账号是否绑定过
 	 * @param string $unionid
-	 * @param string $code
 	 */
-	public function isBind($unionid = null, $code = null)
+	public function isBind($unionid = null)
 	{
-		$bind = BindModel::find()->select('userid,enabled')->where(['unionid' => $unionid, 'code' => $code])->one();
+		// 不要限制CODE，因为对于微信来说，CODE会有多个(weixin,weiximp)
+		$bind = BindModel::find()->select('userid,enabled')->where(['unionid' => $unionid/*, 'code' => $this->code*/])->one();
 		
-		// 包含登录状态绑定的情况，如果当前登录用户与原有绑定用户不一致，则修改为新绑定
+		// 考虑登录状态下绑定的情况，如果当前登录用户与原有绑定用户不一致，则修改为新绑定
 		if($bind && $bind->userid && $bind->enabled && (Yii::$app->user->isGuest || ($bind->userid == Yii::$app->user->id))) 
 		{
 			// 如果该unionid已经绑定， 则检查该用户是否存在
 			if(!UserModel::find()->where(['userid' => $bind->userid])->exists()) {
 				// 如果没有此用户，则说明绑定数据过时，删除绑定
 				BindModel::deleteAll(['userid' => $bind->userid]);
-				return $this->setErrors(Language::get('bind_data_error'));
+				$this->setErrors(Language::get('bind_data_error'));
+				return false;
 			}
 			return $bind->userid;
 		}
@@ -56,13 +57,13 @@ class BaseConnect extends BasePlugin
 	}
 
 	/**
-	 * 跳转至绑定页面
+	 * 跳转至绑定页面（绑定手机）
 	 * @param object $response
 	 */
 	public function goBind($response = null)
 	{
 		$result = array(
-			'code' 			=> $response->code, 
+			'code' 			=> $this->code,
 			'unionid' 		=> $response->unionid,
 			'expire_time' 	=> Timezone::gmtime() + 600,
 			'access_token' 	=> $response->access_token,
@@ -70,7 +71,54 @@ class BaseConnect extends BasePlugin
 			'portrait'		=> isset($response->portrait) ? $response->portrait : null,
 			'nickname'		=> isset($response->nickname) ? $response->nickname : null
 		);
-		$this->setErrors('redirect...'); // use this line to exit()
+		$this->setErrors('redirect...'); // 防止执行后续业务逻辑
 		return Yii::$app->controller->redirect(['connect/bind', 'token' => base64_encode(json_encode($result))]);
+	}
+	
+	/**
+	 * 不跳转，自动绑定
+	 */
+	public function autoBind($response = null) 
+	{
+		if($response) {
+			$response->code = $this->code;
+		}
+		return $this->createUser($response, true);
+	}
+
+	/**
+	 * 创建用户
+	 * @param object $post
+	 * @param boolean $third 是否为第三方账号登录（如微信登录等）
+	 */
+	protected function createUser($post, $third = false)
+	{
+		$model = new \frontend\models\UserRegisterForm();
+
+		do {
+			$model->username = UserModel::generateName($post->code);
+			$model->password  = mt_rand(1000, 9999);
+			$model->phone_mob = $post->phone_mob ? $post->phone_mob : '';
+			$user = $model->register(['portrait' => $post->portrait ? $post->portrait : '', 'nickname' => $post->nickname ? $post->nickname : '']);
+		} while (!$user);
+
+		if ($third && !$this->createBind($post, $user->userid)) {
+			return false;
+		}
+
+		return $user;
+	}
+
+	/**
+	 * 第三方账户登录绑定
+	 * @desc 微信/支付宝/QQ等
+	 */
+	private function createBind($bind, $userid)
+	{
+		// 将绑定信息插入数据库
+		if (BindModel::bindUser($bind, $userid) == false) {
+			return false;
+		}
+		return true;
 	}
 }

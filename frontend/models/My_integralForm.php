@@ -13,6 +13,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model; 
+use yii\helpers\ArrayHelper;
 
 use common\models\IntegralModel;
 use common\models\OrderModel;
@@ -23,7 +24,6 @@ use common\models\IntegralLogModel;
 use common\library\Language;
 use common\library\Timezone;
 use common\library\Page;
-use yii\helpers\ArrayHelper;
 
 /**
  * @Id My_integralForm.php 2018.9.19 $

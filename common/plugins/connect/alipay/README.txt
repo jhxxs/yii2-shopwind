@@ -1,14 +1,17 @@
 /**
  * PC端可接入网站支付宝登录，详见 网站支付宝登录 介绍；
  * 无线端可接入app支付宝登录，详见APP支付宝登录产品 介绍。
- * 注：目前H5网站暂不支持支付宝第三方登录。
- * https://tech.open.alipay.com/support/knowledge/index.htm?knowledgeId=201602070668&categoryId=24153#/?_k=dzvu59
+ * 注：目前H5网页端暂不支持支付宝第三方登录，只能通过支付宝客户端或 支付宝生活号（或H5）发起登录
+ * 接口文档：https://opendocs.alipay.com/open/263/105809/
  * 取消授权：https://openauth.alipay.com/auth/tokenManage.htm
  */
 
 /**
  * 以下为官方原文
  * @Link: https://opensupport.alipay.com/support/knowledge/27589/201602150001
+ * 参考其他客户反馈：
+ * 1）https://www.gznotes.com/wap-h5-alipay-app-startup-load-oauth-url/
+ * 2）https://opensupport.alipay.com/support/helpcenter/168/201602482996#
  */
 
 网站支付宝登录产品介绍

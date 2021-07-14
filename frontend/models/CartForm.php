@@ -98,7 +98,7 @@ class CartForm extends Model
 		
 		foreach($list as $store_id => $cart)
 		{
-			if(CouponModel::find()->where(['clickreceive' => 1, 'if_issue' => 1, 'store_id' => $store_id])->andWhere(['>', 'end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->exists()) {
+			if(CouponModel::find()->where(['clickreceive' => 1, 'available' => 1, 'store_id' => $store_id])->andWhere(['>', 'end_time', Timezone::gmtime()])->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])->exists()) {
 				$list[$store_id]['couponReceive'] = 1;
 			}
 		}

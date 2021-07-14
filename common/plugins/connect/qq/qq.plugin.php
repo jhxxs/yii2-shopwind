@@ -53,23 +53,54 @@ class Qq extends BaseConnect
 	/**
 	 * 构造函数
 	 */
-	public function __construct()
+	public function __construct($params = null)
 	{
-		parent::__construct();
+		parent::__construct($params);
 		
 		$this->config['redirect_uri'] = $this->getReturnUrl();
 	}
 
-	public function login()
+	public function login($redirect = true)
 	{
-		$url = $this->gateway.'?client_id='.$this->config['appId'].'&scope=&redirect_uri='.$this->getReturnUrl().'&state='.mt_rand().'&response_type=code';
-		return Yii::$app->response->redirect($url);
+		$authorizeUrl = $this->getAuthorizeURL();
+		if($redirect) {
+			return Yii::$app->response->redirect($authorizeUrl);
+		}
+		return $authorizeUrl;
 	}
-	
-	public function callback($get, $post)
-	{
 
-		if((($response = $this->getClient()->getAccessToken($get->code)) == false) || !$response->access_token) {
+	public function callback($autobind = false)
+	{
+		$response = $this->params->unionid ? $this->params : $this->getAccessToken();
+		if(!$response) {
+			return false;
+		}
+
+		// 已经绑定
+		if(($userid = parent::isBind($response->unionid))) {
+			$this->userid = $userid;
+			return true;
+		}
+
+		// 没有绑定，自动绑定
+		if($autobind) {
+			if(($identity = parent::autoBind($this->getUserInfo($response)))) {
+				$this->userid = $identity->userid;
+				return true;
+			}
+			return false;
+		}
+
+		// 跳转到绑定页面
+		return parent::goBind($this->getUserInfo($response));
+	}
+
+	/**
+	 * 通过CODE获取用户信息
+	 */
+	public function getAccessToken()
+	{
+		if((($response = $this->getClient()->getAccessToken($this->params->code)) == false) || !$response->access_token) {
 			$this->errors = Language::get('get_access_token_fail');
 			return false;
 		}
@@ -77,17 +108,8 @@ class Qq extends BaseConnect
 			$this->errors = Language::get('unionid_empty');
 			return false;
 		}
-		$response->code = $this->code;
-		
-		if(($userid = parent::isBind($response->unionid, $this->code)) === false) {
-			return parent::goBind($this->getUserInfo($response));
-		} 
-		elseif($this->errors) {
-			return false;
-		}
-		$this->userid = $userid;
-		
-		return true;
+
+		return $response;
 	}
 	
 	public function getUserInfo($response = null)
@@ -102,6 +124,12 @@ class Qq extends BaseConnect
 	public function getReturnUrl()
 	{
 		return urlencode(Url::toRoute(['connect/qqcallback'], true));
+	}
+
+	public function getAuthorizeURL()
+	{
+		$url = $this->gateway.'?client_id='.$this->config['appId'].'&scope=&redirect_uri='.$this->config['redirect_uri'].'&state='.mt_rand().'&response_type=code';
+		return $url;
 	}
 
 	/**

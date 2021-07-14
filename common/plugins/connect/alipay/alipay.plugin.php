@@ -54,9 +54,11 @@ class Alipay extends BaseConnect
 	/**
 	 * 构造函数
 	 */
-	public function __construct()
+	public function __construct($params = null)
 	{
-		parent::__construct();
+		parent::__construct($params);
+
+		$this->config['redirect_uri'] = $this->getReturnUrl();
 
 		// 更换为移动端的秘钥（因为授权域名不同，需要用不同的秘钥）
 		$fields = ['appId', 'rsaPublicKey', 'rsaPrivateKey', 'alipayrsaPublicKey', 'signType'];
@@ -73,19 +75,49 @@ class Alipay extends BaseConnect
 			}
 		}
 	}
-	
-	public function login()
+
+	public function login($redirect = true)
 	{
-		$url = $this->gateway.'?app_id='.$this->config['appId'].'&scope=auth_user&redirect_uri='.$this->getReturnUrl().'&state='.mt_rand();
-		if(Basewind::getCurrentApp() == 'wap') {
-			$url = 'alipays://platformapi/startapp?appId=20000067&url='.urlencode($url);
+		$authorizeUrl = $this->getAuthorizeURL();
+		if($redirect) {
+			return Yii::$app->response->redirect($authorizeUrl);
 		}
-		return Yii::$app->response->redirect($url);
+
+		return $authorizeUrl;
 	}
 	
-	public function callback($get, $post)
+	public function callback($autobind = false)
 	{
-		if((($response = $this->getClient()->getAccessToken($get->auth_code)) == false) || !$response->access_token) {
+		$response = $this->params->unionid ? $this->params : $this->getAccessToken();
+		if(!$response) {
+			return false;
+		}
+
+		// 已经绑定
+		if(($userid = parent::isBind($response->unionid))) {
+			$this->userid = $userid;
+			return true;
+		}
+
+		// 没有绑定，自动绑定
+		if($autobind) {
+			if(($identity = parent::autoBind($this->getUserInfo($response)))) {
+				$this->userid = $identity->userid;
+				return true;
+			}
+			return false;
+		}
+
+		// 跳转到绑定页面
+		return parent::goBind($this->getUserInfo($response));
+	}
+
+	/**
+	 * 通过CODE获取用户信息
+	 */
+	public function getAccessToken()
+	{
+		if((($response = $this->getClient()->getAccessToken($this->params->auth_code)) == false) || !$response->access_token) {
 			$this->errors = Language::get('get_access_token_fail');
 			return false;
 		}
@@ -93,17 +125,8 @@ class Alipay extends BaseConnect
 			$this->errors = Language::get('unionid_empty');
 			return false;
 		}
-		$response->code = $this->code;
-		
-		if(($userid = parent::isBind($response->unionid, $this->code)) === false) {
-			return parent::goBind($this->getUserInfo($response));
-		} 
-		elseif($this->errors) {
-			return false;
-		}
-		$this->userid = $userid;
-		
-		return true;
+
+		return $response;
 	}
 	
 	public function getUserInfo($response = null)
@@ -117,7 +140,25 @@ class Alipay extends BaseConnect
 	
 	public function getReturnUrl()
 	{
+		// for API
+		if($this->params->callback) {
+			return $this->params->callback;
+		}
+		
 		return urlencode(Url::toRoute(['connect/alipaycallback'], true));
+	}
+
+	/**
+	 * 参阅：https://opendocs.alipay.com/open/284
+	 */
+	public function getAuthorizeURL()
+	{
+		$url = $this->gateway.'?app_id='.$this->config['appId'].'&scope=auth_user&redirect_uri='.$this->config['redirect_uri'].'&state='.mt_rand();
+		if(in_array(Basewind::getCurrentApp(), ['api', 'wap'])) {
+			$url = 'alipays://platformapi/startapp?appId=20000067&url='.urlencode($url);
+		}
+		
+		return $url;
 	}
 
 	/**

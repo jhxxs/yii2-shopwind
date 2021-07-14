@@ -13,6 +13,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model; 
+use yii\helpers\ArrayHelper;
 
 use common\models\CouponModel;
 
@@ -72,7 +73,7 @@ class Seller_couponForm extends Model
 		$model->start_time = Timezone::gmstr2time($post->start_time);
 		$model->end_time = Timezone::gmstr2time_end($post->end_time);
 		$model->min_amount = $post->min_amount;
-		$model->if_issue = $post->if_issue ? 1 : 0;
+		$model->available = 1;
 		$model->clickreceive = $post->clickreceive ? 1 : 0;
 		$model->use_times = 1;
 
@@ -80,6 +81,6 @@ class Seller_couponForm extends Model
 			$this->errors = $model->errors;
 			return false;
 		}
-		return true;
+		return ArrayHelper::toArray($model);
 	}
 }

@@ -185,7 +185,7 @@ class CashierController extends \common\controllers\BaseUserController
 			}
 
 			// 生成支付URL或表单
-			list($payTradeNo, $payform) = Plugin::getInstance('payment')->build($post->payment_code)->getPayform($orderInfo);
+			list($payTradeNo, $payform) = Plugin::getInstance('payment')->build($post->payment_code, $post)->getPayform($orderInfo);
 			if($payform['payResult'] === false) {
 				return Message::warning($payform['errMsg']);
 			}

@@ -125,7 +125,7 @@ class SDK
 		$request->setBizContent(json_encode($biz_content));
 		$request->setReturnUrl($this->returnUrl);
 		$request->setNotifyUrl($this->notifyUrl);
-		$result = $aop->pageExecute($request, 'post', false);
+		$result = $aop->pageExecute($request, 'get', false);
 		
 		return $result;
 	}

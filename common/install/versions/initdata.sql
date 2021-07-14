@@ -2191,7 +2191,7 @@ INSERT INTO `swd_limitbuy` (`pro_id`, `goods_id`, `pro_name`, `pro_desc`, `start
 -- 转存表中的数据 `swd_coupon`
 --
 delete from `swd_coupon`;
-INSERT INTO `swd_coupon` (`coupon_id`, `store_id`, `coupon_name`, `coupon_value`, `use_times`, `start_time`, `end_time`, `min_amount`, `if_issue`, `image`, `total`, `surplus`, `clickreceive`) VALUES
+INSERT INTO `swd_coupon` (`coupon_id`, `store_id`, `coupon_name`, `coupon_value`, `use_times`, `start_time`, `end_time`, `min_amount`, `available`, `image`, `total`, `surplus`, `clickreceive`) VALUES
 (1, 2, '新春大促', '10.00', 1, 1617004800, 1625039999, '100.00', 1, NULL, 1000, 1000, 1),
 (2, 2, '年中大促', '5.00', 1, 1617004800, 1627718399, '50.00', 1, NULL, 999, 999, 1),
 (3, 2, '618活动', '18.00', 1, 1617004800, 1627718399, '88.00', 1, NULL, 999, 999, 1);

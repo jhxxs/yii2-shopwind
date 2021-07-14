@@ -44,16 +44,8 @@ class Wxh5pay extends BasePayment
      */
 	private $client = null;
 	
-	/**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-	
 	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $post = null)
+	public function getPayform(&$orderInfo = array(), $redirect = true)
     {
 		// 支付网关商户订单号
 		$payTradeNo = parent::getPayTradeNo($orderInfo);
@@ -70,12 +62,16 @@ class Wxh5pay extends BasePayment
 		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
 		
-		if(($redirect = $sdk->getPayform($orderInfo)) === false) {
+		if(($url = $sdk->getPayform($orderInfo)) === false) {
 			$this->errors = $sdk->errors;
 			return false;
 		}
-		header("Location:$redirect");
-		exit();
+		if($redirect) {
+			header("location:$url"); // don't use Yii::$app->response->redirect($url); 
+			exit();
+		}
+
+		return array($payTradeNo, ['redirect' => $url]);
 	}
 	
 	/* 获取通知地址 公众号支付/扫码支付/APP支付可共用该地址 */

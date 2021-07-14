@@ -346,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `swd_coupon` (
   `start_time` int(10) unsigned DEFAULT NULL,
   `end_time` int(10) unsigned DEFAULT NULL,
   `min_amount` decimal(10,2) unsigned DEFAULT '0.00',
-  `if_issue` int(11) DEFAULT '0',
+  `available` int(11) DEFAULT '1',
   `image` varchar(255) DEFAULT NULL,
   `total` int(11) DEFAULT '0',
   `surplus` int(11) DEFAULT '0',

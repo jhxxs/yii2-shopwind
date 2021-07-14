@@ -82,7 +82,7 @@ class Seller_couponController extends \common\controllers\BaseSellerController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['if_issue', 'clickreceive']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['available', 'clickreceive']);
 			$model = new \frontend\models\Seller_couponForm(['store_id' => $this->visitor['store_id']]);
 			
    			if(!$model->save($post, true)) {
@@ -100,9 +100,7 @@ class Seller_couponController extends \common\controllers\BaseSellerController
 		if(!$id || !($coupon = CouponModel::find()->where(['store_id' => $this->visitor['store_id'], 'coupon_id' => $id])->asArray()->one())) {
 			return Message::warning(Language::get('no_coupon'));
 		}
-		if($coupon['if_issue'] == 1) {
-			return Message::warning(Language::get('coupon_not_edit'));
-		}
+
 		
 		if(!Yii::$app->request->isPost)
 		{
@@ -114,7 +112,7 @@ class Seller_couponController extends \common\controllers\BaseSellerController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['if_issue', 'clickreceive']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['clickreceive']);
 			$model = new \frontend\models\Seller_couponForm(['coupon_id' => $id, 'store_id' => $this->visitor['store_id']]);
 			
    			if(!$model->save($post, true)) {
@@ -132,7 +130,7 @@ class Seller_couponController extends \common\controllers\BaseSellerController
 			return Message::warning(Language::get('no_coupon'));
 		}
 		
-		$coupons = CouponModel::find()->select('coupon_id')->where(['store_id' => $this->visitor['store_id']])->andWhere(['in', 'coupon_id', explode(',', $post->id)])->andWhere('if_issue = 0 OR (if_issue = 1 AND end_time < :end_time)', [':end_time' => Timezone::gmtime()])->column();
+		$coupons = CouponModel::find()->select('coupon_id')->where(['store_id' => $this->visitor['store_id']])->andWhere(['in', 'coupon_id', explode(',', $post->id)])->andWhere('available = 0 OR (available = 1 AND end_time < :end_time)', [':end_time' => Timezone::gmtime()])->column();
 		
 		if(empty($coupons) || !is_array($coupons)) {
 			return Message::warning(Language::get('no_coupon'));
@@ -142,21 +140,6 @@ class Seller_couponController extends \common\controllers\BaseSellerController
 			return Message::warning(Language::get('drop_fail'));
 		}
         return Message::display(Language::get('drop_ok'));
-    }
-	
-	public function actionIssue()
-    {
-		$id = intval(Yii::$app->request->get('id'));
-		if(!$id || !($model = CouponModel::find()->where(['store_id' => $this->visitor['store_id'], 'coupon_id' => $id])->one())) {
-			return Message::warning(Language::get('no_coupon'));
-		}
-
-		$model->if_issue = 1;
-		if(!$model->save()) {
-			return Message::warning($model->errors);
-		}
-
-        return Message::display(Language::get('issue_success'));
     }
 	
 	/* 优惠券发放 */

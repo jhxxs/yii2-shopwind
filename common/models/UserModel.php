@@ -286,6 +286,9 @@ class UserModel extends ActiveRecord implements IdentityInterface
      */
 	public static function generateName($prefix = 'sw')
 	{
+        if($prefix === null) {
+            $prefix = 'sw';
+        }
 		$username = $prefix . Timezone::localDate('shymd', true) . mt_rand(100,999);
 		if(!self::findByUsername($username)) {
 			return $username;

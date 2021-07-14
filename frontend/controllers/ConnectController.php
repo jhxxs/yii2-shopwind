@@ -57,9 +57,7 @@ class ConnectController extends \common\controllers\BaseMallController
 		$binds = array();
 		foreach($plugins as $key => $plugin)
 		{
-			if($key == 'weixinmp') {
-				continue;
-			}
+			
 			$bind = BindModel::find()->select('enabled')->where(['userid' => Yii::$app->user->id, 'code' => $key])->one();
 			$binds[] = array('code' => $key, 'name' => $plugin['name'], 'enabled' => $bind->enabled ? 1 : 0);
 		}
@@ -82,9 +80,11 @@ class ConnectController extends \common\controllers\BaseMallController
 	}
 	public function actionQqcallback()
 	{
-		$connect = Plugin::getInstance('connect')->build('qq');
-		$connect->callback(Basewind::trimAll(Yii::$app->request->get(), true), Basewind::trimAll(Yii::$app->request->post(),true));
-		if($connect->errors) {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+
+		$connect = Plugin::getInstance('connect')->build('qq', $post);
+		$connect->callback();
+		if(!$connect->userid) {
 			return Message::warning($connect->errors);
 		}
 
@@ -98,9 +98,11 @@ class ConnectController extends \common\controllers\BaseMallController
     }
 	public function actionAlipaycallback()
 	{
-		$connect = Plugin::getInstance('connect')->build('alipay');
-		$connect->callback(Basewind::trimAll(Yii::$app->request->get(), true), Basewind::trimAll(Yii::$app->request->post(),true));
-		if($connect->errors) {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+
+		$connect = Plugin::getInstance('connect')->build('alipay', $post);
+		$connect->callback();
+		if(!$connect->userid) {
 			return Message::warning($connect->errors);
 		}
 		
@@ -114,9 +116,11 @@ class ConnectController extends \common\controllers\BaseMallController
     }
 	public function actionWeixincallback()
 	{
-		$connect = Plugin::getInstance('connect')->build('weixin');
-		$connect->callback(Basewind::trimAll(Yii::$app->request->get(), true), Basewind::trimAll(Yii::$app->request->post(),true));
-		if($connect->errors) {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+
+		$connect = Plugin::getInstance('connect')->build('weixin', $post);
+		$connect->callback();
+		if(!$connect->userid) {
 			return Message::warning($connect->errors);
 		}
 
@@ -130,9 +134,11 @@ class ConnectController extends \common\controllers\BaseMallController
     }
 	public function actionXwbcallback()
 	{
-		$connect = Plugin::getInstance('connect')->build('xwb');
-		$connect->callback(Basewind::trimAll(Yii::$app->request->get(), true), Basewind::trimAll(Yii::$app->request->post(),true));
-		if($connect->errors) {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+
+		$connect = Plugin::getInstance('connect')->build('xwb', $post);
+		$connect->callback();
+		if(!$connect->userid) {
 			return Message::warning($connect->errors);
 		}
 		
