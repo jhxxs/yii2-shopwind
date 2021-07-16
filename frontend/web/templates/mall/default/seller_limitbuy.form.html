@@ -29,7 +29,7 @@
                     <div class="assort">
                       <p class="txt">{$lang.limitbuy_name}:</p>
                       <p>
-                        <input type="text" name="pro_name" value="{$limitbuy.pro_name|escape}" class="text" />
+                        <input type="text" name="title" value="{$limitbuy.title|escape}" class="text" />
                         <span class="red">*</span></p>
                     </div>
                     <div class="assort">
@@ -54,9 +54,9 @@
                         <span class="red">*</span> </p>
                     </div>
                     <div class="assort">
-                      <p class="txt"> {$lang.pro_desc}:</p>
+                      <p class="txt"> {$lang.summary}:</p>
                       <p>
-                        <textarea style="overflow-y: auto; width: 250px; vertical-align: top;" id="pro_desc" name="pro_desc" class="text">{$limitbuy.pro_desc|escape}</textarea>
+                        <textarea style="overflow-y: auto; width: 250px; vertical-align: top;" id="summary" name="summary" class="text">{$limitbuy.summary|escape}</textarea>
                       </p>
                     </div>
                   </div>
@@ -68,7 +68,7 @@
                       </p>
                     </div>
                     <div class="assort clearfix">
-                      <p class="txt float-left">{$lang.spec_price}: </p>
+                      <p class="txt float-left">{$lang.rules}: </p>
                       <div ectype="spec_list" class="spec float-left">
                         <ul class="th">
                           <li id="spec_name" class="distance2">{$lang.spec}</li>
@@ -139,7 +139,7 @@ $(function(){
       timeFormat: 'HH:mm:ss' //格式化时间
     });
 	
-	  gs_query_info1({$limitbuy.goods_id|default:0}, {$limitbuy.pro_id|default:0});
+	  gs_query_info1({$limitbuy.goods_id|default:0}, {$limitbuy.id|default:0});
 });
 function gs_submit_check(id,name,callback)
 {

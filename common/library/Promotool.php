@@ -146,11 +146,11 @@ class Promotool
 		if($result === false) {
 			list($proPrice, $id) = LimitbuyModel::getItemProPrice($goods_id, $spec_id);
 		 	if($proPrice !== false) {
-				$limitbuy = LimitbuyModel::find()->select('start_time,end_time,pro_name')->where(['pro_id' => $id])->one();
+				$limitbuy = LimitbuyModel::find()->select('start_time,end_time,title')->where(['id' => $id])->one();
 				$result = array(
 					'price' => round($proPrice, 2),
 					'type' => 'limitbuy',
-					'name' => $limitbuy->pro_name,
+					'name' => $limitbuy->title,
 					'start_time' 	=> Timezone::localDate('Y-m-d H:i:s', $limitbuy->start_time),
 					'end_time' 		=> Timezone::localDate('Y-m-d H:i:s', $limitbuy->end_time),
 					'timestamp' 	=> $limitbuy->end_time - Timezone::gmtime(),

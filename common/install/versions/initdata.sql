@@ -2177,7 +2177,7 @@ INSERT INTO `swd_integral_setting` (`setting_id`, `rate`, `register`, `signin`, 
 -- 转存表中的数据 `swd_limitbuy`
 --
 delete from `swd_limitbuy`;
-INSERT INTO `swd_limitbuy` (`pro_id`, `goods_id`, `pro_name`, `pro_desc`, `start_time`, `end_time`, `store_id`, `spec_price`, `image`) VALUES
+INSERT INTO `swd_limitbuy` (`id`, `goods_id`, `title`, `summary`, `start_time`, `end_time`, `store_id`, `rules`, `image`) VALUES
 (1, 26, '春节大促', '', 1617065980, 1622422780, 2, 'a:1:{i:26;a:2:{s:5:"price";s:1:"9";s:8:"pro_type";s:8:"discount";}}', NULL),
 (2, 25, '春节大促', '', 1617066017, 1625014817, 2, 'a:1:{i:25;a:2:{s:5:"price";s:1:"9";s:8:"pro_type";s:8:"discount";}}', NULL),
 (3, 15, '年中大促', '', 1617066289, 1627693489, 2, 'a:1:{i:15;a:2:{s:5:"price";s:1:"6";s:8:"pro_type";s:8:"discount";}}', NULL),

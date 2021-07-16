@@ -49,7 +49,7 @@ class LimitbuyModel extends ActiveRecord
 	
 	public static function getList($appid, $store_id = 0, $params = array(), &$pagination = false)
 	{
-		$query = parent::find()->alias('lb')->select('lb.pro_id,lb.goods_id,lb.store_id,lb.pro_name,lb.spec_price,lb.start_time,lb.end_time,lb.image,g.goods_name,g.default_image,g.price,g.default_spec')->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0]);
+		$query = parent::find()->alias('lb')->select('lb.id,lb.goods_id,lb.store_id,lb.title,lb.rules,lb.start_time,lb.end_time,lb.image,g.goods_name,g.default_image,g.price,g.default_spec')->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0]);
 		if($store_id > 0) $query->andWhere(['lb.store_id' => $store_id]);
 		if($params) $query->andWhere($params);
 		
@@ -65,11 +65,11 @@ class LimitbuyModel extends ActiveRecord
 				$query->limit($pagination);
 			}
 		}
-		$limitbuys = $query->orderBy(['pro_id' => SORT_DESC])->asArray()->all();
+		$limitbuys = $query->orderBy(['id' => SORT_DESC])->asArray()->all();
 		
 		foreach ($limitbuys as $key => $limitbuy)
         {
-			$limitbuys[$key]['spec_price'] = unserialize($limitbuy['spec_price']);
+			$limitbuys[$key]['rules'] = unserialize($limitbuy['rules']);
 			
 			list($proPrice) = self::getItemProPrice($limitbuy['goods_id'], $limitbuy['default_spec'], true);
 			if($proPrice !== false) $limitbuys[$key]['pro_price'] = $proPrice;
@@ -113,7 +113,7 @@ class LimitbuyModel extends ActiveRecord
 		// 该处可以处理不传[goods_id]的情形
 		if(!$goods_id) $goods_id = $spec->goods_id;
 		
-		$query = parent::find()->select('pro_id,spec_price')->where(['goods_id' => $goods_id])->orderBy(['pro_id' => SORT_DESC]);
+		$query = parent::find()->select('id,rules')->where(['goods_id' => $goods_id])->orderBy(['id' => SORT_DESC]);
 		
 		if($showInvalidPrice == false) {
 			$query->andWhere(['<=', 'start_time', Timezone::gmtime()])->andWhere(['>=', 'end_time', Timezone::gmtime()]);
@@ -121,7 +121,7 @@ class LimitbuyModel extends ActiveRecord
 		
 		if(($limitbuy = $query->one()))
 		{	
-			$specPrice = unserialize($limitbuy->spec_price);
+			$specPrice = unserialize($limitbuy->rules);
 			if(isset($specPrice[$spec_id]))
 			{
 				if($specPrice[$spec_id]['pro_type'] == 'price') 
@@ -136,7 +136,7 @@ class LimitbuyModel extends ActiveRecord
 			}
 		}
 		
-		return array($proPrice, $limitbuy ? $limitbuy->pro_id : 0);
+		return array($proPrice, $limitbuy ? $limitbuy->id : 0);
 	}
 	
 	/* 判断促销状态 */
@@ -145,8 +145,8 @@ class LimitbuyModel extends ActiveRecord
 		$status = '';
 		
 		if(is_array($data)) $limitbuy = Basewind::trimAll($data, true);
-		else $limitbuy = parent::find()->select('goods_id,start_time,end_time,spec_price')->where(['pro_id' => intval($data)])->one();
-		// data = pro_id
+		else $limitbuy = parent::find()->select('goods_id,start_time,end_time,rules')->where(['id' => intval($data)])->one();
+		// data = id
 		
 		if($limitbuy->end_time < Timezone::gmtime()) {
 			$status = 'ended';
@@ -164,7 +164,7 @@ class LimitbuyModel extends ActiveRecord
 		{
 			// 判断价格是否合理（因为设置促销后，卖家有可能再次去修改了价格，导致价格为负数的情况，这个时候就要设置促销商品状态为失效）
 			$specs = GoodsSpecModel::find()->select('spec_id,price')->where(['goods_id' => $limitbuy->goods_id])->all();
-			$specPrice = !is_array($limitbuy->spec_price) ? unserialize($limitbuy->spec_price) : $limitbuy->spec_price;
+			$specPrice = !is_array($limitbuy->rules) ? unserialize($limitbuy->rules) : $limitbuy->rules;
 			
 			if(count($specPrice) != count($specs)) {
 				$status = 'price_invalid';

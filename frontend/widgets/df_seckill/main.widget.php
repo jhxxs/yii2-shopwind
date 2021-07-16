@@ -54,7 +54,7 @@ class Df_seckillWidget extends BaseWidget
 				$query->andWhere(['in','g.goods_id', explode('|',$this->options['goods_id'])]);
 			}
 			
-			$limitbuy_list = $query->limit($limit)->orderBy(['pro_id' => SORT_DESC])->asArray()->all();
+			$limitbuy_list = $query->limit($limit)->orderBy(['id' => SORT_DESC])->asArray()->all();
 			
 			// 如果没有促销商品（补够）
 			if(empty($limitbuy_list) || (count($limitbuy_list) < 5)) {

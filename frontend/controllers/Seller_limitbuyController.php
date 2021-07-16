@@ -49,8 +49,8 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		
-		if($post->pro_name) {
-			$params = ['or', ['like', 'pro_name', $post->pro_name], ['like', 'goods_name', $post->pro_name]];
+		if($post->title) {
+			$params = ['or', ['like', 'title', $post->title], ['like', 'goods_name', $post->title]];
 			$this->params['filtered'] = true;
 		}
 		
@@ -107,7 +107,7 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
     {
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'ret_page']);
 		
-		if(!$get->id || !($limitbuy = LimitbuyModel::find()->where(['store_id' => $this->visitor['store_id'], 'pro_id' => $get->id])->asArray()->one())) {
+		if(!$get->id || !($limitbuy = LimitbuyModel::find()->where(['store_id' => $this->visitor['store_id'], 'id' => $get->id])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_limitbuy'));
 		}
 		
@@ -134,7 +134,7 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			
-			$model = new \frontend\models\Seller_limitbuyForm(['store_id' => $this->visitor['store_id'], 'pro_id' => $get->id]);
+			$model = new \frontend\models\Seller_limitbuyForm(['store_id' => $this->visitor['store_id'], 'id' => $get->id]);
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
@@ -150,9 +150,9 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
 			return Message::warning(Language::get('no_such_limitbuy'));
 		}
 		
-		$uploadedfile = LimitbuyModel::find()->select('image')->where(['pro_id' => $post->id, 'store_id' => $this->visitor['store_id']])->andWhere(['!=', 'image', ''])->column();
+		$uploadedfile = LimitbuyModel::find()->select('image')->where(['id' => $post->id, 'store_id' => $this->visitor['store_id']])->andWhere(['!=', 'image', ''])->column();
 		
-		if(!LimitbuyModel::deleteAll(['pro_id' => $post->id, 'store_id' => $this->visitor['store_id']])) {
+		if(!LimitbuyModel::deleteAll(['id' => $post->id, 'store_id' => $this->visitor['store_id']])) {
 			return Message::warning(Language::get('drop_fail'));
 		}
 		UploadedFileModel::deleteFileByName($uploadedfile);
@@ -164,8 +164,8 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'toolId']);
 		
-		if($post->toolId && ($limitbuy = LimitbuyModel::find()->where(['store_id' => $this->visitor['store_id'], 'pro_id' => $post->toolId])->asArray()->one())) {
-			$limitbuy['spec_price'] = unserialize($limitbuy['spec_price']);
+		if($post->toolId && ($limitbuy = LimitbuyModel::find()->where(['store_id' => $this->visitor['store_id'], 'id' => $post->toolId])->asArray()->one())) {
+			$limitbuy['rules'] = unserialize($limitbuy['rules']);
 		}
 		
 		$model = new \frontend\models\Seller_limitbuyForm(['store_id' => $this->visitor['store_id']]);

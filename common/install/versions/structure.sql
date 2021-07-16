@@ -938,16 +938,16 @@ CREATE TABLE IF NOT EXISTS `swd_integral_setting` (
 --
 DROP TABLE IF EXISTS `swd_limitbuy`;
 CREATE TABLE IF NOT EXISTS `swd_limitbuy` (
-  `pro_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `goods_id` int(10) NOT NULL,
-  `pro_name` varchar(50) NOT NULL DEFAULT '',
-  `pro_desc` varchar(255) DEFAULT '',
+  `title` varchar(50) NOT NULL DEFAULT '',
+  `summary` varchar(255) DEFAULT '',
   `start_time` int(11) DEFAULT NULL,
   `end_time` int(11) DEFAULT NULL,
   `store_id` int(10) DEFAULT '0',
-  `spec_price` text DEFAULT NULL,
+  `rules` text DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`pro_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

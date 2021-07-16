@@ -41,7 +41,7 @@
 							{$lang.mall_price}{$lang.colon} </span> <span class="price" ectype="goods_price">
 							<del>{$goods.goodsSpec.0.price|price_format}</del> </span><br />
 						<span class="t"> {$lang.promotion_activity}{$lang.colon} </span> <span class="promo-price-type"
-							title="{$goods.pro_desc}"><i>{$goods.promotion.name}</i></span> <span class="price"
+							title="{$goods.summary}"><i>{$goods.promotion.name}</i></span> <span class="price"
 							ectype="goods_pro_price"> {$goods.goodsSpec.0.pro_price|price_format} </span>
 						<!--{if $goods.promotion.lefttime}-->
 					<div class="J_CountDown countdown hidden"> <span><ins class="lefttime">还剩</ins></span> <span

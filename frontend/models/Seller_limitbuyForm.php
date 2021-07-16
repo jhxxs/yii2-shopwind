@@ -33,7 +33,7 @@ use common\library\Def;
  */
 class Seller_limitbuyForm extends Model
 {
-	public $pro_id = 0;
+	public $id = 0;
 	public $store_id = null;
 	public $errors = null;
 	
@@ -46,8 +46,8 @@ class Seller_limitbuyForm extends Model
 			return false;
 		}
 		
-		if (empty($post->pro_name)) {
-			$this->errors = Language::get('fill_pro_name');
+		if (empty($post->title)) {
+			$this->errors = Language::get('fill_title');
 			return false;
 		}
 
@@ -88,7 +88,7 @@ class Seller_limitbuyForm extends Model
             $this->errors = Language::get('fill_goods');
 			return false;
         }
-		if(LimitbuyModel::find()->where(['goods_id' => $post->goods_id])->andWhere(['!=', 'pro_id', $this->pro_id])->exists()) {
+		if(LimitbuyModel::find()->where(['goods_id' => $post->goods_id])->andWhere(['!=', 'id', $this->id])->exists()) {
 			$this->errors = Language::get('goods_has_set_limitbuy');
 			return false;
 		}
@@ -119,7 +119,7 @@ class Seller_limitbuyForm extends Model
             $result[$val] = array('price' => $post['pro_price'][$val], 'pro_type' => $post['pro_type'][$val]);
         }
 		if($result) {
-			$post = (object)ArrayHelper::merge($post, ['spec_price' => $result]);
+			$post = (object)ArrayHelper::merge($post, ['rules' => $result]);
 		}
 		
 		return true;
@@ -131,16 +131,16 @@ class Seller_limitbuyForm extends Model
 			return false;
 		}
 
-		if(!$this->pro_id || !($model = LimitbuyModel::find()->where(['pro_id' => $this->pro_id, 'store_id' => $this->store_id])->one())) {
+		if(!$this->id || !($model = LimitbuyModel::find()->where(['id' => $this->id, 'store_id' => $this->store_id])->one())) {
 			$model = new LimitbuyModel();
 		}
 		
-		$model->pro_name = $post->pro_name;
-		$model->pro_desc = $post->pro_desc ? $post->pro_desc : '';
+		$model->title = $post->title;
+		$model->summary = $post->summary ? $post->summary : '';
 		$model->start_time = $post->start_time;
 		$model->end_time = $post->end_time;
 		$model->goods_id = $post->goods_id;
-		$model->spec_price = serialize(ArrayHelper::toArray($post->spec_price));
+		$model->rules = serialize(ArrayHelper::toArray($post->rules));
 		$model->store_id = $this->store_id;
 		
 		if(Basewind::getCurrentApp() == 'pc') {
@@ -187,8 +187,8 @@ class Seller_limitbuyForm extends Model
             }
 			
 			if($limitbuy) {
-				$goods['goodsSpec'][$key]['pro_price'] = $limitbuy['spec_price'][$spec['spec_id']]['price'];
-				$goods['goodsSpec'][$key]['pro_type'] = $limitbuy['spec_price'][$spec['spec_id']]['pro_type'];
+				$goods['goodsSpec'][$key]['pro_price'] = $limitbuy['rules'][$spec['spec_id']]['price'];
+				$goods['goodsSpec'][$key]['pro_type'] = $limitbuy['rules'][$spec['spec_id']]['pro_type'];
 			}
         }
         return $goods;

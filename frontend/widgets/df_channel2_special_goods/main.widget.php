@@ -53,14 +53,14 @@ class Df_channel2_special_goodsWidget extends BaseWidget
 					} else {
 						// 没有商品，删除这个促销
 						unset($limitbuyList[$key]);
-						LimitbuyModel::findOne($limitbuy['pro_id'])->delete();
+						LimitbuyModel::findOne($limitbuy['id'])->delete();
 					}
 					
 					list($proPrice) = LimitbuyModel::getItemProPrice($goods['goods_id'], $goods['default_spec']);
 					if($proPrice) {
 						$limitbuyList[$key]['pro_price'] = $proPrice;
 					}
-					unset($limitbuyList[$key]['spec_price']);	
+					unset($limitbuyList[$key]['rules']);	
 				}
 				$goods_list = $limitbuyList;
 			}
