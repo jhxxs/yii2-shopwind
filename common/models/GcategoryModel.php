@@ -105,7 +105,8 @@ class GcategoryModel extends ActiveRecord
 		return $data;
 	}
 	
-	/* 取得所有商品分类 
+	/**
+	 * 取得所有商品分类 
 	 * 保留级别缩进效果，一般用于select
 	 * @return array(21 => 'abc', 22 => '&nbsp;&nbsp;');
 	 */

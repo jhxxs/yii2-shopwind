@@ -62,6 +62,8 @@ class Seller_exclusiveController extends \common\controllers\BaseSellerControlle
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post('exclusive'), true);
+
+			$post->status = intval(Yii::$app->request->post('status'));
 			$model = new \frontend\models\Seller_exclusiveForm(['store_id' => $this->visitor['store_id']]);
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);

@@ -62,6 +62,8 @@ class Seller_fullfreeController extends \common\controllers\BaseSellerController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post('fullfree'), true, ['quantity']);
+
+			$post->status = intval(Yii::$app->request->post('status'));
 			$model = new \frontend\models\Seller_fullfreeForm(['store_id' => $this->visitor['store_id']]);
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);

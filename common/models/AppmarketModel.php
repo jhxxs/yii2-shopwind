@@ -114,7 +114,6 @@ class AppmarketModel extends ActiveRecord
 				else {
 
 					$result = array('msg' => sprintf(Language::get('appHasNotBuy'), Url::toRoute(['appmarket/view', 'appid' => $appid])), 'result_code' => -2);
-
 				}
 			}
 		}

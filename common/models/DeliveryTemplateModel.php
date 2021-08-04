@@ -43,9 +43,9 @@ class DeliveryTemplateModel extends ActiveRecord
 		$model->types 			= 'express;ems;post';
 		$model->dests 			= '0;0;0';
 		$model->start_standards = '1;1;1';
-		$model->start_fees 		= '0;0;0';
+		$model->start_fees 		= '10;10;10';
 		$model->add_standards 	= '1;1;1';
-		$model->add_fees 		= '0;0;0';
+		$model->add_fees 		= '8;8;8';
 		$model->created			= Timezone::gmtime();
 		
 		return $model->save() ? ArrayHelper::toArray($model) : false;
@@ -105,8 +105,7 @@ class DeliveryTemplateModel extends ActiveRecord
 	
 	public static function formatTemplateForEdit($delivery)
 	{
-		$data[] = $delivery;
-		$delivery = self::formatTemplate($data, true);
+		$delivery = self::formatTemplate([$delivery], true);
 		$delivery = current($delivery);
 		
 		$area_fee_list = array();

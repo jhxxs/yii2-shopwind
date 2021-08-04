@@ -15,6 +15,8 @@ use Yii;
 use yii\base\Model;
 
 use common\models\GoodsModel;
+use common\models\GoodsSpecModel;
+use common\models\GoodsImageModel;
 
 /**
  * @Id GoodsDeleteForm.php 2018.8.14 $
@@ -42,6 +44,11 @@ class GoodsDeleteForm extends Model
 			if(GoodsModel::deleteAll(['in', 'goods_id', $dropIds])) {			
 				// 删除商品附件（注意：删除图片会导致该商品如果已经被购买，那么订单列表中的商品图片加载不出来，导致页面显示缓慢）
 				//UploadedFileModel::deleteGoodsFile($dropIds, $this->store_id);
+
+				// 删除规格/图片信息
+				GoodsSpecModel::deleteAll(['in', 'goods_id', $dropIds]);
+				GoodsImageModel::deleteAll(['in', 'goods_id', $dropIds]);
+
 			}
 		}
 		return true;

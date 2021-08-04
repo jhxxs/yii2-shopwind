@@ -22,6 +22,7 @@ use common\library\Basewind;
 use common\library\Language;
 use common\library\Message;
 use common\library\Resource;
+use common\library\Promotool;
 use common\library\Page;
 
 /**
@@ -52,17 +53,17 @@ class DistributeController extends \common\controllers\BaseUserController
 		} else $query->orderBy(['goods_id' => SORT_DESC]);
 		
 		$page = Page::getPage($query->count(), 16);
-		$goodsList = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-		foreach($goodsList as $key => $goods) {
-			$goods['default_image'] || $goodsList[$key]['default_image'] = Yii::$app->params['default_goods_image'];
+		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+		foreach($list as $key => $goods) {
+			$goods['default_image'] || $list[$key]['default_image'] = Yii::$app->params['default_goods_image'];
 			if($setting = DistributeSettingModel::find()->where(['item_id' => $goods['goods_id'], 'type' => 'goods', 'enabled' => 1])->one()){
-				$goodsList[$key]['enabled'] = 1;
-				$goodsList[$key]['ratio1'] = $setting['ratio1'];
-				$goodsList[$key]['ratio2'] = $setting['ratio2'];
-				$goodsList[$key]['ratio3'] = $setting['ratio3'];
+				$list[$key]['enabled'] = 1;
+				$list[$key]['ratio1'] = $setting['ratio1'];
+				$list[$key]['ratio2'] = $setting['ratio2'];
+				$list[$key]['ratio3'] = $setting['ratio3'];
 			}
         }
-		$this->params['goods_list'] = $goodsList;
+		$this->params['goods_list'] = $list;
 		$this->params['pagination'] = Page::formatPage($page);
 
 		$this->params['_foot_tags'] = Resource::import([
@@ -84,18 +85,18 @@ class DistributeController extends \common\controllers\BaseUserController
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 
-        if(!$post->goods_id || !$goodsList = GoodsModel::find()->select('goods_id,goods_name')->where(['in', 'goods_id', explode(',', $post->goods_id)])->andWhere(['store_id' => $this->visitor['store_id'], 'closed' => 0, 'if_show' => 1])->asArray()->all()) {
+        if(!$post->goods_id || !($list = GoodsModel::find()->select('goods_id,goods_name')->where(['in', 'goods_id', explode(',', $post->goods_id)])->andWhere(['store_id' => $this->visitor['store_id'], 'closed' => 0, 'if_show' => 1])->asArray()->all())) {
 			return Message::warning(Language::get('no_such_goods'));
         }
 
 		if(!Yii::$app->request->isPost)
 		{
-			//单个编辑
-			$goods = current($goodsList);
+			// 单个编辑
+			$goods = current($list);
 			$setting = DistributeSettingModel::find()->where(['item_id' => $goods['goods_id'], 'type' => 'goods'])->asArray()->one();
 			
 			$this->params['setting'] = $setting;
-			$this->params['goodsList'] = $goodsList;
+			$this->params['goodsList'] = $list;
 			$this->params['action'] = Url::toRoute(['distribute/edit','goods_id' => $post->goods_id]);
 
 			$this->params['page'] = Page::seo(['title' => Language::get('set_ratio')]);
@@ -104,11 +105,18 @@ class DistributeController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['enabled']);
-			if($post->ratio1 + $post->ratio2 + $post->ratio3 >= 1) {
-				return Message::popWarning(Language::get('rate_gt1'));
+			$post = $this->absratio($post);
+
+			// 商家是否已购买，并在使用期限内
+			if(!Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable(true)) {
+				return Message::popWarning(Language::get('handle_exception'));
+			}
+
+			if(($post->ratio1 + $post->ratio2 + $post->ratio3 >= 1) || ($post->ratio1 + $post->ratio2 + $post->ratio3 <= 0)) {
+				return Message::popWarning(Language::get('ratio_invalid'));
 			}
 			$editCouts = 0;
-			foreach($goodsList as $key => $val){
+			foreach($list as $key => $val){
 				if(!$model = DistributeSettingModel::find()->where(['item_id' => $val['goods_id'], 'type' => 'goods'])->one()) {
 					$model = new DistributeSettingModel();
 				}
@@ -125,26 +133,41 @@ class DistributeController extends \common\controllers\BaseUserController
 				}
 			}
 			
-			if($editCouts > 0){
-				return Message::popSuccess('ok');
-			}else{
+			if($editCouts <= 0 ) {
 				return Message::popWarning(Language::get('edit_fail'));
 			}
+
+			return Message::popSuccess('ok');
 		}
 	}
 	
 	public function actionDisable()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		if(!$post->goods_id) {
-			return Message::warning(Language::get('no_such_goods'));
+
+		$allId = explode(',', $post->goods_id);
+
+		// 只允许删除自己的商品
+		if(empty($allId) || GoodsModel::find()->where(['and', ['in', 'goods_id', $allId], ['!=', 'store_id', $this->visitor['store_id']]])->exists()) {
+			return Message::warning(Language::get('disable_fail'));
 		}
-		if(!DistributeSettingModel::deleteAll(['and', ['type' => 'goods'], ['in', 'item_id', explode(',', $post->goods_id)]])) {
+
+		if(!DistributeSettingModel::deleteAll(['and', ['type' => 'goods'], ['in', 'item_id', $allId]])) {
 			return Message::warning(Language::get('disable_fail'));
 		}
 		return Message::display(Language::get('disable_ok'));	
 	}
-	
+
+	/**
+	 * 禁止负值或非数值处理
+	 */
+	private function absratio($post) {
+		$post->ratio1 = abs(floatval($post->ratio1));
+		$post->ratio2 = abs(floatval($post->ratio2));
+		$post->ratio3 = abs(floatval($post->ratio3));
+
+		return $post;
+	}
 	
 	/* 三级菜单 */
     public function getUserSubmenu()

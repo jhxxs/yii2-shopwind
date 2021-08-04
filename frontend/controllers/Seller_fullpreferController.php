@@ -62,6 +62,8 @@ class Seller_fullpreferController extends \common\controllers\BaseSellerControll
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post('fullprefer'), true);
+			
+			$post->status = intval(Yii::$app->request->post('status'));
 			$model = new \frontend\models\Seller_fullpreferForm(['store_id' => $this->visitor['store_id']]);
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);

@@ -38,7 +38,7 @@ class Seller_fullpreferForm extends Model
 			return false;
 		}
 
-		if(!$post->discount && !$post->decrease) {
+		if((!$post->discount && !$post->decrease) || ($post->discount && $post->decrease)) {
 			$this->errors = Language::get('pls_select_type');
 			return false;
 		}
@@ -58,11 +58,6 @@ class Seller_fullpreferForm extends Model
 				$this->errors = Language::get('amount_le_decrease');
 				return false;
 			}
-		}
-		
-		if($post->discount && $post->decrease) {
-			$this->errors = Language::get('type_select_two');
-			return false;
 		}
 
 		return true;
@@ -95,8 +90,10 @@ class Seller_fullpreferForm extends Model
 		}
 		$model->appid = $this->appid;
 		$model->store_id = $this->store_id;
+		$model->status = intval($post->status);
+
+		unset($post->status);
 		$model->rules = serialize(ArrayHelper::toArray($post));
-		$model->status = intval(Yii::$app->request->post('status'));
 		
 		if(!$model->save()) {
 			$this->errors = $model->errors;

@@ -74,27 +74,22 @@
                           <li id="spec_name" class="distance2">{$lang.spec}</li>
                           <li class="distance1">{$lang.stock}</li>
                           <li class="distance1">{$lang.price}</li>
-                          <li class="distance2" style="width:130px;">{$lang.pro_price}</li>
-                          <li class="distance1">{$lang.pro_type}</li>
+                          <li class="distance2" style="width:120px;">{$lang.decrease}</li>
+                          <li class="distance2" style="width:120px;">{$lang.discount}</li>
                         </ul>
                       </div>
                       <div ectype="template" class="hidden">
                         <ul ectype="spec_item" class="td">
-                          <li class="distance2">
-                            <input ecname="spec_id[]" value="[1]" type="hidden" />
-                            [2]</li>
+                          <li class="distance2">[1]</li>
+                          <li class="distance1">[2]</li>
                           <li class="distance1">[3]</li>
-                          <li class="distance1">
-                            <input ecname="price[[4]]" type="hidden" value="[5]" />
-                            [6]</li>
                           <li class="distance1" style="width:130px;">
-                            <input ectype="pro_price" placeholder="0.01-9.99" ecname="pro_price[[7]]" type="text" class="text width2" value="[8]" />
+                            <input ecname="rules[[4]][price]" type="text" class="text width2" value="[5]" />
+                            <label>{$lang.pro_type_price}</label>
                           </li>
-                          <li class="distance1">
-                            <select ectype="pro_type" ecname="pro_type[[9]]" >
-                              <option value="price" selected="[10]" >{$lang.pro_type_price}</option>
-                              <option value="discount" selected="[11]" >{$lang.pro_type_discount}</option>
-                            </select>
+                          <li class="distance1" style="width:130px;">
+                            <input placeholder="0.01-9.99" ecname="rules[[6]][discount]" type="text" class="text width2" value="[7]" />
+                            <label>{$lang.pro_type_discount}</label>
                           </li>
                         </ul>
                       </div>
@@ -181,9 +176,8 @@ function gs_query_info1(goods_id, toolId)
 				var html = '';
 				var template = $('*[ectype="template"]').clone(true);
 				$.each(goods.goodsSpec, function(i,item) {
-					html += sprintf(replace_all(template.html(), 'ecname', 'name'), item.spec_id, item.spec, item.stock, item.spec_id, item.price, item.price, item.spec_id, item.pro_price ? item.pro_price : '', item.spec_id, (item.pro_type == 'price') ? 'selected' : '', (item.pro_type != 'price') ? 'selected' : '');
+					html += sprintf(replace_all(template.html(), 'ecname', 'name'), item.spec, item.stock, item.price, item.spec_id, (item.pro_type == 'price' && item.pro_price) ? item.pro_price : '', item.spec_id, (item.pro_type == 'discount' && item.pro_price) ? item.pro_price : '');
 				});
-				html = replace_all(html, 'selected=""', '');
 				$('*[ectype="spec_list"]').append(html);
 			}	
  		}

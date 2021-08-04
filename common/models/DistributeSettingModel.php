@@ -38,8 +38,9 @@ class DistributeSettingModel extends ActiveRecord
 		return parent::hasOne(GoodsModel::className(), ['goods_id' => 'item_id']);
 	}
 	
-	/** 检测三级分销功能是否可用 
-	 *  @var type  string example: goods|store|register
+	/** 
+	 * 检测三级分销功能是否可用 
+	 * @var type  string example: goods|store|register
 	 */
 	public static function isAvailable($type = 'goods', $item_id = 0)
 	{

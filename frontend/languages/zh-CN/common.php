@@ -92,8 +92,6 @@ return array(
 	'bi'       => '笔', 
 	'default_sort'=>'默认排序',
 	'back_home'  => '回到首页',
-	'decrease' => '减少一件',
-	'increase' => '增加一件',
 	'all_category' => '所有分类',
 	'all_store'=>'所有店铺',
 	'slides'=>'幻灯片设置',
@@ -556,4 +554,5 @@ return array(
     'only_pint'     => '此项仅能为正整数',
 	'small_le'      => '此项应小于等于',
 	'col_not_empty'     => '此项不能为空',
+	'handle_exception'	=> '业务异常'
 );

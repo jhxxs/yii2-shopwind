@@ -31,13 +31,20 @@ class Seller_fullfreeForm extends Model
 	public $appid = 'fullfree';
 	public $errors = null;
 
-	public function valid($post)
+	public function valid(&$post)
 	{
-		if(empty($post->amount) && empty($post->quantity)) {
+		if(isset($post->quantity)) {
+			$post->quantity = intval($post->quantity);
+		}
+		if($post->amount) {
+			$post->amount = abs(floatval($post->amount));
+		}
+
+		if(!$post->amount && $post->quantity <= 0) {
 			$this->errors = Language::get('not_allempty');
 			return false;
 		}
-
+		
 		return true;
 	}
 	
@@ -57,13 +64,12 @@ class Seller_fullfreeForm extends Model
 			$model->add_time = Timezone::gmtime();
 		}
 		
-		$post->amount 	= abs(floatval($post->amount));
-		$post->quantity = $post->quantity;
-		
 		$model->appid = $this->appid;
 		$model->store_id = $this->store_id;
+		$model->status = $post->status;
+
+		unset($post->status);
 		$model->rules = serialize(ArrayHelper::toArray($post));
-		$model->status = intval(Yii::$app->request->post('status'));
 		
 		if(!$model->save()) {
 			$this->errors = $model->errors;

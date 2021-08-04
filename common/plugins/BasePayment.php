@@ -188,22 +188,13 @@ class BasePayment extends BasePlugin
 				// 如果是移动设备
 				elseif(Basewind::isMobileDevice()) 
 				{
-					// 如果是移动设备的浏览器
-					if(Basewind::isBrowser()) {
-
-						// 如果是在支付宝内嵌浏览器
-						if(Basewind::isAlipay()) {
-							$suitable = ['deposit', 'alipay_wap'];
-						}
-						// 普通浏览器
-						else {
-							$suitable = ['deposit', 'alipay_wap', 'wxh5pay'];
-						}
+					// 如果是在支付宝内嵌浏览器或支付宝小程序
+					if(Basewind::isAlipay()) {
+						$suitable = ['deposit', 'alipay_wap'];
 					}
-					
-					// APP
+					// 其他浏览器或APP
 					else {
-						$suitable = ['deposit', 'alipay_app', 'wxapppay'];
+						$suitable = ['deposit', 'alipay_wap', 'alipay_app', 'wxh5pay', 'wxapppay'];
 					}
 				}
 				// 其他（可能是PC）

@@ -16,6 +16,10 @@ use yii\base\Action;
 use yii\web\Response;
 use yii\helpers\FileHelper;
 
+use common\models\GoodsImageModel;
+use common\models\UploadedFileModel;
+
+use common\library\Basewind;
 use common\library\Message;
 use common\library\Language;
 
@@ -52,6 +56,9 @@ class ClearCacheAction extends Action
 		// 删除临时资源文件
 		$this->clearResourceFiles();
 
+		// 删除无用的上传文件
+		$this->clearUploadedFiles();
+
 		return Message::display(Language::get('clear_cache_ok'));
 	}
 
@@ -73,5 +80,17 @@ class ClearCacheAction extends Action
 				FileHelper::createDirectory($folder);
 			}
 		}
+	}
+
+	/**
+	 * 删除无用的上传文件
+	 * @param int $limit 每次删除的文件数
+	 */
+	private function clearUploadedFiles($limit = 10)
+	{
+		$uploadedfiles = UploadedFileModel::find()->where(['item_id' => 0])
+			->orderBy(['file_id' => SORT_ASC])->limit($limit)->asArray()->all();
+
+		UploadedFileModel::deleteFileByQuery($uploadedfiles);
 	}
 }

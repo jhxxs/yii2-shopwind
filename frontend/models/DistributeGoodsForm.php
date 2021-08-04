@@ -35,15 +35,24 @@ class DistributeGoodsForm extends Model
 {
 	public $errors = null;
 	
+	/**
+	 * 分销商获取分销商品（多个店铺的允许分销的商品数据）
+	 */
 	public function formData($post = null, $pageper = 4, $isAJax = false, $curPage = false) 
 	{
 		// 可分销的商品
 		if($post->type == 'pending') {
-			$query = DistributeSettingModel::find()->alias('ds')->select('ds.item_id as goods_id')->joinWith('goods g', false, 'INNER JOIN')->where(['enabled' => 1, 'ds.type' => 'goods'])->andWhere(['not in', 'item_id', DistributeItemsModel::find()->select('item_id')->where(['userid' => Yii::$app->user->id, 'type' => 'goods'])->column()])->orderBy(['dsid' => SORT_DESC]);
+			$query = DistributeSettingModel::find()->alias('ds')->select('ds.item_id as goods_id')
+				->joinWith('goods g', false, 'INNER JOIN')->where(['enabled' => 1, 'ds.type' => 'goods'])
+				->andWhere(['not in', 'item_id', DistributeItemsModel::find()->select('item_id')->where(['userid' => Yii::$app->user->id, 'type' => 'goods'])->column()])
+				->orderBy(['dsid' => SORT_DESC]);
 		}
 		// 已经分销的商品
 		else { // going
-			$query = DistributeItemsModel::find()->alias('di')->select('di.item_id as goods_id')->joinWith('distributeSetting ds', false, 'INNER JOIN')->joinWith('goods g', false, 'INNER JOIN')->where(['di.type' => 'goods', 'userid' => Yii::$app->user->id])->orderBy(['diid' => SORT_DESC]);
+			$query = DistributeItemsModel::find()->alias('di')->select('di.item_id as goods_id')
+				->joinWith('distributeSetting ds', false, 'INNER JOIN')->joinWith('goods g', false, 'INNER JOIN')
+				->where(['di.type' => 'goods', 'userid' => Yii::$app->user->id])
+				->orderBy(['diid' => SORT_DESC]);
 		}
 		$query->addSelect('ds.ratio1,ds.ratio2,ds.ratio3,ds.enabled,g.goods_name,g.default_image,g.price,g.store_id');
 
@@ -58,7 +67,7 @@ class DistributeGoodsForm extends Model
 			if(Basewind::getCurrentApp() != 'api') {
 				$list[$key]['ratio1'] = ($value['ratio1'] * 100) . '%';
 				$list[$key]['ratio2'] = ($value['ratio2'] * 100) . '%';
-				$list[$key]['ratio3'] = ($vvalueal['ratio3'] * 100) . '%';
+				$list[$key]['ratio3'] = ($value['ratio3'] * 100) . '%';
 			}
 			$list[$key]['default_image'] = empty($value['default_image']) ? Yii::$app->params['default_goods_image'] : $value['default_image'];
 

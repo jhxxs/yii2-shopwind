@@ -78,10 +78,15 @@ class TeambuyForm extends Model
 	
 		// 目前只考虑打折类型的优惠
 		foreach($post->specs as $key => $value) {
-			if(!$value->price || $value->price >= 10 || $value->price <= 0) {
+			if(!$value->discount || $value->discount >= 10 || $value->discount <= 0) {
 				$this->errors = Language::get('invalid_price');
 				return false;
 			}
+
+			$result[$key] = ['price' => $value->discount, 'type' => 'discount'];
+		}
+		if($result) {
+			$post->specs = (object) $result;
 		}
 
 		return true;

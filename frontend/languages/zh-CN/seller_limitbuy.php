@@ -28,9 +28,6 @@ return array(
 	'end_not_le_today' => '结束时间不能小于当前时间',
    	'fill_goods' => '请选择要促销的商品',
    	'fill_spec' => '请先勾选秒杀商品规格',
-   	'invalid_pro_price' => '请正确填写减价或折扣值，填写的数值代表，在原价的基础上减少多少价格或者打多少折扣',
-	'invalid_pro_price_discount' => '折扣必须在0-10之间',
-	'invalid_pro_price_price' => '减价幅度必须大于零且小于原价',
    	'add_limitbuy_ok'  => '添加秒杀成功',
    	'no_such_limitbuy'=>'没有该秒杀活动',
    	'limitbuy_edit'   => '编辑秒杀',
@@ -52,4 +49,9 @@ return array(
 	'gselector' => '选择促销商品',
 	'add_records'   => '请选择需要参加促销活动的商品',
 	'records_error' => '每个促销活动只能选择一个商品',
+	'decrease' => '减价',
+
+	'invalid_discount'				=> '无效的折扣',
+	'invalid_decrease'				=> '优惠金额必须大于零且小于原价格',
+	'invalid_price'					=> '优惠幅度无效',
 );

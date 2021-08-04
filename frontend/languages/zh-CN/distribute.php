@@ -15,7 +15,7 @@ return array(
 	'edit_successed'				=> '设置分销成功',
 	'edit_fail'						=> '设置失败',
 	'ratio_desc' 					=> '佣金比率,例如：0.1,三个比率之和须小于1',
-	'rate_gt1'						=> '三级分销比率加总不能大于或等于1',
+	'ratio_invalid'					=> '无效的分销比率',
 	'disable_fail'					=> '关闭失败',
 	'disable_ok'					=> '关闭成功',
 );

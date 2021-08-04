@@ -68,7 +68,7 @@ class GoodsDeleteForm extends Model
 				$store = StoreModel::find()->select('store_name')->where(['store_id' => $model->store_id])->asArray()->one();
 				
 				// 发站内信
-				$pmer = Basewind::getPmer('toseller_goods_drop_notify', ['goods' => ArrayHelper::toArray($model), 'store' => $store, 'reason' => $post->content, 'baseUrl' => $this->params['homeUrl']]);
+				$pmer = Basewind::getPmer('toseller_goods_drop_notify', ['goods' => ArrayHelper::toArray($model), 'store' => $store, 'reason' => $post->content, 'baseUrl' => Basewind::homeUrl()]);
 				if($pmer) {
 					$pmer->sendFrom(0)->sendTo($model->store_id)->send();
 				}

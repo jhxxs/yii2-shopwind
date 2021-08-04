@@ -67,8 +67,10 @@ class Seller_exclusiveForm extends Model
 		$post->decrease = round(abs($post->decrease), 2);
 		$model->appid = $this->appid;
 		$model->store_id = $this->store_id;
+		$model->status = $post->status;
+
+		unset($post->status);
 		$model->rules = serialize(ArrayHelper::toArray($post));
-		$model->status = intval(Yii::$app->request->post('status'));
 
 		if(!$model->save()) {
 			$this->errors = $model->errors;

@@ -49,9 +49,12 @@ class UserForm extends Model
 			'pending'  => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_PENDING])->count(),
 			'accepted' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_ACCEPTED])->count(),
             'shipped'  => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_SHIPPED])->count(),
-            'finished' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED, 'evaluation_status' => 0])->count(),
+            'finished' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED])->count(),
+            'evaluation' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED, 'evaluation_status' => 0])->count(),
+			'my_question' => GoodsQaModel::find()->where(['userid' => Yii::$app->user->id, 'if_new' => 1])->andWhere(['!=', 'reply_content', ''])->count(), // for mobile
+			'refund'  => RefundModel::find()->where(['and', ['buyer_id' => Yii::$app->user->id], ['not in', 'status', ['SUCCESS', 'CLOSED']]])->count() // for mobile
         );
-		return (array) $array;
+		return $array;
 	}
 	
 	/**
@@ -67,8 +70,9 @@ class UserForm extends Model
     		'shipped'  => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_SHIPPED])->count(),
 			'finished' => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED, 'evaluation_status' => 0])->count(),
 			'replied'   => GoodsQaModel::find()->where(['store_id' => Yii::$app->user->id])->andWhere(['=', 'reply_content', ''])->count(),
+			'refund'  => RefundModel::find()->where(['and', ['seller_id' => Yii::$app->user->id], ['not in', 'status', ['SUCCESS', 'CLOSED']]])->count() // for mobile
  		);
-		 return (array) $array;
+		 return $array;
 	}
 	
 	/* 店铺等级、有效期、商品数、空间 */

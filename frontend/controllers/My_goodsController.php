@@ -343,7 +343,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 	{
 		$id = intval(Yii::$app->request->get('id', 0));
 
-		$uploadedfile = UploadedFileModel::find()->alias('f')->select('f.file_id, f.file_path, gi.image_id, gi.image_url, gi.thumbnail')->joinWith('goodsImage gi', false)->where(['f.file_id' => $id, 'store_id' => $this->visitor['store_id']])->asArray()->one();
+		$uploadedfile = UploadedFileModel::find()->alias('f')->select('f.file_id, f.file_path')->where(['f.file_id' => $id, 'store_id' => $this->visitor['store_id']])->asArray()->one();
 		if(UploadedFileModel::deleteFileByQuery(array($uploadedfile))) {
 			return Message::display($id);
 		}
@@ -952,7 +952,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 		$uploadedfiles = UploadedFileModel::find()->alias('f')->select('f.file_id,f.file_type,f.file_name,f.file_path,gi.goods_id,gi.thumbnail')->joinWith('goodsImage gi', false)->where(['store_id' => $this->visitor['store_id'], 'item_id' => $id, 'belong' => Def::BELONG_GOODS])->orderBy(['sort_order' => SORT_ASC, 'file_id' => SORT_ASC])->asArray()->all();
 		if($uploadedfiles) {
 			foreach($uploadedfiles as $key => $file) {
-				if($file['goods_id'] == null) {
+				if(!$file['goods_id']) {
 					$goods['desc_images'][] = $file;
 				} else $goods['goods_images'][] = $file;
 			}

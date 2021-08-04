@@ -16,6 +16,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 use common\models\GoodsModel;
+use common\models\GoodsSpecModel;
 use common\models\AppmarketModel;
 use common\models\ApprenewalModel;
 use common\models\LimitbuyModel;
@@ -40,7 +41,7 @@ class Seller_limitbuyForm extends Model
 	public function valid(&$post)
 	{
 		$result = array();
-		
+	
 		if(($query = Promotool::getInstance('limitbuy')->build(['store_id' => $this->store_id])->checkAvailable(true, true)) !== true) {
 			$this->errors = $query['msg'];
 			return false;
@@ -92,34 +93,38 @@ class Seller_limitbuyForm extends Model
 			$this->errors = Language::get('goods_has_set_limitbuy');
 			return false;
 		}
-        if (!$post->spec_id || !is_object($post->spec_id)) {
+        if (!$post->rules || !is_object($post->rules)) {
             $this->errors = Language::get('fill_spec');
 			return false;
         }
-		
-		$post = ArrayHelper::toArray($post);
-        foreach ($post['spec_id'] as $key => $val)
-        {
-			if (empty($post['pro_price'][$val]))
-            {
-				$this->errors = Language::get('invalid_pro_price');
+	
+		foreach($post->rules as $key => $value) 
+		{
+			if(!$value->price && !$value->discount) {
+				$this->errors = Language::get('invalid_price');
 				return false;
-            }
-			else
+			}
+			else 
 			{
-				if(in_array($post['pro_type'][$val], ['discount']) && ($post['pro_price'][$val] >= 10 || $post['pro_price'][$val] <= 0)) {
-                	$this->errors = Language::get('invalid_pro_price_discount');
-					return false;
+				if($value->discount) {
+					if($value->discount >= 10 || $value->discount <= 0) {
+						$this->errors = Language::get('invalid_discount');
+						return false;
+					}
+					$result[$key] = ['price' => $value->discount, 'pro_type' => 'discount'];
 				}
-				if(in_array($post['pro_type'][$val], ['price']) && ($post['pro_price'][$val] >= $post['price'][$val] || $post['pro_price'][$val] == 0)) {
-                	$this->errors = Language::get('invalid_pro_price_price');
-					return false;
+				elseif($value->price) {
+					$price = GoodsSpecModel::find()->select('price')->where(['spec_id' => $key])->scalar();
+					if($value->price <= 0 || $value->price >= $price) {
+						$this->errors = Language::get('invalid_decrease');
+						return false;
+					}
+					$result[$key] = ['price' => $value->price, 'pro_type' => 'price'];
 				}
 			}
-            $result[$val] = array('price' => $post['pro_price'][$val], 'pro_type' => $post['pro_type'][$val]);
-        }
+		}
 		if($result) {
-			$post = (object)ArrayHelper::merge($post, ['rules' => $result]);
+			$post->rules = (object) $result;
 		}
 		
 		return true;

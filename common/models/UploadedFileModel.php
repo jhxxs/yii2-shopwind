@@ -119,11 +119,10 @@ class UploadedFileModel extends ActiveRecord
 					self::deleteFile($uploadedfile['file_path']);
 					$deleteNum++;
 				}
-				if($uploadedfile['image_url'] && ($model = GoodsImageModel::find()->where(['file_id' => $uploadedfile['file_id']])->one()) && $model->delete()) {
-
-					self::deleteFile($uploadedfile['image_url']);
-					if($uploadedfile['thumbnail']) {
-						self::deleteFile($uploadedfile['thumbnail']);
+				if(($model = GoodsImageModel::find()->where(['file_id' => $uploadedfile['file_id']])->one())) {
+					$thumbnail = $model->thumbnail;
+					if($model->delete()) {
+						self::deleteFile($thumbnail);
 					}
 				}
 			}
@@ -175,7 +174,7 @@ class UploadedFileModel extends ActiveRecord
 	{
 		$array = explode('data/', $file);
 		if(empty($array[0])) {
-			return array(Def::fileSavePath(). '/'. $file);
+			return array(Def::fileSavePath(). '/'. $file, null);
 		}
 		
 		// 删除本地文件需要全路径，删除OSS云存储文件需要相对路径
