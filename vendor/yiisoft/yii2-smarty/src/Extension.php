@@ -110,7 +110,7 @@ class Extension
 		if (isset($params['baseUrl'])) {
 			$baseUrl = $params['baseUrl'];
 			unset($params['baseUrl']);
-        	return str_replace(Yii::$app->homeUrl, $baseUrl . '/', Url::to($params));
+            return $baseUrl . Url::to($params);
 		}
 	
 		return Url::to($params);
