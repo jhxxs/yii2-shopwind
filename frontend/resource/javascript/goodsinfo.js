@@ -189,7 +189,7 @@ function selectSpec(num, liObj)
         $(".handle ul:eq(1) li[class='handle_title']").siblings().remove();
 
         var spec2Values = goodsspec.getDistinctValues('spec2', goodsspec.spec1);
-		var stock = goodsspec.getDistinctValues('stock', goodsspec.spec1);
+		var stock = goodsspec.getDistinctValues('stock', goodsspec.spec1, false);
         for (var i = 0; i < spec2Values.length; i++)
         {
 			var aclass ,liclass,canclick;
