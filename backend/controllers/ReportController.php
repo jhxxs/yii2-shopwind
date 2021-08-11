@@ -179,7 +179,7 @@ class ReportController extends \common\controllers\BaseAdminController
 	{
 		if($query === null) {
 			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
-				if(in_array($field, ['username', 'goods_name', 'store_name', status])) {
+				if(in_array($field, ['username', 'goods_name', 'store_name', 'status'])) {
 					return true;
 				}
 			}
