@@ -36,35 +36,14 @@ class Page
 	 */
 	public static function setView($folder = '', $template = 'default')
 	{
-		$setting = array();
-		if(in_array($folder, ['mall','store'])) {
-			$setting = [
-				'pathMap' => [
-					'@app/views' => [
-						'@app/web/templates/'.$folder. '/' .$template
-					],
-					//'@app/modules/teambuy/views' => '@app/web/templates/'.$folder. '/' .$template.'/modules',
-				],
-				'baseUrl' => '@web/templates/'.$folder. '/' .$template,
-			];
-		}
-		
-		// 安装程序的主题，暂时不支持动态主题
-		elseif(in_array($folder, ['install'])) {
-			$setting = [
-				'pathMap' => [
-					'@app/views' => [
-						'@app/web/install/templates/default',
-					]
-				],
-				'baseUrl' => '@web/install/templates/default',
-			];
-		}
-		
-		if($setting) {
-			$theme = new \yii\base\Theme(array_merge(ArrayHelper::toArray(Yii::$app->view->theme), $setting));
-			Yii::$app->view->theme = $theme;
-		}
+		Yii::$app->view->theme = new \yii\base\Theme(array_merge(ArrayHelper::toArray(Yii::$app->view->theme), [
+			'pathMap' => [
+				'@app/views' => [
+					'@app/views/'.$template. '/' .$folder
+				]
+			],
+			'baseUrl' => '@web/views/'.$template. '/' .$folder
+		]));
 		
 		return Yii::$app->view;
 	}
@@ -101,11 +80,14 @@ class Page
 	/**
 	 * 主题列表
 	 * @param string $folder mall|store
+	 * @param string $client pc|mobile
 	 * @return array
 	 */
 	public static function listTemplate($folder = 'mall', $client = 'pc')
 	{
-		$dir = Yii::getAlias('@frontend') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $folder;
+		//$dir = (in_array($client, ['wap']) ?  Yii::getAlias('@mobile') : Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $folder;
+		
+		$dir = Yii::getAlias('@frontend/views');
 		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
 	
 		$templates = array();
@@ -123,7 +105,7 @@ class Page
 	 */
 	public static function listStyle($folder = 'mall', $client = 'pc', $template = 'default')
 	{
-		$dir = Yii::getAlias('@frontend') . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
+		$dir = (in_array($client, ['wap']) ?  Yii::getAlias('@mobile') : Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
 		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
 		
 		$styles = array();
@@ -329,7 +311,7 @@ class Page
 		}
 		
 		// 二维码都是使用移动设备访问，所以修改访问地址为移动端
-		$text = str_replace(Basewind::siteUrl(), Yii::$app->params['mobileUrl'], $text);
+		$text = str_replace(Basewind::siteUrl(), Basewind::mobileUrl(false), $text);
 		$outfile = Yii::getAlias('@frontend') . '/web/data/files/mall/qrcode/goods/';
 		if(!is_dir($outfile)) {
 			FileHelper::createDirectory($outfile);

@@ -43,11 +43,11 @@ return [
         ],
 		'view' => [
             'theme' => [
-                'basePath' => '@app/web/templates/mall/default',
-                'baseUrl' => '@web/templates/mall/default',
+                'basePath' => '@app/views/default',
+                'baseUrl' => '@web/views/default',
                 'pathMap' => [
 					'@app/views' => [
-        				'@app/web/templates/mall/default'
+        				'@app/views/default'
     				]
                 ]
             ]

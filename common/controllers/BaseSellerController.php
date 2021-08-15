@@ -20,6 +20,12 @@ use Yii;
 
 class BaseSellerController extends BaseUserController
 {
+	public function init() 
+	{
+		parent::init();
+		Yii::$app->session->set('userRole', 'seller');
+	}
+
 	/**
 	 * 在执行Action前，判断是否有权限访问
 	 * @param $action

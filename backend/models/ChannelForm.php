@@ -42,9 +42,10 @@ class ChannelForm extends Model
 				$this->$key = $val;
 			}
 		}
-		
-		$this->clientPath = Yii::getAlias('@frontend');
-		$this->template = Yii::$app->params['template_name'];
+		if($this->instance == 'wap') {
+			$this->clientPath = Yii::getAlias('@mobile');
+		} else $this->clientPath = Yii::getAlias('@frontend');
+		$this->template = in_array($this->instance, ['wap']) ? Yii::$app->params['wap_template_name'] : Yii::$app->params['template_name'];
 		if(!$this->template) $this->template = 'default';
 		
 		$this->tpl_filepath = $this->clientPath . '/web/templates/mall/'.$this->template;

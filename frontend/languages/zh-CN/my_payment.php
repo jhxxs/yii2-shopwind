@@ -25,5 +25,4 @@ return array(
 	'unify_config'		=> '已安装，无需配置',
     'uninstall_fail' => '支付方式卸载失败',
     'cod_disallow_enabled' => '平台不支持开启货到付款',
-	
 );

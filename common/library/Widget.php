@@ -23,6 +23,7 @@ class Widget
 {
 	var $instance = null;
 	var $clientPath = null;
+	var $folder = null;
 	
 	public function __construct($options = null)
 	{
@@ -32,8 +33,11 @@ class Widget
 				$this->$key = $val;
 			}
 		}
-		$this->clientPath = Yii::getAlias('@frontend');
+		if($this->instance == 'wap') {
+			$this->clientPath = Yii::getAlias('@mobile');
+		} else $this->clientPath = Yii::getAlias('@frontend');
 	}
+	
 	/* 获取挂件基类 */
 	public static function getInstance($options = null)
 	{
@@ -99,7 +103,7 @@ class Widget
 		{
 			$tmp = array('widgets' => array(), 'config' => array());
 			
-			$config_file = $this->clientPath . '/web/data/page_config/' . $template . '.' . $page . '.config.php';
+			$config_file = $this->getConfigPath($template, $page);
 			
 			if (is_file($config_file)) 
 			{
@@ -109,6 +113,11 @@ class Widget
 			$widgets[$key] = $tmp;
 		}
 		return $widgets[$key];
+	}
+
+	public function getConfigPath($template, $page) 
+	{
+		return $this->clientPath . '/web/data/page_config/' . $template . '.' . $page . '.config.php';
 	}
 	
 	public function genUniqueId($page_config)
@@ -129,7 +138,7 @@ class Widget
         if (!$area || !$page) {
             return;
         }
-
+		
         // 获取该页面的挂件配置信息
 		if($this->instance == 'wap') {
        		$widgets = $this->getConfig(Yii::$app->params['wap_template_name'], $page);

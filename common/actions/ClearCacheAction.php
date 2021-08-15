@@ -45,6 +45,7 @@ class ClearCacheAction extends Action
 		{
 			FileHelper::removeDirectory(Yii::getAlias('@backend') . '/runtime/'.$folder);
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/runtime/'.$folder);
+			FileHelper::removeDirectory(Yii::getAlias('@mobile') . '/runtime/'.$folder);
 		}
 
 		// 删除二维码/海报图片（图片很多，可以定时删除，以免占用太多服务器资源）
@@ -71,7 +72,13 @@ class ClearCacheAction extends Action
 	 */
 	private function clearResourceFiles($num = 20)
 	{
-		$folders = [Yii::getAlias('@backend').'/web/assets', Yii::getAlias('@frontend').'/web/assets'];
+		$folders = [
+			Yii::getAlias('@frontend').'/web/assets', 
+			Yii::getAlias('@frontend').'/web/admin/assets',
+			Yii::getAlias('@frontend').'/web/mobile/assets',
+			Yii::getAlias('@backend').'/web/assets', 
+			Yii::getAlias('@mobile').'/web/assets'
+		];
 		foreach($folders as $folder) {
 			if(!is_dir($folder)) continue;
 			$list = FileHelper::findDirectories($folder, ['recursive' => false]);

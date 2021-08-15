@@ -106,7 +106,7 @@ class TemplateController extends \common\controllers\BaseAdminController
 
         // 清除临时的配置信息
         unset($page_config['tmp']);
-
+		
         // 保存配置
 		$this->saveConfig($client, $template, $page, $page_config);
 		return Message::result(null, Language::get('save_successed'));
@@ -220,9 +220,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 	/* 保存页面配置文件 */
     public function saveConfig($client = 'pc', $template, $page, $page_config)
     {
-        $config_file = Widget::getInstance($client)->clientPath . '/web/data/page_config/' . $template . '.' . $page . '.config.php';
-        $php_data = "<?php\n\nreturn " . var_export($page_config, true) . ";";
+        $config_file = Widget::getInstance($client)->getConfigPath($template, $page);
 
+        $php_data = "<?php\n\nreturn " . var_export($page_config, true) . ";";
         return file_put_contents($config_file, $php_data, LOCK_EX);
     }
 	
@@ -273,21 +273,10 @@ class TemplateController extends \common\controllers\BaseAdminController
 	/* 让页面具有编辑功能 */
     public function makeEditable($client = 'pc', $page, $html)
     {
-        $backUrl = Yii::$app->params['backendUrl'];
-		
-		if(in_array($client, ['wap'])) {
-			$template = Yii::$app->params['wap_template_name'];
-			$style = Yii::$app->params['wap_style_name'];
-		}
-		else {
-			$template = Yii::$app->params['template_name'];
-			$style = Yii::$app->params['style_name'];
-		}
-		
-        $editmode = '<script type="text/javascript" src="' . Url::toRoute(['template/jslang']).'"></script><script type="text/javascript">__PAGE__ = "' . $page . '"; __CLIENT__ ="'.$client.'"; BACK_URL = "' . $backUrl . '";</script>'.Resource::import([
+        $editmode = '<script type="text/javascript" src="' . Url::toRoute(['template/jslang']).'"></script><script type="text/javascript">__PAGE__ = "' . $page . '"; __CLIENT__ ="'.$client.'"; BACK_URL = "' . Basewind::backendUrl() . '";</script>'.Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
-			]).'<script type="text/javascript" src="' . $backUrl . '/templates/'.$template.'/styles/'.$style.'/js/template_panel.js"></script><link id="template_editor_css" href="' . $backUrl . '/templates/'.$template.'/styles/'.$style.'/css/template_panel.css" rel="stylesheet" type="text/css" />';
+			]).'<script type="text/javascript" src="' . Resource::getThemeAssetsUrl('js/template_panel.js', false) . '"></script><link id="template_editor_css" href="' .  Resource::getThemeAssetsUrl('css/template_panel.css', false) .'" rel="stylesheet" type="text/css" />';
 
         return str_replace('<!--<editmode></editmode>-->', $editmode, $html);
     }
@@ -298,31 +287,33 @@ class TemplateController extends \common\controllers\BaseAdminController
 		$data = array();
 		
 		list($client, $template, $page) = $this->getClientParams();
-		$siteUrl = Yii::$app->params['frontendUrl'];
-
-		// 首页（pc/wap）
-		$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index', 'editmode' => true], $siteUrl), 'action' => array());
-		
+		$siteUrl = $client == 'wap' ? Basewind::mobileUrl() : Basewind::homeUrl();
+	
+		// PC && H5
+		$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index'], $siteUrl), 'action' => array());
 		if(in_array($client, ['pc']))
 		{
 			if(IntegralSettingModel::getSysSetting('enabled')) {
-				$data['integral'] = array('title' => Language::get('integral_mall'), 'url' => Url::toRoute(['integral/index', 'editmode' => true], $siteUrl),'action'=>array());
+				$data['integral'] = array('title' => Language::get('integral_mall'), 'url' => Url::toRoute(['integral/index'], $siteUrl),'action'=>array());
 			}
-			$data['gcategory'] 	= array('title' => Language::get('gcategory'),'url' => Url::toRoute(['category/index', 'editmode' => true], $siteUrl), 'action' => array());
-			$data['scategory'] 	= array('title' => Language::get('scategory'),'url' => Url::toRoute(['category/store', 'editmode' => true], $siteUrl), 'action' => array());
-			$data['login'] 	= array('title' => Language::get('login'), 'url'=> Url::toRoute(['user/login', 'editmode' => true], $siteUrl), 'action' => array());
+			$data['gcategory'] 	= array('title' => Language::get('gcategory'),'url' => Url::toRoute(['category/index'], $siteUrl), 'action' => array());
+			$data['scategory'] 	= array('title' => Language::get('scategory'),'url' => Url::toRoute(['category/store'], $siteUrl), 'action' => array());
+			$data['login'] 	= array('title' => Language::get('login'), 'url'=> Url::toRoute(['user/login'], $siteUrl), 'action' => array());
 			
 			// 频道页
 			if(($channels = ChannelModel::find()->indexBy('cid')->all())){
 				foreach($channels as $id => $channel){
 					$data[$id] = array(
 						'title' => $channel->title,
-						'url' 	=> Url::toRoute(['channel/index', 'id' => $id, 'editmode' => true], Yii::$app->params['frontendUrl']),
+						'url' 	=> Url::toRoute(['channel/index', 'id' => $id], Yii::$app->params['frontendUrl']),
 						'action' => array('edit','drop'), 
 						'name' 	=> 'channel_style'.$channel->style
 					);
 				}
 			}
+		}
+		if(in_array($client, ['wap'])) {
+			$data['community'] = array('title' => Language::get('community'), 'url' => Url::toRoute(['community/index'], $siteUrl), 'action' => array());
 		}
 		
 		return $data;
@@ -354,9 +345,16 @@ class TemplateController extends \common\controllers\BaseAdminController
 
 		// web目录
 		$basePath = Yii::getAlias('@frontend').'/web';
+		$baseMPath = Yii::getAlias('@mobile').'/web';
 
 		// PC
 		$files = FileHelper::findFiles($basePath.'/data/page_config', ['recursive' => false]);
+		foreach($files as $file) {
+			$contents .= file_get_contents($file);
+		}
+
+		// H5
+		$files = FileHelper::findFiles($baseMPath.'/data/page_config', ['recursive' => false]);
 		foreach($files as $file) {
 			$contents .= file_get_contents($file);
 		}

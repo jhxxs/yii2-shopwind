@@ -38,7 +38,7 @@ class Basewind
 	 */
 	public static function getVersion()
 	{
-		return '3.3.2';	
+		return '3.3.3';	
 	}
 	
 	/**
@@ -90,7 +90,7 @@ class Basewind
 		$current = substr(Yii::getAlias('@app'), strripos(Yii::getAlias('@app'), DIRECTORY_SEPARATOR) + 1);
 		
 		// 允许的应用程序列表
-		$list = ['backend' => 'admin', 'frontend' => 'pc'];
+		$list = ['backend' => 'admin', 'frontend' => 'pc', 'mobile' => 'wap'];
 		foreach($list as $key => $value) {
 			$app = substr(Yii::getAlias('@'.$key), strripos(Yii::getAlias('@'.$key), '/') + 1);
 			if($app == $current) {
@@ -498,11 +498,39 @@ class Basewind
 	}
 
 	/**
-	 * 获取网站安装时配置的前台首页地址
+	 * 获取安装时网站前台首页地址
 	 * @return string
 	 */
 	public static function homeUrl()
 	{
 		return isset(Yii::$app->params['frontendUrl']) ? Yii::$app->params['frontendUrl'] : Yii::$app->homeUrl;
+	}
+
+	/**
+	 * 获取安装时网站后台首页地址
+	 * @return string
+	 */
+	public static function backendUrl()
+	{
+		if(!isset(Yii::$app->params['backendUrl']) && !empty(Yii::$app->params['backendUrl'])) {
+			return Yii::$app->params['backendUrl'];
+		}
+
+		return self::homeUrl() . '/admin';
+	}
+
+	/**
+	 * 获取移动端的首页地址
+	 * @return string
+	 */
+	public static function mobileUrl($isConfig = true)
+	{
+		// DIY配置移动端
+		if($isConfig || empty(Yii::$app->params['mobileUrl'])) {
+			return self::homeUrl() . '/mobile';
+		}
+
+		// 移动端实际访问地址
+		return Yii::$app->params['mobileUrl'];
 	}
 }

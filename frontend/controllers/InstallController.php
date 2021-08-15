@@ -35,7 +35,7 @@ class InstallController extends \common\controllers\BaseInstallController
 		// parent::init(); don't init
 
 		Basewind::environment(false);
-		$this->view  = Page::setView('install');
+		$this->view  = Page::setView('mall');
 		$this->params = [
 			'homeUrl'		=> Basewind::homeUrl(),
 			'siteUrl' 		=> Basewind::siteUrl(),
@@ -88,7 +88,11 @@ class InstallController extends \common\controllers\BaseInstallController
 			'../backend/web/assets',
 			'../frontend/runtime',
 			'../frontend/web/data',
-			'../frontend/web/assets'
+			'../frontend/web/assets', 
+			'../frontend/web/admin/assets',  
+			'../mobile/runtime',
+			'../mobile/web/data',
+			'../mobile/web/assets'
         ));
 		
 		$this->params['check_env'] = $check_env;
@@ -116,15 +120,6 @@ class InstallController extends \common\controllers\BaseInstallController
 			} else Yii::$app->session->set('install_config', true);
 			
 			$this->params['hiddens'] = ['compatible' => true, 'accept' => true];
-			
-			// 只能在本地安装才可以自动获取地址
-			if(($siteUrl = Basewind::siteUrl())) {
-				$this->params['site_url'] = $siteUrl;
-				if(stripos($siteUrl, 'frontend/web')) {
-					$this->params['back_url'] = str_replace('frontend/web', 'backend/web', $siteUrl);
-				}
-			}
-			
 			$this->params['_head_tags'] = Resource::import('jquery.plugins/jquery.form.js');
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('install_config')]);
@@ -159,14 +154,6 @@ class InstallController extends \common\controllers\BaseInstallController
 
 			if(!preg_match('/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{5,}/',$post->admin_pass)) {
 				return Message::warning(Language::get('admin_pass_error'));
-			}
-
-			if(!preg_match("/^http(s?):\/\//i", $post->site_url)) {
-				return Message::warning(Language::get('site_url_error'));
-			}
-			
-			if(!preg_match("/^http(s?):\/\//i", $post->back_url)) {
-				return Message::warning(Language::get('back_url_error'));
 			}
 			
 			if ($post->admin_pass != $post->confirm_pass) {
@@ -339,10 +326,10 @@ class InstallController extends \common\controllers\BaseInstallController
 			}
 			
 			// 注册用户
-			if(!($seller_id = $install->userRegister($post->seller, '123456789'))) {
+			if(!($seller_id = $install->userRegister($post->seller, '123456'))) {
 				return Message::warning(Language::get('seller_create_fail'), ['install/initdata']);
 			}
-			if(!($buyer_id = $install->userRegister($post->buyer, '123456789'))) {
+			if(!($buyer_id = $install->userRegister($post->buyer, '123456'))) {
 				return Message::warning(Language::get('buyer_create_fail'), ['install/initdata']);
 			}
 	
@@ -355,7 +342,21 @@ class InstallController extends \common\controllers\BaseInstallController
 			// 安装结束，锁定程序
 			$install->initend();
 			
-			return Message::display(Language::get('initdata_end'), ['default/index']);	
+			//return Message::display(Language::get('initdata_end'), ['default/index']);
+
+			return $this->redirect(['install/success']);
 		}
+	}
+
+	/**
+	 * 安装成功页面
+	 */
+	public function actionSuccess()
+	{
+		if(!Basewind::isInstall()) {
+			return $this->redirect(['install/index']);
+		}
+
+		return $this->render('../install.success.html', $this->params);
 	}
 }

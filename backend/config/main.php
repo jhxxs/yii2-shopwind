@@ -44,14 +44,14 @@ return [
         ],
 		'view' => [
             'theme' => [
-                'basePath' => '@app/web/templates/default',
-                'baseUrl' => '@web/templates/default',
+                'basePath' => '@app/views/default',
+                'baseUrl' => '@web/views/default',
                 'pathMap' => [
 					'@app/views' => [
-        				'@app/web/templates/default',
+        				'@app/views/default',
     				],
-    				'@app/modules' => '@app/web/templates/default/modules',
-    				'@app/widgets' => '@app/web/templates/default/widgets'
+    				'@app/modules' => '@app/views/default/modules',
+    				'@app/widgets' => '@app/views/default/widgets'
                 ],
             ],
         ],

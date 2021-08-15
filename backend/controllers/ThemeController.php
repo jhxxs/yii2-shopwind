@@ -39,14 +39,11 @@ class ThemeController extends \common\controllers\BaseAdminController
 
 		$list = array();
 		$templates = Page::listTemplate('mall', $post->client);
-		foreach($templates as $template) {
-			$list[$template] = Page::listStyle('mall', $post->client, $template);
-		}
-		$this->params['templates'] = $list;
-		$this->params['cur_template_name'] = Yii::$app->params['template_name'];
-		$this->params['cur_style_name'] = Yii::$app->params['style_name'];
-		$this->params['webroot'] = Yii::$app->params['frontendUrl'];
+
+		$this->params['templates'] = $templates;
+		$this->params['cur_template_name'] = ($post->client == 'wap') ? Yii::$app->params['wap_template_name'] : Yii::$app->params['template_name'];
 		
+		$this->params['mobileUrl'] = Basewind::mobileUrl(false);
 		$this->params['page'] = Page::seo(['title' => Language::get('template_list')]);
 		return $this->render('../theme.index.html', $this->params);
 	}
@@ -58,15 +55,12 @@ class ThemeController extends \common\controllers\BaseAdminController
         if (!$post->template_name) {
 			return Message::warning(Language::get('no_such_template'));
         }
-        if (!$post->style_name) {
-            return Message::warning(Language::get('no_such_style'));
-        }
 		
 		if($post->client == 'wap'){
-			$data = array('wap_template_name' => $post->template_name, 'wap_style_name' => $post->style_name);
+			$data = array('wap_template_name' => $post->template_name);
 		}
 		else {
-			$data = array('template_name' => $post->template_name, 'style_name' => $post->style_name);
+			$data = array('template_name' => $post->template_name);
 		}
 		
         $model = new \backend\models\SettingForm();
@@ -74,19 +68,5 @@ class ThemeController extends \common\controllers\BaseAdminController
 			return Message::warning($model->errors);
 		}
 		return Message::display(Language::get('set_theme_successed'), ['theme/index']);
-    }
-	
-	public function actionPreview()
-    {
-		$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
-        if (!$post->template_name) {
-			return Message::warning(Language::get('no_such_template'));
-        }
-        if (!$post->style_name) {
-            return Message::warning(Language::get('no_such_style'));
-        }
-		$cl = ($post->client == 'wap') ? Yii::$app->params['mobileUrl'] : Yii::$app->params['frontendUrl'];
-		return $this->redirect($cl.'/templates/mall/'.$post->template_name . '/styles/'.$post->style_name.'/screenshot.jpg');
     }
 }

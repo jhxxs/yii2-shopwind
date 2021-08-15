@@ -2,3 +2,9 @@ location / {
   #Redirect everything that isn't a real file to index.php
   try_files $uri $uri/ /index.php$is_args$args;
 }
+location /admin {
+  try_files $uri $uri/ /admin/index.php$is_args$args;
+}
+location /mobile {
+  try_files $uri $uri/ /mobile/index.php$is_args$args;
+}

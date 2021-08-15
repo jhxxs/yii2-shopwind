@@ -15,6 +15,7 @@ use yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
+use common\library\Basewind;
 use common\library\Language;
 use common\library\Arrayfile;
 use common\library\Setting;
@@ -145,8 +146,9 @@ class BaseInstall
 	public function saveSetting($post = null)
 	{
 		$config = ArrayHelper::merge([
-			'frontendUrl' 	=> $post->site_url,
-			'backendUrl'	=> $post->back_url
+			'frontendUrl' 	=> Basewind::siteUrl(),
+			'mobileUrl'		=> '',
+			'backendUrl'	=> Basewind::backendUrl()
 		], Setting::getDefault());
 
 		return Setting::getInstance()->setAll($config);

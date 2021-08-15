@@ -23,7 +23,7 @@ use yii\helpers\FileHelper;
 class Resource
 {
 	/**
-     * 获取当前主题&当前风格下的图片/文件绝对路径
+     * 获取图片/文件绝对路径
      * @desc 注意不要返回相对路径，因为在视图中可能会使用|url_fromat标签，导致转义路径不对
      * @param array|string $params
      */
@@ -32,10 +32,7 @@ class Resource
         $file = is_string($params) ? $params : ((is_array($params) && isset($params['file'])) ? $params['file'] : '');
         $baseUrl = (is_array($params) && isset($params['baseUrl'])) ? $params['baseUrl'] : Basewind::siteUrl();
 
-		return $baseUrl.
-			'/templates/mall/'.Yii::$app->params['template_name'].
-			'/styles/'.Yii::$app->params['style_name'].
-			'/'.$file;
+		return $baseUrl . '/static/' . $file;
 	}
     
     /**
@@ -111,15 +108,13 @@ class Resource
         {
             !$spec_type && $spec_type = 'script';
             $resources = self::getResourceData($resources);
-            foreach ($resources as $params)
-            {
+            foreach ($resources as $params) {
                 $headtag .= self::getResourceCode($spec_type, $params) . PHP_EOL;
             }
         }
         elseif (is_array($resources))
         {
-            foreach ($resources as $type => $res)
-            {
+            foreach ($resources as $type => $res) {
                 $headtag .= self::import($res, $type);
             }
         }
@@ -132,7 +127,7 @@ class Resource
      */
     public static function getResourceData($resources)
     {
-        $return = array();
+        $result = array();
         if (is_string($resources))
         {
             $items = explode(',', $resources);
@@ -150,10 +145,10 @@ class Resource
                     $array = explode(':', $depends);
                     !empty($array[1]) && $depends = $array[1];
                 }
-                $return[] = array('file' => $path, /*'attr' => '',*/ 'depends' => $depends);
+                $result[] = array('file' => $path, 'depends' => $depends);
             }
         }
-        return $return;
+        return $result;
     }
 	
 	/**
@@ -186,14 +181,6 @@ class Resource
                 $attr= ' rel="stylesheet" ';
                 $tail= ' />';
             break;
-            
-            /* 主题下的CSS文件，不清楚是否用到，如果有用到，再兼容处理
-            case 'style':
-                $pre = '<link type="text/css" ';
-                $path= ' href="' . self::getThemeAssetsUrl($params) . '"';
-                $attr= ' rel="stylesheet" ';
-                $tail= ' />';
-            break;*/
         }
         $html = $pre . $path . $attr . $tail;
 

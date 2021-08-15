@@ -110,7 +110,7 @@ class Extension
 		if (isset($params['baseUrl'])) {
 			$baseUrl = $params['baseUrl'];
 			unset($params['baseUrl']);
-            return $baseUrl . Url::to($params);
+            return Url::toRoute($params, $baseUrl);
 		}
 	
 		return Url::to($params);

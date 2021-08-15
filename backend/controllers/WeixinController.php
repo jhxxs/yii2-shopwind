@@ -94,7 +94,7 @@ class WeixinController extends \common\controllers\BaseAdminController
 			if(!($setting = WeixinSettingModel::find()->where(['userid' => 0, 'code' => 'mp'])->orderBy(['id' => SORT_DESC])->asArray()->one()) || empty($setting['token'])) {
 				$setting['token'] = WeixinSettingModel::genToken(32);
 			}
-			$setting['gatewayUrl'] = Url::toRoute('weixin/index', Yii::$app->params['mobileUrl']);
+			$setting['gatewayUrl'] = Url::toRoute('weixin/index', Basewind::homeUrl());
 			$this->params['weixin'] = $setting;
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('weixin_setting')]);

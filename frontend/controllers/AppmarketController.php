@@ -27,7 +27,7 @@ use common\library\Def;
  * @author mosir
  */
 
-class AppmarketController extends \common\controllers\BaseUserController
+class AppmarketController extends \common\controllers\BaseSellerController
 {
 	/**
 	 * 初始化

@@ -22,7 +22,7 @@
 	
 	'login'=>'登录页',
 	'find_password'=>'找回密码页',
-	'visual'=>'可视化',
+	'visual'=>'装修',
     'preview'=>'预览',
 	
 	'confirm'    => '确定',
@@ -36,7 +36,7 @@
     'save_successed'=> '保存成功！',
     'empty_area_notice' => '您可以将挂件拖放至此',
 	'pc_theme' => '电脑端',
-    'wap_theme' => '手机端',
+    'wap_theme' => '移动端',
     'clear_file' => '清除冗余图片',
     'clear_ok' => '成功清除%s张冗余图片',
     'clear_empty' => '没有可清除的冗余图片',
