@@ -187,7 +187,7 @@ class RefundController extends \common\controllers\BaseUserController
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
-			return Message::display(Language::get('send_message_ok'));			
+			return Message::display(Language::get('send_message_ok'));	
 		}
 	}
 	
@@ -223,6 +223,8 @@ class RefundController extends \common\controllers\BaseUserController
 	// 卖家退款管理
 	public function actionReceive()
 	{
+		Yii::$app->session->set('userRole', 'seller');
+
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		
 		$model = new \frontend\models\RefundForm(['visitor' => 'seller']);
@@ -244,6 +246,8 @@ class RefundController extends \common\controllers\BaseUserController
 	/* 卖家同意退款 */
 	public function actionAgree()
 	{
+		Yii::$app->session->set('userRole', 'seller');
+
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		
 		$model = new \frontend\models\RefundAgreeForm();
@@ -257,6 +261,8 @@ class RefundController extends \common\controllers\BaseUserController
 	/* 卖家拒绝退款 */
 	public function actionRefuse()
 	{
+		Yii::$app->session->set('userRole', 'seller');
+		
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		
 		$model = new \frontend\models\RefundRefuseForm();

@@ -9,7 +9,7 @@ ShopWind系统高拓展性可以使其很方便的通过Composer安装强大的�
 ShopWind基于优秀的开源框架Yii2.0底层开发，采用MVC开发模式，逻辑层和视图层完美分离，拓展性高，安全性高。Yii以快速、安全、专业著称，是一个高性能、高拓展，适合开发大型WEB2.0的PHP框架，ShopWind集成了Yii2框架的所有优点，是您搭建电商网站，移动应用的理想选择。
 
 三、环境要求：https://www.shopwind.net/forum/thread-264.html
-四、安装流程：https://www.shopwind.net/forum/thread-105.html
+四、安装流程：https://www.shopwind.net/forum/thread-252.html
 五、官方演示：http://test.shopwind.net
 
 	

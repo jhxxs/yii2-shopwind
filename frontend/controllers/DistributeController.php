@@ -30,7 +30,7 @@ use common\library\Page;
  * @author luckey
  */
 
-class DistributeController extends \common\controllers\BaseUserController
+class DistributeController extends \common\controllers\BaseSellerController
 {
 	/**
 	 * 初始化
