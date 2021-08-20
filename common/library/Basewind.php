@@ -512,7 +512,7 @@ class Basewind
 	 */
 	public static function backendUrl()
 	{
-		if(!isset(Yii::$app->params['backendUrl']) && !empty(Yii::$app->params['backendUrl'])) {
+		if(isset(Yii::$app->params['backendUrl']) && !empty(Yii::$app->params['backendUrl'])) {
 			return Yii::$app->params['backendUrl'];
 		}
 
