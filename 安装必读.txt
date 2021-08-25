@@ -52,13 +52,13 @@ http://www.kuaidi100.com/openapi/api_2_02.shtml
 1.QQ账号登陆KEY申请
 https://connect.qq.com/manage.html
 创建应用-》网站-》填写相关信息
-回调地址填写：  http://你的网站网址/connect/qqcallback.php
+回调地址填写：  http://你的网站网址/connect/qqcallback.html
 
 2.支付宝登陆申请KEY：
 https://b.alipay.com/order/productDetail.htm?productId=2015090914994961
 
 新版（rsa）：https://docs.open.alipay.com/263/105809
-新版回调地址填：http://你的网址/connect/alipaycallback.php
+新版回调地址填：http://你的网址/connect/alipaycallback.html
 
 3.新浪微博申请KEY：
 http://open.weibo.com/authentication/
