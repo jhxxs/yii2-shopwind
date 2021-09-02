@@ -58,10 +58,12 @@ table,tr,th,td{margin: 0; padding: 0;}
 .padding5{padding:5px;}
 .padding10{padding:10px;}
 .bgf { background-color: #fff;}
+.blue {color: #59b6f5;}
 
 .indent{text-indent:22px;}
 .fw300{font-weight:300;}
 .fs14{font-size: 14px;}
+.fs16{font-size: 16px;}
 .btn-normal{width:120px;height:38px; line-height: 38px; background:#59b6f5;color:#FFF;border:none;border-radius:2px;font-family:"Microsoft Yahei",Arial,Helvetica,sans-serif;font-size:14px;cursor:pointer;}
 .btn-normal:hover{background:#ff9751;}
 [disabled].btn-normal{background:#e4e4e4;}
@@ -94,9 +96,6 @@ table,tr,th,td{margin: 0; padding: 0;}
 .btn-box{text-align:center;padding:20px;vertical-align:middle; border-top:1px #f1f1f1 solid}
 .btn-box input[type=checkbox]{ height: 16px; width: 16px; margin-top: 0px;}
 
-
-
-
 .check-box table{width:100%;border:0; border-collapse:collapse;}
 .check-box table tr > *{height: 34px;line-height: 34px;text-align:center; border-collapse:collapse;border:0;color:#666;}
 .check-box table tr th{background-color: #e7e8e9;font-weight:400;color:#000;}
@@ -113,16 +112,10 @@ table,tr,th,td{margin: 0; padding: 0;}
 .text {height: 260px;overflow-y: scroll; padding: 20px;color: #666; line-height: 30px;}
 .text h3 {font-size: 14px; color: #333; margin-bottom: 10px;font-weight:400;}
 
-
-
-#footer .copyright{color:#888; height:80px; text-align: center; line-height: 80px;}
-#footer .copyright a{ text-decoration:none; }
-
 .messages {  margin:0 auto 10px; background:#F48F8F;padding:5px; list-style:none; }
 .messages li { margin:2px; padding:3px; }
 .main_table .failed { background: url(../images/install/failed.gif) no-repeat left; color:red; font-weight:bold; }
 
-.agreement2 {}
 .accede2 {line-height:44px;color: #dc2121; background:#fbfbfb; text-align: center}
 .text2 {height: 300px;overflow-y: scroll;  color: #333; line-height: 20px; }
 .text2 p{ border-bottom:1px #fbfbfb solid; padding:8px 20px;}
@@ -145,3 +138,8 @@ table,tr,th,td{margin: 0; padding: 0;}
 .success span {background: url(../images/install/success.png) no-repeat;background-size:100%; }
 .defeated span {background: url(../images/install/fail.png) no-repeat; background-size:100%;}
 .message p b{margin: 40px; font-size: 16px; display:block; font-weight:300}
+
+.success a.blue:hover{ text-decoration: underline; color: #dc2121;}
+
+#footer .copyright{color:#888; height:80px; text-align: center; line-height: 80px;}
+#footer .copyright a{ text-decoration:none; }

@@ -357,6 +357,7 @@ class InstallController extends \common\controllers\BaseInstallController
 			return $this->redirect(['install/index']);
 		}
 
+		$this->params['page'] = Page::seo(['title' => Language::get('install_finished')]);
 		return $this->render('../install.success.html', $this->params);
 	}
 }

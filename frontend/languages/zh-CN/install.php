@@ -5,7 +5,7 @@ return array(
     'install_check'     => '环境检测',
     'install_config'    => '系统配置',
 	'install_build'    	=> '正在安装',
-    'install_finished'	=> '完成安装',
+    'install_finished'	=> '安装成功',
     'install_guide'          => 'ShopWind 安装向导',
     'welcome_install'          => '您好，很高兴您能选用ShopWind',
     'select_language'          => '请选择语言',
