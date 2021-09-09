@@ -503,7 +503,7 @@ class Basewind
 	 */
 	public static function homeUrl()
 	{
-		return isset(Yii::$app->params['frontendUrl']) ? Yii::$app->params['frontendUrl'] : Yii::$app->homeUrl;
+		return isset(Yii::$app->params['frontendUrl']) ? Yii::$app->params['frontendUrl'] : self::siteUrl();
 	}
 
 	/**
