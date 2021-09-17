@@ -1,6 +1,6 @@
 <script type="text/javascript">
 var _d = DialogManager.get('config_dialog');
-_d.setWidth(440);
+_d.setWidth(540);
 _d.setPosition('center');
 $(function(){
 	$("select[name='img_recom_id']").change(function(){
@@ -21,14 +21,28 @@ function switchRecommend(recomId, selectName)
         $("select[name='" + selectName + "']").show();
     }
 }
+
+function loadImage(obj){
+    getTempPath(obj,function(res){
+        $(obj).parent().find('img').attr('src',res);
+    });
+}
 </script>
-<div class="field_item">
-    <label>左侧广告图片(<span>图片尺寸：484*177，支持 gif|jpg|jpeg|png 格式</span>)</label>
-    <p><input type="file" name="ad_image_file" /><input type="hidden" name="ad_image_url" value="{$options.ad_image_url}" /></p>
-    <!-- {if $options.ad_image_url} --><p><img src="{$options.ad_image_url|url_format}" height="20" /></p><!-- {/if} -->
-    <label>左侧广告图片链接地址:</label>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>左侧图片</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad_image_url" value="{$options.ad_image_url}" />
+        <img src="{if $options.ad_image_url}{$options.ad_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传,图片大小：484*177px</font>
+</div>
+<div class="field_item webkit-box">
+    <label>链接地址</label>
     <p><input type="text" name="ad_link_url" value="{$options.ad_link_url}" /></p>
-    <label>品牌标签:</label>
+</div>
+<div class="field_item webkit-box">
+    <label>品牌标签</label>
     <p><input type="text" name="btag" value="{$options.btag}" /></p>
 </div>
 

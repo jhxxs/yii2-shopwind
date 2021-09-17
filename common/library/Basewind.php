@@ -38,7 +38,7 @@ class Basewind
 	 */
 	public static function getVersion()
 	{
-		return '3.3.3';	
+		return '3.3.4';
 	}
 	
 	/**
@@ -523,10 +523,10 @@ class Basewind
 	 * 获取移动端的首页地址
 	 * @return string
 	 */
-	public static function mobileUrl($isConfig = true)
+	public static function mobileUrl($isConfig = true, $strict = false)
 	{
 		// DIY配置移动端
-		if($isConfig || empty(Yii::$app->params['mobileUrl'])) {
+		if($isConfig || !$strict) {
 			return self::homeUrl() . '/mobile';
 		}
 

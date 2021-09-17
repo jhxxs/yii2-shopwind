@@ -17,12 +17,8 @@
    <!--{/if}-->
 </div>
 <script>
-// don't put in $(funciton(){});
 $('.J_S{$widget_data.model_id} ul li').css('width', $(window).width() +'px');
 $(function(){
-	//var width=document.body.clientWidth;
-	//$('.s{$widget_data.model_id}').attr('style','height:410px;width:'+width+'px;overflow:hidden;');
-	//$('.s{$widget_data.model_id} .scroller ul li').attr('style','height:410px;width:'+width+'px');
 	$(".J_S{$widget_data.model_id}").slide({ mainCell:".ks-switchable-content", titCell:".ks-switchable-nav span", effect:"leftLoop",trigger:"click", prevCell:".prev", nextCell:".next", titOnClassName:"ks-active", autoPlay:true});
 });
 </script>

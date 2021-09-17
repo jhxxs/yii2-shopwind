@@ -5,19 +5,25 @@ return array (
   array (
     '_widget_275' => 
     array (
-      'name' => 'df_slide',
+      'name' => 'df_swiper',
       'options' => 
       array (
-        0 => 
+        'images' => 
         array (
-          'ad_image_url' => 'data/files/mall/template/20210604185940902.jpg',
-          'ad_link_url' => 'community/goods/index?id=64',
+          0 => 
+          array (
+            'ad_image_url' => 'data/files/mall/template/20210604185940902.jpg',
+            'ad_link_url' => 'community/goods/index?id=64',
+          ),
+          1 => 
+          array (
+            'ad_image_url' => 'data/files/mall/template/20210604185940704.jpg',
+            'ad_link_url' => 'community/goods/index?id=63',
+          ),
         ),
-        1 => 
-        array (
-          'ad_image_url' => 'data/files/mall/template/20210604185940704.jpg',
-          'ad_link_url' => 'community/goods/index?id=63',
-        ),
+        'bgcolor' => '#ededed',
+        'radius' => 'round',
+        'space' => '10',
       ),
     ),
   ),

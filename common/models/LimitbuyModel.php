@@ -14,7 +14,9 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 
+use common\models\GoodsModel;
 use common\models\GoodsSpecModel;
+use common\models\OrderGoodsModel;
 
 use common\library\Basewind;
 use common\library\Timezone;
@@ -180,5 +182,39 @@ class LimitbuyModel extends ActiveRecord
 			}
 		}
 		return $status;
+	}
+
+	/**
+	 * 获取指定秒杀活动的销量进度
+	 */
+	public static function getSpeedOfProgress($id = 0, $goods_id = 0, $percentage = false)
+	{
+		$progress = 1;
+
+		if(!$id || !($model = self::find()->select('start_time,end_time')->where(['id' => $id])->one())) {
+			return false;
+		}
+
+		$list = OrderGoodsModel::find()->alias('og')->select('og.quantity')
+			->joinWith('order o', false)
+			->where(['and', ['>=', 'o.pay_time', $model->start_time], ['<=', 'o.pay_time', $model->end_time], ['og.goods_id' => $goods_id]])
+			->asArray()->all();
+		
+		// 指定时间段已售出件数
+		$sells = 0;
+		foreach($list as $key => $value) {
+			$sells += $value['quantity'];
+		}
+
+		// 现有库存
+		$stocks = GoodsModel::getStocks($goods_id);
+		if(($total = $sells + $stocks) > 0) {
+			$progress = round($sells / $total, 2);
+		}
+		if($progress > 1) {
+			$progress = 1;
+		}
+
+		return $percentage ? $progress * 100 . '%' : $progress;
 	}
 }

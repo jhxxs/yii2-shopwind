@@ -2,7 +2,7 @@
 
 return array(
     'name'      => 'df_fl_brand',
-    'display_name'  => '小块品牌',
+    'display_name'  => '品牌栏',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',

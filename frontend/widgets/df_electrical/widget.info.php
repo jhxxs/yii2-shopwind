@@ -2,11 +2,11 @@
 
 return array(
     'name'      => 'df_electrical',
-    'display_name'  => '箱包手表',
+    'display_name'  => '楼层风格二',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',
-	'desc'      => '展示箱包手表  与男装女装框架类似  ',
+	'desc'      => '包含幻灯片，图片广告，5个TAB选项卡',
     'configurable'  => true,
 	'belongs'  	=> 'default.index'
 );

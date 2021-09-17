@@ -1,6 +1,6 @@
 <script type="text/javascript">
 var _d = DialogManager.get('config_dialog');
-_d.setWidth(440);
+_d.setWidth(540);
 _d.setPosition('center');
 $(function(){
 	$("select[name='img_recom_id']").change(function(){
@@ -21,12 +21,12 @@ function switchRecommend(recomId, selectName)
     }
 }
 </script>
-<div class="field_item">
+<div class="field_item webkit-box">
     <label>模块名称</label>
     <p><input type="text" name="model_name" value="{$options.model_name}"/></p>
 </div>
-<div class="field_item">
-    <label>推荐类型:</label>
+<div class="field_item webkit-box">
+    <label>推荐类型</label>
     <p><select name="img_recom_id">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->

@@ -1,6 +1,6 @@
 <script type="text/javascript">
 var _d = DialogManager.get('config_dialog');
-_d.setWidth(440);
+_d.setWidth(540);
 _d.setPosition('center');
 $(function(){
 	$("select[name='img_recom_id']").change(function(){
@@ -20,17 +20,16 @@ function switchRecommend(recomId, selectName)
     }
 }
 </script>
-<div class="field_item">
+<div class="field_item webkit-box">
     <label>模块名称</label>
     <p><input type="text" name="model_name" value="{$options.model_name}"/></p>
-
+</div>
+<div class="field_item webkit-box">
 	<label>显示数量</label>
     <p><input type="text" name="num" value="{$options.num}" /></p>
 </div>
-
-<div class="field_item">
-    <p style="color:gray; font-size:14px;">默认读取限时打折的商品，如果没有限时打折商品，请配置下面参数读取常规商品</p>
-    <label>推荐类型:</label>
+<div class="field_item webkit-box box-align-center">
+    <label>商品数据</label>
     <p><select name="img_recom_id">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->
@@ -41,4 +40,5 @@ function switchRecommend(recomId, selectName)
         <option value="0">请选择分类...</option>
         {html_options options=$gcategories selected=$options.img_cate_id}
     </select></p>
+    <font class="ml10 fs12" color="gray">默认读取限时打折的商品</font>
 </div>

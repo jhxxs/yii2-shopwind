@@ -45,7 +45,7 @@ ScreenLocker = {
         'top'               : '0px',
         'left'              : '0px',
         'backgroundColor'   : '#000',
-        'opacity'           : 0.45,
+        'opacity'           : 0.7,
         'zIndex'            : 999
     },
     'masker'    : null,
@@ -115,13 +115,13 @@ Dialog.prototype = {
         this.dom.title          = $('<span class="dialog_title_icon"></span>').get(0);
 
         /* 创建关闭按钮 */
-        this.dom.close_button   = $('<span class="dialog_close_button">close</span>').get(0);
+        this.dom.close_button   = $('<span class="dialog_close_button layui-icon layui-icon-close layui-font-16"></span>').get(0);
 
         /* 创建内容区域 */
         this.dom.content        = $('<div class="dialog_content"></div>').get(0);
 
         /* 组合 */
-        $(this.dom.head).append('<div class="dialog_ornament1"></div><div class="dialog_ornament2"></div>').append($('<span class="dialog_title"></span>').append(this.dom.title)).append(this.dom.close_button);
+        $(this.dom.head).append($('<span class="dialog_title"></span>').append(this.dom.title)).append(this.dom.close_button);
         $(this.dom.body).append(this.dom.head).append(this.dom.content);
         $(this.dom.wrapper).append(this.dom.body).append('<div style="clear:both;display:block;"></div>');
 
@@ -137,12 +137,11 @@ Dialog.prototype = {
         $(this.dom.head).css({
             'cursor'     : 'move'
         });
-        $(this.dom.close_button).css({
-            'position'   : 'absolute',
-            'text-indent': '-9999px',
-            'cursor'     : 'pointer',
-            'overflow'   : 'hidden'
-        });
+        // $(this.dom.close_button).css({
+        //     'position'   : 'absolute',
+        //     'cursor'     : 'pointer',
+        //     'overflow'   : 'hidden'
+        // });
         $(this.dom.content).css({
             'margin'     : '0px',
             'padding'    : '0px',
@@ -154,6 +153,10 @@ Dialog.prototype = {
         $(this.dom.close_button).click(function(){
             DialogManager.close(self.id);
         });
+
+        $(this.dom.content).on('click', '*[ectype="dialog_close_button"]', function() {
+            DialogManager.close(self.id);
+        })
 		
         /* 可拖放 */
         $(this.dom.wrapper).draggable({
@@ -313,7 +316,7 @@ Dialog.prototype = {
                             no_button_name = options.no_button_name;
                         }
                         _yes_button = $('<input type="button" class="btn1" value="' + yes_button_name + '" />');
-                        _no_button = $('<input type="button" class="btn2" value="' + no_button_name + '" />');
+                        _no_button = $('<input type="button" class="btn2 mr10" value="' + no_button_name + '" />');
                         $(_yes_button).click(function(){
                             if (options.onClickYes)
                             {
@@ -334,7 +337,7 @@ Dialog.prototype = {
                             }
                             DialogManager.close(self.id);
                         });
-                        $(_buttons_bar).append(_yes_button).append(_no_button);
+                        $(_buttons_bar).append(_no_button).append(_yes_button);
                     break;
                 }
                 _html = $(_message_body).append(_message_contents).append(_buttons_bar);

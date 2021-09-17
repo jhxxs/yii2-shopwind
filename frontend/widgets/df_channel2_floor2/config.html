@@ -1,6 +1,6 @@
 <script type="text/javascript">
 var _d = DialogManager.get('config_dialog');
-_d.setWidth(400);
+_d.setWidth(540);
 _d.setPosition('center');
 $(function(){
 	$("select[name='img_recom_id_2']").change(function(){
@@ -37,80 +37,164 @@ function switchRecommend(recomId, selectName)
     }
 }
 
+function loadImage(obj){
+    getTempPath(obj,function(res){
+        $(obj).parent().find('img').attr('src',res);
+    });
+}
+
 </script>
-<div class="field_item">
+<div class="field_item webkit-box">
     <label>模块名称</label>
     <p><input type="text" name="model_name" value="{$options.model_name}"/></p>
-    <label>关键字（多个关键字用|隔开）</label>
-    <p><textarea name="keyword" style="width:300px;height:55px;">{$options.keyword}</textarea></p>
+</div>
+<div class="field_item webkit-box box-align-center">
+    <label>热搜关键字</label>
+    <p><textarea name="keywords" style="width:190px;height:60px; padding: 0 5px;">{$options.keywords}</textarea></p>
+    <font class="ml10" color="gray">多个关键字用“|”隔开</font>
+</div>
+<div class="field_item webkit-box">
+    <label>左侧分类</label>
+    <p>
+    <textarea name="cate_ids"  style="width:190px;height:60px; padding: 0 5px;">{$options.cate_ids}</textarea>
+	</p>
+	<font class="ml10" color="gray">多个分类id用半角逗号隔开，如1,2,3,4,5,6</font>
 </div>
 
-<div class="field_item">
-    <label>左侧显示的分类（多个分类id用半角逗号隔开，如1,2,3,4,5,6）</label>
-    <p><textarea name="cate_ids"  style="width:300px;height:50px;">{$options.cate_ids}</textarea></p>
-	<label>左侧分类下大图:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:200px * 285px</span>)</label>
-    <p><input type="file" name="ad1_image_file" /><input type="hidden" name="ad1_image_url" value="{$options.ad1_image_url}" /></p>
-     <!-- {if $options.ad1_image_url} --><p><img src="{$options.ad1_image_url|url_format}" height="20" /></p><!-- {/if} -->
-     <label>左侧分类下大图链接地址:</label>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>分类下大图</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad1_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad1_image_url" value="{$options.ad1_image_url}" />
+        <img src="{if $options.ad1_image_url}{$options.ad1_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：200px*285px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>链接地址</label>
     <p><input type="text" name="ad1_link_url" value="{$options.ad1_link_url}" /></p>
 </div>
+
  
-<div class="field_item">
-    <label>中部切换标题一</label>
+<div class="field_item webkit-box">
+    <label>中部标题一</label>
     <p><input type="text" name="cate_name_1" value="{$options.cate_name_1}" /></p>
-	<label>幻灯图片A:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:599px * 215px</span>)</label>
-    <p><input type="file" name="ad2_image_file" /><input type="hidden" name="ad2_image_url" value="{$options.ad2_image_url}" /></p>
-     <!-- {if $options.ad2_image_url} --><p><img src="{$options.ad2_image_url|url_format}" height="20" /></p><!-- {/if} -->
-    <label>幻灯图片A链接地址:</label>
+</div>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>幻灯片A</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad2_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad2_image_url" value="{$options.ad2_image_url}" />
+        <img src="{if $options.ad2_image_url}{$options.ad2_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：599*215px</font>
+</div>
+
+<div class="field_item webkit-box">     
+    <label>幻灯片A链接</label>
     <p><input type="text" name="ad2_link_url" value="{$options.ad2_link_url}" /></p>
-	
-    <label>幻灯图片B:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:599px * 215px</span>)</label>
-    <p><input type="file" name="ad3_image_file" /><input type="hidden" name="ad3_image_url" value="{$options.ad3_image_url}" /></p>
-     <!-- {if $options.ad3_image_url} --><p><img src="{$options.ad3_image_url|url_format}" height="20" /></p><!-- {/if} -->
-    <label>幻灯图片B链接地址:</label>
+</div>
+
+<div class="field_item webkit-box file-box box-align-center">
+    <label>幻灯片B</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad3_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad3_image_url" value="{$options.ad3_image_url}" />
+        <img src="{if $options.ad3_image_url}{$options.ad3_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：599*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>幻灯片B链接</label>
     <p><input type="text" name="ad3_link_url" value="{$options.ad3_link_url}" /></p>
-	
-    <label>幻灯图片C:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:599px * 215px</span>)</label>
-    <p><input type="file" name="ad4_image_file" /><input type="hidden" name="ad4_image_url" value="{$options.ad4_image_url}" /></p>
-    <!-- {if $options.ad4_image_url} --><p><img src="{$options.ad4_image_url|url_format}" height="20" /></p><!-- {/if} -->    
-    <label>幻灯图片C链接地址:</label>
+</div>
+
+<div class="field_item webkit-box file-box box-align-center">
+    <label>幻灯片C</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad4_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad4_image_url" value="{$options.ad4_image_url}" />
+        <img src="{if $options.ad4_image_url}{$options.ad4_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：599*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>幻灯片C链接</label>
     <p><input type="text" name="ad4_link_url" value="{$options.ad4_link_url}" /></p>
-    
-    <label>中部广告图1:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:199px * 215px</span>)</label>
-    <p><input type="file" name="ad5_image_file" /><input type="hidden" name="ad5_image_url" value="{$options.ad5_image_url}" /></p>
-    <!-- {if $options.ad5_image_url} --><p><img src="{$options.ad5_image_url|url_format}" height="20" /></p><!-- {/if} -->    
-    <label>中部广告图1链接地址:</label>
+</div>
+
+<div class="field_item webkit-box file-box box-align-center">
+    <label>中部广告1</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad5_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad5_image_url" value="{$options.ad5_image_url}" />
+        <img src="{if $options.ad5_image_url}{$options.ad5_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：199*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>广告1链接</label>
     <p><input type="text" name="ad5_link_url" value="{$options.ad5_link_url}" /></p>
-    
-    <label>中部广告图2:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:199px * 215px</span>)</label>
-    <p><input type="file" name="ad6_image_file" /><input type="hidden" name="ad6_image_url" value="{$options.ad6_image_url}" /></p>
-    <!-- {if $options.ad6_image_url} --><p><img src="{$options.ad6_image_url|url_format}" height="20" /></p><!-- {/if} -->    
-    <label>中部广告图2链接地址:</label>
+</div>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>中部广告2</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad6_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad6_image_url" value="{$options.ad6_image_url}" />
+        <img src="{if $options.ad6_image_url}{$options.ad6_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：199*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>广告2链接</label>
     <p><input type="text" name="ad6_link_url" value="{$options.ad6_link_url}" /></p>
-    
-    <label>中部广告图3:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:199px * 215px</span>)</label>
-    <p><input type="file" name="ad7_image_file" /><input type="hidden" name="ad7_image_url" value="{$options.ad7_image_url}" /></p>
-    <!-- {if $options.ad7_image_url} --><p><img src="{$options.ad7_image_url|url_format}" height="20" /></p><!-- {/if} -->    
-    <label>中部广告图3链接地址:</label>
+</div>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>中部广告3</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad7_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad7_image_url" value="{$options.ad7_image_url}" />
+        <img src="{if $options.ad7_image_url}{$options.ad7_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：199*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>广告3链接</label>
     <p><input type="text" name="ad7_link_url" value="{$options.ad7_link_url}" /></p>
-    
-    <label>中部广告图4:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:199px * 215px</span>)</label>
-    <p><input type="file" name="ad8_image_file" /><input type="hidden" name="ad8_image_url" value="{$options.ad8_image_url}" /></p>
-    <!-- {if $options.ad8_image_url} --><p><img src="{$options.ad8_image_url|url_format}" height="20" /></p><!-- {/if} -->    
-    <label>中部广告图4链接地址:</label>
+</div>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>中部广告4</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad8_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad8_image_url" value="{$options.ad8_image_url}" />
+        <img src="{if $options.ad8_image_url}{$options.ad8_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：199*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>广告4链接</label>
     <p><input type="text" name="ad8_link_url" value="{$options.ad8_link_url}" /></p>
-    
-    <label>中部广告图5:(<span>支持 gif|jpg|jpeg|png 格式,尺寸:199px * 215px</span>)</label>
-    <p><input type="file" name="ad9_image_file" /><input type="hidden" name="ad9_image_url" value="{$options.ad9_image_url}" /></p>
-    <!-- {if $options.ad9_image_url} --><p><img src="{$options.ad9_image_url|url_format}" height="20" /></p><!-- {/if} -->    
-    <label>中部广告图5链接地址:</label>
+</div>
+<div class="field_item webkit-box file-box box-align-center">
+    <label>中部广告5</label>
+    <p class="relative">
+        <input class="file absolute pointer" type="file" name="ad9_image_file" onchange="loadImage(this)" />
+        <input type="hidden" name="ad9_image_url" value="{$options.ad9_image_url}" />
+        <img src="{if $options.ad9_image_url}{$options.ad9_image_url|url_format}{else}{res file='images/upload.png'}{/if}"/>
+    </p>
+    <font class="ml10 fs12" color="gray">点击图片上传，图片尺寸：199*215px</font>
+</div>
+<div class="field_item webkit-box">     
+    <label>广告5链接</label>
     <p><input type="text" name="ad9_link_url" value="{$options.ad9_link_url}" /></p>
 </div>
-   
-<div class="field_item">   
-    <label>中部切换标题二</label>
+ 
+<div class="field_item webkit-box">   
+    <label>中部标题二</label>
     <p><input type="text" name="cate_name_2" value="{$options.cate_name_2}" /></p>
-    <label>中部切换标题二商品推荐类型</label>
+</div>
+<div class="field_item webkit-box">  
+    <label>显示商品</label>
     <p><select name="img_recom_id_2">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->
@@ -124,10 +208,12 @@ function switchRecommend(recomId, selectName)
 	</p>
 </div>
    
-<div class="field_item">   
-    <label>中部切换标题三</label>
+<div class="field_item webkit-box">   
+    <label>中部标题三</label>
     <p><input type="text" name="cate_name_3" value="{$options.cate_name_3}" /></p>
-    <label>中部切换标题三商品推荐类型</label>
+</div>
+<div class="field_item webkit-box">  
+    <label>显示商品</label>
     <p><select name="img_recom_id_3">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->
@@ -141,10 +227,12 @@ function switchRecommend(recomId, selectName)
 	</p>
 </div>
    
-<div class="field_item">
-    <label>中部切换标题四</label>
+<div class="field_item webkit-box">
+    <label>中部标题四</label>
     <p><input type="text" name="cate_name_4" value="{$options.cate_name_4}" /></p>
-    <label>中部切换标题四商品推荐类型</label>
+</div>
+<div class="field_item webkit-box">  
+    <label>显示商品</label>
     <p><select name="img_recom_id_4">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->
@@ -158,10 +246,12 @@ function switchRecommend(recomId, selectName)
 	</p>
 </div>
 
-<div class="field_item">
-    <label>右侧切换卡片一</label>
+<div class="field_item webkit-box">
+    <label>右侧卡片一</label>
     <p><input type="text" name="cate_name_5" value="{$options.cate_name_5}" /></p>
-    <label>右侧切换卡片一商品推荐类型</label>
+</div>
+<div class="field_item webkit-box">  
+    <label>显示商品</label>
     <p><select name="img_recom_id_5">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->
@@ -173,10 +263,13 @@ function switchRecommend(recomId, selectName)
         {html_options options=$gcategories selected=$options.img_cate_id_5}
     </select>
 	</p>
-    
-    <label>右侧切换卡片二</label>
+</div>
+<div class="field_item webkit-box">     
+    <label>右侧卡片二</label>
     <p><input type="text" name="cate_name_6" value="{$options.cate_name_6}" /></p>
-    <label>右侧切换卡片二商品推荐类型</label>
+</div>
+<div class="field_item webkit-box">  
+    <label>显示商品</label>
     <p><select name="img_recom_id_6">
         <option value="0">请选择...</option>
         <!-- {foreach from=$recommends key=recom_id item=recom_name} -->

@@ -1,7 +1,8 @@
+@import url('//at.alicdn.com/t/font_1864554_lpgyuxyd4n.css');
 
 /************** global.css - No need to modify ***************************************************/
 html{font-size:100%;}
-body{margin:0;padding:0; font-family:/*Tahoma, Geneva, sans-serif*/Heiti, Heiti SC, DroidSans, DroidSansFallback, Arial, "Microsoft YaHei";background:#f4f4f4;font-size:12px; max-width:640px;  margin:0 auto}
+body{margin:0;padding:0; font-family:Heiti, Heiti SC, DroidSans, DroidSansFallback, Arial, "Microsoft YaHei";background:#f7f8fa;font-size:12px; max-width:640px;  margin:0 auto}
 body *{-webkit-tap-highlight-color: rgba(0,0,0,0);}
 em,p,ul,dl,dt,dd,ins,h1,h2,h3,h4,form,ins,s{margin:0;padding:0; font-weight:normal !important;text-decoration: none}
 h1,h2,h3,h4,h5,h6{font-size:14px;}
@@ -10,7 +11,6 @@ em,i{font-style:normal;}
 ul,ol{ list-style:none;}
 input, button, select, textarea{outline: none;filter: none !important;-webkit-appearance:none;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
-input[type="text"]{border-radius:4px;}
 input,button,select,textarea{outline:none;}
 textarea{resize:none}
 img{border:0;}
@@ -36,9 +36,6 @@ a{text-decoration:none;blr:expression(this.onFocus=this.blur());outline:none;out
 .yahei{font-family: 'microsoft yahei',Verdana,Arial,Helvetica,sans-serif;}
 .price{color:#E4393C; font-family: 'microsoft yahei',Verdana,Arial,Helvetica,sans-serif; font-weight:normal}
 .bgf{ background:#fff;}
-.gray{color:#999;}
-.green{color:#1BB974;}
-.fixed-gap{width:100%; height:48px; background:#f4f4f4}
 
 /* margin,padding */
 .margin5{margin:5px;}
@@ -73,10 +70,12 @@ a{text-decoration:none;blr:expression(this.onFocus=this.blur());outline:none;out
 /* text,color */
 .fff{color:#fff;}
 .f60{color:#ff6600;}
-.f66{color:#666;}
 .f99{color:#999;}
 .ddd{color:#ddd;}
-.red{color:red;}
+.red{color:#E4393C;}
+.gray{color:#999;}
+.green{color:#1BB974;}
+.blue {color:#0d6fb8;}
 
 .fs18{font-size:18px}
 .fs16{font-size:16px}
@@ -86,10 +85,8 @@ a{text-decoration:none;blr:expression(this.onFocus=this.blur());outline:none;out
 .fs11{font-size:11px;}
 .fs10{font-size:10px;}
 
-.fw-normal{font-weight:normal;}
 .strong{font-weight:bold;}
 .center{ text-align:center}
-.align-right{ text-align:right}
 
 /* border */
 .border{border:1px #f4f4f4 solid}
@@ -109,36 +106,6 @@ a{text-decoration:none;blr:expression(this.onFocus=this.blur());outline:none;out
 .overflow-ellipsis{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}/*文字溢出隐藏*/
 .flex-wrap{flex-wrap: wrap;}/*换行*/
 
-@font-face {
-  font-family: 'wind-icon-font';  /* project id 37350 */
-  src: url('//at.alicdn.com/t/font_37350_w9bhspcagq.eot');
-  src: url('//at.alicdn.com/t/font_37350_w9bhspcagq.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_37350_w9bhspcagq.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_37350_w9bhspcagq.woff') format('woff'),
-  url('//at.alicdn.com/t/font_37350_w9bhspcagq.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_37350_w9bhspcagq.svg#iconfont') format('svg');
-}
-
-.wind-icon-font {
-  font-family:"wind-icon-font" !important;
-  font-style:normal;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* global banner */
-.global-image-ads{ position:relative;text-align:center;}
-.global-image-ads a{width:100%;display:block;}
-.global-image-ads a img{display:block;width:100%; margin: 0 auto;}
-.global-image-ads .global-image-ads-content{text-align:center; margin:0 auto}
-.global-image-ads .global-image-ads-botton{position:absolute;right:2px;top:2px; height:16px; width:16px; text-align:center; background:#CC0000;color:#fff; line-height:16px; cursor:pointer; font-weight:normal; font-family:"Microsoft yahei"; font-size:100%; vertical-align:baseline}
-
-
-
-
-
-
 
 /************** common.css - Modified according to the situation ***************************************************/
 
@@ -146,17 +113,7 @@ a{color:#222;}
 a:hover{/*color:#E4393C;*/ color: #222; text-decoration:none}
 
 .w-mall,.w{min-width:320px; max-width:640px;margin:0 auto;}
-.w-shop{}
-.w-user{}
-
 img.lazyload{background:#fff url(../images/loading.gif) no-repeat center center;}
-
-
-/* 没有记录提示 */
-.notice-empty{background:#f4f4f4; text-align: center; margin:0 auto;padding-top:100px; text-align:center; vertical-align:middle}
-.notice-empty i{display:block; font-family:"wind-icon-font"; font-size:70px; text-align:center; color:#999;width: 100px;height: 100px; line-height:100px; margin: 0 auto;background:#ddd;border-radius: 100%;}
-.notice-empty p{ color:#999;margin-top:20px; font-size: 12px;}
-.notice-empty .btn{ border:1px #ddd solid; padding:5px 10px; color:#222; border-radius:3px; display:inline-block; background:#fff; font-size:14px}
 
 /* 下拉刷新 */
 .infinite-template{display:none}
@@ -177,49 +134,103 @@ img.lazyload{background:#fff url(../images/loading.gif) no-repeat center center;
 .filePicker .webuploader-pick{ display:block; padding:0; width:100%; height:100%; font-size:0;}
 
 
+/* pagination */
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  border-radius: 4px;
+  margin: 0 auto;
+}
+.pagination > li {
+  float: left;
+}
+.pagination > li > a,
+.pagination > li > span {
+  position: relative;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #337ab7;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  display: inline-block;
+}
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  margin-left: 0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  z-index: 2;
+  color: #23527c;
+  background-color: #eee;
+  border-color: #ddd;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  z-index: 3;
+  color: #fff;
+  cursor: default;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.pagination-lg > li > a,
+.pagination-lg > li > span {
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 1.3333333;
+}
+.pagination-lg > li:first-child > a,
+.pagination-lg > li:first-child > span {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.pagination-lg > li:last-child > a,
+.pagination-lg > li:last-child > span {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.pagination-sm > li > a,
+.pagination-sm > li > span {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.pagination-sm > li:first-child > a,
+.pagination-sm > li:first-child > span {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.pagination-sm > li:last-child > a,
+.pagination-sm > li:last-child > span {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
 
-/* ajaxSwitcher 弹窗的效果 全屏*/
-@keyframes optionBlockLeft
-{
-from { display: none; left: 100%; right:-100%;}
-to { display: block ; left: 0; right:0;}
-}
-@-webkit-keyframes optionBlockLeft
-{
-from { display: none; left: 100%; right:-100%;}
-to { display: block; left: 0; right:0;}
-}
-@keyframes optionBlockRight
-{
-from { display: block; left: 0; right:0;}
-to { display: none; left: 110%; right: -110%;}
-}
-@-webkit-keyframes optionBlockRight
-{
-from { display: block; left: 0; right:0;}
-to { display: none; left: 110%; right: -110%;}
-}
-
-/* ajaxSwitcher 弹窗的效果 非全屏*/
-@keyframes optionHalfBlockLeft
-{
-from { display: none; left: 100%; right:-100%;}
-to { display: block ; left:20%; right:0;}
-}
-@-webkit-keyframes optionHalfBlockLeft
-{
-from { display: none; left: 100%; right:-100%;}
-to { display: block; left:20%; right:0;}
-}
-@keyframes optionHalfBlockRight
-{
-from { display: block; left:20%; right:0;}
-to { display: none; left: 110%; right: -110%;}
-}
-@-webkit-keyframes optionHalfBlockRight
-{
-from { display: block; left:20%; right:0;}
-to { display: none; left: 110%; right: -110%;}
-}
 
 /************** common end ***************************************************/

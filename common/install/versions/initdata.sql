@@ -39,6 +39,8 @@ delete from `swd_goods_statistics`;
 delete from `swd_recommend_goods`;
 delete from `swd_report`;
 delete from `swd_sgrade_integral`;
+delete from `swd_limitbuy`;
+delete from `swd_teambuy`;
 
 --
 -- 转存表中的数据 `swd_brand`
@@ -2186,6 +2188,16 @@ INSERT INTO `swd_limitbuy` (`id`, `goods_id`, `title`, `summary`, `start_time`, 
 (6, 17, '春节大促', '', 1617066451, 1627693651, 2, 'a:1:{i:17;a:2:{s:5:"price";s:1:"7";s:8:"pro_type";s:8:"discount";}}', NULL),
 (7, 18, '春节大促', '', 1617066481, 1630372081, 2, 'a:1:{i:18;a:2:{s:5:"price";s:1:"8";s:8:"pro_type";s:8:"discount";}}', NULL),
 (8, 20, '春节大促', '', 1617066504, 1627693704, 2, 'a:1:{i:20;a:2:{s:5:"price";s:1:"5";s:8:"pro_type";s:8:"discount";}}', NULL);
+
+-- -----------------------------
+-- 转存表中的数据 `swd_teambuy`
+-- -----------------------------
+INSERT IGNORE INTO `swd_teambuy` VALUES ('1', '24', 'twopeople', '1', '2', '2', 'a:1:{i:24;a:2:{s:5:\"price\";s:1:\"8\";s:4:\"type\";s:8:\"discount\";}}');
+INSERT IGNORE INTO `swd_teambuy` VALUES ('2', '22', 'twopeople', '1', '2', '3', 'a:1:{i:22;a:2:{s:5:\"price\";s:1:\"7\";s:4:\"type\";s:8:\"discount\";}}');
+INSERT IGNORE INTO `swd_teambuy` VALUES ('3', '12', 'twopeople', '1', '2', '2', 'a:1:{i:12;a:2:{s:5:\"price\";s:3:\"8.9\";s:4:\"type\";s:8:\"discount\";}}');
+INSERT IGNORE INTO `swd_teambuy` VALUES ('4', '17', 'twopeople', '1', '2', '2', 'a:1:{i:17;a:2:{s:5:\"price\";s:1:\"7\";s:4:\"type\";s:8:\"discount\";}}');
+INSERT IGNORE INTO `swd_teambuy` VALUES ('5', '13', 'twopeople', '1', '2', '2', 'a:1:{i:13;a:2:{s:5:\"price\";s:3:\"8.4\";s:4:\"type\";s:8:\"discount\";}}');
+INSERT IGNORE INTO `swd_teambuy` VALUES ('6', '16', 'twopeople', '1', '2', '3', 'a:1:{i:16;a:2:{s:5:\"price\";s:1:\"9\";s:4:\"type\";s:8:\"discount\";}}');
 
 --
 -- 转存表中的数据 `swd_coupon`

@@ -33,8 +33,17 @@ class Df_fl_brandWidget extends BaseWidget
 		$data = $cache->get($key);
         if($data === false)
         {	
+            $query = BrandModel::find()->select('brand_logo, brand_id');
+            if(($btag = $this->options['btag'])) {
+                $query->where(['tag' => $btag]);
+            }
+            $amount = intval($this->options['amount']);
+            if($amount > 0) {
+                $query->limit($amount);
+            }
             $data = array(
-				'brandList'	=> BrandModel::find()->select('brand_logo, brand_id')->asArray()->all()
+                'model_name' => $this->options['model_name'],
+				'brandList'	=> $query->orderBy(['sort_order' => SORT_ASC])->asArray()->all()
 			);
             $cache->set($key, $data, $this->ttl);
         }

@@ -24,7 +24,7 @@
             <input type="hidden" name="client" value="{$client}" />
             <input type="hidden" name="page" value="{$key}" />
             <input type="submit" class="submit" value="{$lang.visual}" />
-            <input type="button" class="preview" url="{$page.url}" value="{$lang.preview}" />
+            <input type="button" class="preview" url="{$page.path|default:$page.url}" value="{$lang.preview}" />
             <!--{foreach from=$page.action item=action}-->
             <input type="button" class="{$action}" id="{$key}" value="{$lang.$action}" />
             <!--{/foreach}-->

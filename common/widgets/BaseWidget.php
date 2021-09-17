@@ -21,6 +21,7 @@ use common\models\UploadedFileModel;
 use common\models\RecommendModel;
 use common\models\RecommendGoodsModel;
 
+use common\library\Basewind;
 use common\library\Def;
 use common\library\Language;
 use common\library\Widget;
@@ -61,7 +62,11 @@ class BaseWidget
 	/* 设置选项 */
     public function setOptions($options)
     {
+        if(!$options) {
+            $options = [];
+        }
         $this->options = $options;
+        $this->params['homeUrl'] = Basewind::homeUrl();
 		$this->params['options'] = $this->options;
     }
 	
@@ -69,7 +74,7 @@ class BaseWidget
     public function getContents()
     {
         // 获取挂件数据
-		$this->params['widget_data'] = $this->getData();
+		$this->params['widget_data'] = array_merge(['uniqueid' => mt_rand()], $this->getData());
 		$this->params['options'] = $this->options;
         return $this->wrapContents($this->fetch('widget'));
     }
@@ -107,6 +112,7 @@ class BaseWidget
     /* 传递配置页面需要的一些变量 */
     public function getConfigDataSrc()
     {
+
     }
 
     /* 显示配置表单 */

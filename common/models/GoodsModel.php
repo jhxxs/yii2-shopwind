@@ -14,6 +14,7 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 
+use common\models\GoodsSpecModel;
 use common\models\GoodsStatisticsModel;
 
 use common\library\Def;
@@ -107,6 +108,21 @@ class GoodsModel extends ActiveRecord
 			$cache->set($cachekey, $data, 3600);
 		}
 		return $data;
+	}
+
+	/**
+	 * 取得商品库存数量
+	 */
+	public static function getStocks($goods_id = 0, $cached = true)
+	{
+		$cache = Yii::$app->cache;
+		$cachekey = md5((__METHOD__) . var_export(func_get_args(), true));
+		$data = $cache->get($cachekey);
+		if ($data === false || !$cached) {
+			$data = GoodsSpecModel::find()->select('stock')->where(['goods_id' => $goods_id])->sum('stock');
+			$cache->set($cachekey, $data, 3600);
+		}
+		return intval($data);
 	}
 
 	/* 清除缓存 */

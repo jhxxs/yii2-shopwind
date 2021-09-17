@@ -146,23 +146,26 @@ class GcategoryController extends \common\controllers\BaseAdminController
 	/* 异步取所有下级 */
    	public function actionChild()
     {
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'shown']);
 		if(!$post->id) {
 			return Message::warning(false);
 		}
 		
-		$gcategories = GcategoryModel::getList($post->id, 0, false);
-		foreach ($gcategories as $key => $val)
+		$list = GcategoryModel::getList($post->id, 0, $post->shown ? true : false);
+		foreach ($list as $key => $value)
         {
-            $gcategories[$key]['switchs'] = 0;
-			if(GcategoryModel::find()->where(['parent_id' => $val['cate_id']])->exists()) {
-				$gcategories[$key]['switchs'] = 1;
+			$query = GcategoryModel::find()->select('cate_id')->where(['parent_id' => $value['cate_id']]);
+			if($post->shown) {
+				$query->andWhere(['if_show' => 1]);
+			}
+			if($query->exists()) {
+				$list[$key]['switchs'] = 1;
             }
 			
-			// 暂时不限制级别
-			$gcategories[$key]['add_child'] = 1;
+			// 允许添加下级标识
+			$list[$key]['add_child'] = 1;
         }
-		return Message::result(array_values($gcategories));
+		return Message::result(array_values($list));
     }
 	
 	/* 异步修改数据 */

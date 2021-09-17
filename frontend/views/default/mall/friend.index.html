@@ -24,7 +24,7 @@
                   </b> <span> <a href="{url route='my_message/send' to_id=$friend.userid}" class="note">{$lang.send_message}</a> <a href="javascript:drop_confirm('{$lang.drop_confirm}', '{url route='friend/delete' userid={$friend.friend_id}}');" class="delete">{$lang.drop}</a> </span> </h3>
               </li>
               <!--{foreachelse}-->
-              <li class="padding6">
+              <li>
                 <div class="notice-word">
                   <p>{$lang.{$app->controller->action->id}}{$lang.no_records}</p>
                 </div>

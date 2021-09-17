@@ -154,7 +154,7 @@ class GoodsController extends \common\controllers\BaseAdminController
 			return Message::display(Language::get('edit_ok'), ['goods/index']);
 		}
 	}
-	
+
 	/* 异步修改数据 */
     public function actionEditcol()
     {

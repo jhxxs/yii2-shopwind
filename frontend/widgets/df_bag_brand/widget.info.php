@@ -2,7 +2,7 @@
 
 return array(
     'name'      => 'df_bag_brand',
-    'display_name'  => '大块品牌',
+    'display_name'  => '左图右品牌',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',

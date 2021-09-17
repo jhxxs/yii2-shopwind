@@ -1,50 +1,143 @@
+::-webkit-scrollbar {display: none; /* Chrome Safari */}
+.editTmplateMode { max-width: 100%;  overflow: hidden; }
+.editTmplateMode #template_page {position: fixed; z-index: 1;overflow-x: hidden; overflow-y: scroll;  scrollbar-width: none;-ms-overflow-style:none; width: 100%; height: calc(100%  - 60px);}
+.editTmplateMode #template_page .ewraper {background-color: #ededed; max-width: 375px;margin: 30px auto; /*box-shadow:0 0 20px 0 rgba(0,0,0,.05)*/}
+
+#template_config { display: none; position: fixed; z-index: 2; right: 0; top:57px;  width: 400px; overflow: hidden;  height: 100%;}
+#template_config .wraper {overflow-x: hidden;overflow-y: scroll;scrollbar-width: none;-ms-overflow-style:none; width: 100%;height: 100%;background-color: #fff;}
+
+.editTmplateMode #header .content {height: 68px;}
+.editTmplateMode #header .content p {padding: 33px 90px 0 90px; font-size: 14px;}
 
 /* 挂件区域 */
 .empty_widget_area { padding:20px; background:#eee; text-align:center; }
+.placeholder { background:#eee;}
 
 /* 挂件样式 */
-.widget .widget_icons { position:absolute; top:0px; right:0px; cursor:move; height:25px; z-index:999; }
-.widget .widget_icons span { position:absolute; top:10px; cursor:pointer; width:15px; height:15px; text-indent:-99999px; }
-.widget .widget_icons .delete_widget { background:transparent url(../images/delete.gif) no-repeat center center; right:5px; }
-.widget .widget_icons .config_widget { background:transparent url(../images/config.gif) no-repeat center center; right:25px; }
-
-/* 配置对话框样式 */
-/* .widget_config_form {padding-bottom: 10px;} */
-.widget_config_form_body { padding:10px; }
-.widget_config_form_body .field_item { padding:5px; }
-.widget_config_form_body .field_item label { padding:8px 0px;display:block; font-size: 14px;}
-.widget_config_form_body .field_item label span { font-weight:normal; color:#888; font-size: 14px; }
-.widget_config_form_body .field_item  p{font-size: 14px;}
-.widget_config_form_body input[type="button"]{ background: #3e6caa;border:0;color:#fff; padding:6px 10px; cursor: pointer; }
-.widget_config_form_body #add_image {background: #ffcc00; width: 80px;}
-.widget_config_form_body input[type="text"]{border-radius: 0;}
-
-/* 面板的样式 */
-.handle {background: #cde4f6; padding-bottom: 10px; position: relative; width: 100%;}
-.handle_top {margin: 0 7px; position: relative; height: 30px; z-index: 2;}
-.handle_logo {position: absolute; top: 5px; left: 2px;}
-.handle_top ul {position: relative; top: 2px; margin: 1px 0 0 0px; height: 31px; _top: 3px; overflow:hidden}
-.handle_top ul li {float: left;}
-
-#page-layout-community-index.editTmplateMode .handle {
-    margin-top: 60px;
+.widget .widget_icons { position:absolute; border-radius: 3px; width: 42px; height: 136px; top:0px; right: -51px; display: none; background-color: #0d6fb8;}
+.widget .widget_icons .layui-btn {margin-left: 0; background:none;}
+.widget .widget_icons .layui-btn.disabled {color: rgb(124, 157, 196)}
+.widget .widget_mask{
+    position: absolute;
+    width: calc(100% - 3px);
+    height: calc(100% - 3px);
+    left: 0;
+    top: 0;
+    border: 2px solid #0d6fb8;
+    opacity: 0;
+    box-shadow: 0 0 20px 0 rgba(98,60,235,.2);
+}
+.widget .widget_mask.show {
+    opacity: 1;
 }
 
-.handle_hover {border:1px solid #b2d7f1; border-bottom:0;display: block; font-size: 14px; text-decoration: none; color:#3e6caa; }
-.handle_hover span {background: #fff; padding: 5px 20px 5px 18px; display: block;}
-
-.handle_hide {display: block; background: url(../images/handle_hide.gif); width: 33px; height: 19px; padding: 2px 0 0 25px; position: absolute; top: 5px; right: 0; text-decoration: none; color: #22508e}
-.handle_bot {margin: 0 7px;}
-.handle_con { position: relative; z-index: 1; width: 100%;}
-.handle_con_box {border: 1px solid #b2d7f1; background: #fff; width: 100%; padding-bottom: 15px;}
-.handle_btn { padding-top: 15px; border-top: 1px solid #cde4f6; }
-.handle_btn a{border-radius:3px; width:80px; height:30px; line-height:30px; display:inline-block;  text-align: center; text-decoration: none; color: #fff; margin-left: 10px;}
-.handle_btn1 {background:#f60; }
-.handle_btn2 {background:#666;}
-.handle_btn a:hover{color:#fff;opacity:0.9}
-
-.widget_list { height:70px; overflow:auto; }
+/* 配置对话框样式 */
+.widget_config_form {background-color: #fff; padding: 20px; padding-bottom: 100px;}
+.widget_list .iconfont {font-size: 28px;color: #9da3a7; display: block; margin-bottom: 10px;}
 .widget_list ul { list-style:none; margin:0px 5px; overflow: hidden;}
-.widget_list ul li { float:left; }
-.widget_list ul li { padding:0 20px; height:50px; overflow:hidden; text-align:center; line-height:50px; margin:10px 5px; background:#eee; border:#ddd 1px solid; }
+.widget_list ul li { float: left;
+    color: #303133;
+    padding: 20px 0;
+    font-size: 13px;
+    width: 100px;
+    text-align: center;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    border-radius: 4px;
+    margin: 5px;
+    cursor:default;
+}
+.widget_list ul li:hover {
+    color: #0d6fb8;
+    box-shadow: 0 0 10px 0 rgba(98,60,235,.1);
+}
+.widget_list ul li:hover .iconfont {
+    color: #0d6fb8;
+}
+.widget_list ul li s{
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 3px;
+    background-color: #fdf3f1;
+    color: #fc2b34;
+    font-size: 10px;
+    padding: 2px 5px;
+}
+
 .widget_list ul li .add_widget_note { color:#aaa; font-size:12px; position:absolute; top:0px; right:0px; line-height:12px; }
+
+.mainnav { position: relative; z-index: 999; height: 58px; overflow: hidden; }
+.mainnav .wraper{position: fixed;left: 0;top:0;z-index: 999; /*border-bottom: 1px solid #f2f2f2; */line-height: 36px;background-color: #6F6F6F;}
+.mainnav .layui-btn {width: 90px;font-size:14px; background-color: #fff;}
+
+/* 面板的样式 */
+.handle {background: #ffffff; position: fixed; z-index: 2; height: calc(100% - 57px); left: 0;top:57px;}
+.handle .content {height: calc(100% + 200px);}
+.handle_top ul li {float: left; }
+.handle_hover {display: block; font-size: 14px; border-left: 3px #333 solid;}
+.handle .scroller {
+    width:344px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    height: 100%;
+    box-shadow: rgb(0 0 0 / 20%) 0px 0px 5px -2px;
+}
+.handle .fold {
+    right: -20px;
+    top: calc(50% - 78px);
+    background-color: #fff;
+    height: 78px;
+    line-height: 78px;
+    border-radius: 0 10px 10px 0;
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.2) 3px 0px 3px -5px;
+    font-weight: bold;
+}
+
+/*  挂件配置 */
+.widget-box {font-size: 14px;}
+.widget-box h3,.widget-box h4 {
+    border-bottom:  1px solid #f2f4f6;
+}
+.widget-box h3 strong{border-left: 4px #0d6fb8 solid;padding-left:10px; color: #333;}
+.widget-box .item { line-height: 34px; margin-top: 15px;margin-bottom: 15px;}
+.widget-box .item .input {
+    border:1px #ddd solid;
+    padding: 8px 10px;
+    border-radius: 2px;
+}
+.widget-box .item .input:hover {
+    border: 1px #0d6fb8 solid;
+    box-shadow: 0 0 2px 0 rgba(98,60,235,.2);
+}
+.widget-box .item .switch {
+    background-color: #fff;
+    border:1px #eee solid;
+    color: #333;
+    padding: 2px;
+    width: 36px;
+    height: 24px;
+    margin-top:1px;
+    line-height: 24px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    border-left-color: transparent;
+}
+.widget-box .item .switch.first{border-left-color: #eee;}
+.widget-box .item .switch.selected {border-color:#0d6fb8; color: #0d6fb8;}
+
+.layui-form-onswitch { background-color: #0d6fb8 !important; border-color: #0d6fb8 !important;}
+.layui-btn-normal {background-color: #0d6fb8 !important}
+.layui-bg-blue {background-color: #0d6fb8 !important;}
+.layui-border-blue { border-color: #0d6fb8 !important; color: #0d6fb8 !important;}
+.layui-layer-title {border-bottom: 0;}
+.layui-slider-input.layui-input {padding-left: 4px;}
+.layui-form-checked[lay-skin="primary"] i {border-color: #0d6fb8 !important; background-color: #0d6fb8 ;}
+.layui-form-checkbox[lay-skin="primary"]:hover i {border-color: #0d6fb8;}

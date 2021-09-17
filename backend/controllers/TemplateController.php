@@ -109,7 +109,7 @@ class TemplateController extends \common\controllers\BaseAdminController
 		
         // 保存配置
 		$this->saveConfig($client, $template, $page, $page_config);
-		return Message::result(null, Language::get('save_successed'));
+		return Message::result(null, Language::get('publish_successed'));
     }
 	
 	/* 编辑页面 */
@@ -126,7 +126,13 @@ class TemplateController extends \common\controllers\BaseAdminController
         if (!($html = $this->getPageHtml($page))) {
             return Message::warning(Language::get('no_such_page'));
         }
-		
+	
+		// 给BODY内容加上外标签，以便控制样式
+		if($client == 'wap') {
+			preg_match("/<body.*?>(.*?)<\/body>/is", $html, $match);
+			$html = str_replace($match[0], "<div id='template_page'><div class='ewraper hidden'>".$match[0]."</div></div>", $html);
+		}
+
         // 让页面可编辑，并输出HTML
         echo $this->makeEditable($client, $page, $html);
 		exit(0);
@@ -162,15 +168,19 @@ class TemplateController extends \common\controllers\BaseAdminController
         header('Content-Type:text/html;charset=' . Yii::$app->charset);
 		$this->params['widgets'] = Json::encode($widgets);
 		$this->params['page'] = $this->getPage();
+
+		if($client == 'wap') {
+			return $this->render('../template.panel.html', $this->params);
+		}
 		
-		return $this->render('../template.panel.html', $this->params);
+		return $this->render('../template.panel.pc.html', $this->params);
     }
 	
 	/* 配置挂件 */
     public function actionConfig()
     {
 		$get = Basewind::trimAll(Yii::$app->request->get(), true);
-        
+       
 		// 当前所编辑的页面
         list($client, $template, $page) = $this->getClientParams();
 		
@@ -189,28 +199,37 @@ class TemplateController extends \common\controllers\BaseAdminController
 		else
 		{
 			if (!$get->name || !$get->id || !$page) {
-				$this->configRespond('_d.setTitle("' . Language::get('no_such_widget') . '");_d.setContents("message", {text:"' . Language::get('no_such_widget') . '"});');
-				return;
+				if($client == 'wap') {
+					return Message::warning(Language::get('no_such_widget'));
+				}
+				return $this->configRespond('_d.setTitle("' . Language::get('no_such_widget') . '");_d.setContents("message", {text:"' . Language::get('no_such_widget') . '"});');
 			}
 			$page_config = Widget::getInstance($client)->getConfig($template, $page);
 			$widget = Widget::getInstance($client)->build($get->id, $get->name, $page_config['widgets'][$get->id]['options']);
 			
 			if(($options = $widget->parseConfig(Yii::$app->request->post())) === false) {
-				return;
+				return Message::warning(Language::get('no_such_widget'));
 			}
 			$page_config['tmp'][$get->id]['options'] = $options;
 				
 			// 保存配置信息
 			$this->saveConfig($client, $template, $page, $page_config);
-	
+			
 			// 返回即时更新的数据
 			$widget->setOptions($options);
 			$contents = $widget->getContents();
-			$this->configRespond('DialogManager.close("config_dialog");parent.disableLink(parent.$(document.body));parent.$("#' . $get->id . '").replaceWith(document.getElementById("' . $get->id . '").parentNode.innerHTML);parent.init_widget("#' . $get->id . '");', $contents);
+
+			if($client == 'wap') {
+				return Message::result($contents, Language::get('save_successed'));
+			}
+			return $this->configRespond('DialogManager.close("config_dialog");parent.disableLink(parent.$(document.body));parent.$("#' . $get->id . '").replaceWith(document.getElementById("' . $get->id . '").parentNode.innerHTML);parent.init_widget("#' . $get->id . '");', $contents);
 		}
     }
 	
-	/* 响应配置请求 */
+	/**
+	 * 响应配置请求
+	 * 这个是弹窗模式下的反馈代码（for PC）
+	 */
     public function configRespond($js, $widget = '')
     {
         header('Content-Type:text/html;charset=' . Yii::$app->charset);
@@ -261,7 +280,7 @@ class TemplateController extends \common\controllers\BaseAdminController
     public function getPageHtml($page = null)
     {
         $pages = $this->getEditablePages();
-		
+	
 		foreach($pages as $key => $val){
 			if($key == $page){
 				return file_get_contents($val['url']);
@@ -274,9 +293,9 @@ class TemplateController extends \common\controllers\BaseAdminController
     public function makeEditable($client = 'pc', $page, $html)
     {
         $editmode = '<script type="text/javascript" src="' . Url::toRoute(['template/jslang']).'"></script><script type="text/javascript">__PAGE__ = "' . $page . '"; __CLIENT__ ="'.$client.'"; BACK_URL = "' . Basewind::backendUrl() . '";</script>'.Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js',
-            	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
-			]).'<script type="text/javascript" src="' . Resource::getThemeAssetsUrl('js/template_panel.js', false) . '"></script><link id="template_editor_css" href="' .  Resource::getThemeAssetsUrl('css/template_panel.css', false) .'" rel="stylesheet" type="text/css" />';
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js,layui/layui.js,jquery.plugins/jquery.form.js',
+            	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,layui/css/layui.css'
+			]).'<script type="text/javascript" src="' . Resource::getThemeAssetsUrl('js/'.($client == 'wap' ? '' : 'pc/').'template_panel.js', false) . '"></script><link href="' .  Resource::getThemeAssetsUrl('css/'.($client == 'wap' ? '' : 'pc/').'template_panel.css', false) .'" rel="stylesheet" type="text/css" />';
 
         return str_replace('<!--<editmode></editmode>-->', $editmode, $html);
     }
@@ -289,10 +308,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 		list($client, $template, $page) = $this->getClientParams();
 		$siteUrl = $client == 'wap' ? Basewind::mobileUrl() : Basewind::homeUrl();
 	
-		// PC && H5
-		$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index'], $siteUrl), 'action' => array());
 		if(in_array($client, ['pc']))
 		{
+			$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index'], $siteUrl), 'action' => array());
 			if(IntegralSettingModel::getSysSetting('enabled')) {
 				$data['integral'] = array('title' => Language::get('integral_mall'), 'url' => Url::toRoute(['integral/index'], $siteUrl),'action'=>array());
 			}
@@ -313,7 +331,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 			}
 		}
 		if(in_array($client, ['wap'])) {
-			$data['community'] = array('title' => Language::get('community'), 'url' => Url::toRoute(['community/index'], $siteUrl), 'action' => array());
+			$mobileUrl = Basewind::mobileUrl(false, true);
+			$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index'], $siteUrl), 'path' => $mobileUrl, 'action' => array());
+			$data['community'] = array('title' => Language::get('community'), 'url' => Url::toRoute(['community/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/community/index/index' : '', 'action' => array());
 		}
 		
 		return $data;
