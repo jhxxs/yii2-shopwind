@@ -40,7 +40,6 @@ body {font-size: 12px;}
     width: 50px;
 }
 
-.widget_config_form_body .field_item .file
 .widget_config_form_body input[type="button"]{ background: #3e6caa;border:0;color:#fff; padding:6px 10px; cursor: pointer; }
 .widget_config_form_body #add_image { line-height: 30px; cursor: pointer; text-align: center;}
 .widget_config_form_body input[type="text"]{border-radius: 0;}
