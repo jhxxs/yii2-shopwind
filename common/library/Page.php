@@ -105,7 +105,9 @@ class Page
 	 */
 	public static function listStyle($folder = 'mall', $client = 'pc', $template = 'default')
 	{
-		$dir = (in_array($client, ['wap']) ?  Yii::getAlias('@mobile') : Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
+		//$dir = (in_array($client, ['wap']) ?  Yii::getAlias('@mobile') : Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
+		
+		$dir = Yii::getAlias('@frontend/views');
 		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
 		
 		$styles = array();
@@ -464,15 +466,17 @@ class Page
 	public static function export($config = [])
 	{
 		$writer = new \XLSXWriter();
-		header('Content-disposition: attachment; filename="'.$writer->sanitize_filename($config['fileName']).'"');
+		header('Content-disposition: attachment; filename="'.$writer->sanitize_filename($config['fileName']).'.xlsx"');
 		header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		header('Content-Transfer-Encoding: binary');
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
-
-		$writer->setTempDir(Yii::getAlias('@runtime'));
+		
+		$writer->setTempDir(Yii::getAlias('@frontend/runtime'));
 		$writer->writeSheet($config['models']);
+	
 		$writer->writeToStdOut();
+		exit(0);
 	}
 	
 	public static function writeLog($key = '', $word = '') 
