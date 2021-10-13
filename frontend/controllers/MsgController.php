@@ -49,7 +49,7 @@ class MsgController extends \common\controllers\BaseUserController
 		if(!Yii::$app->request->isPost)
 		{
 			// 初始化检查
-			if(!($smser = Plugin::getInstance('sms')->autoBuild()) || !$smser->verify()) {
+			if(!($smser = Plugin::getInstance('sms')->autoBuild()) || !$smser->verify(false)) {
 				return Message::warning(Language::get('msgkey_not_config'));
 			}
 			
