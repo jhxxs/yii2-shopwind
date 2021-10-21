@@ -26,10 +26,28 @@ use common\library\Page;
 
 class SiteController extends \common\controllers\BaseMallController
 {
+	/**
+	 * 初始化
+	 * @var array $view 当前视图
+	 * @var array $params 传递给视图的公共参数
+	 */
+	public function init()
+	{
+		// parent::init(); don't init
+
+		$this->view  = Page::setView('mall');
+		$this->params = [
+			'homeUrl'		=> Basewind::homeUrl(),
+			'siteUrl' 		=> Basewind::siteUrl(),
+			'lang' 			=> Language::find($this->id),
+		];
+	}
+
 	public function actionClosed()
 	{
 		if(Yii::$app->params['site_status']) {
-			return $this->redirect(['default/index']);
+			// don't use $this->redirect()
+			return Yii::$app->getResponse()->redirect(['default/index']);
 		}
 		return Message::warning(Yii::$app->params['closed_reason']);
 	}
