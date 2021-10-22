@@ -98,7 +98,7 @@ class My_addressController extends \common\controllers\BaseUserController
 		
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0])->indexBy('region_id')->column();
+			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
 			$this->params['address'] = $address;
 			$this->params['action'] = Url::toRoute(['my_address/edit', 'addr_id' => $addr_id]);
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
