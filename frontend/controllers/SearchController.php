@@ -68,9 +68,15 @@ class SearchController extends \common\controllers\BaseMallController
 		}
 		else
 		{
-			$goodsList = GoodsModel::find()->alias('g')->select('g.goods_id,g.goods_name,g.default_image,g.price, s.store_id,s.store_name,s.im_qq,gst.sales,gst.comments')->joinWith('store s', false)->with('goodsImage')->joinWith('goodsStatistics gst', false)->orderBy(['g.goods_id' => SORT_DESC])->limit(50)->asArray()->all();
+			$goodsList = GoodsModel::find()->alias('g')->select('g.goods_id,g.goods_name,g.default_image,g.price, s.store_id,s.store_name,s.im_qq,gst.sales,gst.comments')
+				->joinWith('store s', false)
+				->with('goodsImage')
+				->joinWith('goodsStatistics gst', false)
+				->where(['g.if_show' => 1, 'g.closed' => 0, 's.state' => 1])
+				->orderBy(['g.goods_id' => SORT_DESC])
+				->limit(50)->asArray()->all();
+				
 			$this->params['goodsListEmptyRecommended'] = true;
-			
 		}
 		foreach ($goodsList as $key => $goods) {
 			empty($goods['default_image']) && $goodsList[$key]['default_image'] = Yii::$app->params['default_goods_image'];

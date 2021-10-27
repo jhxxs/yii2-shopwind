@@ -136,10 +136,10 @@
               <li class="subbox clearfix">
                 <label class="subbox-title">商品品牌：</label>
                 <div class="subbox-body">
-                  <select name="brand_id">
+                  <select name="brand">
                     <option value="">{$lang.select_pls}</option>
                     <!--{foreach from=$brandList item=item}-->
-                    <option value="{$item.brand_id|escape}" {if $goods.brand_id eq $item.brand_id} selected="selected"{/if}>{$item.brand_name|escape}</option>
+                    <option value="{$item.brand_name|escape}" {if $goods.brand eq $item.brand_name} selected="selected"{/if}>{$item.brand_name|escape}</option>
                     <!--{/foreach}-->
                   </select>
                 </div>
