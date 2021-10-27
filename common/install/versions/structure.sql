@@ -1139,8 +1139,8 @@ CREATE TABLE IF NOT EXISTS `swd_order_extm` (
   `region_name` varchar(255) NOT NULL DEFAULT '',
   `address` varchar(255) NOT NULL DEFAULT '',
   `zipcode` varchar(20) NOT NULL DEFAULT '',
-  `phone_tel` varchar(60) NOT NULL DEFAULT '',
-  `phone_mob` varchar(20) NOT NULL DEFAULT '',
+  `phone_tel` varchar(60) DEFAULT '',
+  `phone_mob` varchar(20) DEFAULT '',
   `shipping_name` varchar(100) DEFAULT NULL,
   `shipping_fee` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`order_id`)
