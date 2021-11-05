@@ -30,9 +30,10 @@ class ChannelForm extends Model
 	public $errors = null;
 	
 	private $clientPath = null;
-	private $template = null;
 	private $tpl_filepath = null;
 	private $tpl_confpath = null;
+
+	public $template = 'default';
 	
 	public function __construct($options = null)
 	{
@@ -45,10 +46,9 @@ class ChannelForm extends Model
 		if($this->instance == 'wap') {
 			$this->clientPath = Yii::getAlias('@mobile');
 		} else $this->clientPath = Yii::getAlias('@frontend');
-		$this->template = in_array($this->instance, ['wap']) ? Yii::$app->params['wap_template_name'] : Yii::$app->params['template_name'];
-		if(!$this->template) $this->template = 'default';
-		
-		$this->tpl_filepath = $this->clientPath . '/web/templates/mall/'.$this->template;
+
+
+		$this->tpl_filepath = $this->clientPath . '/views/'.$this->template.'/mall';
 		$this->tpl_confpath = $this->clientPath . '/web/data/page_config';
 	}
 	
@@ -85,14 +85,15 @@ class ChannelForm extends Model
 			return false;
 		}
 		
-		// 如果编辑的时候，修改了风格，则删除原频道的页面文件及配置文件，创建新风格的页面文件及配置文件，注意：先删除再创建
+		// 如果编辑的时候，修改了风格，则删除原页面文件及配置文件，创建新风格的页面文件及配置文件，注意：先删除再创建
 		if($this->id) {
 			if($post->style != $style) {
 				$this->deleteFile($style, $model->cid);
 			}
 		}
 		
-		if($this->createFile($model->style, $model->cid) === false) {
+		if(!$this->createFile($model->style, $model->cid)) {
+			$model->delete();
 			return false;
 		}
 		return true;
@@ -145,6 +146,8 @@ class ChannelForm extends Model
 				return false;
 			}
 		}
+
+		return true;
 	}
 	
 	// 删除视图文件和配置文件
