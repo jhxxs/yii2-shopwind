@@ -101,7 +101,7 @@
                 <div class="multimage-piclist clearfix">
                   <ul id="desc_images" class="preview J_descriptioneditor">
                     <!--{foreach from=$appmarket.desc_images item=image}-->
-                    <li ectype="handle_pic" file_name="{$image.file_name|escape}" file_path="{$image.file_path|url_format}" file_id="{$image.file_id}">
+                    <li ectype="handle_pic" file_type="{$image.file_type|escape}" file_name="{$image.file_name|escape}" file_path="{$image.file_path|url_format}" file_id="{$image.file_id}">
                       <input type="hidden" name="desc_file_id[]" value="{$image.file_id}">
                       <div class="pic"> <img src="{$image.file_path|url_format}" width="80" height="80" alt="{$image.file_name|escape}" title="{$image.file_name|escape}" /> </div>
                       <div ectype="handler" class="bg">
