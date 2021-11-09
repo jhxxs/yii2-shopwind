@@ -97,7 +97,7 @@ class AppmarketController extends \common\controllers\BaseAdminController
 			$this->params['period'] = AppmarketModel::getPeriodList();
 			
 			// 属于应用的附件（游离图）
-			$appmarket['desc_images'] = UploadedFileModel::find()->select('file_id,file_path,file_name')->where(['store_id' => 0, 'item_id' => 0, 'belong' => Def::BELONG_APPMARKET])->orderBy(['file_id' => SORT_ASC])->asArray()->all();
+			$appmarket['desc_images'] = UploadedFileModel::find()->select('file_id,file_type,file_path,file_name')->where(['store_id' => 0, 'item_id' => 0, 'belong' => Def::BELONG_APPMARKET])->orderBy(['file_id' => SORT_ASC])->asArray()->all();
 			$this->params['appmarket'] = array_merge($appmarket, ['status' => 1]);
 			
 			// 编辑器图片批量上传器
