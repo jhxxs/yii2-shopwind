@@ -15,6 +15,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\captcha\CaptchaValidator;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\UserModel;
 use common\models\UserPrivModel;
@@ -50,47 +51,30 @@ class UserController extends \common\controllers\BaseAdminController
 	
     public function actionIndex() 
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('user_list')]);
 			return $this->render('../user.index.html', $this->params);
 		}
 		else
 		{
-			$query = UserModel::find()->alias('u')->select('u.*, up.store_id as priv_store_id, up.privs,s.store_id')->joinWith('userPriv up', false)->joinWith('store s', false)->indexBy('userid');
-			$query = $this->getConditions($post, $query);
+			$query = UserModel::find()->select('userid,username,real_name,email,phone_mob,create_time,last_login,logins,last_ip');
+			$query = $this->getConditions($post, $query)->orderBy(['userid' => SORT_ASC]);
+			
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 
-			$orderFields = ['username', 'real_name', 'email', 'phone_mob', 'create_time', 'last_login', 'logins', 'last_ip'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['userid' => SORT_ASC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'user')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$operation .= "<a class='btn blue' href='".Url::toRoute(['user/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a><a class='btn red' href='".Url::toRoute(['user/enter', 'id' => $key])."'><i class='fa fa-clock-o'></i>登陆记录</a>";
-				$list['operation'] = $operation;
-				$list['username'] = $val['username'];
-				$list['real_name'] = $val['real_name'];
-				$list['email'] = $val['email'];
-				$list['phone_mob'] = $val['phone_mob'];
-				$userPriv = UserPrivModel::find()->select('privs')->where(['userid' => $key, 'store_id' => 0])->one();
-				$list['if_admin'] = $userPriv['privs'] ? "<em class='yes'><i class='fa fa-check-circle'></i>是</em>" : "<a href='".Url::toRoute(['admin/add', 'id' => $key])."'>设为管理员</a>";
-				$list['create_time'] = Timezone::localDate('Y-m-d', $val['create_time']);
-				$list['logins'] = $val['logins'];
-				$list['last_login'] = Timezone::localDate('Y-m-d H:i:s', $val['last_login']);
-				$list['last_ip'] = $val['last_ip'];
-				$result['list'][$key] = $list;
+				$list[$key]['if_admin'] = UserPrivModel::find()->select('privs')->where(['userid' => $value['userid'], 'store_id' => 0])->scalar() ? true : false;
+				$list[$key]['create_time']= Timezone::localDate('Y-m-d', $value['create_time']);
+				$list[$key]['last_login'] = Timezone::localDate('Y-m-d H:i:s', $value['last_login']);
 			}
-			return Page::flexigridXML($result);
+		
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -158,22 +142,26 @@ class UserController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('drop_ok'), ['user/index']);
 	}
 	
+	/**
+	 * 导出数据
+	 */
 	public function actionExport()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = UserModel::find()->indexBy('userid')->orderBy(['userid' => SORT_DESC]);
+		$query = UserModel::find()->select('userid,username,real_name,phone_mob,email,im_qq,create_time,last_login,last_ip,logins')
+			->orderBy(['userid' => SORT_ASC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'userid', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_user'));
+			return Message::warning(Language::get('no_data'));
 		}
-		return \backend\models\UserExportForm::download($query->all());		
+		return \backend\models\UserExportForm::download($query->asArray()->all());		
 	}
 
     public function actionLogin()
@@ -224,34 +212,22 @@ class UserController extends \common\controllers\BaseAdminController
 	{
 		if(!Yii::$app->request->isAjax) 
 		{
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('user_enter')]);
 			return $this->render('../user.enter.html', $this->params);
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
+			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'limit', 'page']);
 			
-			$query = UserEnterModel::find()->where(['userid' => $post->id]);
+			$query = UserEnterModel::find()->select('id,userid,username,ip,address,add_time')->where(['userid' => $post->id]);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			
-			$orderFields = ['ip', 'region_name', 'add_time'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$list['username'] = $val['username'];
-				$list['ip'] = $val['ip'];
-				$list['region_name'] = $val['region_name'];
-				$list['add_time'] = Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$result['list'][$key] = $list;
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value) {
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -277,16 +253,16 @@ class UserController extends \common\controllers\BaseAdminController
 		// 获取日期列表
 		$xaxis = array();
 		for($day = 1; $day <= $days; $day++) {
-			$xaxis[] = $day.'日';
+			$xaxis[] = $day;
 		}
 
 		$this->params['echart'] = array(
 			'id'		=>  mt_rand(),
 			'theme' 	=> 'macarons',
-			'width'		=> 890,
-			'height'    => 288,
+			'width'		=> '100%',
+			'height'    => 360,
 			'option'  	=> json_encode([
-				'grid' => ['left' => '10', 'right' => '0', 'top' => '50', 'bottom' => '30', 'containLabel' => true],
+				'grid' => ['left' => '20', 'right' => '20', 'top' => '80', 'bottom' => '20', 'containLabel' => true],
 				'tooltip' 	=> ['trigger' => 'axis'],
 				'legend'	=> [
 					'data' => $legend

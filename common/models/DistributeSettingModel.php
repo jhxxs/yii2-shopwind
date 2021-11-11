@@ -57,7 +57,7 @@ class DistributeSettingModel extends ActiveRecord
 		}
 		
 		// 用户是否已购买，并在使用期限内
-		if(!Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable(true)) {
+		if(!Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable(false)) {
 			return false;
 		}
 		

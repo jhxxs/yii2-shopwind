@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'plugin_list' => '插件列表',
 	'plugin_install' => '插件安装',
     'plugin_manage'  => '插件管理',
     'plugin_name'  => '插件名称',
@@ -14,6 +15,9 @@ return array(
 	'uninstall'		=> '卸载',
 	'uninstall_plugin_successed' => '卸载插件成功',
 	'uninstall_plugin_fail' => '卸载插件失败',
+    'version'           => '插件版本',
+    'plugin_config' => '配置插件',
+    'plugin_install' => '安装插件',
 	
 	'alipay'  => '支付宝',
     'alipay_wap' => '手机支付宝',

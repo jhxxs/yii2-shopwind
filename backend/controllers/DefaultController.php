@@ -16,8 +16,10 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 use common\models\UserModel;
-use common\models\UserEnterModel;
+use common\models\DepositTradeModel;
 use common\models\StoreModel;
+use common\models\GuideshopModel;
+use common\models\DistributeMerchantModel;
 use common\models\GoodsModel;
 use common\models\OrderModel;
 use common\models\RegionModel;
@@ -34,7 +36,7 @@ use common\library\Resource;
 use common\library\Timezone;
 use common\library\Page;
 use common\library\Def;
-use backend\library\Menu;
+use common\library\Plugin;
 
 /**
  * @Id DefaultController.php 2018.7.25 $
@@ -64,23 +66,16 @@ class DefaultController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$this->params['back_nav'] = Menu::getMenus();
-		
+		$this->params['promotes'] = Plugin::getInstance('promote')->build()->getList();
+		// $this->params['sys_info'] = $this->getSysInfo();
+		$this->params['functions'] = $this->getStatistics();
+		$this->params['days'] = $this->getDataOfDay();
+		$this->params['reminds'] = $this->getRemindInfo();
+		$this->params['now'] = Timezone::gmtime();
+
+		$this->params['_foot_tags'] = Resource::import('echarts/echarts.min.js,echarts/macarons.js');
 		$this->params['page'] = Page::seo(['title' => Language::get('admin_backend')]);
         return $this->render('../index.html', $this->params);
-	}
-	public function actionWelcome()
-	{
-		$this->params['sys_info'] = $this->getSysInfo();
-		$this->params['stats'] = $this->getStatistics();
-		$this->params['data_of_week'] = $this->getDataOfWeek();
-		$this->params['loginLogs'] = $this->getUserEnter(5);
-		$this->params['remind_info'] = $this->getRemindInfo();
-		
-		$this->params['_foot_tags'] = Resource::import('jquery.plugins/SuperSlide/jquery.SuperSlide.2.1.2.js,echarts/echarts.min.js,echarts/macarons.js');
-			
-		$this->params['page'] = Page::seo(['title' => Language::get('admin_backend')]);
-        return $this->render('../welcome.html', $this->params);
 	}
 	
 	/* 实时查询访客地区 */
@@ -103,31 +98,59 @@ class DefaultController extends \common\controllers\BaseAdminController
 		return Message::result($address);	
 	}	
 	
-	/* 一周数据 */
-	public function getDataOfWeek()
+	/* 日数据 */
+	public function getDataOfDay()
     {
-        $lastWeek = Timezone::gmtime() - 7 * 24 * 3600;
-        
-        return array(
-            'new_user_qty'  => UserModel::find()->where(['>', 'create_time', $lastWeek])->count(),
-            'new_store_qty' => StoreModel::find()->where(['and', ['state' => Def::STORE_OPEN], ['>', 'add_time', $lastWeek]])->count(), 
-            'new_apply_qty' => StoreModel::find()->where(['and', ['state' => Def::STORE_APPLYING], ['>', 'add_time', $lastWeek]])->count(),
-            'new_goods_qty' => GoodsModel::find()->where(['and', ['if_show' => 1, 'closed' => 0], ['>', 'add_time', $lastWeek]])->count(),
-            'new_order_qty' => OrderModel::find()->where(['and', ['!=', 'status', Def::ORDER_CANCELED], ['>', 'add_time', $lastWeek]])->count(),
-			'new_pinglun' 	=> OrderModel::find()->where(['and', ['evaluation_status' => 1], ['>', 'evaluation_time', $lastWeek]])->count()
-        );
+		// 当天时间
+        $today = Timezone::gmstr2time(Timezone::localDate('Y-m-d 00:00:00', Timezone::gmtime()));
+		$list = ['today' => $today, 'yesterday' => $today - 24 * 3600];
+
+		$result = [];
+		foreach($list as $key => $value) {
+			$result[$key] = array(
+            	'users'  => UserModel::find()->where(['>', 'create_time', $value])->count('userid'),
+            	'stores' => StoreModel::find()->where(['and', ['in', 'state', [Def::STORE_APPLYING, Def::STORE_OPEN]], ['>', 'add_time', $value]])->count('store_id'),
+            	'orders' => OrderModel::find()->where(['and', ['!=', 'status', Def::ORDER_CANCELED], ['>', 'add_time', $value]])->count('order_id'),
+				'sales' => OrderModel::find()->where(['and', ['>', 'status', Def::ORDER_CANCELED], ['>', 'add_time', $value]])->sum('order_amount')
+        	);
+		}
+	
+		foreach($result['today'] as $key => $value) {
+			
+			// 昨天的值
+			$result['yesterday'][$key] -= $value;
+
+			// 日同比
+			if($result['yesterday'][$key] <= 0) {
+				if($value > 0) {
+					$result['compares'][$key] = ['value' => '100%', 'level' => 'high']; 
+				} else {
+					$result['compares'][$key] = ['value' => '0%', 'level' => 'equal']; 
+				}
+			} else {
+				$v = round($value / $result['yesterday'][$key], 4);
+				$result['compares'][$key] = ['value' => $v * 100 .'%', 'level' => $v > 1 ? 'high' : ($v < 1 ? 'low' : 'equal')];
+			}
+		}
+
+		// 汇总
+		$result['stores'] = StoreModel::find()->count('store_id');
+		$result['users'] = UserModel::find()->count('userid');
+		$result['orders'] = OrderModel::find()->count('order_id');
+		$result['sales'] = OrderModel::find()->sum('order_amount');
+
+		return $result;
     }
+
 	/* 基础统计 */
 	public function getStatistics()
     {
         return array(
-            'user_qty'  => UserModel::find()->count(),
-            'store_qty' => StoreModel::find()->where(['state' => 1])->count(),
-            'apply_qty' => StoreModel::find()->where(['state' => 0])->count(),
-            'goods_qty' => GoodsModel::find()->where(['if_show' => 1, 'closed' => 0])->count(),
-            'order_qty' => OrderModel::find()->where(['!=', 'status', Def:: ORDER_CANCELED])->count(),
-            'order_amount' => OrderModel::find()->where(['!=', 'status', Def::ORDER_CANCELED])->sum('order_amount'),
-            'admin_email' => UserModel::find()->select('email')->where(['userid' => 1])->scalar()
+			'refunds' => RefundModel::find()->where(['not in', 'status', ['CLOSED', 'SUCCESS']])->count('refund_id'),
+			'drawals' => DepositTradeModel::find()->where(['bizIdentity' => Def::TRADE_DRAW, 'status' => 'WAIT_ADMIN_VERIFY'])->count('trade_id'),
+			'stores'  => StoreModel::find()->where(['in', 'state', [Def::STORE_APPLYING, Def::STORE_NOPASS]])->count('store_id'),
+			'guideshops' => GuideshopModel::find()->where(['in', 'status', [Def::STORE_APPLYING, Def::STORE_NOPASS]])->count('id'),
+			'distributeshops' => DistributeMerchantModel::find()->where(['in', 'status', [Def::STORE_APPLYING, Def::STORE_NOPASS]])->count('dmid'),
         );
     }
 	
@@ -145,47 +168,44 @@ class DefaultController extends \common\controllers\BaseAdminController
         );
     }
 	
-	/* 登录记录 */
-	public function getUserEnter($limit = 5)
-	{
-		return UserEnterModel::find()->where(['scene' => 'backend'])->limit($limit)->orderBy(['add_time' => SORT_DESC])->asArray()->all();
-	}
-	
 	/* 取得提醒信息 */
     public function getRemindInfo()
     {
         $remind_info = array();
-  
+
         // 地区
 		if(!RegionModel::find()->where(['parent_id' => 0, 'if_show' => 1])->exists()) {
 			$remind_info[] = sprintf(Language::get('reminds.region'), Url::toRoute('region/index'));
+			return $remind_info;
 		}
         // 支付方式
 		if(!PluginModel::find()->where(['instance' => 'payment', 'enabled' => 1])->exists()) {
 			$remind_info[] = sprintf(Language::get('reminds.payment'), Url::toRoute(['plugin/index', 'instance' => 'payment']));
+			return $remind_info;
 		}
         // 商品分类
 		if(!GcategoryModel::find()->where(['parent_id' => 0, 'store_id' => 0, 'if_show' => 1])->exists()) {
-			$remind_info[] = sprintf(Language::get('reminds.gcategory'), Url::toRoute('gcategory'));
-		}
-        // 店铺分类
-		if(!ScategoryModel::find()->where(['parent_id' => 0, 'if_show' => 1])->exists()) {
-			$remind_info[] = Language::get('reminds.scategory');
+			$remind_info[] = sprintf(Language::get('reminds.gcategory'), Url::toRoute('gcategory/index'));
+			return $remind_info;
 		}
 		
 		// 待处理的举报
 		if(($count = ReportModel::find()->where(['status' => 0])->count()) > 0) {
 			$remind_info[] = sprintf(Language::get('reminds.report'), $count, Url::toRoute('report/index'));
+			return $remind_info;
 		}
 		
-		//要求平台接入的退款申请
+		// 待平台处理的退款
 		if(($count = RefundModel::find()->where(['intervene' => 1, 'status' => 'WAIT_SELLER_AGREE'])->count()) > 0) {
 			$remind_info[] = sprintf(Language::get('reminds.refund'), $count, Url::toRoute('refund/index'));
+			return $remind_info;
 		}
 		// 待审核的店铺
 		if(($count = StoreModel::find()->where(['state' => Def::STORE_APPLYING])->count()) > 0) {
-			$remind_info[] = sprintf(Language::get('reminds.apply'), $count, Url::toRoute(['store/index', 'state' => 'applying']));
+			$remind_info[] = sprintf(Language::get('reminds.apply'), $count, Url::toRoute('store/verify'));
+			return $remind_info;
 		}
+
         return $remind_info;
     }
 }

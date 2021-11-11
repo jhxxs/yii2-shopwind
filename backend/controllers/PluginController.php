@@ -48,7 +48,7 @@ class PluginController extends \common\controllers\BaseAdminController
 		
 		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css']);
 		
-		$this->params['page'] = Page::seo(['title' => Language::get('plugin_list')]);
+		$this->params['page'] = Page::seo(['title' => Language::get('plugin_'.$post->instance)]);
 		return $this->render('../plugin.index.html', $this->params);
 	}
 	
@@ -64,6 +64,8 @@ class PluginController extends \common\controllers\BaseAdminController
         {
 			$model = Plugin::getInstance($get->instance)->build($get->code);
 			$this->params['plugin'] = $model->getInfo();
+
+			$this->params['page'] = Page::seo(['title' => Language::get('plugin_install')]);
             return $this->render('../plugin.form.html', $this->params);
         }
         else
@@ -106,6 +108,8 @@ class PluginController extends \common\controllers\BaseAdminController
 			$model = Plugin::getInstance($get->instance)->build($get->code);
 			$this->params['plugin'] = $model->getInfo();
 			$this->params['config'] = $model->getConfig();
+
+			$this->params['page'] = Page::seo(['title' => Language::get('plugin_config')]);
             return $this->render('../plugin.form.html', $this->params);
         }
         else

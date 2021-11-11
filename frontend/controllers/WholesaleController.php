@@ -54,9 +54,13 @@ class WholesaleController extends \common\controllers\BaseSellerController
 		}
 		
 		$page = array('pageSize' => 15);
-		$this->params['list'] = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']])->getList($params, $page);
+		$wholesaleTool = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']]);
+		if(($message = $wholesaleTool->checkAvailable()) !== true) {
+			$this->params['tooldisabled'] = $message;
+		}
+	
+		$this->params['list'] = $wholesaleTool->getList($params, $page);
 		$this->params['pagination'] = Page::formatPage($page);
-		$this->params['appAvailable'] = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 		
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('wholesale'), Url::toRoute('wholesale/index'), Language::get('goods_list'));
@@ -72,7 +76,9 @@ class WholesaleController extends \common\controllers\BaseSellerController
     {
         if(!Yii::$app->request->isPost)
 		{
-			$this->params['appAvailable'] = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			if(($message = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js',
@@ -111,8 +117,11 @@ class WholesaleController extends \common\controllers\BaseSellerController
 				return Message::warning(Language::get('no_such_goods'));
 			}
 
+			if(($message = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
+			
 			$this->params['list'] = json_encode($list);
-			$this->params['appAvailable'] = Promotool::getInstance('wholesale')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js',

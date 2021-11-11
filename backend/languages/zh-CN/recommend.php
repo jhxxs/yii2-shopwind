@@ -22,4 +22,5 @@ return array(
 	'price' => '价格',
 	'recommend_goods' => '推荐商品',
 	'recommend_cancel' => '批量取消',
+    'cancel_ok' => '取消推荐成功'
 );

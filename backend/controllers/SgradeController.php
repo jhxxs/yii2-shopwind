@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\SgradeModel;
 use common\models\StoreModel;
@@ -41,45 +42,25 @@ class SgradeController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
-			
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('sgrade_list')]);
 			return $this->render('../sgrade.index.html', $this->params);
 		}
 		else
 		{
-			$query = SgradeModel::find()->indexBy('grade_id');
-			$query = $this->getConditions($post, $query);
+			$query = SgradeModel::find();
+			$query = $this->getConditions($post, $query)->orderBy(['sort_order' => SORT_ASC, 'grade_id' => SORT_DESC]);
 			
-			$orderFields = ['grade_name','goods_limit','space_limit','need_confirm', 'sort_order'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'grade_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'sgrade')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$operation .= "<a class='btn red' href='".Url::toRoute(['sgrade/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a>";
-				$list['operation'] = $operation;
-				$list['grade_name'] = $val['grade_name'];
-				$list['goods_limit'] = $val['goods_limit'] ? $val['goods_limit'] : Language::get('no_limit');
-				$list['space_limit'] = $val['space_limit'] ? $val['space_limit'] : Language::get('no_limit');
-				$list['charge'] = $val['charge'];
-				$list['need_confirm']	= ($val['need_confirm'] == 0) ? '<em class="no" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$list['sort_order'] 	= '<span ectype="inline_edit" controller="sgrade" fieldname="sort_order" fieldid="'.$key.'" datatype="pint" class="editable" title="'.Language::get('editable').'">'.$val['sort_order'].'</span>';
-				$result['list'][$key] = $list;
-			}
-			return Page::flexigridXML($result);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -145,65 +126,20 @@ class SgradeController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('drop_ok'));
 	}
 	
-	public function actionTheme()
-    {
-		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['id'], ['client']);
-		
-		if(!$get->id || !($sgrade = SgradeModel::find()->select('grade_id,skins,wap_skins')->where(['grade_id' => $get->id])->one())) {
-			return Message::warning(Language::get('sgrade_empty'));
-		}
-	
-		if(!Yii::$app->request->isPost) 
-		{
-			$themes = array();
-			$templates = Page::listTemplate('store', $get->client);
-			foreach($templates as $template) {
-				$styles = Page::listStyle('store', $get->client, $template);
-				foreach($styles as $key => $style) {
-					$styles[$key] = ['name' => $style, 'value' => $template.'|'.$style];
-				}
-				$themes[$template] = $styles;
-			}
-			$this->params['themes'] = $themes;
-			$this->params['baseUrl'] = $get->client == 'wap' ? Basewind::mobileUrl() : Basewind::homeUrl();
-			$this->params['skins'] = $get->client == 'wap' ? explode(',', $sgrade->wap_skins) : explode(',', $sgrade->skins);
-			
-			$this->params['page'] = Page::seo(['title' => Language::get('sgrade_theme')]);
-			return $this->render('../sgrade.theme.html', $this->params);
-		}
-		
-		else
-		{
-			$post = Yii::$app->request->post();
-			$skins = (isset($post['skins']) && !empty($post['skins'])) ? implode(',', $post['skins']) : 'default|default';
-			
-			if($get->client == 'wap') {
-				$sgrade->wap_skins = $skins;
-			}
-			else {
-				$sgrade->skins = $skins;
-			}
-			if(!$sgrade->save()) {
-				return Message::warning($sgrade->errors);
-			}
-			return Message::display(Language::get('set_skins_ok'));
-		}
-    }
-	
 	public function actionExport()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = SgradeModel::find()->indexBy('grade_id')->orderBy(['sort_order' => SORT_ASC, 'grade_id' => SORT_DESC]);
+		$query = SgradeModel::find()->orderBy(['sort_order' => SORT_ASC, 'grade_id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'grade_id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_sgrade'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\SgradeExportForm::download($query->asArray()->all());		
 	}

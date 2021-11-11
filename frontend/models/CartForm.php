@@ -56,7 +56,7 @@ class CartForm extends Model
 	}
 	
 	/**
-	 * 店铺满折满减
+	 * 店铺满优惠
 	 */
 	public function getCartFullprefer($list = array())
 	{
@@ -65,7 +65,7 @@ class CartForm extends Model
 		foreach($list as $store_id => $cart)
 		{
 			$fullpreferTool = Promotool::getInstance('fullprefer')->build(['store_id' => $store_id]);
-			if($fullpreferTool->checkAvailable()){
+			if($fullpreferTool->checkAvailable(false)){
 				$fullprefer = $fullpreferTool->getInfo();
 				if(isset($fullprefer['status']) && $fullprefer['status']) {
 					if($fullprefer['rules']['type'] == 'discount') {

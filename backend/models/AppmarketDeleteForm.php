@@ -49,7 +49,7 @@ class AppmarketDeleteForm extends Model
 					if($query->expired > Timezone::gmtime()) {
 						
 						// 未过期，不允许删除
-						$this->errors = sprintf(Language::get('you_has_app_drop_fail'), Language::get($model->appid));
+						$this->errors = sprintf(Language::get('drop_fail'), Language::get($model->appid));
 						return false;
 					}
 				}
@@ -58,6 +58,7 @@ class AppmarketDeleteForm extends Model
 					$this->errors = $model->errors;
 					return false;
 				}
+				
 				$promotool = Promotool::getInstance($model->appid)->build();
 				
 				// 删掉应用设置表

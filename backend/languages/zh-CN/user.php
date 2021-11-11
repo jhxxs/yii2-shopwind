@@ -1,9 +1,7 @@
 <?php
 return array(
-    'user' => '用户管理',
     'username' => '用户名',
-    'password' => '密 码',
-	'mima'		=> '密<s style="margin:0 7px"></s>码',
+    'password' => '登录密码',
     'email' => '电子邮箱',
     'currect_email'=>'请您填写有效的电子邮箱',
     'real_name' => '真实姓名',
@@ -23,7 +21,6 @@ return array(
     'male' => '男',
     'female' => '女',
     'portrait' => '头像',
-    'note_portrait' => '支持格式gif,jpg,jpeg,png',
     'add_ok' => '新增用户成功',
 	'add_fail' => '新增用户失败',
     'continue_add' => '继续新增用户',
@@ -58,4 +55,6 @@ return array(
 	'user_enter' => '登录记录',
 	'username_password_error' => '用户名或密码错误',
 	'not_admin' => '抱歉！您还不是管理员',
+    'user_add' => '添加用户',
+    'user_edit' => '编辑用户'
 );

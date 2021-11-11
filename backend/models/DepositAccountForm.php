@@ -46,7 +46,7 @@ class DepositAccountForm extends Model
 			$this->errors = Language::get('real_name_not_empty');
 			return false;
 		}
-		if(isset($post->password) && (strlen($post->password) < 6 || strlen($post->password) > 40)) {
+		if(isset($post->password) && $post->password && (strlen($post->password) < 6 || strlen($post->password) > 40)) {
 			$this->errors = Language::get('password_limit');
 			return false;
 		}

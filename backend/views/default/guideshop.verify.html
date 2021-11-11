@@ -1,101 +1,70 @@
 {include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.manage}</p>
-    <ul class="subnav">
-      <li><a class="btn1" href="{url route='guideshop/index'}">{$lang.shoplist}</a></li>
-      <li><a class="btn1" href="{url route='guideshop/index' status='applying'}">{$lang.applying}</a></li>
-      <li><span>{$lang.detail}</span></li>
-    </ul>
-  </div>
-  <div class="explanation" id="explanation">
-    <div class="title" id="checkZoom"> <i class="fa fa-lightbulb-o"></i>
-      <h4>{$lang.operation_tip}</h4></div>
-    <ul>
-      <li><i class="fa fa-angle-double-right"></i> 点击同意，门店即可正常运营，在前台将作为自提点供买家选择，门店自提的订单将由平台来完成配送，所以平台需评估自身的配送能力后开通。</li>
-      <li><i class="fa fa-angle-double-right"></i> 点击拒绝，须填写拒绝原因，拒绝后该门店将允许申请者修改后重新审核</li>
-    </ul>
-  </div>
-  <div class="info">
-    <form method="post">
-      <table class="infoTable">
-        <tr>
-          <th class="paddingT15">{$lang.owner}:</th>
-          <td class="paddingT15 wordSpacing5">{$guideshop.owner}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.phone_mob}:</th>
-          <td class="paddingT15 wordSpacing5">{$guideshop.phone_mob}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.name}:</th>
-          <td class="paddingT15 wordSpacing5">{$guideshop.name}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.address}:</th>
-          <td class="paddingT15 wordSpacing5" >{$guideshop.region_name}{$guideshop.address}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.banner}:</th>
-          <td class="paddingT15 wordSpacing5"> 
-            <!--{if $guideshop.banner}-->
-            <a href="{$guideshop.banner|url_format}" target="_blank" class="mr20" ><img src="{$guideshop.banner|url_format}" height="30"/></a>
-            <!--{/if}-->
-          </td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.created}:</th>
-          <td class="paddingT15 wordSpacing5" >{$guideshop.created|date_format:"%Y-%m-%d %H:%M:%S"}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.status}:</th>
-          <td class="paddingT15 wordSpacing5" >{$guideshop.status}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15">{$lang.remark}:</th>
-          <td class="paddingT15 wordSpacing5">{$guideshop.remark|escape|nl2br}</td>
-        </tr>
-        <tr>
-          <th class="paddingT15" valign="top">{$lang.reject_reason}:</th>
-          <td class="paddingT15 wordSpacing5"><textarea name="reason" cols="60" rows="4" id="reject_reason"></textarea></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td class="ptb20"><input type="hidden" id="action" name="action" value="agree" />
-            <input class="formbtn" type="button" id="reject" value="{$lang.reject}" />
-            <input class="formbtn" type="submit" id="agree" value="{$lang.agree}" /></td>
-        </tr>
-      </table>
-    </form>
-  </div>
+<div id="main">
+	{include file="menus.html"}
+	<div id="rightCon" class="clearfix layui-body">
+		<div class="scroller">
+			<div class="tablegrid">
+				<table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+			</div>
+			{include file="version.html"}
+		</div>
+	</div>
 </div>
-<script type="text/javascript">
-//<!CDATA[
-$(function(){
-    $("#reject").click(function(){
-      var reason = $.trim($("#reject_reason").val());
-      if (reason == '') {
-        layer.msg(lang.input_reason);
-          return false;
-      }
-		  $('#action').val('reject');
-		  var type = $(this).parents('form').attr('method').toUpperCase();
-		  var url =  window.location.href; 
-		  var fromObj = $(this).parents('form');
-		  ajaxSubmit(type,url,fromObj);
-		  return false;
-    });
-	
-	  $("#agree").click(function(){
-		  $('#action').val('agree');
-		  $('#reject_reason').val('');
-		  var type = $(this).parents('form').attr('method').toUpperCase();
-		  var url =  window.location.href; 
-		  var fromObj = $(this).parents('form');
-		  ajaxSubmit(type,url,fromObj);
-		  return false;
-	  });
-});
-//]]>
-</script> 
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+		<a class="layui-btn layui-bg-blue" href="{url route='guideshop/index'}"><i class="layui-icon layui-icon-return"></i>返回门店列表</a>
+	</div>
+</script>
+
+<script type="text/html" id="colBar">
+	<a class="ml5 mr5 blue pointer" lay-event="agree">通过</a>
+	<a class="ml5 mr5 blue pointer" lay-event="view">拒绝</a>
+	<a class="ml5 mr5 blue pointer" lay-event="view">查看</a>
+</script>
+
+<script>
+	layui.use('table', function () {
+		var table = layui.table;
+
+		table.render({
+			elem: '#tablegrid'
+			//,skin: 'line'
+			, url: url(['guideshop/verify', $("#formSearch").serializeJson()])
+			, toolbar: '#toolbar'
+			, defaultToolbar: ['filter', /*'exports',*/ 'print']
+			, title: '门店审核'
+			//, size: 'lg'
+			, cols: [[
+				{ type: 'checkbox', fixed: 'left' }
+				, { field: 'id', title: 'ID', width: 70, fixed: 'left', unresize: true }
+				, { field: 'owner', title: '团长姓名', width: 200 }
+				, { field: 'phone_mob', title: '团长电话', width: 200 }
+				, { field: 'name', title: '门店名称', width: 160 }
+				, { field: 'address', title: '门店地址', width: 300 }
+				, { field: 'guider_rate', title: '团长返佣比率', width: 160 }
+				, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 200, align: 'center' }
+			]]
+			, page: {
+				theme: 'blue'
+			}
+		});
+
+		//监听行工具事件
+		table.on('tool(tablegrid)', function (obj) {
+			var data = obj.data;
+			if (obj.event == 'agree') {
+				layer.confirm('点击“确认”按钮后，该门店将正式开通', { title: lang.guideshop_verify }, function (index) {
+					var formObj = $('<form><input name="action" value="agree"><form>');
+					ajaxSubmit('post', url(['guideshop/view', { id: data.id }]), formObj);
+					layer.close(index);
+				}, function (index) {
+					layer.close(index);
+				});
+			}
+			else if (obj.event === 'view') {
+				window.location.href = url(['guideshop/view', { id: data.id }]);
+			}
+		});
+	});
+</script>
 {include file="footer.html"}

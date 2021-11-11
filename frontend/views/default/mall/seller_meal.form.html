@@ -8,9 +8,9 @@
         <div class="public_select">
           <div class="promotool">
             <div class="bundle bundle-form"> 
-              <!--{if $appAvailable neq 'true'}-->
+              <!--{if $tooldisabled}-->
               <div class="notice-word">
-                <p>{$appAvailable.msg}</p>
+                <p>{$tooldisabled}</p>
               </div>
               <!--{else}-->
               <form method="post" id="meal_form" enctype="multipart/form-data">

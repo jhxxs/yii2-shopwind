@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    'article'    => '文章管理',
     'no_such_article'        => '没有该文章',
     'edit_article_successed' => '编辑文章成功',
     'drop_ok' => '删除文章成功',
@@ -30,4 +29,6 @@ return array(
 	'articletype' => '文章归属',
 	'backend_article' => '后台文章',
 	'store_article' => '店铺文章',
+    'article_add' => '新增文章',
+    'article_edit' => '编辑文章'
 );

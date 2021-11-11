@@ -1,30 +1,35 @@
 {include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.webim}</p>
-    <ul class="subnav">
-      <li><a class="btn1" href="{url route='webim/index'}">{$lang.manage}</a></li>
-      <li><span>{$lang.setting}</span></li>
-    </ul>
-  </div>
-  <div class="info">
-    <form method="post" >
-      <table class="infoTable">
-        <tr>
-          <th class="paddingT15">{$lang.webim_status}:</th>
-          <td class="paddingT15"><span class="onoff">
-            <label class="cb-enable {if $setting.webim}selected{/if}">{$lang.open}</label>
-            <label class="cb-disable {if !$setting.webim}selected{/if}">{$lang.close}</label>
-            <input name="webim" value="1" type="radio" {if $setting.webim}checked{/if}>
-            <input name="webim" value="0" type="radio" {if !$setting.webim}checked{/if}>
-            </span> <span class="grey notice">{$lang.webim_desc}</span></td>
-        </tr>
-         <tr>
-          <th></th>
-          <td class="ptb20"><input class="formbtn J_AjaxSubmit" type="submit" value="{$lang.submit}" /></td>
-        </tr>
-      </table>
-    </form>
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+      <div class="layui-tab">
+        <ul class="layui-tab-title">
+          <li><a href="{url route='webim/setting'}">{$lang.logs}</a></li>
+          <li class="layui-this">{$lang.setting}</a></li>
+        </ul>
+      </div>
+      <div class="flexigrid">
+        <form method="post">
+          <table class="infoTable">
+            <tr>
+              <th class="paddingT15"><label>{$lang.webim_status}</label></th>
+              <td class="paddingT15 layui-form">
+                <input type="radio" name="webim" value="1" title="{$lang.open}" {if $setting.webim}checked{/if} />
+                <input type="radio" name="webim" value="0" title="{$lang.close}" {if !$setting.webim}checked{/if} />
+                <span class="field_notice">{$lang.webim_desc}</span>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td class="ptb20"><input class="layui-btn layui-bg-blue J_AjaxSubmit" type="submit"
+                  value="{$lang.submit}" /></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      {include file="version.html"}
+    </div>
   </div>
 </div>
-{include file="footer.html"} 
+{include file="footer.html"}

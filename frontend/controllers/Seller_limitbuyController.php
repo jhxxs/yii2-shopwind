@@ -55,9 +55,12 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
 		}
 		
 		$page = array('pageSize' => 15);
-		$this->params['limitbuys'] = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->getList($params, $page);
+		$limitbuyTool = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']]);
+		if(($message = $limitbuyTool->checkAvailable()) !== true) {
+			$this->params['tooldisabled'] = $message;
+		}
+		$this->params['limitbuys'] = $limitbuyTool->getList($params, $page);
 		$this->params['pagination'] = Page::formatPage($page);
-		$this->params['appAvailable'] = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 		
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('seller_limitbuy'), Url::toRoute('seller_limitbuy/index'), Language::get('limitbuy_list'));
@@ -74,7 +77,10 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
         if(!Yii::$app->request->isPost)
 		{
 			$this->params['now'] = Timezone::gmtime();
-			$this->params['appAvailable'] = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			
+			if(($message = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
@@ -114,7 +120,10 @@ class Seller_limitbuyController extends \common\controllers\BaseSellerController
         if(!Yii::$app->request->isPost)
 		{
 			$this->params['limitbuy'] = $limitbuy;
-			$this->params['appAvailable'] = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			
+			if(($message = Promotool::getInstance('limitbuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',

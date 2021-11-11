@@ -1,59 +1,43 @@
-$(function(){
+$(function () {
 	/* 全选 */
-    $('.checkall').click(function(){
-        $('.checkitem').prop('checked', this.checked);
-    });
-	
-	$(".show_image").mouseover(function(){
-        $(this).parent().siblings(".show_img").show();
-    });
-    $(".show_image").mouseout(function(){
-        $(this).parent().siblings(".show_img").hide();
-    });
-	$(".type-file-file").change(function(){
-		$(this).siblings(".type-file-text").val($(this).val());
+	$('.checkall').click(function () {
+		$('.checkitem').prop('checked', this.checked);
 	});
-	
-	//自定义radio样式
-    $(".cb-enable").click(function(){
-        $(this).addClass('selected');
-		$(this).siblings('.cb-disable').removeClass('selected');
-		$(this).siblings('input:first').attr('checked', true);
-		$(this).siblings('input:first').click();
-    });
-    $(".cb-disable").click(function(){
-		$(this).addClass('selected');
-		$(this).siblings('.cb-enable').removeClass('selected');
-		$(this).siblings('input:last').attr('checked', true);
-		$(this).siblings('input:last').click();
-    });
-	
-	$('body').on('click', '.J_BatchDel', function() { 
-   		if($('.checkitem:checked').length == 0){    //没有选择
-			parent.layer.msg('没有选择项',{icon:2});
-    		return false;
-      	}
- 		//获取选中的项 
-      	var items = '';
-   		$('.checkitem:checked').each(function(){
-        	items += this.value + ',';
-    	});
-     	items = items.substr(0, (items.length - 1));
+
+	$('body').on('click', '.J_BatchDel', function () {
+		if ($('.checkitem:checked').length == 0) {    //没有选择
+			layer.msg('没有选择项');
+			return false;
+		}
+		//获取选中的项 
+		var items = '';
+		$('.checkitem:checked').each(function () {
+			items += this.value + ',';
+		});
+		items = items.substr(0, (items.length - 1));
 		var uri = $(this).attr('uri');
 		uri = uri + ((uri.indexOf('?') != -1) ? '&' : '?') + $(this).attr('name') + '=' + items;
 		ajaxRequest($(this), uri);
 	});
-	
-	var wWidth = $(window).width();
-    var wHeight = $(window).height();
-    //$('#page_main').width(wWidth - $('#left').width() - parseInt($('#left').css('margin-right')));
-    $('#page_main').height(wHeight - $('#head').height());
+
+	$('#clear_cache').click(function () {
+		$.getJSON(url(['default/clearCache']), function (data) {
+			layer.msg(data.msg);
+		});
+	});
+
+	$('.J_Tips').on('mouseover', function () {
+		layer.tips($(this).attr('data-value'), this, {
+			tips: [3, '#0d6fb8'], //1-上，2-右，3-下，4-左
+		});
+	});
+
+	systemUpgrade();
 });
 
-function clear_file()
-{
-	$.getJSON(url(['template/clearfile']), function(data){
-		if(data.done) {
+function clear_file() {
+	$.getJSON(url(['template/clearfile']), function (data) {
+		if (data.done) {
 			layer.msg(data.msg);
 			return true;
 		}
@@ -61,111 +45,18 @@ function clear_file()
 	})
 }
 
-function fg_delete(id, controller, action, reason) {
-	var id = id;
-	if (typeof(id) == 'number') {
-    	id = new Array(id.toString());
-	} else if (typeof(id) == 'string') {
-		id = new Array(id);
-	}
-	var action = action ? action : 'delete';
-	
-	parent.layer.confirm('删除后将不能恢复，确认删除这 ' + id.length + ' 项吗？',{icon: 3, title:'提示'},function(index){
-		if(reason === true){
-			parent.layer.prompt({
-				formType: 2,
-				value: '',
-				title: '删除原因'
-			}, function(value, index, elem){
-				$.ajaxSettings.async = false;
-				$.getJSON(url([controller+'/'+action]), {id:id.join(','), content:value}, function(data){
-					if (data.done){
-						parent.layer.close(index);
-						parent.layer.msg(data.msg);
-						$("#flexigrid").flexReload();
-					} else {
-						parent.layer.msg(data.msg);
-						$("#flexigrid").flexReload();
-					}
-				});
-			});
+/**
+ * 上传图片前，显示（获取）图像信息
+ * @param {obj} obj 
+ */
+function getTempPathcallback(obj) {
+	getTempPath(obj, function (res) {
+		var imgObj = $(obj).parent().find('.type-file-image');
+		if (imgObj.find('img').length > 0) {
+			imgObj.find('img').attr('src', res);
+		} else {
+			imgObj.html('<img class="block" src="' + res + '"><span>修改图片</span>');
 		}
-		else
-		{
-			$.ajaxSettings.async = false;
-			$.getJSON(url([controller+'/'+action]), {id:id.join(',')}, function(data){
-				if (data.done){
-					parent.layer.close(index);
-					parent.layer.msg(data.msg);
-					$("#flexigrid").flexReload();
-				} else {
-					parent.layer.close(index);
-					parent.layer.msg(data.msg);
-					$("#flexigrid").flexReload();
-				}
-			});
-		}
-		parent.layer.close(index);
-	},function(index){
-		parent.layer.close(index);
-	});
-}
-
-function fg_csv(id, controller, action, model) {
-    var id = id.join(',');
-	var action = action ? action : 'export';
-	var model = model ? model : '';
-    window.location.href = url([controller+'/'+action, $.extend($("#formSearch").serializeJson(), {id:id, model:model})]);
-}
-
-function fg_cancel(id, controller, action, reason) {
-	var id = id;
-	if (typeof(id) == 'number') {
-    	id = new Array(id.toString());
-	} else if (typeof(id) == 'string') {
-		id = new Array(id);
-	}
-	var action = action ? action : 'cancel';
-	
-	parent.layer.confirm('确认取消这 ' + id.length + ' 项吗？',{icon: 3, title:'提示'},function(index){
-		if(reason === true){
-			parent.layer.prompt({
-				formType: 2,
-				value: '',
-				title: '取消原因'
-			}, function(value, index, elem){
-				$.ajaxSettings.async = false;
-				$.getJSON(url([controller+'/'+action]), function(data) {
-					if (data.done){
-						parent.layer.close(index);
-						parent.layer.msg(data.msg);
-						$("#flexigrid").flexReload();
-					} else {
-						parent.layer.close(index);
-						parent.layer.msg(data.msg);
-						$("#flexigrid").flexReload();
-					}
-				});
-			});
-		}
-		else
-		{
-			$.ajaxSettings.async = false;
-			$.getJSON(url([controller+'/'+action]), {id:id.join(',')}, function(data){
-				if (data.done){
-					parent.layer.close(index);
-					parent.layer.msg(data.msg);
-					$("#flexigrid").flexReload();
-				} else {
-					parent.layer.close(index);
-					parent.layer.msg(data.msg);
-					$("#flexigrid").flexReload();
-				}
-			});
-		}
-		parent.layer.close(index);
-	},function(index){
-		parent.layer.close(index);
 	});
 }
 
@@ -173,9 +64,10 @@ function fg_cancel(id, controller, action, reason) {
  * 检测系统是否有新版本
  */
 function systemUpgrade(){
+	var sysurl = 'httabbps://wwabbw.shoabbpabbwinabbd.neabbt';
 	$.ajax({
 		async : true,
-		url : replace_all('httabbps://wwabbw.shoabbpabbwinabbd.net/sysabbteabbm/upabbgrabbade.html', 'abb', ''),
+		url : replace_all(sysurl+'/sysabbteabbm/upabbgrabbade.htabbml', 'abb', ''),
 		type : "GET", 
 		dataType : "jsonp",  
 		jsonpCallback: 'jsonpCallback',
@@ -185,9 +77,32 @@ function systemUpgrade(){
 		}, 
 		success: function(data){
 			if(data.done && data.retval.higher) {
-			  $('.J_Upgrade').html($('.J_Upgrade').html().replace('sysversion', data.retval.version));
+			  //$('.J_Upgrade').attr('sysversion', data.retval.version);
+			  $('.J_Upgrade').attr('href', replace_all(sysurl+'/prabboduabbct/updabbate.habbtml', 'abb', ''))
 			  $('.J_Upgrade').show();
 			}
 		}
 	});
+}
+
+function FullScreen() {
+	var el = document.documentElement; //target兼容Firefox
+	var isFullscreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+	var o = $('body').find('.fullScreen');
+	if (!isFullscreen) { //进入全屏,多重短路表达式
+		(el.requestFullscreen && el.requestFullscreen()) ||
+			(el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
+			(el.webkitRequestFullscreen && el.webkitRequestFullscreen()) || (el.msRequestFullscreen && el.msRequestFullscreen());
+
+		o.find('i').removeClass('icon-fangda').addClass('icon-suoxiao');
+		o.attr('data-value', '缩小');
+
+	} else { //退出全屏,三目运算符
+		document.exitFullscreen ? document.exitFullscreen() :
+			document.mozCancelFullScreen ? document.mozCancelFullScreen() :
+				document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
+
+		o.find('i').addClass('icon-fangda').removeClass('icon-suoxiao');
+		o.attr('data-value', '放大');
+	}
 }

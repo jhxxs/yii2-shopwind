@@ -14,7 +14,9 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
+use common\models\UserModel;
 use common\models\StoreModel;
 use common\models\SgradeModel;
 use common\models\RegionModel;
@@ -48,7 +50,7 @@ class StoreController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		$this->params['sgrades'] = SgradeModel::getOptions();
 		
 		if(!Yii::$app->request->isAjax) 
@@ -56,51 +58,65 @@ class StoreController extends \common\controllers\BaseAdminController
 			$this->params['stypes'] = ['personal' => Language::get('personal'), 'company' => Language::get('company')];
 			$this->params['filtered'] = $this->getConditions($post);
 			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
-			
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('store_list')]);
 			return $this->render('../store.index.html', $this->params);
 		}
 		else
 		{
-			$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.stype,s.sgrade,s.owner_name,s.region_name,s.add_time,s.end_time,s.state,s.recommended,s.sort_order,s.tel,u.username,u.phone_mob,u.phone_tel')->joinWith('user u', false)->indexBy('store_id');
+			$query = StoreModel::find()
+				->select('store_id,store_name,stype,sgrade,owner_name,region_name,add_time,end_time,state,recommended,sort_order,tel')
+				->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
+
 			$query = $this->getConditions($post, $query);
 			
-			$orderFields = ['username','owner_name','store_name','region_name','cate_name','sgrade','add_time','end_time','state','sort_order','recommended'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'store')\"><i class='fa fa-trash-o'></i>删除</a>";
-				if($post->state == 'applying') {
-					$operation .= "<a class='btn orange' href='".Url::toRoute(['store/view', 'id' => $key])."'><i class='fa fa-check'></i>审核</a>";
-				} else {
-					$operation .= "<span class='btn'><em><i class='fa fa-cog'></i>设置<i class='arrow'></i></em><ul>";
-					$operation .= "<li><a href='".Url::toRoute(['store/index', 'id' => $key], $this->params['homeUrl'])."' target=\"_blank\">查看</a></li>";
-					$operation .= "<li><a href='".Url::toRoute(['store/edit', 'id' => $key])."'>编辑</a></li>";
-					$operation .= "</ul>";
-				}
-				$list['operation'] 		= $operation;
-				$list['username'] 		= $val['username'];
-				$list['owner_name'] 	= $val['owner_name'];
-				$list['store_name'] 	= $val['store_name'];
-				$list['region_name'] 	= $val['region_name'];
-				$list['stype'] 			= Language::get($val['stype']);
-				$list['sgrade'] 		= $this->params['sgrades'][$val['sgrade']];
-				$list['add_time'] 		= Timezone::localDate('Y-m-d', $val['add_time']);
-				$list['end_time'] 		= $val['end_time'] > 0 ? Timezone::localDate('Y-m-d', $val['end_time']) :'-';
-				$list['state'] 			= $this->getStatus($val['state']);
-				$list['sort_order'] 	= '<span ectype="inline_edit" controller="store" fieldname="sort_order" fieldid="'.$key.'" datatype="pint" class="editable" title="'.Language::get('editable').'">'.$val['sort_order'].'</span>';
-				$list['recommended']	= ($val['recommended'] == 0) ? '<em class="no" ectype="inline_edit" controller="store" fieldname="recommended" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="store" fieldname="recommended" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$result['list'][$key] = $list;
+				$list[$key]['stype'] = Language::get($value['stype']);
+				$list[$key]['sgrade'] = $this->params['sgrades'][$value['sgrade']];
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d', $value['add_time']);
+				$list[$key]['end_time'] = $value['end_time'] > 0 ? Timezone::localDate('Y-m-d', $value['end_time']) :'-';
+				$list[$key]['state'] = $this->getStatus($value['state']);
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['store_id']])->scalar();
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
+		}
+	}
+
+	/**
+	 * 店铺审核
+	 */
+	public function actionVerify()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
+		$this->params['sgrades'] = SgradeModel::getOptions();
+		
+		if(!Yii::$app->request->isAjax) 
+		{
+			$this->params['page'] = Page::seo(['title' => Language::get('store_verify')]);
+			return $this->render('../store.verify.html', $this->params);
+		}
+		else
+		{
+			$query = StoreModel::find()
+				->select('store_id,store_name,stype,sgrade,owner_name,region_name,state')
+				->where(['in', 'state', [Def::STORE_APPLYING, Def::STORE_NOPASS]])
+				->orderBy(['store_id' => SORT_DESC]);
+
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
+			{
+				$list[$key]['stype'] = Language::get($value['stype']);
+				$list[$key]['sgrade'] = $this->params['sgrades'][$value['sgrade']];
+				$list[$key]['state'] = $this->getStatus($value['state']);
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['store_id']])->scalar();
+			}
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -148,7 +164,7 @@ class StoreController extends \common\controllers\BaseAdminController
 			
 			$this->params['_foot_tags'] = Resource::import('mlselection.js');
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('store_batchedit')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('batch_edit')]);
 			return $this->render('../store.batch.html', $this->params);
 		}
 		else
@@ -165,7 +181,9 @@ class StoreController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	 /* 查看并处理店铺申请 */
+	 /**
+	  * 查看并处理店铺申请 
+	  */
 	public function actionView()
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
@@ -230,7 +248,7 @@ class StoreController extends \common\controllers\BaseAdminController
 					if($pmer) {
 						$pmer->sendFrom(0)->sendTo($store['store_id'])->send();
 					}
-					return Message::display(Language::get('reject_ok'), ['store/index', 'state' => 'applying']);
+					return Message::display(Language::get('reject_ok'), ['store/verify']);
 				}
 				return Message::warning(Language::get('handle_fail'));	
 			}
@@ -238,12 +256,14 @@ class StoreController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	/* 目前只有用户不存在了，才允许删除 （暂时不明白为何加这个条件，先屏蔽）*/
+	/**
+	 * 删除店铺
+	 */
 	public function actionDelete()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		foreach(explode(',', $post->id) as $id) {
-			if($id && ($model = StoreModel::findOne($id)) /*&& !UserModel::findOne($id)*/) { // 用户ID同store_id
+			if($id && ($model = StoreModel::findOne($id))) {
 				if(!$model->delete()) {
 					return Message::warning($model->errors);
 				}
@@ -257,15 +277,17 @@ class StoreController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.sgrade,s.owner_name,s.region_name,s.add_time,s.state,s.recommended,s.sort_order,s.tel,u.username,u.phone_mob,u.phone_tel')->joinWith('user u', false)->indexBy('store_id')->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
+		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.stype, s.sgrade,s.owner_name,s.region_name,s.add_time,s.state,s.recommended,s.tel,u.username')
+			->joinWith('user u', false)
+			->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'store_id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_store'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\StoreExportForm::download($query->asArray()->all());		
 	}
@@ -302,16 +324,16 @@ class StoreController extends \common\controllers\BaseAdminController
 		// 获取日期列表
 		$xaxis = array();
 		for($day = 1; $day <= $days; $day++) {
-			$xaxis[] = $day.'日';
+			$xaxis[] = $day;
 		}
 
 		$this->params['echart'] = array(
 			'id'		=>  mt_rand(),
 			'theme' 	=> 'macarons',
-			'width'		=> 890,
-			'height'    => 288,
+			'width'		=> '100%',
+			'height'    => 360,
 			'option'  	=> json_encode([
-				'grid' => ['left' => '10', 'right' => '0', 'top' => '50', 'bottom' => '30', 'containLabel' => true],
+				'grid' => ['left' => '20', 'right' => '20', 'top' => '80', 'bottom' => '20', 'containLabel' => true],
 				'tooltip' 	=> ['trigger' => 'axis'],
 				'legend'	=> [
 					'data' => $legend
@@ -424,8 +446,8 @@ class StoreController extends \common\controllers\BaseAdminController
 		if($post->owner_name) {
 			$query->andWhere(['or', ['owner_name' => $post->owner_name], ['username' => $post->owner_name]]);
 		}
-		if($post->state == 'applying') {
-			$query->andWhere(['in', 'state', [Def::STORE_APPLYING, Def::STORE_NOPASS]]);
+		if(isset($post->state) && $post->state !== '') {
+			$query->andWhere(['state' => intval($post->state)]);
 		} else {
 			$query->andWhere(['in', 'state', [Def::STORE_OPEN, Def::STORE_CLOSED]]);
 		}

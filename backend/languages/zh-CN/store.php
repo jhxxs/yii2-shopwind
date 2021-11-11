@@ -1,11 +1,9 @@
 <?php
 return array(
-    'store' => '店铺',
-	'store_manage' => '店铺管理',
     'store_name' => '店铺名称',
     'region' => '所在地',
     'sgrade' => '店铺等级',
-    'state' => '状态',
+    'state' => '店铺状态',
     'certification' => '认证',
     'autonym' => '实名认证',
     'material' => '实体店铺认证',
@@ -14,6 +12,7 @@ return array(
     'continue_add' => '继续新增店铺',
     'back_list' => '返回店铺列表',
     'no_such_store' => '该店铺不存在，请您返回后刷新页面',
+    'store_edit' => '编辑店铺',
     'edit_ok' => '编辑店铺成功',
     'edit_again' => '重新编辑该店铺',
     'no_store_to_drop' => '请您选择要删除的店铺',
@@ -56,7 +55,6 @@ return array(
     'no_change' => '保持不变',
     'change_to' => '改为',
     'no_change_set' => '您没有设置要修改的内容',
-    'scategory' => '所属分类',
     'edit_the_store' => '编辑该店铺',
     'store_index' => '店铺首页',
     'close_reason' => '关闭原因',
@@ -73,12 +71,12 @@ return array(
     'store_name_required' => '请输入店铺名称',
     'apply_remark' => '审核说明',
     'editable'     => '可编辑',
-	'check_ok_to_next_step' => '验证完成，请填写店铺详细信息',
 	'region_name' => '所在地区',
 	'recommended' => '推荐',
 	'list' => '列表',
     'detail' => '详情',
     'stype' => '主体类型',
     'company' => '企业',
-    'personal' => '个人'
+    'personal' => '个人',
+    'store_view' => '查看店铺',
 );

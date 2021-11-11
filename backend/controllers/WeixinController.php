@@ -13,6 +13,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\WeixinSettingModel;
 use common\models\WeixinMenuModel;
@@ -48,39 +49,23 @@ class WeixinController extends \common\controllers\BaseAdminController
 	 */
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('weixin_reply')]);
 			return $this->render('../weixin.reply.html', $this->params);
 		}
 		else
 		{
-			$query = WeixinReplyModel::find()->where(['and', ['userid' => 0], ['in', 'action', ['beadded','autoreply','smartreply']]])->indexBy('reply_id');
+			$query = WeixinReplyModel::find('reply_id, action, rule_name, keywords, description')
+				->where(['and', ['userid' => 0], ['in', 'action', ['beadded','autoreply','smartreply']]])
+				->orderBy(['reply_id' => SORT_DESC]);
 			
-			$orderFields = ['reply_id','type','action'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['userid' => SORT_ASC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$list['operation'] = "<a class='btn red' onclick=\"fg_delete({$key},'weixin', 'deletereply')\"><i class='fa fa-trash-o'></i>删除</a><a class='btn blue' href='".Url::toRoute(['weixin/editreply', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a>";
-				$list['reply_id']  = $key;
-				$list['action']    = Language::get($val['action']);
-				$list['rule_name'] = $val['action'] == 'smartreply' ? $val['rule_name'] : '-';
-				$list['keywords']  = $val['action'] == 'smartreply' ? $val['keywords'] : '-';
-				$list['type'] 	   = $val['type'] ? Language::get('imgmsg') : Language::get('textmsg');
-				$list['description']   = "<span>{$val['description']}</span>";
-				$result['list'][$key]= $list;
-			}
-			return Page::flexigridXML($result);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 
@@ -339,8 +324,8 @@ class WeixinController extends \common\controllers\BaseAdminController
     public function actionEditcol()
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'sort_order']);
-		if(in_array($post->column, ['sort_order'])) {
-			if(!WeixinMenuModel::updateAll(['sort_order' => $post->value], ['id' => $post->id])) {
+		if(in_array($post->column, ['sort_order', 'name'])) {
+			if(!WeixinMenuModel::updateAll([$post->column => $post->value], ['id' => $post->id])) {
 				return Message::warning(Language::get('edit_fail'));
 			}
 			return Message::display(Language::get('edit_ok'));	

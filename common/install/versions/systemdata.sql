@@ -30,21 +30,6 @@ INSERT INTO `swd_acategory` (`cate_id`, `cate_name`, `parent_id`, `store_id`, `s
 (1, '系统分类', 0, 0, 255, 1);
 
 --
--- 转存表中的数据 `swd_appmarket`
---
-delete from `swd_appmarket`;
-INSERT INTO `swd_appmarket` (`aid`, `appid`, `title`, `summary`, `category`, `description`, `logo`, `config`, `sales`, `views`, `purchase`, `status`, `add_time`) VALUES
-(1, 'limitbuy', '限时打折', '限时打折', 1, '', 'data/files/mall/appmarket/limitbuy/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:3:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"3";}}', 0, 0, 0, 1, 1542904012),
-(2, 'meal', '搭配套餐', '搭配套餐', 1, '', 'data/files/mall/appmarket/meal/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:3:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"3";}}', 0, 0, 0, 1, 1542904073),
-(3, 'fullfree', '满包邮', '满包邮', 1, '', 'data/files/mall/appmarket/fullfree/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"3";i:3;s:1:"4";i:4;s:1:"5";}}', 0, 0, 0, 1, 1542904872),
-(4, 'fullprefer', '满折满减', '满折满减', 1, '', 'data/files/mall/appmarket/fullprefer/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"12";}}', 0, 0, 0, 1, 1542904902),
-(5, 'exclusive', '手机专享', '手机下单立享折扣', 1, '', 'data/files/mall/appmarket/exclusive/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:4:{i:0;s:1:"1";i:1;s:1:"3";i:2;s:1:"6";i:3;s:2:"12";}}', 0, 0, 0, 1, 1542905072),
-(6, 'distribute', '三级分销', '三级分销', 1, '', 'data/files/mall/appmarket/distribute/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"11";}}', 0, 0, 0, 1, 1542905490),
-(7, 'teambuy', '拼团', '拼团模块', 1, '', 'data/files/mall/appmarket/teambuy/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"11";}}', 0, 0, 0, 1, 1542905490),
-(8, 'wholesale', '批发价', '阶梯价格', 1, '', 'data/files/mall/appmarket/wholesale/logo.jpg', 'a:2:{s:6:"charge";s:1:"0";s:6:"period";a:5:{i:0;s:1:"1";i:1;s:1:"2";i:2;s:1:"9";i:3;s:2:"10";i:4;s:2:"11";}}', 0, 0, 0, 1, 1542905490);
-
-
---
 -- 转存表中的数据 `swd_article`
 --
 delete from `swd_article`;

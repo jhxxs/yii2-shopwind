@@ -29,7 +29,7 @@ var ENABLE_PRETTY = "{$enablePretty}";
 <script type="text/javascript" src='{url route="{$app->controller->id}/jslang"}' charset="{$app->charset}"></script>
 <script type="text/javascript" src="{lib file='jquery-1.11.1.js'}" charset="{$app->charset}"></script>
 <script type="text/javascript" src="{lib file='jquery.plugins/jquery.form.js'}" charset="{$app->charset}"></script>
-<script type="text/javascript" src="{lib file='layer/layer.js' }" charset="{$app->charset}"></script>
+<script type="text/javascript" src="{lib file='layui/layui.js' }" charset="{$app->charset}"></script>
 <script type="text/javascript" src="{lib file='shopwind.js'}" charset="{$app->charset}"></script>
 </head>
 <body id="page-layout-{$app->controller->id|default:'default'}-{$app->controller->action->id|default:'index'}">
@@ -49,7 +49,7 @@ var ENABLE_PRETTY = "{$enablePretty}";
             </dd>
           </dl>
           <dl class="item clearfix" style="border-top:0;">
-            <dt>{$lang.mima}{$lang.colon}</dt>
+            <dt>密<span style="margin:0 7px;"></span>码{$lang.colon}</dt>
             <dd>
               <input type="password" name="password" class="input" placeholder="{$lang.password}" />
             </dd>
@@ -78,9 +78,9 @@ var ENABLE_PRETTY = "{$enablePretty}";
 <script src="{res file='js/supersized-init.js'}"></script> 
 <script type="text/javascript">
 // 登陆页跳出框架
-if(self != top){
-	top.location = self.location;
-}
+// if(self != top){
+// 	top.location = self.location;
+// }
 $(function(){
     $('#username').focus();
 });

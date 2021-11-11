@@ -45,7 +45,7 @@ ScreenLocker = {
         'top'               : '0px',
         'left'              : '0px',
         'backgroundColor'   : '#000',
-        'opacity'           : 0.7,
+        'opacity'           : 0.5,
         'zIndex'            : 999
     },
     'masker'    : null,
@@ -412,13 +412,13 @@ DialogManager.loadStyle();
 $(function(){
 	$('body').on('click', '*[ectype="dialog"]', function(event){
         var id = $(this).attr('dialog_id');
-        var title = $(this).attr('dialog_title') ? $(this).attr('dialog_title') : '';
+        var title = $(this).attr('dialog_title') ? $(this).attr('dialog_title') : lang.title;
         var uri = $(this).attr('uri');
         var width = $(this).attr('dialog_width');
 		var style = $(this).attr('dialog_class');
 		var opacity = $(this).attr('dialog_opacity');
 		var position = $(this).attr('dialog_position') ? $(this).attr('dialog_position') : 'center';
-        ajax_form(id, title, uri, width, style, opacity, position);
+        ajax_form(id, title, uri, width ? width : 800, style, opacity, position);
         return false;
     });
 });

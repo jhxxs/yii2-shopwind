@@ -1,6 +1,7 @@
 <?php
 return array(
     'gcategory' => '商品分类',
+    'gcategory_list' => '分类管理',
     'cate_name_empty'=>'分类名称不能为空',
     'number_only'=>'分类排序仅能为数字',
     'cate_name' => '分类名称',
@@ -22,14 +23,6 @@ return array(
     'update_order_ok' => '更新排序成功',
     'no_change' => '保持不变',
     'batch_edit_ok' => '批量编辑成功',
-    'file_format_desc' =>
-        '<table border="1">'.
-        '<tr><td>一级分类</td></tr>'.
-        '<tr><td></td><td>二级分类</td></tr>'.
-        '<tr><td></td><td>二级分类</td></tr>'.
-        '<tr><td></td><td></td><td>三级分类</td></tr>'.
-        '<tr><td>一级分类</td></tr>'.
-        '</table>',
     'no_data'  => '暂无商品分类',
     'editable' => '可编辑',
     'max_layer_error' => '请确保商品分类不超过四级',
@@ -39,4 +32,5 @@ return array(
 	'parent_error' => '上级分类不合理',
 	'ad_valid' => '非顶级分类不能设置分类广告图',
 	'groupid_valid' => '非顶级分类不能设置分组',
+    'gcategory_add' => '新增分类'
 );

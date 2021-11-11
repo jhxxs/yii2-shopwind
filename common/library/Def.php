@@ -24,9 +24,6 @@ class Def
 {
 	/* 特殊文章分类 */
 	const STORE_NAV 			=  -1; // 店铺导航
-	const ACATE_HELP			=	1; // 商城帮助
-	const ACATE_NOTICE			=	2; // 商城快讯（公告）
-	const ACATE_SYSTEM			=	3; // 内置文章
 
 	/* 店铺/自提门店 状态 */
 	const STORE_APPLYING 		= 	0; // 申请中

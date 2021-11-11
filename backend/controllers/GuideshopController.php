@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 use common\models\GuideshopModel;
 use common\models\DepositSettingModel;
@@ -44,86 +45,74 @@ class GuideshopController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 	
 		if(!Yii::$app->request->isAjax)
 		{
 			$this->params['filtered'] = $this->getConditions($post);
-			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
-			
-			$this->params['page'] = Page::seo(['title' => Language::get('list')]);
+
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
+			$this->params['page'] = Page::seo(['title' => Language::get('guideshop_list')]);
 			return $this->render('../guideshop.index.html', $this->params);
 		}
 		else
 		{
-			$query = GuideshopModel::find()->select('id,userid,owner,phone_mob,name,region_name,address,created,status')->indexBy('id');
-			$query = $this->getConditions($post, $query);
+			$query = GuideshopModel::find()->select('id,userid,owner,phone_mob,name,region_name,address,created,status');
+			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 			
-			$orderFields = ['name','owner', 'phone_mob', 'region_name','created','status'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['id' => SORT_DESC]);
 			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'guideshop')\"><i class='fa fa-trash-o'></i>删除</a>";
-				if($post->status == 'applying') {
-					$operation .= "<a class='btn orange' href='".Url::toRoute(['guideshop/verify', 'id' => $key])."'><i class='fa fa-check'></i>审核</a>";
-				}
-				$val['guider_rate'] = DepositSettingModel::getDepositSetting($val['userid'], 'guider_rate');
-
-				$list['operation'] 	= $operation;
-				$list['owner'] 		= $val['owner'];
-				$list['phone_mob'] 	= $val['phone_mob'];
-				$list['name'] 		= $val['name'];
-				$list['address'] 	= $val['region_name'].$val['address'];
-				$list['rate'] 		= '<span ectype="inline_edit" controller="guideshop" fieldname="guider_rate" fieldid="'.$key.'"  required="1" class="editable" title="'.Language::get('editable').'">'.$val['guider_rate'].'</span>';
-				$list['status'] 	= $this->getStatus($val['status']);
-				$list['created'] 	= Timezone::localDate('Y-m-d', $val['created']);
-				$result['list'][$key] = $list;
+				$list[$key]['guider_rate'] = DepositSettingModel::getDepositSetting($value['userid'], 'guider_rate');
+				$list[$key]['address'] 	= $value['region_name'].$value['address'];
+				$list[$key]['status'] 	= $this->getStatus($value['status']);
+				$list[$key]['created'] 	= Timezone::localDate('Y-m-d', $value['created']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 
-	public function actionSetting()
+	/**
+	 * 门店审核
+	 */
+	public function actionVerify()
 	{
-		if(!Yii::$app->request->isPost)
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
+	
+		if(!Yii::$app->request->isAjax)
 		{
-			$setting = DepositSettingModel::find()->select('guider_rate')->where(['userid' => 0])->asArray()->one();
-			if(($guideshop = Yii::$app->params['guideshop'])) {
-				$setting = array_merge($setting, $guideshop);
-			}
-			$this->params['setting'] = $setting;
-			$this->params['gcategories'] = GcategoryModel::getOptions(0, -1, null, 2);
-			$this->params['page'] = Page::seo(['title' => Language::get('config')]);
-			return $this->render('../guideshop.setting.html', $this->params);
+			$this->params['page'] = Page::seo(['title' => Language::get('guideshop_verify')]);
+			return $this->render('../guideshop.verify.html', $this->params);
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-
-			$model = new \backend\models\DepositSettingForm();
-			if(!$model->save($post, true)) {
-				return Message::warning($model->errors);
+			$query = GuideshopModel::find()->select('id,userid,owner,phone_mob,name,region_name,address,status')
+				->where(['in', 'status', [Def::STORE_APPLYING, Def::STORE_NOPASS]])
+				->orderBy(['id' => SORT_DESC]);
+			
+			
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			
+			foreach ($list as $key => $value)
+			{
+				$list[$key]['guider_rate'] = DepositSettingModel::getDepositSetting($value['userid'], 'guider_rate');
+				$list[$key]['address'] 	= $value['region_name'].$value['address'];
+				$list[$key]['status'] 	= $this->getStatus($value['status']);
 			}
 
-			$post = ['guideshop' => ['cateId' => intval($post->cate_id)]];
-			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
-				return Message::warning($model->errors);
-			}
-
-			return Message::display(Language::get('handle_ok'));
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 
-	public function actionVerify()
+	/**
+	 * 查看门店并审核
+	 */
+	public function actionView()
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 
@@ -133,8 +122,8 @@ class GuideshopController extends \common\controllers\BaseAdminController
 			$record['status'] = $this->getStatus($record['status']);
 			$this->params['guideshop'] = $record;
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('verify')]);
-			return $this->render('../guideshop.verify.html', $this->params);
+			$this->params['page'] = Page::seo(['title' => Language::get('detail')]);
+			return $this->render('../guideshop.view.html', $this->params);
 		}
 		else
 		{
@@ -168,10 +157,42 @@ class GuideshopController extends \common\controllers\BaseAdminController
 						return Message::warning(Language::get('handle_fail'));
 					}
 
-					return Message::display(Language::get('reject_ok'), ['guideshop/index', 'status' => 'applying']);
+					return Message::display(Language::get('reject_ok'), ['guideshop/verify']);
 				}
 			}
 			return Message::warning(Language::get('handle_error'));
+		}
+	}
+
+	public function actionSetting()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$setting = DepositSettingModel::find()->select('guider_rate')->where(['userid' => 0])->asArray()->one();
+			if(($guideshop = Yii::$app->params['guideshop'])) {
+				$setting = array_merge($setting, $guideshop);
+			}
+			$this->params['setting'] = $setting;
+			$this->params['gcategories'] = GcategoryModel::getOptions(0, -1, null, 2);
+			$this->params['page'] = Page::seo(['title' => Language::get('config')]);
+			return $this->render('../guideshop.setting.html', $this->params);
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+
+			$model = new \backend\models\DepositSettingForm();
+			if(!$model->save($post, true)) {
+				return Message::warning($model->errors);
+			}
+
+			$post = ['guideshop' => ['cateId' => intval($post->cate_id)]];
+			$model = new \backend\models\SettingForm();
+			if(!$model->save($post, true)) {
+				return Message::warning($model->errors);
+			}
+
+			return Message::display(Language::get('handle_ok'));
 		}
 	}
 	
@@ -209,12 +230,12 @@ class GuideshopController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = GuideshopModel::find()->select('owner,phone_mob,name,region_name,address,created,status')->indexBy('id');
+		$query = GuideshopModel::find()->select('id,owner,phone_mob,name,region_name,address,created,status');
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
 			return Message::warning(Language::get('no_data'));
@@ -256,8 +277,8 @@ class GuideshopController extends \common\controllers\BaseAdminController
 		if($post->phone_mob) {
 			$query->andWhere(['phone_mob' => $post->phone_mob]);
 		}
-		if($post->status == 'applying') {
-			$query->andWhere(['in', 'status', [Def::STORE_APPLYING, Def::STORE_NOPASS]]);
+		if(isset($post->status) && $post->status !== '') {
+			$query->andWhere(['status' => intval($post->status)]);
 		} else {
 			$query->andWhere(['in', 'status', [Def::STORE_OPEN, Def::STORE_CLOSED]]);
 		}

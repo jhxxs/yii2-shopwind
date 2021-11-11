@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\BrandModel;
 use common\models\GcategoryModel;
@@ -41,49 +42,29 @@ class BrandController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
-			
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('brand_list')]);
 			return $this->render('../brand.index.html', $this->params);
 		}
 		else
 		{
-			$query = BrandModel::find()->indexBy('brand_id');
+			$query = BrandModel::find()->select('brand_id,brand_name,brand_logo,cate_id,tag,letter,sort_order')->orderBy(['sort_order' => SORT_ASC, 'brand_id' => SORT_DESC]);
 			$query = $this->getConditions($post, $query);
 			
-			$orderFields = ['brand_id','brand_name','tag', 'letter','sort_order','recommended','if_show'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'brand_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$list['operation'] = "<a class='btn red' onclick=\"fg_delete({$key},'brand')\"><i class='fa fa-trash-o'></i>删除</a><a class='btn blue' href='".Url::toRoute(['brand/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a>";
-				
-				$list['brand_id'] = $key;
-				$list['brand_name'] = '<span ectype="inline_edit" controller="brand" required="1" fieldname="brand_name" fieldid="'.$key.'" class="editable" title="'.Language::get('editable').'">'.$val['brand_name'].'</span>';
-				$list['tag'] = '<span ectype="inline_edit" controller="brand" fieldname="tag" fieldid="'.$key.'" required="1" class="editable" title="'.Language::get('editable').'">'.$val['tag'].'</span>';
-				$list['letter'] = '<span ectype="inline_edit" controller="brand" fieldname="letter" fieldid="'.$key.'" required="1" class="editable" title="'.Language::get('editable').'">'.$val['letter'].'</span>';
-				
-				$list['cate_name'] = GcategoryModel::find()->select('cate_name')->where(['cate_id' => $val['cate_id']])->scalar();
-				
-				$list['brand_logo'] = $val['brand_logo'] ? '<img src="'.Page::urlFormat($val['brand_logo']).'" height="25" />' : '';
-				$list['sort_order'] = '<span ectype="inline_edit" controller="brand" fieldname="sort_order" fieldid="'.$key.'" datatype="pint" maxvalue="255" class="editable" title="'.Language::get('editable').'">'.$val['sort_order'].'</span>';
-				$list['recommended'] = $val['recommended'] == 0 ? '<em class="no" ectype="inline_edit" controller="brand" fieldname="recommended" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="brand" fieldname="recommended" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$list['if_show'] = $val['if_show'] == 0 ? '<em class="no" ectype="inline_edit" controller="brand" fieldname="if_show" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="brand" fieldname="if_show" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$result['list'][$key] = $list;
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value) {
+				$category = GcategoryModel::find()->select('cate_name')->where(['cate_id' => $value['cate_id']])->scalar();
+				$list[$key]['cate_name'] = $category ? $category : '';
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -91,7 +72,7 @@ class BrandController extends \common\controllers\BaseAdminController
 	{
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['brand'] = ['recommended' => 0, 'sort_order' => 255];
+			$this->params['brand'] = ['recommended' => 0, 'sort_order' => 255, 'if_show' => 1];
 			
 			// 取得一级商品分类
 			$this->params['gcategories'] = GcategoryModel::getOptions(0, 0);
@@ -170,15 +151,15 @@ class BrandController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = BrandModel::find()->indexBy('brand_id')->orderBy(['sort_order' => SORT_ASC, 'brand_id' => SORT_DESC]);
+		$query = BrandModel::find()->select('brand_id,brand_name,brand_logo,if_show,recommended,tag,letter')->orderBy(['sort_order' => SORT_ASC, 'brand_id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'brand_id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_brand'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\BrandExportForm::download($query->asArray()->all());		
 	}

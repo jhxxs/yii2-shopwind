@@ -45,8 +45,12 @@ class Seller_fullfreeController extends \common\controllers\BaseSellerController
     {
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['fullfree'] = Promotool::getInstance('fullfree')->build(['store_id' => $this->visitor['store_id']])->getInfo();
-			$this->params['appAvailable'] = Promotool::getInstance('fullfree')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			$fullfreeTool = Promotool::getInstance('fullfree')->build(['store_id' => $this->visitor['store_id']]);
+			$this->params['fullfree'] = $fullfreeTool->getInfo();
+			
+			if(($message = $fullfreeTool->checkAvailable(true, false)) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.form.js');
 			

@@ -108,14 +108,14 @@ class DistributeController extends \common\controllers\BaseSellerController
 			$post = $this->absratio($post);
 
 			// 商家是否已购买，并在使用期限内
-			if(!Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable(true)) {
+			if(!Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable(false)) {
 				return Message::popWarning(Language::get('handle_exception'));
 			}
 
 			if(($post->ratio1 + $post->ratio2 + $post->ratio3 >= 1) || ($post->ratio1 + $post->ratio2 + $post->ratio3 <= 0)) {
 				return Message::popWarning(Language::get('ratio_invalid'));
 			}
-			$editCouts = 0;
+			$counts = 0;
 			foreach($list as $key => $val){
 				if(!$model = DistributeSettingModel::find()->where(['item_id' => $val['goods_id'], 'type' => 'goods'])->one()) {
 					$model = new DistributeSettingModel();
@@ -129,11 +129,11 @@ class DistributeController extends \common\controllers\BaseSellerController
 				$model->item_id		= $val['goods_id'];
 
 				if($model->save()) {
-					$editCouts++;
+					$counts++;
 				}
 			}
 			
-			if($editCouts <= 0 ) {
+			if($counts <= 0 ) {
 				return Message::popWarning(Language::get('edit_fail'));
 			}
 

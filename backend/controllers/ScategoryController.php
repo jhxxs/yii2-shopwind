@@ -51,7 +51,7 @@ class ScategoryController extends \common\controllers\BaseAdminController
 		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css']);
 		$this->params['_foot_tags'] = Resource::import(['script' => 'treetable/stree.js,inline_edit.js']);
 		
-		$this->params['page'] = Page::seo(['title' => Language::get('scategory_list')]);
+		$this->params['page'] = Page::seo(['title' => Language::get('scategory')]);
 		return $this->render('../scategory.index.html', $this->params);
 	}
 	

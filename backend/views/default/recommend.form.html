@@ -1,30 +1,17 @@
-{include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.recommend}</p>
-    <ul class="subnav">
-      <li><a class="btn1" href="{url route='recommend/index'}">{$lang.manage}</a></li>
-      <!-- {if $recommend} -->
-      <li><a class="btn1" href="{url route='recommend/add'}">{$lang.add}</a></li>
-      <li><span>{$lang.edit}</span></li>
-      <!--{else}-->
-      <li><span>{$lang.add}</span></li>
-      <!--{/if}-->
-    </ul>
-  </div>
-  <div class="info">
-    <form method="post">
-      <table class="infoTable">
-        <tr>
-          <th class="paddingT15"> {$lang.recom_name}:</th>
-          <td class="paddingT15 wordSpacing5"><input class="infoTableInput2" name="recom_name" type="text" value="{$recommend.recom_name|escape}" /></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td class="ptb20"><input class="formbtn J_AjaxSubmit" type="submit" value="{$lang.submit}" /></td>
-        </tr>
-      </table>
-    </form>
-  </div>
+<div class="content1 pb10">
+  <div class="ml20 mr20 mb20 mt10" id="warning"></div>
+  <form method="post" action="{$smarty.server.REQUEST_URI}" target="iframe">
+    <table class="infoTable pb10">
+      <tr>
+        <th class="paddingT15"><label>{$lang.recom_name}</label></th>
+        <td class="paddingT15 wordSpacing5"><input class="infoTableInput2" name="recom_name" type="text"
+            value="{$recommend.recom_name|escape}" /></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td class="ptb20"><input class="layui-btn layui-bg-blue" type="submit" value="{$lang.submit}" />
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
-{include file="footer.html"} 

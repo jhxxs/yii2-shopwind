@@ -13,8 +13,8 @@ return array(
    'appid_empty'		=> 'AppId不能为空',
    'appsecret_empty'	=> 'AppSecret不能为空',
    'token_empty'		=> 'Token（令牌）不能为空',
-   'weixin_setting'		=> '微信接口配置',
-   'setting_successed'	=> '微信接口配置成功',
+   'weixin_setting'		=> '公众号设置',
+   'setting_successed'	=> '公众号接口配置成功',
    'autologin' 		=> '关注自动登陆',
    'autologin_desc' 	=> '关注公众号后自动注册登陆',
    'gatewayUrl' 		=> 'URL(服务器地址)',
@@ -52,7 +52,6 @@ return array(
    'createmenu_fail'	=> '菜单生成失败，错误代码：%s，错误说明：%s',
    'createmenu_successed'=> '生成菜单成功', 
    
-   'weixin_reply'		=> '自动回复',
    'textmsg' 			=> '文字消息',
    'imgmsg'				=> '图文消息',
    'replys_list' 		=> '列表',
@@ -77,4 +76,5 @@ return array(
    'reply_desc_3'		=> '3. 关键词自动回复，可以增加多条，多个关键词用分号隔开',
    'action_invalid'		=> '回复类型非法',
    'title_empty'		=> '标题不能为空',
+   'weixin_addreply' => '新增公众号回复'
 );

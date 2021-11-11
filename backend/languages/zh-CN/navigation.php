@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    'navigation'    => '页面导航',
     'type'          => '所在位置',
     'open_new'      => '新窗口打开',
     'header'        => '头部',
@@ -25,6 +24,6 @@ return array(
     'title_empty'     => '标题不能为空',
     'link_limit'      => '请输入有效的链接地址',
     'number_only'    => '此项仅能为数字',
-	'navigation_list' => '页面导航列表',
-
+    'navigation_add' => '新增导航',
+    'navigation_edit' => '新增导航',
 );

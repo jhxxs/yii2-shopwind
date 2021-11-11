@@ -25,7 +25,6 @@ return array(
     'note_limit' => '仅能为整数',
     'number_only' => '仅能为数字',
     'description' => '申请说明',
-    'no_limit' => '不限',
     'default' => '默认等级不能删除',
     'drop_confirm' => '您确定要删除该店铺等级吗？删除该店铺等级下的所有店铺会自动改为默认等级',
     'function_limit'    => '可用附加功能',
@@ -33,4 +32,6 @@ return array(
 	'skin' => '店铺风格',
 	'sgrade_list' => '店铺等级列表',
 	'donot_drop_by_store' => '该等级[ID:%s]下还有店铺，您不能删除',
+    'sgrade_add' => '新增等级',
+    'sgrade_edit' => '编辑等级'
 );

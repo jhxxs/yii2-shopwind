@@ -13,6 +13,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 use common\models\UserModel;
 use common\models\CashcardModel;
@@ -41,54 +42,36 @@ class CashcardController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page', 'printed', 'actived']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'printed', 'actived']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'inline_edit.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
-			
 			$this->params['page'] = Page::seo(['title' => Language::get('cashcard_list')]);
 			return $this->render('../cashcard.index.html', $this->params);
 		}
 		else
 		{
-			$query = CashcardModel::find()->alias('c')->select('c.*,u.username')->joinWith('user u')->indexBy('id');
-			$query = $this->getConditions($post, $query);
+			$query = CashcardModel::find()->select('id,name,cardNo,password,money,add_time,expire_time,active_time,useId,printed');
+			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 			
-			$orderFields = ['cardNo','money','username','add_time','printed','active_time','expire_time'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['id' => SORT_DESC]);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'cashcard')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$operation .= "<span class='btn'><em><i class='fa fa-cog'></i>设置 <i class='arrow'></i></em><ul>";
-				$operation .= "<li><a href=\"javascript:;\" onclick=\"fg_print({$key}, 1)\">制卡</a></li>";
-				$operation .= "<li><a href=\"javascript:;\" onclick=\"fg_print({$key}, 0)\">取消制卡</a></li>";
-				$operation .= "</ul>";
-				$list['operation'] = $operation;
-				$list['name'] = $val['name'];
-				$list['cardNo'] = $val['cardNo'];
-				$list['password'] = $val['password'];
-				$list['money'] = $val['money'];
-				$list['add_time'] = Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['expire_time'] = Timezone::localDate('Y-m-d H:i:s', $val['expire_time']);
-				$list['printed'] = $val['printed'] == 0 ? '<em class="no"><i class="fa fa-ban"></i>未制卡</em>' : '<em class="yes"><i class="fa fa-check-circle"></i>已制卡</em>';
-				$list['username'] = $val['username'];
-				$list['active_time'] = Timezone::localDate('Y-m-d H:i:s', $val['active_time']);
-				$result['list'][$key] = $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['expire_time'] = Timezone::localDate('Y-m-d H:i:s', $value['expire_time']);
+				$list[$key]['active_time'] = Timezone::localDate('Y-m-d H:i:s', $value['active_time']);
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['useId']])->scalar();
 			}
-			return Page::flexigridXML($result);
+			
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -127,12 +110,16 @@ class CashcardController extends \common\controllers\BaseAdminController
 		{
 			$this->params['cashcard'] = ArrayHelper::toArray($cashcard);
 			
+			$this->params['_foot_tags'] = Resource::import([
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+            	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
+			]);
 			$this->params['page'] = Page::seo(['title' => Language::get('cashcard_edit')]);
 			return $this->render('../cashcard.form.html', $this->params);
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['if_show', 'sort_order', 'recommended']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			
 			$model = new \backend\models\CashcardForm(['id' => $id]);
 			if(!($cashcard = $model->save($post, true))) {
@@ -142,7 +129,9 @@ class CashcardController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	// 目前只有用户不存在了，或充值卡未分配给用户，才允许删除
+	/**
+	 * 目前只有用户不存在了，或充值卡未分配给用户，才允许删除
+	 */
 	public function actionDelete()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
@@ -156,6 +145,9 @@ class CashcardController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('drop_ok'));
 	}
 
+	/**
+	 * 设置制卡状态
+	 */
 	public function actionPrinted()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['value']);
@@ -188,15 +180,15 @@ class CashcardController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = CashcardModel::find()->indexBy('id')->orderBy(['id' => SORT_DESC]);
+		$query = CashcardModel::find()->select('id,name,cardNo,password,money,add_time,expire_time,active_time,useId,printed')->orderBy(['id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_cashcard'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\CashcardExportForm::download($query->asArray()->all());		
 	}

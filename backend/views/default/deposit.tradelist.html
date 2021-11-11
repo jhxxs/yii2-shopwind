@@ -1,96 +1,114 @@
 {include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.deposit_manage}</p>
-    <ul class="subnav">
-      <li><a class="btn1" href="{url route='deposit/index'}">{$lang.manage}</a></li>
-      <li><span>{$lang.trade_manage}</span></li>
-      <li><a class="btn1" href="{url route='deposit/drawlist'}">{$lang.withdraw_manage}</a></li>
-      <li><a class="btn1" href="{url route='deposit/rechargelist'}">{$lang.recharge_manage}</a></li>
-      <li><a class="btn1" href="{url route='deposit/setting'}">{$lang.system_setting}</a></li>
-    </ul>
-  </div>
-  <div class="search-form clearfix">
-    <form method="get" id="formSearch">
-      <input type="hidden" name="r" value="deposit/tradelist" />
-      <select class="querySelect" name="field">
-        
-        	{html_options options=$search_options selected=$smarty.get.field}
-      	
-      </select>
-      <input class="queryInput" type="text" name="search_name" value="{$smarty.get.search_name}" />
-      <select class="querySelect" name="status">
-        <option value="">{$lang.trade_status}</option>
-        
-          	{html_options options=$status_list selected=$smarty.get.status}
-      	
-      </select>
-      {$lang.add_time_from}
-      <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from" name="add_time_from" class="pick_date" />
-      {$lang.to}
-      <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to" class="pick_date" />
-      {$lang.amount_from}
-      <input class="queryInput2" type="text" value="{$smarty.get.amount_from}" name="amount_from" />
-      {$lang.to}
-      <input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.amount_to}" name="amount_to" class="pick_date" />
-      <input type="submit" class="formbtn" value="{$lang.query}" />
-      <!--{if $filtered}--> 
-      <a class="formbtn formbtn1" href="{url route='deposit/tradelist'}">{$lang.cancel_query}</a> 
-      <!--{/if}-->
-    </form>
-  </div>
-  <div id="flexigrid"></div>
+<div id="main">
+	{include file="menus.html"}
+	<div id="rightCon" class="clearfix layui-body">
+		<div class="scroller">
+			<div class="search-form clearfix">
+				<form method="get" id="formSearch">
+					<div class="webkit-box box-align-center">
+						<input type="hidden" name="r" value="deposit/tradelist" />
+						<select class="querySelect" name="field">
+							{html_options options=$search_options selected=$smarty.get.field}
+						</select>
+						<input class="infoTableInput mr10" type="text" name="search_name"
+							value="{$smarty.get.search_name}" />
+						<label>{$lang.trade_status}</label>
+						<select class="querySelect" name="status">
+							<option value="">{$lang.no_limit}</option>
+							{html_options options=$status_list selected=$smarty.get.status}
+						</select>
+						{$lang.amount_from}
+						<input class="queryInput2" type="text" value="{$smarty.get.amount_from}" name="amount_from" />
+						{$lang.to}
+						<input class="queryInput2" type="text" value="{$smarty.get.amount_to}"
+							name="amount_to" class="pick_date" />
+					</div>
+					<div class="webkit-box box-align-center mt20">
+						{$lang.add_time_from}
+						<input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
+							name="add_time_from" class="pick_date" />
+						{$lang.to}
+						<input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to"
+							name="add_time_to" class="pick_date" />
+
+						<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm box-align-center width7"
+							value="{$lang.query}" />
+						<!--{if $filtered}-->
+						<a class="layui-btn layui-btn-primary layui-btn-sm box-align-center"
+							href="{url route='deposit/tradelist'}">{$lang.cancel_query}</a>
+						<!--{/if}-->
+					</div>
+				</form>
+			</div>
+			<div class="tablegrid">
+				<table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+			</div>
+			{include file="version.html"}
+		</div>
+	</div>
 </div>
-<script type="text/javascript">
-$(function(){
-    $("#flexigrid").flexigrid({
-		url: url(['deposit/tradelist', $("#formSearch").serializeJson()]),
-    	colModel : [
-    		{ display: '{$lang.operation}', name : 'operation', width : 50, sortable : false, align: 'center', className: 'handle'},
-			  { display: '{$lang.add_time}', name : 'add_time', width : 150, sortable : true, align: 'center'},
-			  { display: '{$lang.tradeNo}', name : 'tradeNo', width : 150, sortable : true, align: 'center'},
-			  { display: '{$lang.bizOrderId}', name : 'bizOrderId', width : 150, sortable : true, align: 'center'},
-			  { display: '{$lang.title}', name : 'title', width : 200, sortable : true, align: 'center'},
-			  { display: '{$lang.buyer_name}', name : 'buyer_name', width : 60, sortable : false, align: 'center'}, 
-			  { display: '{$lang.party}', name : 'party', width : 60, sortable : false, align: 'center'}, 
-    		{ display: '{$lang.amount}', name : 'amount', width : 100, sortable : true, align: 'center'},    		
-			  { display: '{$lang.status}', name : 'status', width: 150, sortable : true, align : 'center'}  		
-    	],
-      buttons : [
-          { display: '<i class="fa fa-trash"></i>{$lang.batch_del}', name : 'del', bclass : 'del', title : '{$lang.batch_del_for_selected}', onpress : fg_operate },
-		  	  { display: '<i class="fa fa-file-excel-o"></i>{$lang.export_data}', name : 'csv', bclass : 'csv', title : '{$lang.export_data}', onpress : fg_operate }
-      ],
-    	// sortname: "add_time",
-    	// sortorder: "desc",
-    	title: '{$lang.deposit_tradelist}'
-    });
-	$('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd'});
-    $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd'});
-});
-function fg_operate(name, bDiv) {
-	var itemlist = new Array();
-	$('.trSelected',bDiv).each(function(){
-		itemlist.push($(this).attr('data-id'));
-	});
-	if (name == 'del') {
-	   if($('.trSelected',bDiv).length == 0){
-			layer.msg(lang.no_selected_item);
-			return false;
-	   }
-       fg_delete(itemlist,'deposit','drop_trade');
-	}
-	if(name == 'csv'){
-		if($('.trSelected',bDiv).length == 0){
-		   layer.confirm(lang.download_all_data,{ icon: 3, title:lang.notice}, function(index){
-				fg_csv(itemlist, 'deposit', 'export', 'trade');
-				layer.close(index);
-			},function(index){
-				layer.close(index);
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+		<a class="layui-btn layui-bg-blue" href="{url route='deposit/rechargelist'}"><i class="layui-icon layui-icon-file-b"></i>充值记录</a>
+		<a class="layui-btn" href="{url route='deposit/drawlist'}"><i class="layui-icon layui-icon-file-b"></i>提现记录</a>
+		<button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+	</div>
+</script>
+
+<script>
+	layui.use('table', function () {
+		var table = layui.table;
+
+		table.render({
+			elem: '#tablegrid'
+			//,skin: 'line'
+			, url: url(['deposit/tradelist', $("#formSearch").serializeJson()])
+			, toolbar: '#toolbar'
+			, defaultToolbar: ['filter', /*'exports',*/ 'print']
+			, title: '交易流水'
+			//, size: 'lg'
+			, cols: [[
+				{ type: 'checkbox', fixed: 'left' }
+				, { field: 'trade_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
+				, { field: 'tradeNo', title: '交易号', width: 200, sort: true, }
+				, { field: 'bizOrderId', title: '商户订单号', width: 200, sort: true }
+				, { field: 'title', title: '标题', width: 200 }
+				, { field: 'buyer', title: '交易方', width: 110, sort: true }
+				, { field: 'party', title: '对方', width: 110, sort: true }
+				, {
+					field: 'amount', title: '金额', width: 110, sort: true, templet: function (res) {
+						return res.flow == 'income' ? '<span class="red">+' + res.amount + '</span>' : '<span class="green">-' + res.amount + '</span>';
+					}
+				}
+				, { field: 'add_time', title: '创建时间', width: 180, sort: true, align: 'center' }
+				, { field: 'pay_time', title: '支付时间', width: 180, sort: true, align: 'center' }
+				, { field: 'end_time', title: '完成时间', width: 180, sort: true, align: 'center' }
+				, { fixed: 'right', field: 'status', title: '状态', width: 160, sort: true }
+			]]
+			, page: {
+				theme: 'blue'
+			}
+		});
+
+		//监听头工具栏事件
+		table.on('toolbar(tablegrid)', function (obj) {
+			var checkStatus = table.checkStatus(obj.config.id);
+			if (checkStatus.data.length <= 0) {
+				return false;
+			}
+			var items = new Array();
+			$.each(checkStatus.data, function (i, item) {
+				items.push(item.trade_id);
 			});
-	   }else{
-		   fg_csv(itemlist, 'deposit', 'export', 'trade');
-	   }
-	}
-}
-</script> 
-{include file="footer.html"} 
+			if (obj.event === 'export') {
+				window.location.href = url(['deposit/export', $.extend($("#formSearch").serializeJson(), { id: items.join(','), model: 'trade' })]);
+			}
+		});
+	});
+
+	$(function () {
+		$('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
+		$('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
+	});
+</script>
+{include file="footer.html"}

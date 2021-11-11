@@ -14,6 +14,8 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\models\UserModel;
+
 use common\library\Language;
 use common\library\Timezone;
 
@@ -34,29 +36,30 @@ class DepositRechargeExportForm extends Model
 			'tradeNo' 		=> '交易号',
     		'orderId' 		=> '商户订单号',
 			'username' 		=> '用户名',
-			'name' 			=> '名称',
-			'amount' 		=> '金额',
+			'amount' 		=> '充值金额',
 			'status' 		=> '状态',
+			'reamrk'		=> '充值备注',
 			'examine' 		=> '操作员',
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'RECHARGE_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
+
 		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
     	{
-			$record_value['add_time']	= Timezone::localDate('Y/m/d H:i:s', $val['add_time']);
-			$record_value['tradeNo']	= $val['tradeNo']; 
-			$record_value['orderId']	= $val['orderId'];
-			$record_value['username']	= $val['username'];
-			$record_value['name']		= Language::get('recharge');
-			$record_value['amount']		= $val['amount']; 
-			$record_value['status']		= Language::get(strtolower($val['status']));
-			$record_value['examine']	= $val['examine'];
+			foreach($lang_bill as $k => $v) {
+
+				if(in_array($k, ['add_time'])) {
+					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
+				}
+				if($k == 'status') {
+					$value[$k] = Language::get(strtolower($value[$k]));
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
+			$record_value['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
+	
         	$record_xls[] = $record_value;
     	}
 		

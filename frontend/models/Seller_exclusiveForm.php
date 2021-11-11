@@ -53,8 +53,8 @@ class Seller_exclusiveForm extends Model
 			return false;
 		}
 		
-		if(($appAvailable = Promotool::getInstance($this->appid)->build(['store_id' => $this->store_id])->checkAvailable(true, true)) !== true) {
-			$this->errors = Language::get($appAvailable['msg']);
+		if(($message = Promotool::getInstance($this->appid)->build(['store_id' => $this->store_id])->checkAvailable(true, false)) !== true) {
+			$this->errors = $message;
 			return false;
 		}
 

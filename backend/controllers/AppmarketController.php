@@ -40,61 +40,11 @@ class AppmarketController extends \common\controllers\BaseAdminController
 		parent::init();
 	}
 	
-	public function actionIndex()
-	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
-		
-		if(!Yii::$app->request->isAjax) 
-		{
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
-			$this->params['page'] = Page::seo(['title' => Language::get('appmarket_list')]);
-			return $this->render('../appmarket.index.html', $this->params);
-		}
-		else
-		{
-			$periodList = AppmarketModel::getPeriodList();
-			$query = AppmarketModel::find()->indexBy('aid');
-			
-			$orderFields = ['logo','title','category','sales','status'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['aid' => SORT_ASC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$config = unserialize($val['config']);
-				$period = '';
-				foreach($periodList as $k => $v) {
-					if(in_array($v['key'], $config['period'])) {
-						$period .= "<label><input type='checkbox' disabled='disabled' value='{$v}' checked='checked' />".$v['value']."</label>&nbsp;&nbsp";
-					}
-				} 
-				$list['operation'] = "<a class='btn red' onclick=\"fg_delete({$key},'appmarket')\"><i class='fa fa-trash-o'></i>删除</a><a class='btn blue' href='".Url::toRoute(['appmarket/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a>";
-				$list['name'] = Language::get($val['appid']);
-				$list['logo'] = '<img src="'.Page::urlFormat($val['logo']).'" height="25" />';
-				$list['title'] = $val['title'];
-				$list['category'] = $val['category'] == 1 ? Language::get('promotool') : '';
-				$list['charge'] = $config['charge'].'元/月';
-				$list['period'] = $period;
-				$list['sales'] = $val['sales'];
-				$list['purchase'] = $val['purchase'] == 0 ? '<em class="no" ectype="inline_edit" controller="appmarket" fieldname="purchase" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="appmarket" fieldname="purchase" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$list['status'] = $val['status'] == 0 ? '<em class="no" ectype="inline_edit" controller="appmarket" fieldname="status" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="appmarket" fieldname="status" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$result['list'][$key]= $list;
-			}
-			return Page::flexigridXML($result);
-		}
-	}
-	
 	public function actionAdd()
 	{
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['applist'] = AppmarketModel::getAppList();
-			$this->params['period'] = AppmarketModel::getPeriodList();
+			$this->params['applist'] = AppmarketModel::getList();
 			
 			// 属于应用的附件（游离图）
 			$appmarket['desc_images'] = UploadedFileModel::find()->select('file_id,file_type,file_path,file_name')->where(['store_id' => 0, 'item_id' => 0, 'belong' => Def::BELONG_APPMARKET])->orderBy(['file_id' => SORT_ASC])->asArray()->all();
@@ -116,7 +66,7 @@ class AppmarketController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['purchase', 'status', 'category']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['status', 'category']);
 			
 			$model = new \backend\models\AppmarketForm();
 			if(!($appmarket = $model->save($post, true))) {
@@ -130,17 +80,16 @@ class AppmarketController extends \common\controllers\BaseAdminController
 	{
 		$id = intval(Yii::$app->request->get('id', 0));
 		if(!$id || !($appmarket = AppmarketModel::find()->where(['aid' => $id])->asArray()->one())) {
-			return Message::warning(Language::get('no_such_appmarket'));
+			return Message::warning(Language::get('no_such_app'));
 		}
 		
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['applist'] = AppmarketModel::getAppList();
-			$this->params['period'] = AppmarketModel::getPeriodList();
+			$this->params['applist'] = AppmarketModel::getList();
 			
 			// 属于应用的附件
-			$appmarket['desc_images'] = UploadedFileModel::find()->select('file_id,file_path,file_name')->where(['store_id' => 0, 'item_id' => $id, 'belong' => Def::BELONG_APPMARKET])->orderBy(['file_id' => SORT_ASC])->asArray()->all();
-			$this->params['appmarket'] = array_merge($appmarket, ['config' => unserialize($appmarket['config'])]);
+			$appmarket['desc_images'] = UploadedFileModel::find()->select('file_id,file_type,file_path,file_name')->where(['store_id' => 0, 'item_id' => $id, 'belong' => Def::BELONG_APPMARKET])->orderBy(['file_id' => SORT_ASC])->asArray()->all();
+			$this->params['appmarket'] = $appmarket;
 			
 			// 编辑器图片批量上传器
 			$this->params['build_upload'] = Plugin::getInstance('uploader')->autoBuild(true)->create([
@@ -158,7 +107,7 @@ class AppmarketController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['purchase', 'status', 'category']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['status', 'category']);
 			
 			$model = new \backend\models\AppmarketForm(['aid' => $id]);
 			if(!($appmarket = $model->save($post, true))) {
@@ -181,7 +130,7 @@ class AppmarketController extends \common\controllers\BaseAdminController
 		return Message::display(Language::get('drop_ok'), ['appmarket/index']);
 	}
 	
-	/* 异步删除编辑期上传的图片 */
+	/* 异步删除编辑器上传的图片 */
 	public function actionDeleteimage()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
@@ -190,20 +139,4 @@ class AppmarketController extends \common\controllers\BaseAdminController
 		}
 		return Message::display(Language::get('drop_ok'));
 	}
-	
-	/* 异步修改数据 */
-    public function actionEditcol()
-    {
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'purchase', 'status']);
-		if(in_array($post->column, ['purchase','status'])) {
-			$model = new \backend\models\AppmarketForm(['aid' => $post->id]);
-			$query = AppmarketModel::findOne($post->id);
-			$query->config = Basewind::trimAll(unserialize($query->config), true);
-			$query->{$post->column} = $post->value;
-			if(!($appmarket = $model->save($query, true))) {
-				return Message::warning($model->errors);
-			}
-			return Message::display(Language::get('edit_ok'));
-		}
-    }
 }

@@ -36,32 +36,33 @@ class DepositDrawExportForm extends Model
 			'account_name'		=> '收款人姓名',
 			'num' 				=> '收款人银行账号',
 			'bank_name' 		=> '开户行',
-			'amount'			=> '金额',
+			'amount'			=> '提现金额',
 			'status'			=> '状态',
 			'remark'			=> '提现备注',
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'DRAW_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
+
 		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
     	{
-			$record_value['add_time']	= Timezone::localDate('Y/m/d H:i:s', $val['add_time']);
-			$record_value['tradeNo']	= $val['tradeNo'];
-			$record_value['orderId']    = $val['orderId'];
-			$card_info = unserialize($val['card_info']);
+			foreach($lang_bill as $k => $v) {
+
+				if(in_array($k, ['add_time'])) {
+					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
+				}
+				if($k == 'status') {
+					$value[$k] = Language::get(strtolower($value[$k]));
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
+
+			$card_info = unserialize($value['card_info']);
 			$record_value['account_name'] 	= $card_info['account_name'];
 			$record_value['num']			= $card_info['num'];
 			$record_value['bank_name']		= $card_info['bank_name'] . $card_info['open_bank'];
-			
-			$record_value['amount']			= $val['amount'];
-			$record_value['status']  		= Language::get(strtolower($val['status']));
-			$record_value['remark']  		= $val['buyer_remark'];
-			
+	
         	$record_xls[] = $record_value;
     	}
 		

@@ -31,6 +31,7 @@ class GuideshopExportForm extends Model
 		// 文件数组
 		$record_xls = array();		
 		$lang_bill = array(
+			'id'			=> 'ID',
     		'owner' 		=> '团长姓名',
 			'phone_mob'		=> '团长电话',
 			'name'			=> '门店名称',
@@ -40,21 +41,25 @@ class GuideshopExportForm extends Model
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'GUIDESHOP_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
-		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
 
-		foreach($list as $key => $val)
+		$record_value = array();
+		foreach($list as $key => $value)
     	{
-			$record_value['owner'] 		= $val['owner'];
-			$record_value['phone_mob']	= $val['phone_mob']; 
-			$record_value['name']		= $val['name'];
-			$record_value['address']	= $val['region_name'] . $val['address'];
-			$record_value['status']		= self::getStatus($val['status']);
-			$record_value['created']	= Timezone::localDate('Y-m-d', $val['created']);
+			foreach($lang_bill as $k => $v) {
+
+				if(in_array($k, ['created'])) {
+					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
+				}
+				if($k == 'status') {
+					$value[$k] = self::getStatus($value[$k]);
+				}
+				if($k == 'address') {
+					$value[$k] = $value['region_name'] .  $value['adderss'];
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
+	
         	$record_xls[] = $record_value;
     	}
 		

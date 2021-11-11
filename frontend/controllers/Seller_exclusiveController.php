@@ -45,8 +45,11 @@ class Seller_exclusiveController extends \common\controllers\BaseSellerControlle
     {
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['exclusive'] = Promotool::getInstance('exclusive')->build(['store_id' => $this->visitor['store_id']])->getInfo();
-			$this->params['appAvailable'] = Promotool::getInstance('exclusive')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			$exclusiveTool = Promotool::getInstance('exclusive')->build(['store_id' => $this->visitor['store_id']]);
+			if(($message = $exclusiveTool->checkAvailable(true, false)) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
+			$this->params['exclusive'] = $exclusiveTool->getInfo();
 			
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.form.js');
 		

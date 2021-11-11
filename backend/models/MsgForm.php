@@ -20,6 +20,7 @@ use common\models\MsgLogModel;
 
 use common\library\Language;
 use common\library\Timezone;
+use common\library\Plugin;
 
 /**
  * @Id MsgForm.php 2018.8.23 $
@@ -68,6 +69,7 @@ class MsgForm extends Model
 		}
 
 		$query = new MsgLogModel();
+		$query->code = Plugin::getInstance('sms')->autoBuild()->getCode();
 		$query->userid = $model->userid;
 		$query->quantity = $post->direction == 'add' ? $post->num : -$post->num;
 		$query->status = 1;

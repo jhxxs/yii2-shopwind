@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\ReportModel;
 use common\models\UserModel;
@@ -44,72 +45,59 @@ class ReportController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['search_options'] = $this->getSearchOption();
 			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('report_list')]);
 			return $this->render('../report.index.html', $this->params);
 		}
 		else
 		{
-			$query = ReportModel::find()->alias('r')->select('r.*,u.username,s.store_id,s.store_name,g.goods_id,g.goods_name,g.default_image')->joinWith('user u', false)->joinWith('store s', false)->joinWith('goods g', false)->indexBy('id');
-			$query = $this->getConditions($post, $query);
-			
-			$orderFields = ['add_time', 'status'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$query = ReportModel::find()->alias('r')->select('r.id,r.userid,r.content,r.status,r.add_time,s.store_id,s.store_name,g.goods_id,g.goods_name')
+				->joinWith('store s', false)
+				->joinWith('goods g', false);
+			$query = $this->getConditions($post, $query)->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_DESC]);
+
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'report')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$operation .= "<span class='btn'><em><i class='fa fa-cog'></i>设置 <i class='arrow'></i></em><ul>";
-				if($val['status'] == 0){
-					$operation .= "<li><a href='javascript:;' onclick='javascrip:fg_verify({$key});'>审核</a></li>";
-				}
-				$operation .= "<li><a href='".Url::toRoute(['report/sendmsg', 'id' => $val['userid']])."'>通知举报人</a></li>";
-				$operation .= "<li><a href='".Url::toRoute(['report/sendmsg', 'id' => $val['store_id']])."'>通知被举报的店铺</a></li>";
-				$operation .= "<li><a href='".Url::toRoute(['goods/index', 'goods_name' => $val['goods_name']])."'>管理举报商品</a></li>";
-				$operation .= "</ul>";
-				$list['operation'] = $operation;
-				
-				$list['add_time'] = Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['username'] = $val['username'];
-				$list['goods_name'] = '<a target="_blank" href="'.Url::toRoute(['goods/index', 'id' => $val['goods_id']], $this->params['homeUrl']).'">'.$val['goods_name'].'</a>';
-				$list['store_name'] = '<a target="_blank" href="'.Url::toRoute(['store/index', 'id' => $val['store_id']], $this->params['homeUrl']).'">'.$val['store_name'].'</a>';
-				$list['content'] = $val['content'];
-				$list['status'] = $val['status'] ? '<span class="yes"><i class="fa fa-check-circle"></i>已审核</span>' : '<span class="no"><i class="fa fa-ban"></i>未审核</span>';
-				$result['list'][$key] = $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
 			}
-			return Page::flexigridXML($result);
+			
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
 	public function actionVerify()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 
-		if(!$post->id || !($model = ReportModel::find()->select('status,id')->where(['and', ['id' => $post->id], ['status' => 0]])->one())){
+		if(!$post->id || !($list = ReportModel::find()->select('id,userid,goods_id,add_time')->where(['and', ['in', 'id', explode(',', $post->id)], ['status' => 0]])->indexBy('id')->asArray()->all())){
 			return Message::warning(Language::get('no_such_item'));
 		}
 
-		$model->status = 1;
-		$model->examine = $this->visitor['username'];
-		$model->verify = $post->verify;
-		if(!$model->save()) {
-			return Message::warning($model->errors);
-		}
+		ReportModel::updateAll(['status' => 1, 'examine' => $this->visitor['username'], 'verify' =>  $post->verify], ['in', 'id', array_keys($list)]);
 		
+		// 通知举报人（站内信）
+		foreach($list as $key => $value) {
+			$value['content'] = $post->verify;
+			$value['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
+			$value['goods_name'] = GoodsModel::find()->select('goods_name')->where(['goods_id' => $value['goods_id']])->scalar();
+
+			$pmer = Basewind::getPmer('touser_report', ['report' => $value]);
+			if($pmer) {
+				$pmer->sendFrom(0)->sendTo($value['userid'])->send();
+			}
+		}
+
 		return Message::display(Language::get('verify_ok'));
 	}	
 	
@@ -121,49 +109,10 @@ class ReportController extends \common\controllers\BaseAdminController
 			return Message::warning(Language::get('no_such_item'));
 		}
 		
-		if(!ReportModel::deleteAll(['and', ['id' => $post->id], ['in', 'id', explode(',', $post->id)]])) {
+		if(!ReportModel::deleteAll(['in', 'id', explode(',', $post->id)])) {
 			return Message::warning(Language::get('drop_fail'));	
 		}
 		return Message::display(Language::get('drop_ok'), ['report/index']);
-	}
-	
-	public function actionSendmsg()
-	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		
-		if (!$post->id){
-			return Message::warning(Language::get('Hacking Attempt'));
-		}
-		
-		$report = ReportModel::find()->alias('r')->select('r.*, g.goods_name')->joinWith('goods g', false)->where(['userid' => $post->id])->asArray()->one();
-		
-		if(!($user = UserModel::find()->select('username')->where(['userid' => $post->id])->asArray()->one())){
-			return Message::warning(Language::get('no_such_user'));
-		}
-		
-		if(!Yii::$app->request->isPost)
-		{
-			$this->params['user'] = $user;
-			return $this->render('../report.notice.html', $this->params);
-		}
-		else 
-		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-			
-			if(empty($post->content)){
-				return Message::warning($model->errors);
-			}
-			
-			$report['content'] = $post->content;
-			$report['username'] = $user['username'];
-
-			$pmer = Basewind::getPmer('touser_report', ['report' => $report]);
-			if($pmer) {
-				$pmer->sendFrom(0)->sendTo($report['userid'])->send();
-			}
-			
-			return Message::display(Language::get('send_success'), ['report/index']);	
-		}
 	}
 	
 	private function getSearchOption()

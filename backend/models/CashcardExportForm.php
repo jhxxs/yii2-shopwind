@@ -14,6 +14,9 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\models\UserModel;
+
+use common\library\Language;
 use common\library\Timezone;
 
 /*
@@ -29,6 +32,7 @@ class CashcardExportForm extends Model
 		// 文件数组
 		$record_xls = array();		
 		$lang_bill = array(
+			'id'			=> 'ID',
 			'name' 			=> '卡名称',
 			'cardNo'		=> '卡号',
 			'password'		=> '密码',
@@ -41,24 +45,24 @@ class CashcardExportForm extends Model
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'Cashcard_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
+
 		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
     	{
-			$record_value['name'] = $val['name'];
-			$record_value['cardNo']	= $val['cardNo'];
-			$record_value['password'] = $val['password'];
-			$record_value['money'] = $val['money'];
-			$record_value['add_time'] = Timezone::localDate('Y/m/d H:i:s', $val['add_time']);
-			$record_value['expire_time'] = Timezone::localDate('Y/m/d H:i:s', $val['expire_time']);
-			$record_value['printed'] = $val['printed'] == 0 ? '未制卡' : '已制卡';
-			$record_value['username'] = $val['username'];
-			$record_value['active_time'] = Timezone::localDate('Y/m/d H:i:s', $val['active_time']);
-			
+			foreach($lang_bill as $k => $v) {
+
+				if(in_array($k, ['add_time', 'expire_time', 'active_time'])) {
+					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
+				}
+				if($k == 'printed') {
+					$value[$k] = $value[$k] == 0 ? Language::get('no_print') : Language::get('printed');
+				}
+				if($k == 'username') {
+					$value[$k] = UserModel::find()->select('username')->where(['userid' => $value['useId']])->scalar();
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
 		

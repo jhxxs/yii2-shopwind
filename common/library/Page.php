@@ -85,8 +85,6 @@ class Page
 	 */
 	public static function listTemplate($folder = 'mall', $client = 'pc')
 	{
-		//$dir = (in_array($client, ['wap']) ?  Yii::getAlias('@mobile') : Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $folder;
-		
 		$dir = Yii::getAlias('@frontend/views');
 		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
 	
@@ -95,26 +93,6 @@ class Page
 			$templates[] = substr($item, strripos($item, DIRECTORY_SEPARATOR) + 1);
 		}
 		return $templates;
-	}
-	
-	/**
-	 * 风格列表
-	 * @param string $folder mall|store
-	 * @param string $client  
-	 * @return array
-	 */
-	public static function listStyle($folder = 'mall', $client = 'pc', $template = 'default')
-	{
-		//$dir = (in_array($client, ['wap']) ?  Yii::getAlias('@mobile') : Yii::getAlias('@frontend')) . DIRECTORY_SEPARATOR . 'web'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$folder. DIRECTORY_SEPARATOR . $template . '/styles';
-		
-		$dir = Yii::getAlias('@frontend/views');
-		$list = FileHelper::findDirectories($dir, ['recursive' => false]);
-		
-		$styles = array();
-		foreach($list as $item) {
-			$styles[] = substr($item, strripos($item, DIRECTORY_SEPARATOR) + 1);
-		}
-		return $styles;
 	}
 	
 	/* 当前位置 */
@@ -428,37 +406,6 @@ class Page
 		imagejpeg ($imageRes);     //在浏览器上显示
 		imagedestroy($imageRes);
 	  }
-	}
-
-	public static function flexigridXML($flexigridXML)
-	{
-		$page = $flexigridXML['page'];
-		$total = $flexigridXML['total'];
-		//header("Expires: Mon, 26 Jul 1997 05:00:00 GMT" ); 
-		//header("Last-Modified: " . gmdate( "D, d M Y H:i:s" ) . "GMT" ); 
-		//header("Cache-Control: no-cache, must-revalidate" ); 
-		header("Pragma: no-cache" );
-		header("Content-type: text/xml");
-		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
-		$xml .= "<rows>";
-		$xml .= "<page>$page</page>";
-		$xml .= "<total>$total</total>";
-		if(empty($flexigridXML['list'])){
-			$xml .= "<row id=''>";
-			$xml .= "<cell></cell>";
-			$xml .= "</row>";	
-			}else{
-			foreach ($flexigridXML['list'] as $k => $v){
-				$xml .= "<row id='".$k."'>";
-			   foreach ($v as $kk => $vv){
-					$xml .= "<cell><![CDATA[".$v[$kk]."]]></cell>";
-					}
-			$xml .= "</row>";	
-			}
-		}
-		$xml .= "</rows>";
-		echo $xml;
-		exit;
 	}
 
 	/**

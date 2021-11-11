@@ -30,42 +30,46 @@ class RefundExportForm extends Model
 		// 文件数组
 		$record_xls = array();		
 		$lang_bill = array(
-			'refund_sn' 			=> '退款单编号',
+			'refund_id'				=> 'ID',
+			'refund_sn' 			=> '退款编号',
     		'buyer_name' 			=> '买家',
     		'store_name' 			=> '卖家',
 			'total_fee' 			=> '交易金额',
-			'refund_goods_fee' 		=> '退款金额',
-    		'refund_shipping_fee' 	=> '退运费',
+			'refund_total_fee' 		=> '退款金额',
 			'created' 				=> '申请时间',
 			'status'				=> '退款状态',
-			'intervene' 			=> '客服介入',
+			'refund_reason'			=> '退款原因',
+			'shipped'				=> '收货情况',
+			'intervene' 			=> '平台介入',
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'REFUND_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
-		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
 
-		$amount = $quantity = 0;
-		foreach($list as $key => $val)
+		$record_value = array();
+		foreach($list as $key => $value)
     	{
 			$quantity++;
-			$amount += floatval($val['refund_total_fee']);
-			
-			$record_value['refund_sn']	= $val['refund_sn'];
-			$record_value['buyer_name']	= $val['buyer_name'];
-			$record_value['store_name']	= $val['store_name'];
-			$record_value['total_fee']	= $val['total_fee'];
-			$record_value['refund_goods_fee'] = $val['refund_goods_fee'];
-			$record_value['refund_shipping_fee'] = $val['refund_shipping_fee'];
-			$record_value['created'] = Timezone::localDate('Y/m/d H:i:s',$val['created']);
-			$record_value['status']	= Language::get('REFUND_'.strtoupper($val['status']));
-			$record_value['intervene'] =	$val['intervene'] ? '是':'否' ;
+			$amount += floatval($value['refund_total_fee']);
+
+			foreach($lang_bill as $k => $v) {
+				if(in_array($k, ['created'])) {
+					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
+				}
+				if(in_array($k, ['intervene'])) {
+					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
+				}
+				if(in_array($k, ['status'])) {
+					$value[$k] = Language::get('REFUND_'.strtoupper($value[$k]));
+				}
+				if(in_array($k, ['shipped'])) {
+					$value[$k] = Language::get('shipped_'.$value[$k]);
+				}
+	
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
+
 		$record_xls[] = array('refund_sn' => '');// empty line
 		$record_xls[] = array('refund_sn' => sprintf('退款总数：%s笔，退款总额：%s元', $quantity, $amount));
 		

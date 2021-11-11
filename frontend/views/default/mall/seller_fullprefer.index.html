@@ -6,9 +6,9 @@
         <div class="public_select">
           <div class="promotool">
             <div class="bundle bundle-list"> 
-              <!--{if $appAvailable neq 'true'}-->
+              <!--{if $tooldisabled}-->
               <div class="notice-word">
-                <p>{$appAvailable.msg}</p>
+                <p>{$tooldisabled}</p>
               </div>
               <!--{else}-->
               <div class="notice-word">

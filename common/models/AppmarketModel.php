@@ -16,9 +16,11 @@ use yii\db\ActiveRecord;
 use yii\helpers\Url;
 
 use common\models\ApprenewalModel;
+use common\models\PromotoolSettingModel;
 
 use common\library\Language;
 use common\library\Timezone;
+use common\library\Plugin;
 
 /**
  * @Id AppmarketModel.php 2018.5.7 $
@@ -27,6 +29,8 @@ use common\library\Timezone;
 
 class AppmarketModel extends ActiveRecord
 {
+	public $errors;
+
     /**
      * @inheritdoc
      */
@@ -37,86 +41,61 @@ class AppmarketModel extends ActiveRecord
 	
 	public static function getList()
 	{
-		return ['teambuy', 'limitbuy', 'wholesale', 'meal', 'fullfree', 'fullprefer', 'exclusive', 'distribute'];
-	}
-	
-	public static function getAppList($code = '')
-	{
-		$all = array();
-		foreach(self::getList() as $key => $val) {
-			$all[$key] = array('key' => $val, 'value' => Language::get($val));
-		}
-		
-		if(!empty($code)) {
-			foreach($all as $key => $val) {
-				if($val['key'] == $code) {
-					return $val;
-				}
-			}
-			return '';
-		}
-		return $all;
-	}
-	public static function getPeriodList($code = 0)
-	{
-		$all = array (
-			array('key' => 1, 'value' => '1个月'),
-			array('key' => 2, 'value' => '2个月'),
-			array('key' => 3, 'value' => '3个月'),
-			array('key' => 4, 'value' => '4个月'),
-			array('key' => 5, 'value' => '5个月'),
-			array('key' => 6, 'value' => '半年'),
-			array('key' => 7, 'value' => '7个月'),
-			array('key' => 8, 'value' => '8个月'),
-			array('key' => 9, 'value' => '9个月'),
-			array('key' => 10, 'value' => '10个月'),
-			array('key' => 11, 'value' => '11个月'),
-			array('key' => 12, 'value' => '一年'),
-			array('key' => 24, 'value' => '二年'),
-			array('key' => 36, 'value' => '三年'),
-		);
-		if(!empty($code)) {
-			foreach($all as $key => $val) {
-				if($val['key'] == $code) {
-					return $val;
-				}
-			}
-			return '';
-		}
-		return $all;
-	}
-	
-	public static function getCheckAvailableInfo($appid = '', $store_id = 0)
-	{
-		$result = true;
-		
-		if(!($appmarket = parent::find()->select('purchase')->where(['status' => 1, 'appid' => $appid])->one())) {
-			$result = array('msg' => Language::get('appDisAvailable'), 'result_code' => 0);
-		}
-		else
-		{
-			// 如果是订购模式，需要订购后才可以使用，不是订购模式，可直接使用
-			if($appmarket->purchase) 
-			{
-				// 在此处判断用户是否购买了该营销工具
-				if(($apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => $appid, 'userid' => $store_id])->orderBy(['rid' => SORT_DESC])->one())) {
-					
-					// 如果购买了，那么检查是否到期
-					if($apprenewal->expired <= Timezone::gmtime()) {
-						
-						// 如果到期了，且应用可用
-						if($appmarket->status) {
-							$result = array('msg' => sprintf(Language::get('appHasExpired'), Url::toRoute(['appmarket/view', 'appid' => $appid])), 'result_code' => -1);
-						}
-					}
-				} 
-				// 如果没有购买过
-				else {
+		$result = [];
 
-					$result = array('msg' => sprintf(Language::get('appHasNotBuy'), Url::toRoute(['appmarket/view', 'appid' => $appid])), 'result_code' => -2);
-				}
+		$list = Plugin::getInstance('promote')->build()->getList();
+		foreach($list as $key => $value) {
+			$result[$key] = $value['name'];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 检查该营销工具是否可用
+	 * @var string $appid 工具id
+	 * @var boolean $force 是否验证商家启用状态
+	 */
+	public function checkAvailable($appid, $store_id = 0, $force = true)
+	{
+		// 是否发布到应用市场
+		$query = parent::find()->select('status')->where(['appid' => $appid])->one();
+
+		// 没有发布，则所有卖家可免费使用
+		if(!$query) {
+			return true;
+		}
+
+		// 已发布到市场，若平台禁用
+		if(!$query->status) {
+			$this->errors = Language::get('appDisAvailable');
+			return false;
+		}
+
+		// 以下为发布到应用市场，所有卖家需要订购后才可使用
+		// 在此处判断商家是否购买了该营销工具
+		$apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => $appid, 'userid' => $store_id])->orderBy(['rid' => SORT_DESC])->one();
+		
+		// 如果没有购买
+		if(!$apprenewal) {
+			$this->errors = Language::get('appHasNotBuy');
+			return false;
+		}
+		
+		// 如果购买了，已过期
+		if($apprenewal->expired <= Timezone::gmtime()) {
+			$this->errors = Language::get('appHasExpired');
+			return false;
+		}
+
+		// 如果购买了，但商家禁用/或未配置优惠（目前只有 满包邮、满优惠、手机专享 有此控制）
+		if($force && in_array($appid, ['exclusive', 'fullfree', 'fullprefer'])) {
+			if(!($model = PromotoolSettingModel::find()->select('status')->where(['appid' => $appid, 'store_id' => $store_id, 'status' => 1])->one())) {
+				$this->errors = Language::get('appDisabled');
+				return false;
 			}
 		}
-		return $result;
+	
+		return true;
 	}
 }

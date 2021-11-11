@@ -14,6 +14,8 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\models\SgradeModel;
+
 use common\library\Timezone;
 use common\library\Language;
 use common\library\Def;
@@ -31,10 +33,12 @@ class StoreExportForm extends Model
 		// 文件数组
 		$record_xls = array();		
 		$lang_bill = array(
+			'store_id'		=> 'ID',
 			'store_name'	=> '店铺名称',
+			'stype'			=> '主体类型',
     		'username' 		=> '用户名',
     		'owner_name' 	=> '店主姓名',
-			'phone_tel'		=> '手机/电话',
+			'tel'			=> '联系电话',
     		'region_name' 	=> '所在地区',
     		'sgrade' 		=> '店铺等级',
 			'recommended'   => '推荐',
@@ -45,25 +49,27 @@ class StoreExportForm extends Model
 		$folder = 'STORE_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
 		
 		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
-
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
     	{
-			$record_value['store_name'] = $val['store_name'];
-			$record_value['username']	= $val['username']; 
-			$record_value['owner_name']	= $val['owner_name'];
-			$record_value['phone_tel']	= $val['phone_mob'].'/'.($val['tel'] ? $val['tel'] : $val['phone_tel']);
-			$record_value['region_name']= $val['region_name'];
-			$record_value['sgrade']		= self::getSgrade($val['sgrade']);
-			$record_value['recommended']= $val['recommended'] ? '是' : '否';
-			$record_value['state']		= self::getStatus($val['state']);
-			$record_value['add_time']	= Timezone::localDate('Y-m-d', $val['add_time']);
+			foreach($lang_bill as $k => $v) {
+
+				if(in_array($k, ['add_time'])) {
+					$value[$k] = Timezone::localDate('Y-m-d H:i:s', $value[$k]);
+				} elseif($k == 'sgrade') {
+					$value[$k] = self::getSgrade($value[$k]);
+				} elseif($k == 'state') {
+					$value[$k] = self::getStatus($value[$k]);
+				} elseif($k == 'recommended') {
+					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
+				} elseif($k == 'stype') {
+					$value[$k] = $value[$k] == 'company' ? Language::get('company') : Language::get('personal');
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
-		
+
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,
@@ -78,15 +84,16 @@ class StoreExportForm extends Model
             Def::STORE_OPEN      => Language::get('open'),
             Def::STORE_CLOSED    => Language::get('close'),
         );
-		if($status !== null) {
-			return isset($result[$status]) ? $result[$status] : '';
+		if($status === null) {
+			return $result;	
 		}
-		return $result;		
+
+		return isset($result[$status]) ? $result[$status] : '';		
 	}
 	
 	private static function getSgrade($grade_id = 0)
 	{
-		$sgrades = \common\models\SgradeModel::getOptions();
-		return $sgrades[$grade_id] ? $sgrades[$grade_id] : '';
+		$sgrades = SgradeModel::getOptions();
+		return isset($sgrades[$grade_id]) ? $sgrades[$grade_id] : '';
 	}	
 }

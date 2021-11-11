@@ -518,6 +518,7 @@ return array(
 	'appDisAvailable'			=> '对不起，平台暂未开放此应用的使用权限',
 	'appHasExpired'				=> '对不起，您购买的该应用已过期，请重新到应用市场购买或续费',
 	'appHasNotBuy'				=> '对不起，您还没有购买此应用，请到应用市场购买',
+	'appDisabled'				=> '商家未启用该优惠',
 	'month'						=> '月',
 	
 	/* 在商品详情页显示 */

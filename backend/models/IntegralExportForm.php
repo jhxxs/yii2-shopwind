@@ -35,22 +35,16 @@ class IntegralExportForm extends Model
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'INTEGRAL_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
-		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
 
-		$amount = $quantity = 0;
-		foreach($list as $key => $val)
+		$record_value = array();
+		foreach($list as $key => $value)
     	{
-			$record_value['userid']		= $val['userid'];
-			$record_value['username']	= $val['username'];
-			$record_value['amount']		= floatval($val['amount']);
+			foreach($lang_bill as $k => $v) {
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
-		
+
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,

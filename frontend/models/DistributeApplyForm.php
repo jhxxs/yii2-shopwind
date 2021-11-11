@@ -21,6 +21,7 @@ use common\models\DistributeSettingModel;
 use common\library\Basewind;
 use common\library\Language;
 use common\library\Timezone;
+use common\library\Def;
 
 /**
  * @Id DistributeApplyForm.php 2018.10.23 $
@@ -64,8 +65,8 @@ class DistributeApplyForm extends Model
 		$model->username 	= Yii::$app->user->identity->username;
 		$model->phone_mob 	= $post->phone_mob;
 		$model->name 		= $post->name;
-		$model->status		= 1;
-		$model->add_time	= Timezone::gmtime();
+		$model->status		= Def::STORE_OPEN; // 如果分销商需要审核后开通，请给值 Def::STORE_APPLYING
+		$model->created		= Timezone::gmtime();
 		
 		// 如果有推荐人，构建上下级分销商关系
 		if(($invites = DistributeSettingModel::getInvites('register'))) {

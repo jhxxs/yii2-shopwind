@@ -55,8 +55,11 @@ class TeambuyController extends \common\controllers\BaseSellerController
 		$page = array('pageSize' => 15);
 		$this->params['teambuys'] = TeambuyModel::getList($this->visitor['store_id'], $params, $page);
 		$this->params['pagination'] = Page::formatPage($page);
-		$this->params['appAvailable'] = Promotool::getInstance('teambuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 		
+		if(($message = Promotool::getInstance('teambuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+			$this->params['tooldisabled'] = $message;
+		}
+	
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('teambuy'), Url::toRoute('teambuy/index'), Language::get('teambuy_list'));
 		
@@ -71,7 +74,9 @@ class TeambuyController extends \common\controllers\BaseSellerController
     {
         if(!Yii::$app->request->isPost)
 		{
-			$this->params['appAvailable'] = Promotool::getInstance('teambuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			if(($message = Promotool::getInstance('teambuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js',
@@ -110,8 +115,11 @@ class TeambuyController extends \common\controllers\BaseSellerController
 		
         if(!Yii::$app->request->isPost)
 		{
+			if(($message = Promotool::getInstance('teambuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
+			
 			$this->params['teambuy'] = $teambuy;
-			$this->params['appAvailable'] = Promotool::getInstance('teambuy')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js,jquery.plugins/jquery.form.js,gselector.js',

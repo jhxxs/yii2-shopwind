@@ -14,6 +14,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\library\Language;
 use common\library\Timezone;
 use common\library\Page;
 
@@ -33,24 +34,28 @@ class BrandExportForm extends Model
 			'brand_id' 		=> '品牌ID',
     		'brand_name' 	=> '品牌名称',
     		'brand_logo' 	=> '品牌标识',
+			'letter'		=> '首字母',
     		'recommended' 	=> '推荐',
-    		'tag' 			=> '品牌类别',
+			'if_show'		=> '显示',
+    		'tag' 			=> '品牌标签'
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'BRAND_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
-		$record_value = array();
-		foreach($lang_bill as $key => $val) {
-			$record_value[$key] = '';
-		}
 
-		foreach($list as $key => $val)
+		$record_value = array();
+		foreach($list as $key => $value)
     	{
-			$record_value['brand_id'] 	= $val['brand_id'];
-			$record_value['brand_name']	= $val['brand_name']; 
-			$record_value['brand_logo']	= Page::urlFormat($val['brand_logo']);
-			$record_value['recommended']= ($val['recommended'] == 1) ? '是' : '否';
-			$record_value['tag']		= $val['tag'];
+			foreach($lang_bill as $k => $v) {
+
+				if($k == 'brand_logo') {
+					$value[$k] = Page::urlFormat($value['brand_logo']);
+				}
+				if(in_array($k, ['if_show', 'recommended'])) {
+					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
 		

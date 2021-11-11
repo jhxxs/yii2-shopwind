@@ -33,7 +33,6 @@ return array(
 	'has_expired'				=> '已过期',
 	'buyperiod'					=> '购买周期',
 	'per_month'					=> '个月',
-	'buy_confirm'				=> '确定后将直接从账户余额扣除支付的金额，要确认吗？',
 	'amount'					=> '金额',
 	'connecting_cashier'		=> '正在跳转至收银台，请稍等...',
 	'not_allow_buy_for_often'   => '距离您上次购买该免费应用还有大于一个月的时间，为避免恶意购买免费应用，请您在距离到期日一个月内再购买！',

@@ -10,12 +10,27 @@ $(function () {
 
 	/* 通用异步请求(FORM) */
 	$('body').on('click', '.J_AjaxSubmit', function () {
-		// 防止重复提交
-		$(this).prop('disabled', true);
+
 		var method = $(this).parents('form').attr('method').toUpperCase();
 		var uri = window.location.href;
 		var ret_url = $(this).parents('form').find('.J_AjaxFormRetUrl').val();
 		var formObj = $(this).parents('form');
+		var confirm = $(this).attr('confirm');
+
+		if (confirm) {
+			layer.confirm(confirm, { title: lang.notice }, function (index) {
+				layer.close(index);
+				ajaxSubmit(method, uri, formObj, ret_url, $(this));
+			}, function (index) {
+				layer.close(index);
+				return false;
+			});
+
+			return false;
+		}
+
+		// 防止重复提交
+		$(this).prop('disabled', true);
 		ajaxSubmit(method, uri, formObj, ret_url, $(this));
 		return false;
 	});
@@ -25,7 +40,7 @@ $(function () {
 	});
 });
 
-function ajaxRequest(obj, uri) {
+function ajaxRequest(obj, uri, callback) {
 	var uri = (typeof uri == 'undefined') ? obj.attr('uri') : uri;
 	if ($.trim(obj.attr('confirm')) != '') {
 		layer.open({
@@ -36,6 +51,9 @@ function ajaxRequest(obj, uri) {
 						if (!isMobileDevice()) {
 							layer.msg(data.msg, {
 								end: function () {
+									if (typeof callback == 'function') {
+										return callback();
+									}
 									window.location.reload();
 								}
 							});
@@ -43,6 +61,9 @@ function ajaxRequest(obj, uri) {
 						else {
 							layer.open({
 								content: data.msg, time: 3, end: function () {
+									if (typeof callback == 'function') {
+										return callback();
+									}
 									window.location.reload();
 								}
 							});
@@ -65,6 +86,9 @@ function ajaxRequest(obj, uri) {
 				if (!isMobileDevice()) {
 					layer.msg(data.msg, {
 						end: function () {
+							if (typeof callback == 'function') {
+								return callback();
+							}
 							window.location.reload();
 						}
 					});
@@ -72,6 +96,9 @@ function ajaxRequest(obj, uri) {
 				else {
 					layer.open({
 						content: data.msg, time: 3, end: function () {
+							if (typeof callback == 'function') {
+								return callback();
+							}
 							window.location.reload();
 						}
 					});

@@ -37,10 +37,10 @@ class AppmarketForm extends Model
 			$this->errors = Language::get('title_empty');
 			return false;
 		}
-		if(!isset($post->config->period) || empty($post->config->period)) {
-			$this->errors = Language::get('select_period');
-			return false;
-		}
+		// if(!isset($post->config->period) || empty($post->config->period)) {
+		// 	$this->errors = Language::get('select_period');
+		// 	return false;
+		// }
 		
 		// add
 		if(!$this->aid) {
@@ -71,9 +71,8 @@ class AppmarketForm extends Model
         $model->category = $post->category;
 		$model->title = addslashes($post->title);
 		$model->summary = addslashes($post->summary);
-		$model->config = serialize(ArrayHelper::toArray($post->config));
+		$model->price = $post->price;
 		$model->description = $post->description;
-		$model->purchase = $post->purchase;
 		$model->status = $post->status;
 		
 		if($model->save()) {

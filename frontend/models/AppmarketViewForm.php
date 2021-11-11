@@ -33,7 +33,7 @@ class AppmarketViewForm extends Model
 		
 		if($post->id) {
 			$query->where(['aid' => $post->id]);
-		} elseif(in_array($post->appid, AppmarketModel::getList())) {
+		} elseif($post->appid) {
 			$query->where(['appid' => $post->appid]);
 		} else {
 			$this->errors = Language::get('app_not_existed');
@@ -45,14 +45,9 @@ class AppmarketViewForm extends Model
 			return false;
 		}
 		
-		$appmarket['config'] && $appmarket['config'] = unserialize($appmarket['config']);
-		!$appmarket['logo'] && $appmarket['logo'] = Yii::$app->params['default_goods_image'];
-		
-		$periodlist = array();
-		foreach($appmarket['config']['period'] as $val) {
-			$periodlist[$val] = AppmarketModel::getPeriodList($val);
+		if(!$appmarket['logo']){
+			$appmarket['logo'] = Yii::$app->params['default_goods_image'];
 		}
-		$appmarket['config']['period'] = $periodlist; 
 		
 		if(ApprenewalModel::checkIsRenewal($appmarket['appid'], Yii::$app->user->id)){
 			$appmarket['checkIsRenewal'] = true;

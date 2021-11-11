@@ -1,6 +1,6 @@
 <?php
  return array(
-	'drop_confirm'=>'删除后，该频道的页面文件以及频道页面的配置文件都会一起删除，您确定么？',
+	'drop_confirm'=>'删除后，该页面文件以及配置文件都会一起删除，您确定么？',
 	'template_list'=>'页面列表',
 	'channel_add'=>'添加页面',
     'no_such_page'  => '没有指定页面！',
@@ -10,8 +10,6 @@
     'hidden'  => '隐藏',
     'save'  => '保存修改',
     'end_edit'  => '退出编辑',
-    'mall_index'  => '商城首页',
-    'template_setting'  => '模板编辑',
     'index' => '首页',
     'community' => '社区团购',
     'recommend_new' => '最新商品',

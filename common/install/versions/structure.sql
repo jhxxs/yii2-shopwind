@@ -94,10 +94,9 @@ CREATE TABLE IF NOT EXISTS `swd_appmarket` (
   `category` int(11) DEFAULT '0',
   `description` text DEFAULT NULL,
   `logo` varchar(200) DEFAULT NULL,
-  `config` text DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT '0.00',
   `sales` int(11) DEFAULT '0',
   `views` int(11) DEFAULT '0',
-  `purchase` tinyint(1) DEFAULT '0',
   `status` tinyint(1) DEFAULT '0',
   `add_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`aid`)
@@ -590,7 +589,7 @@ CREATE TABLE IF NOT EXISTS `swd_distribute_merchant` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `logo` varchar(255) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
-  `add_time` int(11) DEFAULT NULL,
+  `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`dmid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\UserModel;
 use common\models\IntegralModel;
@@ -48,15 +49,15 @@ class RefundController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
-			$this->params['refund_status_list'] = $this->getStatus();
+			$this->params['status_list'] = $this->getStatus();
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
 			
@@ -65,34 +66,20 @@ class RefundController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.refund_goods_fee,r.refund_shipping_fee,r.status,r.created,r.intervene,rb.username as buyer_name,s.store_name,s.store_id')->joinWith('refundBuyerInfo rb', false)->joinWith('store s', false)->indexBy('refund_id');
-			$query = $this->getConditions($post, $query);
+			$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.status,r.created,r.intervene,r.refund_reason, r.shipped,rb.username as buyer_name,s.store_name,s.store_id')
+				->joinWith('refundBuyerInfo rb', false)
+				->joinWith('store s', false);
+			$query = $this->getConditions($post, $query)->orderBy(['refund_id' => SORT_DESC]);
 			
-			$orderFields = ['refund_sn','total_fee','refund_goods_fee','refund_shipping_fee','created','status','intervene'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['refund_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn green' href='".Url::toRoute(['refund/view', 'id' => $key])."'><i class='fa fa-search-plus'></i>查看</a>";
-				$list['operation'] = $operation;
-				$list['refund_sn'] = $val['refund_sn'];
-				$list['buyer_name'] = $val['buyer_name'];
-				$list['store_name'] = "<a href='".Url::toRoute(['store/index', 'id' => $val['store_id']], $this->params['homeUrl'])."' target='_blank'>".$val['store_name']."</a>";
-				$list['total_fee'] = $val['total_fee'];
-				$list['refund_goods_fee'] = $val['refund_goods_fee'];
-				$list['refund_shipping_fee'] = $val['refund_shipping_fee'];
-				$list['created'] = Timezone::localDate('Y-m-d H:i:s', $val['created']);
-				$list['status'] = Language::get('REFUND_'.strtoupper($val['status']));
-				$list['intervene'] = $val['intervene']? '<em class="yes"><i class="fa fa-check-circle"></i>是</em>':'<em class="no"><i class="fa fa-ban"></i>否</em>' ;
-				$result['list'][$key] = $list;
+				$list[$key]['created'] = Timezone::localDate('Y-m-d H:i:s', $value['created']);
+				$list[$key]['status'] = Language::get('REFUND_'.strtoupper($value['status']));
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -182,15 +169,18 @@ class RefundController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.refund_goods_fee,r.refund_shipping_fee,r.status,r.created,r.intervene,rb.username as buyer_name,s.store_name,s.store_id')->joinWith('refundBuyerInfo rb', false)->joinWith('store s', false)->indexBy('refund_id')->orderBy(['r.refund_id' => SORT_DESC]);
+		$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.status,r.created,r.intervene,r.refund_reason, r.shipped,rb.username as buyer_name,s.store_name,s.store_id')
+			->joinWith('refundBuyerInfo rb', false)
+			->joinWith('store s', false)
+			->orderBy(['r.refund_id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'r.refund_id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_refund'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\RefundExportForm::download($query->asArray()->all());		
 	}

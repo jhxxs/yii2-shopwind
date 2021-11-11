@@ -74,6 +74,7 @@ class DepositRechargeForm extends Model
 		$model->flow = ($post->money_change == 'add') ? 'income' : 'outlay';
 		$model->fundchannel = Language::get('deposit');
 		$model->title = ($post->money_change == 'add') ? Language::get('recharge') : Language::get('chargeback');
+		$model->buyer_remark = $post->remark;
 		$model->add_time = Timezone::gmtime();
 		$model->pay_time = Timezone::gmtime();
 		$model->end_time = Timezone::gmtime();

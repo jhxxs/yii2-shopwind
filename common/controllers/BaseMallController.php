@@ -81,6 +81,7 @@ class BaseMallController extends Controller
 		$this->params = ArrayHelper::merge(['visitor' => $this->visitor], [
 			'homeUrl'		=> Basewind::homeUrl(),
 			'siteUrl'		=> Basewind::siteUrl(),
+			'sysversion'	=> Basewind::getVersion(),
 			'priceFormat'	=> isset(Yii::$app->params['price_format']) ? Yii::$app->params['price_format'] : '',
 			'enablePretty'	=> Yii::$app->urlManager->enablePrettyUrl ? true : false,
 			'lang' 			=> Language::find($this->id)
@@ -144,9 +145,9 @@ class BaseMallController extends Controller
 		return true;
 	}
 
-	public function accessWarning()
+	public function accessWarning($params = [])
 	{
-		$this->params = array_merge($this->params, ['notice' => ['done' => false, 'icon' => 'warning', 'msg' => Language::get('access_limit')]]);
+		$this->params = array_merge($this->params, $params, ['notice' => ['done' => false, 'icon' => 'warning', 'msg' => Language::get('access_limit')]]);
 		Yii::$app->response->data = Yii::$app->controller->render('../message.html', $this->params);
 		return false;
 	}

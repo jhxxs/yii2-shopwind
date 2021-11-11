@@ -78,7 +78,7 @@ class Message
 			Yii::$app->response->format = Response::FORMAT_JSON;//此处必须
 			return $notice;
 		}
-		Yii::$app->controller->params['page'] = Page::seo(['title' => Language::get('handle_fail')]);
+		Yii::$app->controller->params['page'] = Page::seo(['title' => Language::get('sys_notice')]);
 		return Yii::$app->controller->render('../message.html', ArrayHelper::merge(Yii::$app->controller->params, ['notice' => $notice]));
 	}
 	

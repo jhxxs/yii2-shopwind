@@ -1,6 +1,5 @@
 <?php
 return array(
-    'cache_server' => '缓存服务',
     'cache_redis' => 'Redis缓存',
     'cache_memcache' => 'MemCache缓存',
     'cache_file'  => '文件缓存',

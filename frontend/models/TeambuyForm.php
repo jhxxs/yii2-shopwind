@@ -40,29 +40,11 @@ class TeambuyForm extends Model
 	{
 		$result = array();
 		
-		if(($query = Promotool::getInstance('teambuy')->build(['store_id' => $this->store_id])->checkAvailable(true, true)) !== true) {
-			$this->errors = $query['msg'];
+		if(($message = Promotool::getInstance('teambuy')->build(['store_id' => $this->store_id])->checkAvailable()) !== true) {
+			$this->errors = $message;
 			return false;
 		}
 	
-		// 如果是订购模式
-		if(AppmarketModel::find()->select('purchase')->where(['appid' => 'teambuy'])->scalar())
-		{
-			$apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => 'teambuy', 'userid' => Yii::$app->user->id])->orderBy(['rid' => SORT_DESC])->one();
-			
-			// 没有订购
-			if(!$apprenewal) {
-				$this->errors = Language::get('appHasNotBuy');
-				return false;
-			}
-
-			// 购买时限已过期
-			if($apprenewal->expired <= Timezone::gmtime()) {
-				$this->errors = Language::get('appHasExpired');
-				return false;
-			}
-		}
-
         if (!$post->goods_id) {
             $this->errors = Language::get('fill_goods');
 			return false;

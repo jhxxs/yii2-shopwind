@@ -51,7 +51,7 @@ class WebimController extends \common\controllers\BaseAdminController
 		$this->params['pagination'] = Page::formatPage($page);
 		$this->params['filtered'] = $this->getConditions($post);
 		
-		$this->params['page'] = Page::seo(['title' => Language::get('webim_log')]);
+		$this->params['page'] = Page::seo(['title' => Language::get('logs')]);
         return $this->render('../webim.index.html', $this->params);
 	}
 	
@@ -61,7 +61,7 @@ class WebimController extends \common\controllers\BaseAdminController
 		{
 			$this->params['setting'] = Setting::getInstance()->getAll();
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('webim_setting')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('setting')]);
 			return $this->render('../webim.setting.html', $this->params);
 		}
 		else

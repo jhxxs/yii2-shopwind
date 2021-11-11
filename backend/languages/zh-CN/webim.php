@@ -1,5 +1,6 @@
 <?php
 return array(
+	'logs' => '记录',
 	'setting' => '设置',
 	'user_forbid' => '用户已被禁言',
 	'user_unforbid' => '用户可正常发言了',

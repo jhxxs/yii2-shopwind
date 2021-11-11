@@ -32,7 +32,7 @@ class DistributeTeamForm extends Model
 		// 找出当前用户的所有下级团队
 		$childs = DistributeMerchantModel::getChilds($post->id);
 
-		$query = DistributeMerchantModel::find()->alias('dm')->select('dm.userid,dm.username,u.portrait')->joinWith('user u', false)->where(['in', 'dm.userid', $childs])->orderBy(['add_time' => SORT_DESC]);
+		$query = DistributeMerchantModel::find()->alias('dm')->select('dm.userid,dm.username,u.portrait')->joinWith('user u', false)->where(['in', 'dm.userid', $childs])->orderBy(['created' => SORT_DESC]);
 		$page = Page::getPage($query->count(), $pageper, $isAJax, $curPage);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($list as $key => $value)

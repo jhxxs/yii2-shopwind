@@ -29,40 +29,34 @@ class UserExportForm extends Model
 		// 文件数组
 		$record_xls = array();		
 		$lang_bill = array(
-			'username' 		=> '会员名',
+			'userid'		=> 'ID',
+			'username' 		=> '用户名',
     		'real_name' 	=> '真实姓名',
     		'email' 		=> '电子邮箱',
 			'phone_mob' 	=> '手机号码',
     		'im_qq' 		=> 'QQ',
-    		'im_ww' 		=> '旺旺',
     		'create_time' 	=> '注册时间',
 			'last_login' 	=> '最后登录时间',
-			'last_ip' 		=> '最后登录ip',
+			'last_ip' 		=> '最后登录IP',
     		'logins' 		=> '登录次数',
 		);
 		$record_xls[] = array_values($lang_bill);
 		$folder ='USER_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
 		
 		$record_value = array();
-		foreach($lang_bill as $key => $val)
-		{
-			$record_value[$key] = '';
-		}
-
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
     	{
-			$record_value['username']	= $val->username;
-			$record_value['real_name']	= $val->real_name;
-			$record_value['email']		= $val->email;
-			$record_value['phone_mob']	= $val->phone_mob;
-			$record_value['im_qq']		= $val->im_qq;
-			$record_value['im_ww']		= $val->im_ww;
-			$record_value['create_time']= Timezone::localDate('Y-m-d H:i:s', $val->create_time);
-			$record_value['last_login']	= Timezone::localDate('Y/m/d H:i:s', $val->last_login);
-			$record_value['last_ip']	= $val->last_ip;
-			$record_value['logins']   	= $val->logins;
+			foreach($lang_bill as $k => $v) {
+
+				if(in_array($k, ['create_time', 'last_login'])) {
+					$value[$k] = Timezone::localDate('Y-m-d H:i:s', $value[$k]);
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
+
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,

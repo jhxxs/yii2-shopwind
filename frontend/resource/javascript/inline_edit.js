@@ -125,19 +125,11 @@ $(function(){
 		var i_val   = ($(this).attr('fieldvalue'))== 0 ? 1 : 0;
 		$.getJSON(url([controller+'/editcol']), {id:i_id,column:i_name,value:i_val}, function(data){
 			if(data.done) {
-				if(i_css.indexOf('positive')>-1) {
-					if(i_css.indexOf('disabled')>-1) {
-						$('i[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':'positive_enabled','fieldvalue':i_val});
+				if(i_css.indexOf('layui-icon-ok')>-1) {
+					if(i_css.indexOf('layui-font-blue')>-1) {
+						$('i[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':'layui-icon layui-icon-ok layui-font-gray','fieldvalue':i_val});
 					} else {
-						$('i[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':'positive_disabled','fieldvalue':i_val});
-					}
-				}
-				// 以下节点应该用不到，留到日后发现再删除
-				else if(i_css.indexOf('negative')>-1) {
-					if(i_css.indexOf('enabled')>-1) {
-						$('i[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':'negative_disabled','fieldvalue':i_val});
-					} else {
-						$('i[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':'negative_enabled','fieldvalue':i_val});
+						$('i[fieldid="'+i_id+'"][fieldname="'+i_name+'"]').attr({'class':'layui-icon layui-icon-ok layui-font-blue','fieldvalue':i_val});
 					}
 				}
 			} else {

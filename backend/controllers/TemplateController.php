@@ -46,9 +46,13 @@ class TemplateController extends \common\controllers\BaseAdminController
 		list($client, $template, $page) = $this->getClientParams();
 		
 		$this->params['client'] = $client;
-		$this->params['pages'] = $this->getEditablePages();
+		$this->params['pages'] = ['pc' => $this->getEditablePages('pc'), 'wap' => $this->getEditablePages('wap')];
 
-		$this->params['page'] = Page::seo(['title' => Language::get('template_setting')]);
+		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css,dialog/dialog.css']);
+		$this->params['_foot_tags'] = Resource::import(['script' => 'jquery.ui/jquery.ui.js,dialog/dialog.js']);
+		
+
+		$this->params['page'] = Page::seo(['title' => Language::get('template_diy')]);
 		return $this->render('../template.index.html', $this->params);
 	}
 	
@@ -308,11 +312,11 @@ class TemplateController extends \common\controllers\BaseAdminController
     }
 	
 	/* 获取可以编辑的页面列表 */
-    private function getEditablePages()
+    private function getEditablePages($client = null)
     {
 		$data = array();
 		
-		list($client, $template, $page) = $this->getClientParams();
+		list($client, $template, $page) = $this->getClientParams($client);
 		$siteUrl = $client == 'wap' ? Basewind::mobileUrl() : Basewind::homeUrl();
 	
 		if(in_array($client, ['pc']))
@@ -331,8 +335,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 					$data[$id] = array(
 						'title' => $channel->title,
 						'url' 	=> Url::toRoute(['channel/index', 'id' => $id], Yii::$app->params['frontendUrl']),
-						'action' => array('edit','drop'), 
-						'name' 	=> 'channel_style'.$channel->style
+						'action' => array('edit','delete'), 
+						'name' 	=> 'channel_style'.$channel->style,
+						'status' => $channel->status
 					);
 				}
 			}
@@ -346,9 +351,10 @@ class TemplateController extends \common\controllers\BaseAdminController
 		return $data;
     }
 	
-	private function getClientParams()
+	private function getClientParams($client = null)
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+		if($client) $post->client = $client;
 	
 		$client = (isset($post->client) && in_array($post->client, ['pc', 'wap'])) ? $post->client : 'pc';
 		$template = in_array($client, ['wap']) ? Yii::$app->params['wap_template_name'] : Yii::$app->params['template_name'];

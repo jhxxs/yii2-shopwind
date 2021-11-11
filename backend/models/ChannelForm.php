@@ -96,7 +96,8 @@ class ChannelForm extends Model
 			$model->delete();
 			return false;
 		}
-		return true;
+
+		return $model->cid;
 	}
 	
 	public function delete()

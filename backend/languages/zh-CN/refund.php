@@ -26,7 +26,6 @@ return array(
 	'created' => '申请时间',
 	'status' => '退款状态',
 	'intervene' => '客服介入',
-	'refund_list' => '退款单列表',
 	'add_time_from' => '申请时间从',
     'add_time_to' => '至',
 	'search_status' => '退款状态',

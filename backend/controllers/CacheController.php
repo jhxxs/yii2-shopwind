@@ -135,7 +135,7 @@ class CacheController extends \common\controllers\BaseAdminController
 			$config = include($file);
 			$this->params['memcache'] = $config['cache']['servers'];
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('cache_redis')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('cache_memcache')]);
 			return $this->render('../cache.memcache.html', $this->params);
 		}
 		else

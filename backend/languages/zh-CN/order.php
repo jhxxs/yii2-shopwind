@@ -1,12 +1,11 @@
 <?php
 
 return array(
-    'order_manage'  => '订单管理',
     'no_such_order'  => '没有指定的订单',
     'seller_name'  => '卖家名称',
     'buyer_name'  => '买家名称',
     'payment_name'  => '支付方式',
-    'order_sn'  => '订单号',
+    'order_sn'  => '订单编号',
     'add_time'  => '下单时间',
     'order_amount'  => '订单总价',
     'status'  => '订单状态',
@@ -21,7 +20,7 @@ return array(
     'region_name'  => '所在地区',
     'address'  => '详细地址',
     'zipcode'  => '邮政编码',
-    'phone_tel'  => '电话号码',
+    'phone_tel'  => '联系电话',
     'phone_mob'  => '手机号码',
     'shipping_name'  => '配送方式',
     'shipping_fee'  => '配送费用',
@@ -39,8 +38,8 @@ return array(
     'payment_name'  => '支付方式',
     'pay_message'  => '支付留言 ',
     'finished_time'  => '完成时间',
-    'consignee_info'  => '收货人及发货信息',
-    'region'  => '所在地区',
+    'consignee_info'  => '配送信息',
+    'region'  => '收货地址',
     'goods_info'  => '商品信息',
     'price'  => '单价',
     'quantity'  => '数量',
@@ -50,5 +49,5 @@ return array(
 	'distribution' => '是否分销',
 	'order_list' => '订单列表',
     'all_order' => '所有订单',
-    'view_order' => '查看订单',
+    'order_view' => '查看订单',
 );

@@ -36,7 +36,7 @@ class AppmarketBuyForm extends Model
 		// 关闭掉没有付款成功且超过1天的订单
 		$this->tradeClosed();
 		
-		if(!$post->id || !($appmarket = AppmarketModel::find()->select('aid,appid,status,config')->where(['aid' => $post->id])->one())) {
+		if(!$post->id || !($appmarket = AppmarketModel::find()->select('aid,appid,status,price')->where(['aid' => $post->id])->one())) {
 			$this->errors = Language::get('app_not_existed');
 			return false;	
 		}
@@ -52,18 +52,8 @@ class AppmarketBuyForm extends Model
 			return false;
 		}
 		
-		if($appmarket->config){
-			$appmarket->config = unserialize($appmarket->config);
-		} else $appmarket->config = array();
-			
-		// 检查所提交的购买周期是否在允许购买的范围内
-		if(!in_array($post->period, $appmarket->config['period'])) {
-			$this->errors = Language::get('period_fail');
-			return false;
-		}
-		
 		// 计算需要支付的金额
-		$amount = $appmarket->config['charge'] * $post->period;
+		$amount = round($appmarket->price * $post->period, 2);
 		
 		// 为避免用户无数次的购买免费的应用，在这里做个控制：如果上次购买的应用是免费的，且离到期时间大于一个月，那么不允许购买
 		if($amount == 0)

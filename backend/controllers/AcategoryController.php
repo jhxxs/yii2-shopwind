@@ -48,10 +48,11 @@ class AcategoryController extends \common\controllers\BaseAdminController
             }
         }
 		$this->params['acategories'] = $acategories;
-		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css']);
-		$this->params['_foot_tags'] = Resource::import(['script' => 'treetable/atree.js,inline_edit.js']);
 		
-		$this->params['page'] = Page::seo(['title' => Language::get('acategory_list')]);
+		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css,dialog/dialog.css']);
+		$this->params['_foot_tags'] = Resource::import(['script' => 'jquery.ui/jquery.ui.js,dialog/dialog.js,treetable/atree.js,inline_edit.js']);
+		
+		$this->params['page'] = Page::seo(['title' => Language::get('acategory')]);
 		return $this->render('../acategory.index.html', $this->params);
 	}
 	
@@ -71,9 +72,9 @@ class AcategoryController extends \common\controllers\BaseAdminController
 			
 			$model = new \backend\models\AcategoryForm();
 			if(!($acategory = $model->save($post, true))) {
-				return Message::warning($model->errors);
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('add_ok'), ['acategory/index']);		
+			return Message::popSuccess(Language::get('add_ok'));		
 		}
 	}
 	
@@ -98,9 +99,9 @@ class AcategoryController extends \common\controllers\BaseAdminController
 			
 			$model = new \backend\models\AcategoryForm(['cate_id' => $id]);
 			if(!($acategory = $model->save($post, true))) {
-				return Message::warning($model->errors);
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('edit_ok'), ['acategory/index']);		
+			return Message::popSuccess(Language::get('edit_ok'));		
 		}
 	}
 	

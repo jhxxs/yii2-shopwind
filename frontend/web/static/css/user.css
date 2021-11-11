@@ -1396,7 +1396,7 @@ a:hover {color: #108ee9;}
 .cc-tree-group{ height:292px;padding:3px;}
 .cc-tree-each{ height:20px; line-height:20px;padding-left:14px;padding-right:16px;border:1px #fff solid; cursor:pointer; background:url(../images/member/T13PGlXfdfXXXXXXXX-261-188.png) no-repeat right -136px}
 .cc-tree-each-select{border:1px #9CD7FC dotted;  background-color:#DFF1FB; background-image:url(../images/member/T13PGlXfdfXXXXXXXX-261-188.png) no-repeat right -137px;}
-.cc-tree-each-noChild{ background-image:none}
+.cc-tree-each-noChild{ background-image:none; overflow: hidden;}
 .cateBottom{margin-top:30px;margin-bottom:30px; text-align:center}
 .cateBtn {width:269px; margin:0 auto}
 .cateBtn button{height:30px; width:267px;text-align:center;color:#666;font-size:14px;font-weight:normal;border:1px #ddd solid; line-height:28px; }
@@ -1521,8 +1521,8 @@ a:hover {color: #108ee9;}
 .appmarket .applist .list-each li .btn-buy{display: inline-block;padding: 3px 15px 3px 15px; background:#f90; color:#fff; float:right; text-decoration:none}
 .appmarket .applist .list-each li .btn-buy:hover{color:#fff;  background:#f60;}
 
-.appmarket .appdetail .default-image{border:1px #ddd solid; margin-right:20px; width:240px; padding-top:33px; height:207px; text-align:center; vertical-align:middle}
-.appmarket .appdetail .app-info{width:575px;}
+.appmarket .appdetail .default-image{border:1px #ddd solid; margin-right:20px; width:300px; padding-top:33px; height:200px; text-align:center; vertical-align:middle}
+.appmarket .appdetail .app-info{width:560px;}
 .appmarket .appdetail .app-info h3{ font-size:18px; font-weight:normal; border-bottom: 1px #ddd dotted;padding-bottom:8px; width:575px;margin-bottom:10px;}
 .appmarket .appdetail .app-info li{ vertical-align:middle; margin-bottom:15px; line-height:18px; font-size:14px; color:#444;}
 .appmarket .appdetail .app-info li.twocol{padding-left:80px;}

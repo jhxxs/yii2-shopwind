@@ -1,9 +1,6 @@
 <?php
 
 return array(
-    'goods' => '商品',
-	'goods_manage' => '商品管理',
-    'back_list' => '返回商品列表',
     'store_name' => '店铺名',
     'if_show' => '上架',
     'close' => '禁售',
@@ -27,9 +24,8 @@ return array(
     'back' => '返回',
     'closed' => '禁售商品',
     'recommend_required' => '请您选择推荐类型',
-    'note_for_gcategory' => '不修改请不要选择',
+    'note_for_batedit' => '不修改请不要选择',
     'note_for_brand' => '不修改请留空',
-    'closed_status' => '禁售状态',
     'no_change' => '保持不变',
     'open' => '可售',
     'no_change_set' => '您没有设置要修改的内容',

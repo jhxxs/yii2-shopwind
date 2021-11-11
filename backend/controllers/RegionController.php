@@ -48,10 +48,10 @@ class RegionController extends \common\controllers\BaseAdminController
             }
         }
 		$this->params['regions'] = $regions;
-		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css']);
-		$this->params['_foot_tags'] = Resource::import(['script' => 'treetable/rtree.js,inline_edit.js']);
+		$this->params['_head_tags'] = Resource::import(['style' => 'treetable/treetable.css,dialog/dialog.css']);
+		$this->params['_foot_tags'] = Resource::import(['script' => 'jquery.ui/jquery.ui.js,dialog/dialog.js,treetable/rtree.js,inline_edit.js']);
 		
-		$this->params['page'] = Page::seo(['title' => Language::get('region_list')]);
+		$this->params['page'] = Page::seo(['title' => Language::get('region_setting')]);
 		return $this->render('../region.index.html', $this->params);
 	}
 	
@@ -70,10 +70,11 @@ class RegionController extends \common\controllers\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['sort_order', 'parent_id']);
 			
 			$model = new \backend\models\RegionForm();
-			if(!($user = $model->save($post, true))) {
-				return Message::warning($model->errors);
+			if(!$model->save($post, true)) {
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('add_ok'), ['region/index']);		
+
+			return Message::popSuccess();
 		}
 	}
 	
@@ -98,9 +99,9 @@ class RegionController extends \common\controllers\BaseAdminController
 			
 			$model = new \backend\models\RegionForm(['region_id' => $id]);
 			if(!($region = $model->save($post, true))) {
-				return Message::warning($model->errors);
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('edit_ok'), ['region/index']);		
+			return Message::popSuccess();	
 		}
 	}
 	

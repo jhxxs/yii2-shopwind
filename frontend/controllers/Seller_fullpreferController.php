@@ -45,8 +45,12 @@ class Seller_fullpreferController extends \common\controllers\BaseSellerControll
     {
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['fullprefer'] = Promotool::getInstance('fullprefer')->build(['store_id' => $this->visitor['store_id']])->getInfo();
-			$this->params['appAvailable'] = Promotool::getInstance('fullprefer')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			$fullpreferTool = Promotool::getInstance('fullprefer')->build(['store_id' => $this->visitor['store_id']]);
+			$this->params['fullprefer'] = $fullpreferTool->getInfo();
+			
+			if(($message = $fullpreferTool->checkAvailable(true, false)) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.form.js');
 		

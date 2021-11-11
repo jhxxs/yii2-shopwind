@@ -32,7 +32,8 @@ class Df_teambuyWidget extends BaseWidget
 			->joinWith('goods g', false, 'INNER JOIN')
             ->joinWith('store s', false)
             ->joinWith('goodsStatistics gst', false)
-			->where(['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0]);
+			->where(['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0])
+            ->orderBy(['id' => SORT_DESC]);
 
         if($this->options['source'] == 'choice') {
             $query->andWhere(['in', 'g.goods_id', explode(',', $this->options['items'])]);

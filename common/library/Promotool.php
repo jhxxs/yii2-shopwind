@@ -83,15 +83,24 @@ class Promotool
 		if(in_array($this->instance, ['distribute'])) {
 			return new Distribute($this->instance, $params);
 		}
+
 		return new Promotool($this->instance, $params);
 	}
 	
-	public function checkAvailable($checkStatus = false, $returnMsg = false)
+	/**
+	 * @var string $message 是否返回验证未通过信息
+	 * @var boolean $force 是否验证商家启用状态
+	 */
+	public function checkAvailable($message = true, $force = true)
 	{
-		if(!$returnMsg) {
-			return PromotoolSettingModel::checkAvailable($this->instance, $this->params['store_id'], $checkStatus);
+		$model = new AppmarketModel();
+
+		$result = $model->checkAvailable($this->instance, $this->params['store_id'], $force);
+		if(!$result) {
+			return $message ? $model->errors : false;
 		}
-		return AppmarketModel::getCheckAvailableInfo($this->instance, $this->params['store_id']);
+
+		return true;		
 	}
 	public function getInfo($params = array(), $format = true)
 	{
@@ -182,7 +191,7 @@ class Promotool
 	{
 		$proPrice = false;
 		
-		if($this->checkAvailable())
+		if($this->checkAvailable(false))
 		{
 			if(($item_info = $this->getItemInfo(['goods_id' => $goods_id])))
 			{
@@ -226,7 +235,7 @@ class Promotool
 			
 			// 店铺满包邮
 			$fullfreeTool = self::getInstance('fullfree')->build(['store_id' => $this->params['store_id']]);
-			if($fullfreeTool->checkAvailable()){
+			if($fullfreeTool->checkAvailable(false)){
 				$fullfree = $fullfreeTool->getInfo();
 				if(isset($fullfree['status']) && $fullfree['status']) {
 					if(isset($fullfree['rules']['amount'])) {
@@ -235,9 +244,9 @@ class Promotool
 				}
 			}
 			
-			// 店铺满折满减
+			// 店铺满优惠
 			$fullpreferTool = self::getInstance('fullprefer')->build(['store_id' => $this->params['store_id']]);
-			if($fullpreferTool->checkAvailable()){
+			if($fullpreferTool->checkAvailable(false)){
 				$fullprefer = $fullpreferTool->getInfo();
 				if(isset($fullprefer['status']) && $fullprefer['status']) {
 					if($fullprefer['rules']['type'] == 'discount') {
@@ -296,7 +305,7 @@ class Promotool
 	{
 		$result = array();
 		$fullfreeTool = self::getInstance('fullfree')->build(['store_id' => $this->params['store_id']]);
-		if($fullfreeTool->checkAvailable()){
+		if($fullfreeTool->checkAvailable(false)){
 			$fullfree = $fullfreeTool->getInfo();
 			if(isset($fullfree['status']) && $fullfree['status']) {
 				if(($goods_info['amount'] >= $fullfree['rules']['amount']) && ($fullfree['rules']['amount'] > 0)) {
@@ -320,7 +329,7 @@ class Promotool
 			$goods_info['orderList'][$this->params['store_id']]['mealprefer'] = $this->getOrderMealPreferInfo($order_info);
 		}
 		
-		// 判断商品金额（不含运费）是否满足满折满减优惠 
+		// 判断商品金额（不含运费）是否满足满优惠设置 
 		$goods_info['orderList'][$this->params['store_id']]['fullprefer'] = $this->getOrderFullPreferInfo($order_info);
 	}
 	
@@ -329,12 +338,12 @@ class Promotool
 		return array('text' => Language::get('submit_order_reduce'), 'price' => $goods_info['oldAmount'] - $goods_info['amount']);
 	}
 	
-	/* 获取订单是否满足满折满减设置 */
+	/* 获取订单是否满足满优惠设置 */
 	public function getOrderFullPreferInfo($goods_info = array())
 	{
 		$result = array();
 		$fullpreferTool = self::getInstance('fullprefer')->build(['store_id' => $this->params['store_id']]);
-		if($fullpreferTool->checkAvailable()){
+		if($fullpreferTool->checkAvailable(false)){
 			$fullprefer = $fullpreferTool->getInfo();
 			if(isset($fullprefer['status']) && $fullprefer['status']) {
 				$amount = $fullprefer['rules']['amount'];

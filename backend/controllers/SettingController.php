@@ -56,27 +56,6 @@ class SettingController extends \common\controllers\BaseAdminController
 		}
 	}
 	
-	public function actionBaseinfo()
-	{
-		if(!Yii::$app->request->isPost) 
-		{
-			$this->params['setting'] = Setting::getInstance()->getAll();
-			
-			$this->params['page'] = Page::seo(['title' => Language::get('base_information')]);
-			return $this->render('../setting.baseinfo.html', $this->params);
-		}
-		else
-		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
-			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
-				return Message::warning($model->errors);
-			}
-			return Message::display(Language::get('edit_base_information_successed'), ['setting/baseinfo']);
-		}
-	}
-	
 	public function actionEmail()
 	{
 		if(!Yii::$app->request->isPost) 

@@ -16,6 +16,7 @@ use yii\base\Model;
 
 use common\models\GcategoryModel;
 
+use common\library\Language;
 use common\library\Timezone;
 
 /**
@@ -44,27 +45,23 @@ class GoodsExportForm extends Model
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'GOODS_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
 		
-		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
-
 		$amount = $quantity = 0;
-		foreach($list as $key => $val)
+		$record_value = array();
+		foreach($list as $key => $value)
     	{
 			$quantity++;
-			$amount += floatval($val['price']);
-			
-			$record_value['goods_id']	= $val['goods_id'];
-			$record_value['goods_name']	= $val['goods_name'];
-			$record_value['price']		= $val['price'];
-			$record_value['store_name']	= $val['store_name'];
-			$record_value['brand']		= $val['brand'];
-			$record_value['cate_name']	= GcategoryModel::formatCateName($val['cate_name'],false, '/');
-			$record_value['if_show']	= $val['if_show'] == 0 ? '否' : '是';
-			$record_value['closed']		= $val['closed'] == 0 ? '否' : '是';
-			$record_value['views']		= intval($val['views']);
+			$amount += floatval($value['price']);
+
+			foreach($lang_bill as $k => $v) {
+				if($k == 'cate_name') {
+					$value[$k] = GcategoryModel::formatCateName($value[$k], false, ' / ');
+				}
+				if(in_array($k, ['if_show', 'closed'])) {
+					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
+				}
+	
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
 		$record_xls[] = array('goods_name' => '');// empty line

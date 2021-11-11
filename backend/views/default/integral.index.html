@@ -1,67 +1,93 @@
 {include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.integral_manage}</p>
-    <ul class="subnav">
-      <li><span>{$lang.integral_list}</span></li>
-      <li><a class="btn1" href="{url route='integral/setting'}">{$lang.integral_setting}</a></li>
-    </ul>
-  </div>
-  <div class="search-form clearfix">
-    <form method="get" id="formSearch">
-      <input type="hidden" name="r" value="integral/index" />
-      {$lang.username}
-      <input class="queryInput" type="text" name="username" value="{$smarty.get.username|escape}" />
-      <input type="submit" class="formbtn" value="{$lang.query}" />
-      <!--{if $filtered}--> 
-      <a class="formbtn formbtn1" href="{url route='integral/index'}">{$lang.cancel_query}</a> 
-      <!--{/if}-->
-    </form>
-  </div>
-  <div id="flexigrid"></div>
+<div id="main">
+	{include file="menus.html"}
+	<div id="rightCon" class="clearfix layui-body">
+		<div class="scroller">
+			<div class="search-form clearfix">
+				<form method="get" id="formSearch">
+					<div class="webkit-box box-align-center">
+						<input type="hidden" name="r" value="integral/index" />
+						{$lang.username}
+						<input class="queryInput" type="text" name="username" value="{$smarty.get.username|escape}" />
+						手机号
+						<input class="queryInput" type="text" name="phone_mob" value="{$smarty.get.phone_mob|escape}" />
+						<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm box-align-center width7"
+							value="{$lang.query}" />
+						<!--{if $filtered}-->
+						<a class="layui-btn layui-btn-primary layui-btn-sm box-align-center"
+							href="{url route='integral/index'}">{$lang.cancel_query}</a>
+						<!--{/if}-->
+					</div>
+				</form>
+			</div>
+			<div class="tablegrid">
+				<table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+			</div>
+			{include file="version.html"}
+		</div>
+	</div>
 </div>
-<script type="text/javascript">
-$(function(){
-    $("#flexigrid").flexigrid({
-		url: url(['integral/index', $("#formSearch").serializeJson()]),
-    	colModel : [
-    		{ display: '{$lang.operation}', name : 'operation', width : 200, sortable : false, align: 'center', className: 'handle'},
-			{ display: 'ID', name : 'userid', width : 200, sortable : true, align: 'center'},
-			{ display: '{$lang.username}', name : 'username', width : 200, sortable : true, align: 'center'},
-			{ display: '{$lang.amount}', name : 'amount', width : 200, sortable : true, align: 'center'}		
-    	],
-        buttons : [
-			{ display: '<i class="fa fa-file-excel-o"></i>{$lang.export_data}', name : 'csv', bclass : 'csv', title : '{$lang.export_data}', onpress : fg_operate }
-        ],
-    	sortname: "amount",
-    	sortorder: "desc",
-    	title: '{$lang.integral_list}'
-    });
-});
-function fg_operate(name, bDiv) {
-	var itemlist = new Array();
-	$('.trSelected',bDiv).each(function(){
-		itemlist.push($(this).attr('data-id'));
-	});
-	if (name == 'del') {
-	   if($('.trSelected',bDiv).length==0){
-		   layer.msg(lang.no_selected_item);
-			return false;
-	   }
-       fg_delete(itemlist, 'integral');
-	}
-	if(name == 'csv'){
-		if($('.trSelected',bDiv).length==0){
-		   layer.confirm(lang.download_all_data,{ icon: 3, title:lang.notice},function(index){
-				fg_csv(itemlist, 'integral');
-				layer.close(index);
-			},function(index){
-				layer.close(index);
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+	  <button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+	</div>
+</script>
+
+<script type="text/html" id="colBar">
+	<a class="ml5 mr5 blue pointer" lay-event="recharge">充积分</a>
+	<a class="ml5 mr5 blue pointer" lay-event="logs">积分明细</a>
+</script>
+<script>
+	layui.use('table', function () {
+		var table = layui.table;
+
+		table.render({
+			elem: '#tablegrid'
+			//,skin: 'line'
+			, url: url(['integral/index', $("#formSearch").serializeJson()])
+			, toolbar: '#toolbar'
+			, defaultToolbar: ['filter', /*'exports',*/ 'print']
+			, title: '用户积分列表'
+			//, size: 'lg'
+			, cols: [[
+				{ type: 'checkbox', fixed: 'left' }
+				, { field: 'userid', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
+				, { field: 'username', title: '用户名', width: 313, sort: true }
+				, { field: 'phone_mob', title: '手机号', width: 300, sort: true }
+				, { field: 'amount', title: '积分', width: 350, sort: true }
+				, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 180, align: 'center' }
+			]]
+			, page: {
+				theme: 'blue'
+			}
+		});
+
+		//监听头工具栏事件
+		table.on('toolbar(tablegrid)', function (obj) {
+			var checkStatus = table.checkStatus(obj.config.id);
+			if (checkStatus.data.length <= 0) {
+				return false;
+			}
+			var items = new Array();
+			$.each(checkStatus.data, function (i, item) {
+				items.push(item.userid);
 			});
-	   }else{
-		   fg_csv(itemlist, 'integral');
-	   }
-	}
-}
-</script> 
-{include file="footer.html"} 
+
+			if (obj.event === 'export') {
+				window.location.href = url(['integral/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+			}
+		});
+
+		//监听行工具事件
+		table.on('tool(tablegrid)', function (obj) {
+			var data = obj.data;
+			if (obj.event === 'recharge') {
+				ajax_form('dialog', '充积分', url(['integral/recharge', { id: data.userid }]), 600);
+			} else if (obj.event === 'logs') {
+				window.location.href = url(['integral/logs', { id: data.userid }]);
+			}
+		});
+	});
+</script>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
+{include file="footer.html"}

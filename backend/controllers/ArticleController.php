@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\ArticleModel;
 use common\models\AcategoryModel;
@@ -45,44 +46,31 @@ class ArticleController extends \common\controllers\BaseAdminController
 
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page', 'cate_id', 'articletype']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'cate_id', 'articletype']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['acategories'] = AcategoryModel::getOptions();
 			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('article_list')]);
 			return $this->render('../article.index.html', $this->params);
 		}
 		else
 		{
-			$query = ArticleModel::find()->alias('a')->select('a.article_id,a.title,a.cate_id,a.store_id,a.link,a.sort_order,a.if_show,a.add_time,ac.cate_name')->joinWith('acategory ac', false)->indexBy('article_id');
-			$query = $this->getConditions($post, $query);
+			$query = ArticleModel::find()->alias('a')->select('a.article_id,a.title,a.cate_id,a.store_id,a.link,a.sort_order,a.if_show,a.add_time,ac.cate_name')
+				->joinWith('acategory ac', false);
+			$query = $this->getConditions($post, $query)->orderBy(['sort_order' => SORT_ASC, 'article_id' => SORT_DESC]);
 			
-			$orderFields = ['title', 'cate_name', 'sort_order','if_show', 'add_time'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'article_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$list['operation'] = "<a class='btn red' onclick=\"fg_delete({$key}, 'article')\"><i class='fa fa-trash-o'></i>删除</a><a class='btn blue' href='".Url::toRoute(['article/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a><a target='_blank' class='btn blue' href='".Url::toRoute(['article/view', 'id' => $key], $this->params['homeUrl'])."'><i class='fa fa-eye'></i>查看</a>";
-				$list['title'] = '<span ectype="inline_edit" controller="article" fieldname="title" fieldid="'.$key.'"  required="1" class="editable" title="'.Language::get('editable').'">'.$val['title'].'</span>';
-				$list['cate_name'] = $val['cate_name'];
-				$list['articletype'] = $val['store_id'] == 0 ? Language::get('backend_article') : Language::get('store_article');
-				$list['sort_order'] = '<span ectype="inline_edit" controller="article" fieldname="sort_order" fieldid="'.$key.'" datatype="pint" maxvalue="255" class="editable" title="'.Language::get('editable').'">'.$val['sort_order'].'</span>';
-				$list['if_show'] = $val['if_show'] == 0 ? '<em class="no" ectype="inline_edit" controller="article" fieldname="if_show" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="article" fieldname="if_show" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$list['add_time'] = Timezone::localDate('Y-m-d H:i:s',$val['add_time']);
-				$result['list'][$key] = $list;
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value) {
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	

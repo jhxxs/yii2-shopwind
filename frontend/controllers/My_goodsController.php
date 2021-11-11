@@ -171,7 +171,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			
 			// 手机专享
 			$exclusiveTool = Promotool::getInstance('exclusive')->build(['store_id' => $this->visitor['store_id']]);
-			if($exclusiveTool->checkAvailable()){
+			if($exclusiveTool->checkAvailable(false)){
 				$this->params['exclusive'] = $exclusiveTool->getExclusive();
 			}
 			
@@ -269,7 +269,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			
 			// 手机专享
 			$exclusiveTool = Promotool::getInstance('exclusive')->build(['store_id' => $this->visitor['store_id']]);
-			if($exclusiveTool->checkAvailable()){
+			if($exclusiveTool->checkAvailable(false)){
 				$this->params['exclusive'] = $exclusiveTool->getExclusive($id);
 			}
 			
@@ -847,7 +847,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 		
 		// 保存手机专享设置
 		$exclusiveTool = Promotool::getInstance('exclusive')->build(['store_id' => $this->visitor['store_id']]);
-		if($exclusiveTool->checkAvailable()){
+		if($exclusiveTool->checkAvailable(false)){
 			$config = $data['exclusive'];
 			unset($config['status']);
 			if($config['discount']) unset($config['decrease']);

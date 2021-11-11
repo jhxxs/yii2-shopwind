@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\FlagstoreModel;
 use common\models\BrandModel;
@@ -42,40 +43,26 @@ class FlagstoreController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
-			
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('flagstore_list')]);
 			return $this->render('../flagstore.index.html', $this->params);
 		}
 		else
 		{
-			$query = FlagstoreModel::find()->alias('fs')->select('fs.*,b.brand_name,s.store_name,gc.cate_name')->joinWith('brand b', false)->joinWith('gcategory gc', false)->joinWith('store s', false)->indexBy('fid');
+			$query = FlagstoreModel::find()->alias('fs')->select('fs.fid,fs.keyword,fs.sort_order,fs.status,b.brand_name,s.store_name,gc.cate_name')
+				->joinWith('brand b', false)
+				->joinWith('gcategory gc', false)
+				->joinWith('store s', false)
+				->orderBy(['sort_order' => SORT_ASC, 'fid' => SORT_DESC]);
 			
-			$orderFields = ['keyword', 'status', 'sort_order'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'fid' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$list['operation'] = "<a class='btn red' onclick=\"fg_delete({$key},'flagstore')\"><i class='fa fa-trash-o'></i>删除</a><a class='btn blue' href='".Url::toRoute(['flagstore/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a>";
-				$list['store_name'] = $val['store_name'];
-				$list['brand_name'] = $val['brand_name'];
-				$list['cate_name']  = $val['cate_name'];
-				$list['keyword']    = $val['keyword'];
-				$list['sort_order'] 	= '<span ectype="inline_edit" controller="flagstore" fieldname="sort_order" fieldid="'.$key.'" datatype="pint" class="editable" title="'.Language::get('editable').'">'.$val['sort_order'].'</span>';
-				$list['status']	= ($val['status'] == 0) ? '<em class="no" ectype="inline_edit" controller="flagstore" fieldname="status" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="flagstore" fieldname="status" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$result['list'][$key] = $list;
-			}
-			return Page::flexigridXML($result);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -162,12 +149,18 @@ class FlagstoreController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = FlagstoreModel::find()->alias('fs')->select('fs.*,b.brand_name,s.store_name,gc.cate_name')->joinWith('brand b', false)->joinWith('gcategory gc', false)->joinWith('store s', false)->indexBy('fid')->orderBy(['sort_order' => SORT_ASC, 'fid' => SORT_DESC]);
+		$query = FlagstoreModel::find()->alias('fs')->select('fs.fid,fs.keyword,fs.sort_order,fs.status,b.brand_name,s.store_name,gc.cate_name')
+			->joinWith('brand b', false)
+			->joinWith('gcategory gc', false)
+			->joinWith('store s', false)
+			->orderBy(['sort_order' => SORT_ASC, 'fid' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'fid', $post->id]);
+		} else {
+			$query->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_flagstore'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\flagstoreExportForm::download($query->asArray()->all());		
 	}

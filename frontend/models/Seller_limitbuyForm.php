@@ -42,8 +42,8 @@ class Seller_limitbuyForm extends Model
 	{
 		$result = array();
 	
-		if(($query = Promotool::getInstance('limitbuy')->build(['store_id' => $this->store_id])->checkAvailable(true, true)) !== true) {
-			$this->errors = $query['msg'];
+		if(($message = Promotool::getInstance('limitbuy')->build(['store_id' => $this->store_id])->checkAvailable()) !== true) {
+			$this->errors = $message;
 			return false;
 		}
 		
@@ -70,16 +70,12 @@ class Seller_limitbuyForm extends Model
         }
 		
 		// 如果是订购模式
-		if(AppmarketModel::find()->select('purchase')->where(['appid' => 'limitbuy'])->scalar())
+		if(AppmarketModel::find()->where(['appid' => 'limitbuy'])->exists())
 		{
 			// 如果结束的时间大于该应用的购买时限，则不允许
 			$apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => 'limitbuy', 'userid' => Yii::$app->user->id])->orderBy(['rid' => SORT_DESC])->one();
 				
-			if(!$apprenewal) {
-				$this->errors = Language::get('appHasNotBuy');
-				return false;
-			}
-			if($apprenewal->expired <= $post->end_time) {
+			if(!$apprenewal || ($apprenewal->expired <= $post->end_time)) {
 				$this->errors = sprintf(Language::get('limitbuy_end_time_gt_app_expired'), Timezone::localDate('Y-m-d', $apprenewal->expired));
 				return false;
 			}

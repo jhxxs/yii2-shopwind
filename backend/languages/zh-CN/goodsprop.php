@@ -6,7 +6,7 @@ return array(
    'pvalue'=>'属性值',
    'pvalue_note'=>'多个属性值请用半角逗号（,）隔开，如果是颜色属性，请不要再这里填写颜色值，这里只能填写属性值',
    'gcategory'  =>'分类名',
-   'add_prop'  =>'添加属性',
+   'prop_add'  =>'添加属性',
    'belong_gcategory'=>'所属分类',
    'batch_add'=>'批量新增',
    'batch_add_note'=>'每行代表一个属性名',
@@ -32,15 +32,15 @@ return array(
    'back'=>'返回上一页',
    'prop_empty'=>'你未选择任何属性或属性值',
    'is_color'=>'是否颜色属性',
-   'is_color_note'=>'如果选择”是“，请在添加属性值的时候，添加颜色值',
+   'is_color_note'=>'如果选择“是”，在添加属性值的时候，需要设置颜色值',
    'color_value'=>'颜色值',
    'color_value_note'=>'请填写颜色值，如：#000000',
    'ptype'=>'属性显示类型',
-   'ptype_note' => '复选框只针对发布商品的时候，一个属性可以选择多个值（复选框的形式），而在前台搜索页搜索的时候，还是只能单选',
+   'ptype_note' => '复选框是针对发布商品的时候，一个属性可以勾选多个值（复选框的形式），而在前台搜索页作为参数搜索的时候，仅支持单选',
    'checkbox' => '复选框',
    'selectbox'   => '下拉框',
    'radiobox'    => '单选框',
    'no_such_prop' => '没有该属性',
    'no_such_gcategory' => '没有该分类',
-
+   'prop_edit' => '编辑属性'
 );

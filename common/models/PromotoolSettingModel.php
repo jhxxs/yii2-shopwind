@@ -15,8 +15,6 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
-use common\models\AppmarketModel;
-use common\models\ApprenewalModel;
 use common\models\PromotoolItemModel;
 use common\models\GoodsModel;
 
@@ -37,45 +35,6 @@ class PromotoolSettingModel extends ActiveRecord
     {
         return '{{%promotool_setting}}';
     }
-	
-	/* 检查卖家设置的该营销工具是否可用
-	 * 如果是订购模式，检测是否还在购买期限内 
-	 */
-	public static function checkAvailable($appid, $store_id = 0, $checkPurchase = false)
-	{
-		$result = false;
-		
-		// 平台是否配置了营销工具信息
-		$query = AppmarketModel::find()->where(['status' => 1, 'appid' => $appid])->one();
-		if($query)
-		{
-			// 是否检测订购情况
-			if(!$checkPurchase) {
-				$result = true;
-			}
-			// 非订购模式
-			elseif(!$query->purchase) {
-				$result = true;
-			}
-			else
-			{
-				// 在此处判断用户是否购买了该营销工具
-				$apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => $appid, 'userid' => $store_id])->orderBy(['rid' => SORT_DESC])->one();
-					
-				// 如果购买了，那么检查是否到期
-				if($apprenewal && ($apprenewal->expired > Timezone::gmtime())) {
-			
-					// 没有到期，则检查卖家是否启用/配置了该营销工具 
-					// 限时打折、搭配套餐、批发价和三级分销没有该配置
-					if(in_array($appid, ['limitbuy', 'wholesale', 'meal', 'distribute'])) return true;
-					elseif(parent::find()->where(['appid' => $appid, 'store_id' => $store_id, 'status' => 1])->exists()) {
-						$result = true;
-					}
-				}
-			}
-		}
-		return $result;
-	}
 	
 	/* 获取某个卖家设置的营销工具详细信息，并格式化配置项 */
 	public static function getInfo($appid, $store_id = 0, $params = array(), $format = true)

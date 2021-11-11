@@ -50,9 +50,13 @@ class Seller_mealController extends \common\controllers\BaseSellerController
     public function actionIndex()
     {
 		$page = array('pageSize' => 15);
-		$this->params['meals'] = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']])->getList($params, $page);
+		$mealTool = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']]);
+		if(($message = $mealTool->checkAvailable()) !== true) {
+			$this->params['tooldisabled'] = $message;
+		}
+		
+		$this->params['meals'] = $mealTool->getList($params, $page);
 		$this->params['pagination'] = Page::formatPage($page);
-		$this->params['appAvailable'] = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
 		
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('seller_meal'), Url::toRoute('seller_meal/index'), Language::get('meal_list'));
@@ -69,7 +73,10 @@ class Seller_mealController extends \common\controllers\BaseSellerController
         if(!Yii::$app->request->isPost)
 		{
 			$this->params['store_id'] = $this->visitor['store_id'];
-			$this->params['appAvailable'] = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			
+			if(($message = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			// 取得游离状的图片
             $meal['desc_images'] = UploadedFileModel::find()->select('file_id,file_name,file_path')->where(['store_id' => $this->visitor['store_id'], 'belong' => Def::BELONG_MEAL, 'item_id' => 0])->orderBy(['add_time' => SORT_DESC])->asArray()->all();	
@@ -121,7 +128,10 @@ class Seller_mealController extends \common\controllers\BaseSellerController
         if(!Yii::$app->request->isPost)
 		{
 			$this->params['store_id'] = $this->visitor['store_id'];
-			$this->params['appAvailable'] = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']])->checkAvailable(true, true);
+			
+			if(($message = Promotool::getInstance('meal')->build(['store_id' => $this->visitor['store_id']])->checkAvailable()) !== true) {
+				$this->params['tooldisabled'] = $message;
+			}
 			
 			// 取得游离状的图片
             $meal['desc_images'] = UploadedFileModel::find()->select('file_id,file_name,file_path')->where(['store_id' => $this->visitor['store_id'], 'belong' => Def::BELONG_MEAL, 'item_id' => $id])->orderBy(['add_time' => SORT_DESC])->asArray()->all();	

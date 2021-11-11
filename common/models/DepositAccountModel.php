@@ -201,7 +201,14 @@ class DepositAccountModel extends ActiveRecord
 		
 		list($beginMonth, $endMonth) = Timezone::getMonthDay($month);
 		
-		$monthbill = DepositRecordModel::find()->alias('dr')->select('dr.*,dt.bizOrderId,dt.title,dt.buyer_id,dt.seller_id,dt.payment_code,dt.end_time')->joinWith('depositTrade dt', false)->where(['userid' => $userid, 'status' => 'SUCCESS'])->andWhere(['>=', 'end_time', $beginMonth])->andWhere(['<=', 'end_time', $endMonth])->orderBy(['record_id' => SORT_ASC])->asArray()->all();
+		$monthbill = DepositRecordModel::find()->alias('dr')
+			->select('dr.*,dt.bizOrderId,dt.title,dt.buyer_id,dt.seller_id,dt.payment_code,dt.end_time')
+			->joinWith('depositTrade dt', false)
+			->where(['userid' => $userid, 'status' => 'SUCCESS'])
+			->andWhere(['>=', 'end_time', $beginMonth])
+			->andWhere(['<=', 'end_time', $endMonth])
+			->orderBy(['record_id' => SORT_ASC])
+			->asArray()->all();
 	
 		if(!$monthbill) {
 			return Message::warning(Language::get('downloadbill_fail'));

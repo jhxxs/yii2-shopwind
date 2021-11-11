@@ -1,97 +1,142 @@
 {include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.deposit_manage}</p>
-    <ul class="subnav">
-      <li><span>{$lang.manage}</span></li>
-      <li><a class="btn1" href="{url route='deposit/tradelist'}">{$lang.trade_manage}</a></li>
-      <li><a class="btn1" href="{url route='deposit/drawlist'}">{$lang.withdraw_manage}</a></li>
-      <li><a class="btn1" href="{url route='deposit/rechargelist'}">{$lang.recharge_manage}</a></li>
-      <li><a class="btn1" href="{url route='deposit/setting'}">{$lang.system_setting}</a></li>
-    </ul>
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+      <div class="search-form clearfix">
+        <form method="get" id="formSearch">
+          <div class="webkit-box box-align-center">
+            <input type="hidden" name="r" value="deposit/index" />
+            <select class="querySelect" name="field">
+              {html_options options=$search_options selected=$smarty.get.field}
+            </select>
+            <input class="infoTableInput mr10" type="text" name="search_name" value="{$smarty.get.search_name}" />
+            {$lang.pay_status}
+            <select class="querySelect" name="pay_status">
+              <option value="">{$lang.no_limit}</option>
+              {html_options options=$pay_status_list selected=$smarty.get.pay_status}
+            </select>
+            {$lang.money_from}
+            <input class="queryInput2" type="text" value="{$smarty.get.money_from}" name="money_from" />
+            {$lang.to}
+            <input class="queryInput2" type="text" value="{$smarty.get.money_to}" name="money_to" class="pick_date" />
+          </div>
+          <div class="webkit-box box-align-center mt20">
+            {$lang.add_time_from}
+            <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
+              name="add_time_from" class="pick_date" />
+            {$lang.to}
+            <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
+              class="pick_date" />
+
+            <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm box-align-center width7"
+              value="{$lang.query}" />
+            <!--{if $filtered}-->
+            <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center"
+              href="{url route='deposit/index'}">{$lang.cancel_query}</a>
+            <!--{/if}-->
+          </div>
+        </form>
+      </div>
+      <div class="tablegrid">
+        <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+      </div>
+      {include file="version.html"}
+    </div>
   </div>
-  <div class="search-form clearfix">
-    <form method="get" id="formSearch">
-      <input type="hidden" name="r" value="deposit/index" />
-      <select class="querySelect" name="field">
-        
-        	{html_options options=$search_options selected=$smarty.get.field}
- 		
-      </select>
-      <input class="queryInput" type="text" name="search_name" value="{$smarty.get.search_name}" />
-      {$lang.pay_status}
-      <select class="querySelect" name="pay_status">
-        <option value="">{$lang.no_limit}</option>
-        
-    		{html_options options=$pay_status_list selected=$smarty.get.pay_status}
-		
-      </select>
-      {$lang.add_time_from}
-      <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from" name="add_time_from" class="pick_date" />
-      {$lang.to}
-      <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to" class="pick_date" />
-      {$lang.money_from}
-      <input class="queryInput2" type="text" value="{$smarty.get.money_from}" name="money_from" />
-      {$lang.to}
-      <input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.money_to}" name="money_to" class="pick_date" />
-      <input type="submit" class="formbtn" value="{$lang.query}" />
-      <!--{if $filtered}--> 
-      <a class="formbtn formbtn1" href="{url route='deposit/index'}">{$lang.cancel_query}</a> 
-      <!--{/if}-->
-    </form>
-  </div>
-  <div id="flexigrid"></div>
 </div>
-<script type="text/javascript">
-$(function(){
-    $("#flexigrid").flexigrid({
-		url: url(['deposit/index', $("#formSearch").serializeJson()]),
-    	colModel : [
-    		{ display: '{$lang.operation}', name : 'operation', width : 150, sortable : false, align: 'center', className: 'handle'},
-			  { display: '{$lang.account}', name : 'account', width : 200, sortable : true, align: 'center'},
-    		{ display: '{$lang.username}', name : 'username', width : 100, sortable : true, align: 'center'},
-			  { display: '{$lang.real_name}', name : 'real_name', width : 100, sortable : true, align: 'center'},
-			  { display: '{$lang.money}', name : 'money', width : 100, sortable : true, align: 'center'},
-    		{ display: '{$lang.frozen}', name : 'frozen', width : 100, sortable : true, align: 'center'},    		
-			  { display: '{$lang.pay_status}', name : 'pay_status', width: 100, sortable : true, align : 'center'},
-			  { display: '{$lang.add_time}', name : 'add_time', width: 150, sortable : true, align : 'center'},  		
-    	],
-        buttons : [
-            { display: '<i class="fa fa-trash"></i>{$lang.batch_del}', name : 'del', bclass : 'del', title : '{$lang.batch_del_for_selected}', onpress : fg_operate },
-			{ display: '<i class="fa fa-file-excel-o"></i>{$lang.export_data}', name : 'csv', bclass : 'csv', title : '{$lang.export_data}', onpress : fg_operate }
-        ],
-    	sortname: "add_time",
-    	sortorder: "desc",
-    	title: '{$lang.deposit_account_list}'
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+    <button class="layui-btn layui-bg-blue" lay-event="monthbill"><i class="layui-icon layui-icon-file-b"></i>月账单</button>
+	  <button class="layui-btn layui-btn-primary layui-border-blue" lay-event="batdel"><i class="layui-icon layui-icon-close"></i>批量删除</button>
+		<button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+	</div>
+</script>
+
+<script type="text/html" id="colBar">
+	  <a class="ml5 mr5 blue pointer" lay-event="edit">编辑</a>
+  	<a class="ml5 mr5 blue pointer" lay-event="del" confirm="删除后将不能恢复，确认删除该项吗？">删除</a>
+    <a class="ml5 mr5 blue pointer" lay-event="recharge" confirm="删除后将不能恢复，确认删除该项吗？">充值</a>
+</script>
+
+<script>
+  layui.use('table', function () {
+    var table = layui.table;
+
+    table.render({
+      elem: '#tablegrid'
+      //,skin: 'line'
+      , url: url(['deposit/index', $("#formSearch").serializeJson()])
+      , toolbar: '#toolbar'
+      , defaultToolbar: ['filter', /*'exports',*/ 'print']
+      , title: '资金账户列表'
+      //, size: 'lg'
+      , cols: [[
+        { type: 'checkbox', fixed: 'left' }
+        , { field: 'account_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
+        , { field: 'account', title: '账户', width: 200, sort: true, }
+        , { field: 'username', title: '用户名', width: 230, sort: true }
+        , { field: 'money', title: '金额', width: 160, sort: true }
+        , { field: 'frozen', title: '冻结', width: 110, sort: true }
+        , {
+          field: 'pay_status', title: '开启余额支付', width: 160, sort: true, align: 'center', templet: function (res) {
+            return res.pay_status == 'OFF' ? '<em class="no" ectype="inline_edit" controller="deposit" fieldname="pay_status" fieldid="' + res.account_id + '" fieldvalue="0" title="' + lang.editable + '"><i class="fa fa-ban"></i>' + lang.no + '</em>' : '<em class="yes" ectype="inline_edit" controller="deposit" fieldname="pay_status" fieldid="' + res.account_id + '" fieldvalue="1" title="' + lang.editable + '"><i class="fa fa-check-circle"></i>' + lang.yes + '</em>';
+          }
+        }
+        , { field: 'add_time', title: '生成时间', width: 180, sort: true, align: 'center' }
+        , { fixed: 'right', title: '操作', toolbar: '#colBar', width: 200, align: 'center' }
+      ]]
+      , page: {
+        theme: 'blue'
+      }
     });
-	
-	$('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd'});
-    $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd'});
-});
-function fg_operate(name, bDiv) {
-	var itemlist = new Array();
-	$('.trSelected',bDiv).each(function(){
-		itemlist.push($(this).attr('data-id'));
-	});
-	if (name == 'del') {
-	   if($('.trSelected',bDiv).length == 0){
-			layer.msg(lang.no_selected_item);
-			return false;
-	   }
-       fg_delete(itemlist, 'deposit');
-	}
-	if(name == 'csv'){
-		if($('.trSelected',bDiv).length == 0){
-		   layer.confirm(lang.download_all_data,{ icon: 3, title:lang.notice},function(index){
-				fg_csv(itemlist, 'deposit', 'export', 'account');
-				layer.close(index);
-			},function(index){
-				layer.close(index);
-			});
-	   }else{
-		   fg_csv(itemlist, 'deposit', 'export', 'account');
-	   }
-	}
-}
-</script> 
-{include file="footer.html"} 
+
+    //监听头工具栏事件
+    table.on('toolbar(tablegrid)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      if (checkStatus.data.length <= 0) {
+        return false;
+      }
+      var items = new Array();
+      $.each(checkStatus.data, function (i, item) {
+        items.push(item.account_id);
+      });
+      if (obj.event === 'batdel') {
+        var btnObj = $('[lay-event="' + obj.event + '"]');
+        btnObj.attr('confirm', '删除后将不能恢复，确认删除这 ' + items.length + ' 项吗？');
+        ajaxRequest(btnObj, url(['deposit/delete', { id: items.join(',') }]), function () {
+          table.reload('tablegrid');
+        });
+      } else if (obj.event === 'monthbill') {
+        if (items.length > 1) {
+          return layer.alert("只能选择一个用户查看月账单");
+        }
+        window.location.href = url(['deposit/monthbill', { userid: checkStatus.data[0].userid }]);
+
+      } else if (obj.event === 'export') {
+        window.location.href = url(['deposit/export', $.extend($("#formSearch").serializeJson(), { id: items.join(','), model: 'account' })]);
+      }
+    });
+
+    //监听行工具事件
+    table.on('tool(tablegrid)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'del') {
+        var btnObj = $(obj.tr).find('[lay-event="' + obj.event + '"]');
+        ajaxRequest(btnObj, url(['deposit/delete', { id: data.account_id }]), function () {
+          obj.del();
+        });
+      } else if (obj.event === 'edit') {
+        window.location.href = url(['deposit/edit', { id: data.account_id }]);
+      } else if (obj.event === 'recharge') {
+        window.location.href = url(['deposit/recharge', { id: data.account_id }]);
+      }
+    });
+  });
+
+  $(function () {
+    $('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
+  });
+</script>
+{include file="footer.html"}

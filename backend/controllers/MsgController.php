@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\MsgModel;
 use common\models\MsgLogModel;
@@ -48,7 +49,7 @@ class MsgController extends \common\controllers\BaseAdminController
 	 */
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -59,132 +60,99 @@ class MsgController extends \common\controllers\BaseAdminController
 
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['status_list'] = array(Language::get('send_failed'), Language::get('send_success'));
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('msg_list')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('sendlog')]);
 			return $this->render('../msg.index.html', $this->params);
 		}
 		else
 		{
-			$query = MsgLogModel::find()->alias('ml')->select('ml.*,u.username')->joinWith('user u', false)->where(['ml.type' => 0])->indexBy('id');
-			$query = $this->getConditions($post, $query);
+			$query = MsgLogModel::find()->select('id,userid,quantity,status,message,add_time,content,receiver,code')->where(['type' => 0]);
+			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 			
-			$orderFields = ['receiver', 'code', 'content','quantity','add_time','username','status','message'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$list['operation'] 	= "<a class='btn red' onclick=\"fg_delete({$key},'msg')\"><i class='fa fa-trash-o'></i>".Language::get('drop')."</a>";
-				$list['msguser'] 	= $val['username'] ? $val['username'] : Language::get('system');
-				$list['receiver'] 	= $val['receiver'];
-				$list['code'] 		= Plugin::getInstance('sms')->build()->getInfo($val['code'])['name'];
-				$list['content'] 	= $val['content'];
-				$list['quantity'] 	= $val['quantity'];
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['status'] 	= $val['status'] == 1 ? ($val['type'] == 1 ? Language::get('handle_ok') : Language::get('send_success')) : Language::get('send_failed');
-				$list['message'] 	= $val['message'];
-				$result['list'][$key] = $list;
+				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
+					$list[$key] = array_merge($value, $array);
+				}
+
+				$list[$key]['code'] = Plugin::getInstance('sms')->build()->getInfo($value['code'])['name'];
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 
 	/**
-	 * 短信充值页面
+	 * 短信充值记录
 	 */
 	public function actionRecharge()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
-			
-			$this->params['page'] = Page::seo(['title' => Language::get('msg_list')]);
+
+			$this->params['page'] = Page::seo(['title' => Language::get('msgrecharge')]);
 			return $this->render('../msg.recharge.html', $this->params);
 		}
 		else
 		{
-			$query = MsgLogModel::find()->alias('ml')->select('ml.*,u.username')->joinWith('user u', false)->where(['ml.type' => 1])->indexBy('id');
-			$query = $this->getConditions($post, $query);
+			$query = MsgLogModel::find()->select('id,userid,quantity,status,message,add_time')->where(['type' => 1]);
+			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 			
-			$orderFields = ['quantity','add_time','username','status','message'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$list['operation'] 	= "<a class='btn red' onclick=\"fg_delete({$key},'msg')\"><i class='fa fa-trash-o'></i>".Language::get('drop')."</a>";
-				$list['msguser'] 	= $val['username'] ? $val['username'] : Language::get('system');
-				$list['quantity'] 	= $val['quantity'];
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['status'] 	= $val['status'] == 1 ? ($val['type'] == 1 ? Language::get('handle_ok') : Language::get('send_success')) : Language::get('send_failed');
-				$list['message'] 	= $val['message'];
-				$result['list'][$key] = $list;
+				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
+					$list[$key] = array_merge($value, $array);
+				}
+
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
 	public function actionUser()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['status_list'] = array(Language::get('closed'), Language::get('enable'));
-		
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('msguser')]);
 			return $this->render('../msg.user.html', $this->params);
 		}
 		else
 		{
-			$query = MsgModel::find()->alias('msg')->select('msg.*,u.username,u.phone_mob')->joinWith('user u', false)->indexBy('id');
-			$query = $this->getConditions($post, $query);
+			$query = MsgModel::find()->select('id,num,state,userid,functions');
+			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 			
-			$orderFields = ['username','phone_mob','num','functions','state'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['id' => SORT_DESC]);
-
 			// 发送短信的场景
 			$functions = Plugin::getInstance('sms')->build()->getFunctions();
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$functionText = '';
-				$userFunctions = explode(',', $val['functions']);
-				foreach($functions as $k => $v) {
-					$checked = in_array($v, $userFunctions) ? 'checked="checked"' : '';
-					$functionText .= "<input type='checkbox' onclick='javascript:return false;' {$checked} /> <label class='mr10' title='".Language::get($v)."'>".Language::get($v)."</label>";
+				foreach($functions as $v) {
+					$list[$key][$v] = in_array($v, explode(',', $value['functions'])) ? 1 : 0;
 				}
-				$list = array();
-				$list['operation'] = "<a class='btn green' href='".Url::toRoute(['msg/add', 'userid' => $val['userid']])."'><i class='fa fa-pencil-square-o'></i>".Language::get('rechargemsg')."</a>";
-				$list['username'] = $val['username'];
-				$list['phone_mob'] = $val['phone_mob'];
-				$list['functions'] = $functionText;
-				$list['num'] = $val['num'];
-				$list['state'] = $val['state'] ? '<em class="yes"><i class="fa fa-check-circle"></i>'.Language::get('enable').'</em>' : '<em class="no"><i class="fa fa-ban"></i>'.Language::get('closed').'</em>';
-				$result['list'][$key] = $list;
+
+				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
+					$list[$key] = array_merge($value, $array);
+				}
 			}
-			return Page::flexigridXML($result);
+			
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -196,7 +164,7 @@ class MsgController extends \common\controllers\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['userid']);
 			$this->params['user'] = UserModel::find()->select('userid,username')->where(['userid' => $post->userid])->asArray()->one();
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('msg_add')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('msgadd')]);
 			return $this->render('../msg.form.html', $this->params);
 		}
 		else
@@ -207,7 +175,7 @@ class MsgController extends \common\controllers\BaseAdminController
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
-			return Message::display(Language::get('handle_ok'), ['msg/user']);
+			return Message::display(Language::get('handle_ok'), ['msg/recharge']);
 		}
 	}
 	
@@ -226,44 +194,30 @@ class MsgController extends \common\controllers\BaseAdminController
 	 */
 	public function actionTemplate()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('msg_templatelist')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('msgtemplate')]);
 			return $this->render('../msg.template.html', $this->params);
 		}
 		else
 		{
-			// 发送平台列表数组，从这里读取平台名称
-			foreach(Plugin::getInstance('sms')->build()->getList() as $key => $value) {
-				$smslist[$key] = $value['name'];
-			}
+			$query = MsgTemplateModel::find()->select('id,code,templateId,content,signName,scene,add_time');
+			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 
-			$query = MsgTemplateModel::find()->indexBy('id');
-			$query = $this->getConditions($post, $query);
-
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation 	= "<a class='btn red' onclick=\"fg_delete({$key},'msg', 'deletetemplate')\"><i class='fa fa-trash-o'></i>".Language::get('drop')."</a>";
-				$operation .= "<a class='btn green' href='".Url::toRoute(['msg/addtemplate', 'id' => $key, 'code' => $val['code']])."'><i class='fa fa-pencil-square-o'></i>".Language::get('edit')."</a>";
-				$list['operation'] = $operation;
-				$list['code'] 		= $smslist[$val['code']];
-				$list['scene'] 		= Language::get($val['scene']);
-				$list['signName'] 	= $val['signName'];
-				$list['templateId'] = $val['templateId'];
-				$list['content'] 	= $val['content'];
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$result['list'][$key] = $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['name'] = Plugin::getInstance('sms')->build()->getInfo($value['code'])['name'];
+				$list[$key]['scene'] = Language::get($value['scene']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 
@@ -291,7 +245,7 @@ class MsgController extends \common\controllers\BaseAdminController
 			// 发送短信的场景
 			$this->params['scenelist'] = $smser->getFunctions(true);
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('msg_addtemplate')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('addtemplate')]);
 			return $this->render('../msg.template.form.html', $this->params);
 		}
 		else
@@ -324,7 +278,7 @@ class MsgController extends \common\controllers\BaseAdminController
 	{
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['page'] = Page::seo(['title' => Language::get('msg_send')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('sendtest')]);
 			return $this->render('../msg.send.html', $this->params);
 		}
 		else
@@ -377,7 +331,8 @@ class MsgController extends \common\controllers\BaseAdminController
 			return false;
 		}
 		if($post->username) {
-			$query->andWhere(['username' => $post->username]);
+			$userid = UserModel::find()->select('userid')->where(['username' => $post->username])->scalar();
+			$query->andWhere(['userid' => $userid]);
 		}
 		// 针对发送记录才有
 		if(isset($post->receiver) && $post->receiver) {
@@ -393,10 +348,11 @@ class MsgController extends \common\controllers\BaseAdminController
 		}
 		// 针对短信用户才有
 		if(isset($post->phone_mob) && $post->phone_mob) {
-			$query->andWhere(['like', 'phone_mob', $post->phone_mob]);
+			$userid = UserModel::find()->select('userid')->where(['phone_mob' => $post->phone_mob])->scalar();
+			$query->andWhere(['userid' => $userid]);
 		}
 		// 针对短信用户才有
-		if(isset($post->state) && $post->state !== '') {
+		if(isset($post->state) && $post->state != '') {
 			$query->andWhere(['state' => ($post->state == 1) ? 1 : 0]);
 		}
 		// 针对新增/编辑短信模板才有

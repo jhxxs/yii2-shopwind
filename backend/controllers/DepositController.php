@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\UserModel;
 use common\models\DepositTradeModel;
@@ -47,7 +48,7 @@ class DepositController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -56,46 +57,26 @@ class DepositController extends \common\controllers\BaseAdminController
 			$this->params['pay_status_list'] = $this->getPayStatus();
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'inline_edit.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('deposit_account_list')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('account_list')]);
 			return $this->render('../deposit.index.html', $this->params);
 		}
 		else
 		{
-			$query = DepositAccountModel::find()->alias('da')->select('da.*,u.username')->joinWith('user u',false)->indexBy('account_id');
-			$query = $this->getConditions($post, $query);
+			$query = DepositAccountModel::find()->select('account_id,account,money,frozen,pay_status,add_time,userid');
+			$query = $this->getConditions($post, $query)->orderBy(['account_id' => SORT_DESC]);
 			
-			$orderFields = ['username','account','real_name','money','frozen','pay_status','add_time'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['account_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
-			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'deposit')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$operation .= "<span class='btn'><em><i class='fa fa-cog'></i>设置 <i class='arrow'></i></em><ul>";
-				$operation .= "<li><a href='".Url::toRoute(['deposit/edit', 'id' => $key])."'>编辑</a></li>";
-				$operation .= "<li><a href='".Url::toRoute(['deposit/recharge', 'id' => $key])."'>充值</a></li>";
-				$operation .= "<li><a href='".Url::toRoute(['deposit/monthbill', 'userid' => $val['userid']])."'>月账单</a></li>";
-				$operation .= "</ul>";
-				$list['operation'] 	= $operation;
-				$list['account'] 	= $val['account'];
-				$list['username'] 	= $val['username'];
-				$list['real_name'] 	= $val['real_name'];
-				$list['money'] 		= $val['money'];
-				$list['frozen'] 	= $val['frozen'];
-				$list['pay_status'] = $val['pay_status'] == 'OFF' ? '<em class="no"><i class="fa fa-ban"></i>否</em>' : '<em class="yes"><i class="fa fa-check-circle"></i>是</em>';
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$result['list'][$key]	= $list;
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value) {
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -125,7 +106,9 @@ class DepositController extends \common\controllers\BaseAdminController
 		
 	}
 	
-	// 目前只有用户不存在了，才允许删除
+	/**
+	 * 目前只有用户不存在了，才允许删除
+	 */
 	public function actionDelete()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
@@ -138,6 +121,23 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		return Message::display(Language::get('drop_ok'));
 	}
+
+	/* 异步修改数据 */
+    public function actionEditcol()
+    {
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
+		if(in_array($post->column, ['pay_status'])) {
+			$model = DepositAccountModel::findOne($post->id);
+			if(!$model) {
+				return Message::warning(Language::get('no_data'));
+			}
+			$model->{$post->column} = $post->value ? 'ON' : 'OFF';
+			if(!$model->save()) {
+				return Message::warning($model->errors);
+			}
+			return Message::display(Language::get('edit_ok'));
+		}
+    }
 	
 	public function actionSetting()
 	{
@@ -161,7 +161,7 @@ class DepositController extends \common\controllers\BaseAdminController
 	
 	public function actionTradelist()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -177,7 +177,7 @@ class DepositController extends \common\controllers\BaseAdminController
 			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'bizOrderId' => Language::get('orderId'));
 		
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
 			
@@ -186,42 +186,31 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = DepositTradeModel::find()->alias('dt')->select('dt.trade_id,dt.tradeNo,dt.bizOrderId,dt.title,dt.amount,dt.status,dt.flow,dt.buyer_id,dt.add_time,dab.account,dab.real_name')->joinWith('depositAccountBuyer dab',false)->indexBy('trade_id');
-			$query = $this->getTradeConditions($post, $query);
+			$query = DepositTradeModel::find()->select('trade_id,tradeNo,bizOrderId,title,amount,status,flow,buyer_id,add_time,pay_time,end_time');
+
+			$query = $this->getTradeConditions($post, $query)->orderBy(['trade_id' => SORT_DESC]);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			
-			$orderFields = ['bizOrderId','add_time','tradeNo','title','amount', 'status'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['trade_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete('{$key}','deposit','tradedelete')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$list['operation'] 	= $operation;
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['tradeNo'] 	= $val['tradeNo'];
-				$list['bizOrderId'] = $val['bizOrderId'];
-				$list['title'] 		= $val['title'];
-				$list['buyer_name'] = $val['real_name'] ? $val['real_name'] : $val['account'];
-				
-				$partyInfo = DepositTradeModel::getPartyInfoByRecord($val['buyer_id'], $val);
-				$list['party'] 		= $partyInfo['name'];
-				
-				$list['amount'] 	= $val['flow'] == 'income' ? '<span style="color:#C00"><strong>+'.$val['amount'].'</strong></span>' : '<span style="color:#03C"><strong>-'.$val['amount'].'</strong></span>';
-				$list['status'] 	= Language::get(strtolower($val['status']));
-				$result['list'][$key]	= $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
+				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
+				$list[$key]['buyer'] = UserModel::find()->select('username')->where(['userid' => $value['buyer_id']])->scalar();
+				$list[$key]['status'] 	= Language::get(strtolower($value['status']));
+
+				$partyInfo = DepositTradeModel::getPartyInfoByRecord($value['buyer_id'], $value);
+				$list[$key]['party'] = $partyInfo['name'];
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
 	public function actionDrawlist()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -230,10 +219,10 @@ class DepositController extends \common\controllers\BaseAdminController
 				'SUCCESS' => Language::get('TRADE_SUCCESS'),
 				'WAIT_ADMIN_VERIFY' => Language::get('TRADE_WAIT_ADMIN_VERIFY')
 			);
-			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'orderId' => Language::get('orderId'), 'username' => Language::get('username'));
+			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'orderId' => Language::get('orderId'));
 		
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
 			
@@ -242,51 +231,30 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.amount,dt.status,u.username')->joinWith('depositTrade dt', false)->joinWith('user u', false)->indexBy('draw_id');
-			$query = $this->getTradeConditions($post, $query);
+			$query = DepositWithdrawModel::find()->alias('dw')
+				->select('dw.draw_id,dw.userid,dw.orderId,dw.card_info,dt.trade_id,dt.tradeNo,dt.add_time,dt.end_time,dt.amount,dt.status')
+				->joinWith('depositTrade dt', false);
+			$query = $this->getTradeConditions($post, $query)->orderBy(['draw_id' => SORT_DESC]);
 			
-			$orderFields = ['orderId','tradeNo', 'username', 'add_time','amount','status'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['draw_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				
-				if($val['status'] == 'WAIT_ADMIN_VERIFY'){
-					$status_label = '<span style="color:#f60">'.Language::get(strtolower($val['status'])).'</span>';
-				}elseif($val['status'] == 'CLOSED'){
-					$status_label = '<span style="color:#999">'.Language::get(strtolower($val['status'])).'</span>';
-				}else{
-					$status_label = '<span style="color:#2F792E">'.Language::get(strtolower($val['status'])).'</span>';
-				}
-				$card_info = unserialize($val['card_info']);
-				
-				$operation = "<a class='btn red' onclick=\"fg_delete('{$key}','deposit','drawdelete')\"><i class='fa fa-trash-o'></i>删除</a>";
-				if($val['status'] == 'WAIT_ADMIN_VERIFY'){
-					$info = $card_info['bank_name'].','.Language::get($card_info['type']).','.$card_info['account_name'].','.$card_info['num'].','.$card_info['open_bank'];
-					$operation .= "<a class='btn orange' onclick=\"fg_drawverify('{$key}','{$info}')\"><i class='fa fa-check-square'></i>审核</a>";
-				}
-				$list['operation'] 	= $operation;
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['tradeNo'] 	= $val['tradeNo'];
-				$list['orderId'] 	= $val['orderId'];
-				$list['username'] 	= $val['username'];	
-				$list['name'] 		= Language::get('withdraw');
-				$list['amount'] 	= $val['amount'];
-				$list['card_info'] 	= $card_info['bank_name'].'<span class="gray">( '.Language::get($card_info['type']).','.$card_info['account_name'].','.$card_info['num'].','.$card_info['open_bank'].' )</span>';
-				$list['status'] 	= $status_label;
-				$result['list'][$key] = $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
+				$list[$key]['status'] = Language::get(strtolower($value['status']));
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
+
+				$card_info = unserialize($value['card_info']);
+				$list[$key]['card_info'] = $card_info['bank_name'].'<span class="gray">(开户行：'.$card_info['open_bank'].'，账号：'.$card_info['account_name'].'，卡号：'.$card_info['num'].'，'.Language::get($card_info['type']).')</span>';
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
+
 	/* 提现审核（通过） */
-	public function actionDrawadopt()
+	public function actionDrawverify()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		if(!$post->id || !($draw = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
@@ -384,7 +352,7 @@ class DepositController extends \common\controllers\BaseAdminController
 	
 	public function actionRechargelist()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -394,10 +362,10 @@ class DepositController extends \common\controllers\BaseAdminController
 				'SUCCESS' => Language::get('TRADE_SUCCESS'),
 				'CLOSED'  => Language::get('TRADE_CLOSED')
 			);
-			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'orderId' => Language::get('orderId'), 'username' => Language::get('username'));
+			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'orderId' => Language::get('orderId'));
 		
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
 			
@@ -406,92 +374,65 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = DepositRechargeModel::find()->alias('dr')->select('dr.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.amount,dt.status,u.username')->joinWith('depositTrade dt', false)->joinWith('user u', false)->indexBy('recharge_id');
-			$query = $this->getTradeConditions($post, $query);
+			$query = DepositRechargeModel::find()->alias('dr')
+				->select('dr.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.pay_time,dt.end_time,dt.amount,dt.status,dt.buyer_remark as remark')
+				->joinWith('depositTrade dt', false);
+			$query = $this->getTradeConditions($post, $query)->orderBy(['recharge_id' => SORT_DESC]);
 			
-			$orderFields = ['orderId','tradeNo', 'username', 'add_time','amount','status', 'examine'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['recharge_id' => SORT_DESC]);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn red' onclick=\"fg_delete({$key},'deposit','rechargedelete')\"><i class='fa fa-trash-o'></i>删除</a>";
-				$list['operation'] 	= $operation;
-				$list['add_time'] 	= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['tradeNo'] 	= $val['tradeNo'];
-				$list['orderId'] 	= $val['orderId'];
-				$list['username'] 	= $val['username'];
-				$list['name'] 		= Language::get('recharge');
-				$list['amount'] 	= $val['amount'];
-				$list['remark'] 	= DepositRecordModel::find()->select('remark')->where(['tradeNo' => $val['tradeNo'], 'userid' => $val['userid']])->scalar();
-				$list['status'] 	= Language::get(strtolower($val['status']));
-				$list['examine'] 	= $val['examine'];
-				$result['list'][$key] = $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
+				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
+				$list[$key]['status'] = Language::get(strtolower($value['status']));
+				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
 	/* 月账单下载 */
 	public function actionMonthbill()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page', 'userid']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['userid']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
-			if(!$post->userid || !($user = UserModel::find()->select('userid,username')->where(['userid' => $post->userid])->asArray()->one())) {
-				return Message::warning(Language::get('no_such_user'));
-			}
-			$this->params['user'] = $user;
-			
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js');
-			
 			$this->params['page'] = Page::seo(['title' => Language::get('deposit_monthbill')]);
 			return $this->render('../deposit.monthbill.html', $this->params);
 		}
 		else
 		{
-			$query = DepositRecordModel::find()->alias('dr')->select('')->joinWith('depositTrade dt', false)->where(['status' => 'SUCCESS', 'userid' => $post->userid])->andWhere(['>', 'end_time', 0])->indexBy('record_id')->orderBy(['record_id' => SORT_DESC]);
+			$query = DepositRecordModel::find()->alias('dr')->select('dr.record_id,dr.tradeNo,dr.amount,dr.userid,dr.flow,dr.tradeType,dt.end_time')
+				->joinWith('depositTrade dt', false)
+				->where(['and', ['status' => 'SUCCESS', 'userid' => $post->userid], ['>', 'end_time', 0]])
+				->orderBy(['record_id' => SORT_DESC]);
 			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			
-			$monthbill = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			// 也可以限制为当年12个月的数据
+			$list = $query->limit(10000)->asArray()->all();
 			
 			// 按月进行归类
-			$bill_list = array();
-			foreach($monthbill as $key => $bill) {
-				$year_month = Timezone::localDate('Y-m', $bill['end_time']);
-				$bill_list[$year_month][$bill['flow'].'_money'] += $bill['amount'];
-				$bill_list[$year_month][$bill['flow'].'_count'] += 1;
+			$monthbill = array();
+			foreach($list as $key => $value) {
+				$month = Timezone::localDate('Y-m', $value['end_time']);
+
+				$monthbill[$month]['month'] = $month;
+				$monthbill[$month][$value['flow'].'_money'] += $value['amount'];
+				$monthbill[$month][$value['flow'].'_count'] += 1;
 				
 				// 如果是支出，判断是否是服务费
-				if($bill['flow'] == 'outlay' && ($bill['tradeType'] == 'SERVICE')) {
-					$bill_list[$year_month][$bill['tradeType'].'_money'] += $bill['amount'];
-					$bill_list[$year_month][$bill['tradeType'].'_count'] += 1;
+				if($value['flow'] == 'outlay' && ($value['tradeType'] == 'SERVICE')) {
+					$monthbill[$month][$value['tradeType'].'_money'] += $value['amount'];
+					$monthbill[$month][$value['tradeType'].'_count'] += 1;
 				}
 			}
-			$result = ['page' => $post->page, 'total' => count($bill_list)];
-			foreach ($bill_list as $key => $val)
-			{
-				$list = array();
-				$operation = "<a class='btn green' href='".Url::toRoute(['deposit/downloadbill', 'userid' => $post->userid, 'month' => $key])."'><i class='fa fa-download'></i>下载</a>";
-				$list['operation']    = $operation;
-				$list['month'] 		  = $key;
-				$list['income_count'] = $val['income_count'] ? $val['income_count'] : 0;
-				$list['income_money'] = $val['income_money'] ? $val['income_money'] : 0;
-				$list['outlay_count'] = $val['outlay_count'] ? $val['outlay_count'] : 0;
-				$list['outlay_money'] = $val['outlay_money'] ? $val['outlay_money'] : 0;
-				$list['charge_count'] = $val['SERVICE_count'] ? $val['SERVICE_count'] : 0;
-				$list['charge_money'] = $val['SERVICE_money'] ? $val['SERVICE_money'] : 0;
-				$result['list'][$key] = $list;
-			}
-			return Page::flexigridXML($result);
+
+			$list = array_values($monthbill);
+			return Json::encode(['code' => 0, 'msg' => '', 'data' => $list]);
 		}
 	}
 	
@@ -512,57 +453,73 @@ class DepositController extends \common\controllers\BaseAdminController
 		
 		if($post->model == 'account') 
 		{
-			$query = DepositAccountModel::find()->alias('da')->select('da.*,u.username')->joinWith('user u', false)->indexBy('account_id')->orderBy(['account_id' => SORT_DESC]);
+			$query = DepositAccountModel::find()->alias('da')
+				->select('da.*,u.username')
+				->joinWith('user u', false)
+				->orderBy(['account_id' => SORT_DESC]);
+
 			if(!empty($post->id)) {
 				$query->andWhere(['in', 'account_id', $post->id]);
 			}
 			else {
-				$query = $this->getConditions($post, $query);
+				$query = $this->getConditions($post, $query)->limit(100);
 			}
 			if($query->count() == 0) {
-				return Message::warning(Language::get('no_such_account'));
+				return Message::warning(Language::get('no_data'));
 			}
 			$model = new \backend\models\DepositAccountExportForm();
 		}
 		if($post->model == 'trade') 
 		{
-			$query = DepositTradeModel::find()->alias('dt')->select('dt.trade_id,dt.tradeNo,dt.bizOrderId,dt.title,dt.amount,dt.status,dt.flow,dt.buyer_id,dt.add_time,dab.account,dab.real_name')->joinWith('depositAccountBuyer dab',false)->indexBy('trade_id')->orderBy(['trade_id' => SORT_DESC]);
+			$query = DepositTradeModel::find()->alias('dt')
+				->select('dt.trade_id,dt.tradeNo,dt.bizOrderId,dt.title,dt.amount,dt.status,dt.flow,dt.buyer_id,dt.add_time,dab.account,dab.real_name')
+				->joinWith('depositAccountBuyer dab',false)
+				->orderBy(['trade_id' => SORT_DESC]);
+
 			if(!empty($post->id)) {
 				$query->andWhere(['in', 'trade_id', $post->id]);
 			}
 			else {
-				$query = $this->getTradeConditions($post, $query);
+				$query = $this->getTradeConditions($post, $query)->limit(100);
 			}
 			if($query->count() == 0) {
-				return Message::warning(Language::get('no_such_trade'));
+				return Message::warning(Language::get('no_data'));
 			}
 			$model = new \backend\models\DepositTradeExportForm();
 		}
 		if($post->model == 'draw') 
 		{
-			$query = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.amount,dt.status,u.username')->joinWith('depositTrade dt', false)->joinWith('user u', false)->indexBy('draw_id')->orderBy(['draw_id' => SORT_DESC]);
+			$query = DepositWithdrawModel::find()->alias('dw')
+				->select('dw.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.amount,dt.status,dt.buyer_remark as remark')
+				->joinWith('depositTrade dt', false)
+				->orderBy(['draw_id' => SORT_DESC]);
+
 			if(!empty($post->id)) {
 				$query->andWhere(['in', 'draw_id', $post->id]);
 			}
 			else {
-				$query = $this->getTradeConditions($post, $query);
+				$query = $this->getTradeConditions($post, $query)->limit(100);
 			}
 			if($query->count() == 0) {
-				return Message::warning(Language::get('no_such_draw'));
+				return Message::warning(Language::get('no_data'));
 			}
 			$model = new \backend\models\DepositDrawExportForm();
 		}
 		if($post->model == 'recharge') 
 		{
-			$query = DepositRechargeModel::find()->alias('dw')->select('dw.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.amount,dt.status,u.username')->joinWith('depositTrade dt', false)->joinWith('user u', false)->indexBy('recharge_id')->orderBy(['recharge_id' => SORT_DESC]);
+			$query = DepositRechargeModel::find()->alias('dw')
+				->select('dw.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.amount,dt.status,dt.buyer_remark as remark')
+				->joinWith('depositTrade dt', false)
+				->orderBy(['recharge_id' => SORT_DESC]);
+
 			if(!empty($post->id)) {
 				$query->andWhere(['in', 'recharge_id', $post->id]);
 			}
 			else {
-				$query = $this->getTradeConditions($post, $query);
+				$query = $this->getTradeConditions($post, $query)->limit(100);
 			}
 			if($query->count() == 0) {
-				return Message::warning(Language::get('no_such_recharge'));
+				return Message::warning(Language::get('no_data'));
 			}
 			$model = new \backend\models\DepositRechargeExportForm();
 		}
@@ -574,7 +531,7 @@ class DepositController extends \common\controllers\BaseAdminController
 		return array(
             'account'	=> Language::get('account'),
 			'username' 	=> Language::get('username'),
-            'real_name' => Language::get('real_name'),
+            //'real_name' => Language::get('real_name'),
 		);
 	}
 	

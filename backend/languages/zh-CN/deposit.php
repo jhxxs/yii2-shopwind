@@ -31,10 +31,8 @@ return array(
 	'wait_admin_verify'	=>	'等待管理员审核',
 	'success'			=>	'交易完成',
 	'closed'		=>	'交易关闭',
-	'money_from'    =>  '金钱从',
-	'no_limit' => '不限制',
+	'money_from'    =>  '金额从',
 	'recharge_method' => '充值方式',
-	
 	'account'		=>	'账户',
 	'account_name'	=>	'账户名',
 	'real_name'		=>	'真实姓名',
@@ -79,12 +77,12 @@ return array(
 	'amount' => '金额（元）',
 	'status' => '状态',
 	
-	'deposit_account_list' => '预存款账号列表',
-	'deposit_tradelist' => '交易记录列表',
+	'account_list' => '资金账户',
+	'deposit_tradelist' => '交易记录',
 	'orderId' => '商户订单号',
 	'card_info' => '提现到',
-	'deposit_drawlist' => '提现记录列表',
-	'deposit_rechargelist' => '充值记录列表',
+	'deposit_drawlist' => '提现记录',
+	'deposit_rechargelist' => '充值记录',
 	'is_online' => '充值方式',
 	
 	'month' => '月份',
@@ -98,7 +96,6 @@ return array(
 	
 	'recharge_verify' => '请您认真核对充值信息，并做审核操作！',
 	'rerify_ok' => '审核成功!',
-	'withdraw_notice' => '请您认真核对提现信息，并做审核操作！',
 	'agree' => '同意',
 	'refuse' => '拒绝',
 	'refuse_reason' => '拒绝原因',

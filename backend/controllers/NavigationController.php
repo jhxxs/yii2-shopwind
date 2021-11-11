@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\NavigationModel;
 use common\models\GcategoryModel;
@@ -42,44 +43,32 @@ class NavigationController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page', 'sort_order','if_show', 'open_new']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'sort_order','if_show', 'open_new']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['positions'] = $this->getPosition();
 
-			$this->params['_foot_tags'] = Resource::import('jquery.plugins/flexigrid.js,inline_edit.js');
+			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
 			
-			$this->params['page'] = Page::seo(['title' => Language::get('navigation_list')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('navigation')]);
 			return $this->render('../navigation.index.html', $this->params);
 		}
 		else
 		{
-			$query = NavigationModel::find()->indexBy('nav_id');
-			$query = $this->getConditions($post, $query);
+			$query = NavigationModel::find();
+			$query = $this->getConditions($post, $query)->orderBy(['sort_order' => SORT_ASC, 'nav_id' => SORT_DESC]);
 			
-			$orderFields = ['title', 'type', 'sort_order','if_show', 'link', 'open_new'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['sort_order' => SORT_ASC, 'nav_id' => SORT_DESC]);
+			$page = Page::getPage($query->count(), $post->limit? $post->limit : 10);
 			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$list['operation'] = "<a class='btn red' onclick=\"fg_delete({$key},'navigation')\"><i class='fa fa-trash-o'></i>删除</a><a class='btn blue' href='".Url::toRoute(['navigation/edit', 'id' => $key])."'><i class='fa fa-pencil-square-o'></i>编辑</a>";
-				$list['title'] = '<span ectype="inline_edit" controller="navigation" fieldname="title" fieldid="'.$key.'" required="1" class="editable" title="'.Language::get('editable').'">'.$val['title'].'</span>';
-				$list['type'] = $this->getPosition($val['type']);
-				$list['link'] = '<span ectype="inline_edit" controller="navigation" fieldname="link" fieldid="'.$key.'" maxvalue="255" class="editable" title="'.Language::get('editable').'">'.$val['link'].'</span>';
-				$list['sort_order'] = '<span ectype="inline_edit" controller="navigation" fieldname="sort_order" fieldid="'.$key.'" datatype="pint" maxvalue="255" class="editable" title="'.Language::get('editable').'">'.$val['sort_order'].'</span>';
-				$list['if_show'] = $val['if_show'] == 0 ? '<em class="no" ectype="inline_edit" controller="navigation" fieldname="if_show" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="navigation" fieldname="if_show" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$list['open_new'] = $val['open_new'] == 0 ? '<em class="no" ectype="inline_edit" controller="navigation" fieldname="open_new" fieldid="'.$key.'" fieldvalue="0" title="'.Language::get('editable').'"><i class="fa fa-ban"></i>否</em>' : '<em class="yes" ectype="inline_edit" controller="navigation" fieldname="open_new" fieldid="'.$key.'" fieldvalue="1" title="'.Language::get('editable').'"><i class="fa fa-check-circle"></i>是</em>';
-				$result['list'][$key] = $list;
+				$list[$key]['type'] = $this->getPosition($value['type']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -171,7 +160,7 @@ class NavigationController extends \common\controllers\BaseAdminController
 		$positions = array(
             'header' => Language::get('header'),
             'middle' => Language::get('middle'),
-            'footer' => Language::get('footer'),
+            //'footer' => Language::get('footer'),
         );
 		if($code !== null) {
 			return isset($positions[$code]) ? $positions[$code] : '';

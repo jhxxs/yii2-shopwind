@@ -18,14 +18,9 @@ return array(
     'drop_confirm' => '删除该分类将会同时删除该分类的所有下级分类，您确定要删除吗',
     'update_order' => '更新排序',
     'update_order_ok' => '更新排序成功',
-    'file_format_desc' =>
-        '<table border="1">'.
-        '<tr><td>一级分类</td></tr>'.
-        '<tr><td></td><td>二级分类</td></tr>'.
-        '<tr><td></td><td>二级分类</td></tr>'.
-        '<tr><td>一级分类</td></tr>'.
-        '</table>',
      'no_data' => '暂无店铺分类',
      'editable' => '可编辑',
 	 'parent_error' => '上级分类不合理',
+     'scategory_add' => '新增店铺分类',
+     'scategory_edit' => '编辑店铺分类'
 );

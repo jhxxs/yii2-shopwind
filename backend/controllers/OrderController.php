@@ -14,6 +14,7 @@ namespace backend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\OrderModel;
 use common\models\DepositTradeModel;
@@ -43,16 +44,16 @@ class OrderController extends \common\controllers\BaseAdminController
 	
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['rp', 'page', 'status']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['search_options'] = $this->getSearchOption();
-			$this->params['order_status_list'] = $this->getStatus();
+			$this->params['status_list'] = $this->getStatus();
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.plugins/flexigrid.js,jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
 			$this->params['page'] = Page::seo(['title' => Language::get('order_list')]);
@@ -60,32 +61,20 @@ class OrderController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = OrderModel::find()->select('order_id,order_sn,buyer_name,seller_name,order_amount,payment_name,status,add_time')->indexBy('order_id');
-			$query = $this->getConditions($post, $query);
+			$query = OrderModel::find()->select('order_id,order_sn,buyer_name,seller_name as store_name,order_amount,payment_name,status,add_time,pay_time,finished_time');
+			$query = $this->getConditions($post, $query)->orderBy(['order_id' => SORT_DESC]);
 			
-			$orderFields = ['order_sn','seller_name','add_time','buyer_name','order_amount','payment_name','status'];
-			if(in_array($post->sortname, $orderFields) && in_array(strtolower($post->sortorder), ['asc', 'desc'])) {
-				$query->orderBy([$post->sortname => strtolower($post->sortorder) == 'asc' ? SORT_ASC : SORT_DESC]);
-			} else $query->orderBy(['order_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->rp ? $post->rp : 10);
-			
-			$result = ['page' => $post->page, 'total' => $query->count()];
-			foreach ($query->offset($page->offset)->limit($page->limit)->asArray()->each() as $key => $val)
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
 			{
-				$list = array();
-				$operation = "<a class='btn green' href='".Url::toRoute(['order/view', 'id' => $key])."'><i class='fa fa-search-plus'></i>查看</a>";
-				$list['operation'] 		= $operation;
-				$list['order_sn'] 		= $val['order_sn'];
-				$list['seller_name'] 	= $val['seller_name'];
-				$list['add_time'] 		= Timezone::localDate('Y-m-d H:i:s', $val['add_time']);
-				$list['buyer_name'] 	= $val['buyer_name'];
-				$list['order_amount']	= $val['order_amount'];
-				$list['payment_name'] 	= $val['payment_name'];
-				$list['status'] 		= Def::getOrderStatus($val['status']);
-				$result['list'][$key]	= $list;
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
+				$list[$key]['finished_time'] = Timezone::localDate('Y-m-d H:i:s', $value['finished_time']);
+				$list[$key]['status'] = Def::getOrderStatus($value['status']);
 			}
-			return Page::flexigridXML($result);
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
 	
@@ -99,6 +88,8 @@ class OrderController extends \common\controllers\BaseAdminController
 			return Message::warning(Language::get('no_such_order'));
 		}
 		$this->params['order'] = $order;
+
+		$this->params['page'] = Page::seo(['title' => Language::get('order_view')]);
 		return $this->render('../order.view.html', $this->params);
 	}
 	
@@ -122,16 +113,16 @@ class OrderController extends \common\controllers\BaseAdminController
 		// 获取日期列表
 		$xaxis = array();
 		for($day = 1; $day <= $days; $day++) {
-			$xaxis[] = $day.'日';
+			$xaxis[] = $day;
 		}
 
 		$this->params['echart'] = array(
 			'id'		=>  mt_rand(),
 			'theme' 	=> 'macarons',
-			'width'		=> 890,
-			'height'    => 288,
+			'width'		=> '100%',
+			'height'    => 360,
 			'option'  	=> json_encode([
-				'grid' => ['left' => '10', 'right' => '0', 'top' => '50', 'bottom' => '30', 'containLabel' => true],
+				'grid' => ['left' => '20', 'right' => '20', 'top' => '80', 'bottom' => '20', 'containLabel' => true],
 				'tooltip' 	=> ['trigger' => 'axis'],
 				'legend'	=> [
 					'data' => $legend
@@ -151,13 +142,15 @@ class OrderController extends \common\controllers\BaseAdminController
 				 'series' => [
 					[
 						'name' => $legend[0],
-						'type' => 'bar',
+						'type' => 'line',
 						'data' => $series[0],
+						'smooth' => true
 					],
 					[
 						'name' => $legend[1],
-						'type' => 'bar',
+						'type' => 'line',
 						'data' => $series[1],
+						'smooth' => true
 					]
 				]
 			])
@@ -167,7 +160,10 @@ class OrderController extends \common\controllers\BaseAdminController
 		return $this->render('../echarts.html', $this->params);
 	}
 	
-	/* 月数据统计 */
+	/**
+	 * 月数据统计 
+	 * 拍下付款后即统计
+	 */
 	private function getMonthTrend($month = 0)
 	{
 		// 本月
@@ -176,7 +172,7 @@ class OrderController extends \common\controllers\BaseAdminController
 		// 获取当月的开始时间戳和结束那天的时间戳
 		list($beginMonth, $endMonth) = Timezone::getMonthDay(Timezone::localDate('Y-m', $month));
 		
-		$list = DepositTradeModel::find()->select('amount,end_time')->where(['bizIdentity' => Def::TRADE_ORDER, 'status' => 'SUCCESS'])->andWhere(['>=', 'end_time', $beginMonth])->andWhere(['<=', 'end_time', $endMonth])->asArray()->all();
+		$list = DepositTradeModel::find()->select('amount,pay_time')->where(['bizIdentity' => Def::TRADE_ORDER])->andWhere(['>=', 'pay_time', $beginMonth])->andWhere(['<=', 'pay_time', $endMonth])->asArray()->all();
 		
 		// 该月有多少天
 		$days = round(($endMonth-$beginMonth) / (24 * 3600));
@@ -185,7 +181,7 @@ class OrderController extends \common\controllers\BaseAdminController
 		$amount = $quantity = array();
 		foreach($list as $key => $val)
 		{
-			$day = Timezone::localDate('d', $val['end_time']);
+			$day = Timezone::localDate('d', $val['pay_time']);
 	
 			if(isset($amount[$day-1])) {
 				$amount[$day-1] += $val['amount'];
@@ -217,15 +213,17 @@ class OrderController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name,o.order_amount,o.status,o.add_time,o.payment_name,o.express_no,o.postscript,o.pay_message,oe.consignee,oe.region_name,oe.address,oe.phone_mob')->joinWith('orderExtm oe', false)->indexBy('order_id')->orderBy(['o.order_id' => SORT_DESC]);
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.express_no,o.postscript,o.pay_message,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+			->joinWith('orderExtm oe', false)
+			->orderBy(['o.order_id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'o.order_id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query);
+			$query = $this->getConditions($post, $query)->limit(100);
 		}
 		if($query->count() == 0) {
-			return Message::warning(Language::get('no_such_order'));
+			return Message::warning(Language::get('no_data'));
 		}
 		return \backend\models\OrderExportForm::download($query->asArray()->all());		
 	}

@@ -1,61 +1,103 @@
 {include file="header.html"}
-<div id="page_main" class="main-right">
-  <div id="rightTop">
-    <p>{$lang.msg_manage}</p>
-    <ul class="subnav">
-	  <li><a class="btn1" href="{url route='msg/index'}">{$lang.sendlog}</a></li>
-      <li><span>{$lang.msgrecharge}</span></li>
-      <li><a class="btn1" href="{url route='msg/user'}">{$lang.msguser}</a></li>
-      <li><a class="btn1" href="{url route='msg/add'}">{$lang.addmsg}</a></li>
-      <li><a class="btn1" href="{url route='msg/template'}">{$lang.msgtemplate}</a></li>
-      <li><a class="btn1" href="{url route='msg/send'}">{$lang.sendmsg}</a></li>
-    </ul>
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+      <div class="layui-tab">
+        <ul class="layui-tab-title">
+          <li><a href="{url route='msg/index'}">{$lang.sendlog}</a></li>
+          <li class="layui-this">{$lang.msgrecharge}</li>
+          <li><a href="{url route='msg/user'}">{$lang.msguser}</a></li>
+          <li><a href="{url route='msg/add'}">{$lang.msgadd}</a></li>
+          <li><a href="{url route='msg/template'}">{$lang.msgtemplate}</a></li>
+          <li><a href="{url route='msg/send'}">{$lang.sendtest}</a></li>
+        </ul>
+      </div>
+      <div class="search-form clearfix">
+        <form method="get" id="formSearch">
+        <div class="webkit-box box-align-center">
+          <input type="hidden" name="r" value="msg/recharge" />
+          {$lang.msguser}
+          <input class="queryInput" type="text" name="username" value="{$smarty.get.username|escape}" />
+          {$lang.phone_mob}
+          <input class="queryInput" type="text" name="phone_mob" value="{$smarty.get.phone_mob|escape}" />
+          <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm box-align-center width7" value="{$lang.query}" />
+          <!--{if $filtered}-->
+          <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='msg/recharge'}">{$lang.cancel_query}</a>
+          <!--{/if}-->
+          </div>
+        </form>
+      </div>
+      <div class="tablegrid">
+        <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+      </div>
+      {include file="version.html"}
+    </div>
   </div>
-  <div class="search-form clearfix">
-    <form method="get" id="formSearch">
-      <input type="hidden" name="r" value="msg/recharge" />
-      {$lang.msguser}
-      <input class="queryInput" type="text" name="username" value="{$smarty.get.username|escape}" />
-      <input type="submit" class="formbtn" value="{$lang.query}" />
-      <!--{if $filtered}--> 
-      <a class="formbtn formbtn1" href="{url route='msg/recharge'}">{$lang.cancel_query}</a> 
-      <!--{/if}-->
-    </form>
-  </div>
-  <div id="flexigrid"></div>
 </div>
-<script type="text/javascript">
-$(function(){
-    $("#flexigrid").flexigrid({
-    	url: url(['msg/recharge', $("#formSearch").serializeJson()]),
-    	colModel : [
-    		{ display: '{$lang.operation}', name : 'operation', width : 80, sortable : false, align: 'center', className: 'handle'},
-			  { display: '{$lang.msguser}', name : 'username', width : 100, sortable : true, align: 'center'}, 
-    		{ display: '{$lang.quantity}', name : 'quantity', width : 100, sortable : true, align: 'center'},
-			  { display: '{$lang.add_time}', name : 'add_time', width : 150, sortable : true, align: 'center'},
-			  { display: '{$lang.status}', name : 'status', width : 100, sortable : true, align: 'center'},    		
-			  { display: '{$lang.message}', name : 'message', width: 150, sortable : true, align : 'center'}		
-    	],
-        buttons : [
-            { display: '<i class="fa fa-trash"></i>{$lang.batch_del}', name : 'del', bclass : 'del', title : '{$lang.batch_del_for_selected}', onpress : fg_operate }
-        ],
-		sortname: "id",
-    	sortorder: "desc",
-    	title: '{$lang.msg_list}'
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+    <button class="layui-btn layui-bg-blue" lay-event="batdel"><i class="layui-icon layui-icon-close"></i>批量删除</button>
+	</div>
+</script>
+
+<script>
+  layui.use('table', function () {
+    var table = layui.table;
+
+    table.render({
+      elem: '#tablegrid'
+      //,skin: 'line'
+      , url: url(['msg/recharge', $("#formSearch").serializeJson()])
+      , toolbar: '#toolbar'
+      , defaultToolbar: ['filter', /*'exports',*/ 'print']
+      , title: '短信充值记录'
+      //, size: 'lg'
+      , cols: [[
+        { type: 'checkbox', fixed: 'left' }
+        , { field: 'id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
+        , {
+          field: 'username', title: '短信用户', width: 120, sort: true, templet: function (res) {
+            return (res.userid && res.username) ? res.username : lang.system;
+          }
+        }
+        , { field: 'phone_mob', title: '手机号码', width: 200, sort: true }
+        , {
+          field: 'quantity', title: '充值数量', width: 170, sort: true, templet: function (res) {
+            return res.quantity > 0 ? '<em class="green">+' + res.quantity + '</em>' : '<em class="red">' + res.quantity + '</em>';
+          }
+        }
+        , { field: 'add_time', title: '充值时间', width: 200, sort: true }
+        , { field: 'message', title: '备注', width: 395 }
+        , {
+          fixed: 'right', field: 'status', title: '状态', width: 110, sort: true, templet: function (res) {
+            return res.status == 1 ? '<em class="green">成功</em>' : '<em>失败</em>';
+          }
+        }
+      ]]
+      , page: {
+        theme: 'blue'
+      }
     });
-});
-function fg_operate(name, bDiv) {
-	var itemlist = new Array();
-	$('.trSelected',bDiv).each(function(){
-		itemlist.push($(this).attr('data-id'));
-	});
-	if (name == 'del') {
-	   if($('.trSelected',bDiv).length == 0){
-		   	layer.msg(lang.no_selected_item);
-			return false;
-	   }
-       fg_delete(itemlist,'msg');
-	}
-}
-</script> 
+
+    //监听头工具栏事件
+    table.on('toolbar(tablegrid)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      if (checkStatus.data.length <= 0) {
+        return false;
+      }
+      var items = new Array();
+      $.each(checkStatus.data, function (i, item) {
+        items.push(item.id);
+      });
+      if (obj.event === 'batdel') {
+        var btnObj = $('[lay-event="' + obj.event + '"]');
+        btnObj.attr('confirm', '删除后将不能恢复，确认删除这 ' + items.length + ' 项吗？');
+        ajaxRequest(btnObj, url(['msg/delete', { id: items.join(',') }]), function () {
+          table.reload('tablegrid');
+        });
+      }
+    });
+  });
+</script>
 {include file="footer.html"}

@@ -34,8 +34,8 @@ class WholesaleForm extends Model
 	{
 		$result = array();
 		
-		if(($query = Promotool::getInstance('wholesale')->build(['store_id' => $this->store_id])->checkAvailable(true, true)) !== true) {
-			$this->errors = $query['msg'];
+		if(($message = Promotool::getInstance('wholesale')->build(['store_id' => $this->store_id])->checkAvailable()) !== true) {
+			$this->errors = $message;
 			return false;
 		}
 

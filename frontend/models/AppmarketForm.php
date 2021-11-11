@@ -30,7 +30,7 @@ class AppmarketForm extends Model
 	
 	public function formData($post = null, $pageper = 4)
 	{
-		$query = AppmarketModel::find()->select('aid,title,summary,category,config,logo,views,sales,appid,status')->where(['status' => 1]);
+		$query = AppmarketModel::find()->select('aid,title,summary,category,price,logo,views,sales,appid,status')->where(['status' => 1]);
 		if(in_array($post->orderby, ['sales|desc', 'views|desc', 'add_time|desc'])) {
 			$orderBy = explode('|', $post->orderby);
 			$query->orderBy([$orderBy[0] => ($orderBy[1] == 'asc') ? SORT_ASC : SORT_DESC]);
@@ -41,7 +41,6 @@ class AppmarketForm extends Model
 		
 		foreach($recordlist as $key => $record)
 		{
-			$record['config'] && $recordlist[$key]['config'] = unserialize($record['config']);
 			if(!$record['logo']) $recordlist[$key]['logo'] = Yii::$app->params['default_goods_image'];
 			
 			if(ApprenewalModel::checkIsRenewal($record['appid'], Yii::$app->user->id)){

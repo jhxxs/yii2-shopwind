@@ -1,88 +1,188 @@
-<!doctype html>
-<html lang="{$app->language}">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset={$app->charset}" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width" />
-<meta http-equiv="Content-Type" content="text/html; charset={$app->charset}" />
-<meta name="csrf-param" content="{$app->request->csrfParam}">
-<meta name="csrf-token" content="{$app->request->csrfToken}">
-<!--remove underline for edge-->
-<meta name="format-detection" content="telephone=no">
-<meta name="author" content="ShopWind" />
-<meta name="generator" content="ShopWind" />
-<meta name="copyright" content="ShopWind Inc. All Rights Reserved" />
-<title>{$page.title}</title>
-<meta name="Keywords" content="{$page.keywords}" />
-<meta name="Description" content="{$page.description}" />
-
-<link rel="shortcut icon" href="#"/>
-<link href="{res file='css/admin.css'}" rel="stylesheet" type="text/css" />
-<link href="//at.alicdn.com/t/font_1864554_ouqwfai3m4m.css" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript">
-var HOME_URL = "{$homeUrl}";
-var SITE_URL = "{$siteUrl}";
-var PRICE_FORMAT = "{$priceFormat}";
-var ENABLE_PRETTY = "{$enablePretty}";
-</script>
-<script type="text/javascript" src='{url route="{$app->controller->id}/jslang"}' charset="{$app->charset}"></script>
-<script type="text/javascript" src="{lib file='jquery-1.11.1.js'}" charset="{$app->charset}"></script>
-<script type="text/javascript" src="{lib file='jquery.plugins/jquery.form.js'}" charset="{$app->charset}"></script>
-<script type="text/javascript" src="{lib file='layer/layer.js' }" charset="{$app->charset}"></script>
-<script type="text/javascript" src="{lib file='shopwind.js'}" charset="{$app->charset}"></script>
-<script type="text/javascript" src="{res file='js/index.js'}" charset="{$app->charset}"></script>
-</head>
-<body style="background:#6F6F6F">
-
-  <div class="admincp-header" id="head">
-    <div class="admincp-name"> 
-      <p class="mt5"><a href="https://www.shopwind.net" target="_blank" title="{$page.title}"><img src="{res file='images/backendlogo.png'}" height="26"></a></p>
-    </div>
-    <div class="module-menu">
-      <ul class="row clearfix" id="nav">
-        <!--{foreach from=$back_nav key=key item=menu}-->
-        <li> <a class="link" href="javascript:;" id="tab_{$key}">{$menu.text}</a>
-          <dl class="sub-menu hidden">
-            <!--{foreach from=$menu.children key=subkey item=submenu}-->
-            <dd {if $menu.default eq $subkey}class="default"{/if}><a id="item_{$subkey}" uri="{$submenu.url}" href="javascript:openItem('{$submenu.parent}', '{$subkey}', '{$key}');"><i class="iconfont {$submenu.ico}"></i>{$submenu.text}</a></dd>
-            <!--{/foreach}-->
-          </dl>
-        </li>
+{include file="header.html"}
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix welcome layui-body">
+    <div class="scroller">
+      <!--{if $reminds}-->
+      <ul class="reminds mb10 pl10 pr10 pt10 pb10 mr10 mt10 ml10">
+        <!--{foreach from=$reminds item=item}-->
+        <li><i class="iconfont icon-gonggao f-13 mr10"></i>{$item}</li>
         <!--{/foreach}-->
       </ul>
-    </div>
-    <div class="admincp-header-r">
-      <ul class="operate row">
-        <li><a href="javascript:;" class="refresh show-option" id="iframe_refresh"  title="刷新页面">&nbsp;</a></li>
-        <li><a href="javascript:;" class="update-cache show-option" id="clear_cache"  title="更新缓存">&nbsp;</a></li>
-        <li><a class="homepage show-option" target="_blank" href="{$homeUrl}" title="打开商城首页">&nbsp;</a></li>
-        <li class="secede">
-        	<a class="login-user" href="javascript:;">&nbsp;</a>
-            <div class="login-pop hidden">
-            	<div class="userhead clearfix">
-                	<p><img src="{$visitor.portrait|url_format}" /></p>
-            		<h2>{$visitor.username}</h2>
-                    <h3 class="gray">{$lang.last_login}{$lang.colon}{$visitor.last_login|date_format:"%Y.%m.%d %H:%M:%S"}</h3>
-                </div>
-                <a class="safety-escape" href="{url route='user/logout'}" title="安全退出">安全退出</a>
+      <!--{/if}-->
+      <div class="board">
+        <div class="ml10 mt10 mb10 hidden">实时概况 <span class="gray ml10 f-13">更新时间：{$now|date_format:"%Y.%m.%d
+            %H:%M:%S"}</span></div>
+        <div class="webkit-box">
+          <div class="item flex1">
+            <div class="webkit-box box-align-center">
+              <p class="flex1"><span class="bold layui-font-16 mr10">今日订单量</span><i
+                  class="iconfont icon-wenhao-xianxingyuankuang layui-font-16 J_Tips" data-value="下单成功后即统计"></i></p><span
+                class="layui-btn layui-btn-primary layui-border-orange layui-btn-xs J_Tips" data-value="{$days.yesterday.orders|default:0}">昨日</span>
             </div>
-        </li>
-      </ul>
-    </div>
-    <div class="clear"></div>
-  </div>
-  <div class="admincp-container">
-    <div class="admincp-container-left" id="left">
-      <div id="leftMenus">
-        <dl id="submenu">
-          <dt><i class="iconfont icon-liebiao2"></i><a class="ico1" id="submenuTitle" href="javascript:;"></a></dt>
-        </dl>
+            <p class="amount bold">{$days.today.orders|default:0}</p>
+            <p class="gray f-13">日同比 <span
+                class="{$days.compares.orders.level}">{$days.compares.orders.value|default:'0%'} {if
+                $days.compares.orders.level eq 'high'}<i class="iconfont icon-sanjiaotop"></i>{else if
+                $days.compares.orders.level eq 'low'}<i class="iconfont icon-sanjiaoxia"></i>{/if}</span><span
+                class="ml20">昨日订单量 {$days.yesterday.orders|default:0}</span></p>
+            <p class="webkit-box pt10 mt10 total"><span class="flex1">总订单量</span><span>{$days.orders|default:0}</span>
+            </p>
+          </div>
+
+          <div class="item flex1">
+            <div class="webkit-box box-align-center">
+              <p class="flex1"><span class="bold layui-font-16 mr10">今日销售额(元)</span><i
+                  class="iconfont icon-wenhao-xianxingyuankuang layui-font-16 J_Tips" data-value="下单成功后即统计"></i></p><span
+                class="layui-btn layui-btn-primary layui-border-orange layui-btn-xs J_Tips" data-value="{$days.yesterday.sales|default:0}">昨日</span>
+            </div>
+            <p class="amount bold">{$days.today.sales|default:0|price_format}</p>
+            <p class="gray f-13">日同比 <span
+                class="{$days.compares.sales.level}">{$days.compares.sales.value|default:'0%'} {if
+                $days.compares.sales.level eq 'high'}<i class="iconfont icon-sanjiaotop"></i>{else if
+                $days.compares.sales.level eq 'low'}<i class="iconfont icon-sanjiaoxia"></i>{/if}</span><span
+                class="ml20">昨日销售额 {$days.yesterday.sales|default:0|price_format}</span></p>
+            <p class="webkit-box pt10 mt10 total"><span
+                class="flex1">总销售额</span><span>{$days.sales|default:0|price_format}</span></p>
+          </div>
+
+          <div class="item flex1">
+            <div class="webkit-box box-align-center">
+              <p class="flex1"><span class="bold layui-font-16">今日新增用户数</span></p><span
+                class="layui-btn layui-btn-primary layui-border-orange layui-btn-xs J_Tips" data-value="{$days.yesterday.users|default:0}">昨日</span>
+            </div>
+            <p class="amount bold">{$days.today.users|default:0}</p>
+            <p class="gray f-13">日同比 <span
+                class="{$days.compares.users.level}">{$days.compares.users.value|default:'0%'} {if
+                $days.compares.users.level eq 'high'}<i class="iconfont icon-sanjiaotop"></i>{else if
+                $days.compares.users.level eq 'low'}<i class="iconfont iconfont icon-sanjiaoxia"></i>{/if}</span><span
+                class="ml20">昨日新增用户数 {$days.yesterday.users|default:0}</span></p>
+            <p class="webkit-box pt10 mt10 total"><span class="flex1">总用户数</span><span>{$days.users|default:0}</span>
+            </p>
+          </div>
+
+          <div class="item flex1">
+            <div class="webkit-box box-align-center">
+              <p class="flex1"><span class="bold layui-font-16">今日新增商家数</span></p><span
+                class="layui-btn layui-btn-primary layui-border-orange layui-btn-xs J_Tips" data-value="{$days.yesterday.stores|default:0}">昨日</span>
+            </div>
+            <p class="amount bold">{$days.today.stores|default:0}</p>
+            <p class="gray f-13">日同比 <span
+                class="{$days.compares.stores.level}">{$days.compares.stores.value|default:'0%'} {if
+                $days.compares.stores.level eq 'high'}<i class="iconfont icon-sanjiaotop"></i>{else if
+                $days.compares.stores.level eq 'low'}<i class="iconfont icon-sanjiaoxia"></i>{/if}</span><span
+                class="ml20">昨日新增商家数 {$days.yesterday.stores|default:0}</span></p>
+            <p class="webkit-box pt10 mt10 total"><span class="flex1">总商家数</span><span>{$days.stores|default:0}</span>
+            </p>
+          </div>
+
+        </div>
       </div>
-    </div>
-    <div class="admincp-container-right" id="right">
-      <iframe frameborder="0" width="100%" id="workspace" name="workspace" style="display:none"></iframe>
+
+      <div class="board function">
+        <div class="ml10 mt10 mb10">常用功能</div>
+        <div class="webkit-box">
+          <a class="item center block" href="{url route='refund/index'}">
+            <p><i class="iconfont icon-chongzhi2"></i></p>
+            <p class="mt10">退款管理 <span class="gray">({$functions.refunds|default:0})</span></p>
+          </a>
+          <a class="item center block" href="{url route='deposit/drawlist'}">
+            <p><i class="iconfont icon-zhifu1"></i></p>
+            <p class="mt10">提现审核 <span class="gray">({$functions.drawals|default:0})</span></p>
+          </a>
+          <a class="item center block" href="{url route='store/verify'}">
+            <p><i class="iconfont icon-qijiandian"></i></p>
+            <p class="mt10">店铺审核 <span class="gray">({$functions.stores|default:0})</span></p>
+          </a>
+          <a class="item center block" href="{url route='distribute/verify'}">
+            <p><i class="iconfont icon-mendian"></i></p>
+            <p class="mt10">分销商审核 <span class="gray">({$functions.distributeshops|default:0})</span></p>
+          </a>
+          <a class="item center block" href="{url route='guideshop/verify'}">
+            <p><i class="iconfont icon-shenhe"></i></p>
+            <p class="mt10">门店审核 <span class="gray">({$functions.guideshops|default:0})</span></p>
+          </a>
+          <a class="item center block" href="{url route='plugin/index' instance=payment}">
+            <p><i class="iconfont icon-zhifu1"></i></p>
+            <p class="mt10">支付设置</p>
+          </a>
+          <a class="item center block" href="{url route='plugin/index' instance=sms}">
+            <p><i class="iconfont icon-duihua"></i></p>
+            <p class="mt10">短信配置</p>
+          </a>
+          <a class="item center block" href="{url route='template/edit' client=wap page=index}">
+            <p><i class="iconfont icon-zhuangxiu"></i></p>
+            <p class="mt10">页面装修</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="board">
+        <!-- <div class="ml10 mt10 mb10">月度报表</div> -->
+        <div class="webkit-box">
+          <div class="item">
+            <p class="mb10 mt5"><span class="layui-font-16 bold">月销售额（元）</span><i
+                class="iconfont icon-wenhao-xianxingyuankuang layui-font-16 J_Tips" data-value="拍下付款后即统计"></i></p>
+            <div class="J-orderAmountStatic"></div>
+          </div>
+          <div class="item">
+            <p class="mb10 mt5"><span class="layui-font-16 bold">月订单量（笔）</span><i
+                class="iconfont icon-wenhao-xianxingyuankuang layui-font-16 J_Tips" data-value="拍下付款后即统计"></i></p>
+            <div class="J-orderCountStatic"></div>
+          </div>
+        </div>
+
+       
+          <div class="webkit-box">
+            <div class="item">
+              <p class="mb10 mt5"><span class="layui-font-16 bold">月新增用户数（个）</span></p>
+              <div class="J-userStatic"></div>
+            </div>
+            <div class="item">
+              <p class="mb10 mt5"><span class="layui-font-16 bold">月新增商家数（家）</span></p>
+              <div class="J-storeStatic"></div>
+            </div>
+          </div>
+        
+      </div>
+
+      <div class="board board-3 promote mb20">
+        <p class="ml10 mt10 mb10">营销活动</p>
+        <div class="webkit-box">
+          <!--{foreach from=$promotes item=item}-->
+          <!--{if in_array($item.code, ['fullfree', 'teambuy', 'distribute'])}-->
+          <div class="item bgf mb10 mt10 mr10 ml10 webkit-box box-align-center">
+            <p>
+              <!--{if $item.icon}-->
+              <i class="iconfont {$item.icon}"></i>
+              <!--{else}-->
+              <img src="{res file='images/backendlogos.png'}" width="48" height="48">
+              <!--{/if}-->
+            </p>
+            <div class="flex1 ml10" title="{$item.desc}">
+              <p>{$item.name}</p>
+              <span class="gray f-13 line-clamp-1">{$item.desc}</span>
+            </div>
+            <p class="button ml10">
+              <a href="{url route='promote/index'}" class="f-13">{$lang.view}</a>
+            </p>
+          </div>
+          <!--{/if}-->
+          <!--{/foreach}-->
+        </div>
+      </div>
+
+      {include file="version.html"}
     </div>
   </div>
-</body>
-</html>
+
+  <script type="text/javascript">
+    $(function () {
+      $('.J-orderAmountStatic').load(url(['order/trend', { type: 'amount' }])).parent().show();
+      $('.J-orderCountStatic').load(url(['order/trend', { type: 'quantity' }])).parent().show();
+      $('.J-userStatic').load(url(['user/trend'])).parent().show();
+      $('.J-storeStatic').load(url(['store/trend'])).parent().show();
+    });
+  </script>
+</div>
+{include file="footer.html"}

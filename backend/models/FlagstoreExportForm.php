@@ -14,6 +14,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\library\Language;
 use common\library\Timezone;
 
 /**
@@ -39,21 +40,19 @@ class FlagstoreExportForm extends Model
 		$folder = 'FLAGSTORE_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
 		
 		$record_value = array();
-		foreach($lang_bill as $key => $val) 
-		{
-			$record_value[$key] = '';
-		}
-
-		foreach($list as $key => $val)
+		foreach($list as $key => $value)
     	{
-			$record_value['store_name'] = $val['store_name'];
-			$record_value['brand_name']	= $val['brand_name']; 
-			$record_value['cate_name']	= $val['cate_name'];
-			$record_value['keyword']	= $val['keyword'];
-			$record_value['status']		= ($val['status'] == 1) ? '是' : '否';
+			foreach($lang_bill as $k => $v) {
+
+				if($k == 'status') {
+					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
+				}
+
+				$record_value[$k] = $value[$k] ? $value[$k] : '';
+			}
         	$record_xls[] = $record_value;
     	}
-		
+
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,

@@ -35,7 +35,8 @@ class Df_limitbuyWidget extends BaseWidget
         $query = LimitbuyModel::find()->alias('lb')->select('g.goods_id,g.goods_name,g.default_image,g.price,g.default_spec as spec_id')
             ->joinWith('goods g', false, 'INNER JOIN')
             ->joinWith('store s', false)
-            ->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]]);
+            ->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]])
+            ->orderBy(['id' => SORT_DESC]);
 
         if($this->options['source'] == 'choice') {
             $query->andWhere(['in', 'g.goods_id', explode(',', $this->options['items'])]);

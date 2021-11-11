@@ -58,7 +58,7 @@ class DbController extends \common\controllers\BaseAdminController
             'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
 		]);
 
-		$this->params['page'] = Page::seo(['title' => Language::get('cache_file')]);
+		$this->params['page'] = Page::seo(['title' => Language::get('db_slave')]);
 		return $this->render('../db.index.html', $this->params);
 	}
 

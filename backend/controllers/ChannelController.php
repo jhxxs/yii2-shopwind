@@ -50,10 +50,11 @@ class ChannelController extends \common\controllers\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id', 'status', 'style']);
 			
 			$model = new \backend\models\ChannelForm();
-			if(!$model->save($post, true)) {
-				return Message::warning($model->errors);
+			if(!($pageid = $model->save($post, true))) {
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('add_channel_successed'), ['template/index']);	
+
+			return Message::popSuccess(Language::get('add_successed'), ['template/edit', 'page' => $pageid]);
 		}
 	}
 	public function actionEdit()
@@ -77,9 +78,9 @@ class ChannelController extends \common\controllers\BaseAdminController
 			
 			$model = new \backend\models\ChannelForm(['id' => $id]);
 			if(!$model->save($post, true)) {
-				return Message::warning($model->errors);
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('edit_channel_successed'), ['template/index']);	
+			return Message::popSuccess(Language::get('edit_successed'), ['template/index']);	
 		}
 	}
 	
@@ -94,6 +95,6 @@ class ChannelController extends \common\controllers\BaseAdminController
 		if(!$model->delete()) {
 			return Message::warning($model->errors);
 		}
-		return Message::display(Language::get('drop_channel_successed'), ['template/index']);
+		return Message::display(Language::get('drop_successed'), ['template/index']);
 	}
 }

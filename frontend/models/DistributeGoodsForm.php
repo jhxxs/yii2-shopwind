@@ -84,8 +84,8 @@ class DistributeGoodsForm extends Model
 
 	public function choice($post = null)
 	{
-		if(($result = Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable(true, true)) !== true) {
-			$this->errors = $result['msg'];
+		if(($message = Promotool::getInstance('distribute')->build(['store_id' => Yii::$app->user->id])->checkAvailable()) !== true) {
+			$this->errors = $message;
 			return false;
 		}
 		
