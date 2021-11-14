@@ -66,7 +66,7 @@
                       src="{$goods.goods_image|url_format}" /></a></div>
                 <div class="float-left ml10 desc"> <a
                     href="{url route='goods/index' id=$goods.goods_id baseUrl=$homeUrl}"
-                    target="_blank">{$goods.goods_name|escape}</a><br />
+                    target="_blank" class="block mb10">{$goods.goods_name|escape}</a>
                   {$goods.specification|escape}
                   <p>{$lang.price}{$lang.colon}<span class="red">{$goods.price|price_format}</span></p>
                   <p>{$lang.quantity}{$lang.colon}{$goods.quantity}</p>
