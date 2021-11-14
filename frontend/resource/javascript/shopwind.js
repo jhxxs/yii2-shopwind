@@ -148,7 +148,7 @@ function ajaxSubmit(method, uri, formObj, ret_url, oClick, callback) {
 
 				if (!isMobileDevice()) {
 					layer.msg(data.msg, {
-						time: 1000, end: function () {
+						time: 2000, end: function () {
 							go(redirect);
 						}
 					});
@@ -173,7 +173,7 @@ function ajaxSubmit(method, uri, formObj, ret_url, oClick, callback) {
 				oClick.prop('disabled', false);
 				if (!isMobileDevice()) {
 					layer.msg(data.msg, {
-						time: 1000, end: function () {
+						time: 2000, end: function () {
 							go(redirect);
 						}
 					});

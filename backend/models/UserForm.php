@@ -106,7 +106,6 @@ class UserForm extends Model
 		$model->im_ww = $post->im_ww ? $post->im_ww : '';
 		$model->real_name = $post->real_name ? $post->real_name : '';
 		$model->locked = $post->locked;
-		$model->imforbid = $post->imforbid;
 		$model->generateAuthKey();
 
 		if ($model->save()) {

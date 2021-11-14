@@ -372,9 +372,9 @@ input[type="text"],input[type="password"] {
 }
 
 textarea {
-    line-height: 18px;
+    line-height: 20px;
     display: inline-block;
-    height: 36px;
+    height: 40px;
     cursor: text;
     overflow: auto;
     resize: vertical !important;
@@ -632,8 +632,7 @@ tr.no_data td,#treet1 tr.no_data td {
 }
 
 .infoTable textarea {
-    width: 255px;
-    height: 100px;
+    width: 250px;
     padding: 5px;
 }
 .infoTable input[type="submit"] {
@@ -1569,6 +1568,13 @@ i.fa {
     text-align: center;
     max-width: 700px;
 }
+.layui-layout-admin .layui-layer-msg {
+    border-radius: 2px;   
+}
+.layui-layout-admin .layui-layer-msg .layui-layer-content{
+    color: #fff;
+}
+
 .layui-layer-dialog .layui-layer-btn {
     text-align: center;
     padding: 10px 40px 30px;
