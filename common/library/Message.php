@@ -69,7 +69,7 @@ class Message
 		
 		// 如果是发起弹窗的提示，则直接输入错误
 		if(Yii::$app->request->get('dialog_id')) {
-			echo '<p class="padding10">'.$notice['msg'].'</p>';
+			echo sprintf('<p class="padding10 center mb20 gray">'.$notice['msg'].'%s</p>', $redirect ? '<a class="ml10 blue" href="'.$notice['redirect'].'">设置>></a>' : '');
 			return;
 		}
 		

@@ -76,6 +76,9 @@ input,button,select,textarea {
 .padding5 {
     padding: 5px;
 }
+.padding10 {
+    padding: 10px;
+}
 
 .pt10 {
     padding-top: 10px;
@@ -418,6 +421,9 @@ select {
 .blue {
     color: #1E9FFF;
 }
+a.blue:hover {
+    color: #f60 !important;
+}
 .bold {
     font-weight: bold;
 }
@@ -630,7 +636,9 @@ tr.no_data td,#treet1 tr.no_data td {
     padding-top: 6px;
     display: block;
 }
-
+.infoTable2 th {
+    width: 200px;
+}
 .infoTable textarea {
     width: 250px;
     padding: 5px;
