@@ -789,6 +789,9 @@ td.table-center,tr.table-center,th.table-center {
     width: 50%;
     float: left;
 }
+.order_form .goods_info .desc{
+    max-width: 80%;
+}
 .order_form .goods_info p,.order_form .goods_info span, .order_form .goods_info a {
     font-size: 13px;
 }
