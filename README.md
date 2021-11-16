@@ -38,6 +38,26 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 作为一款定位于电商领域的购物软件，ShopWind同样具备了电商系统软件该有的模块，如：商品模块、订单管理模块、登录模块、支付系统、短信系统、 营销系统（拼团、优惠券、秒杀、社区团购、搭配购、三级分销、满优惠、满包邮等）、资金管理系统（充值、提现、余额支付）、积分系统（积分充值、积分抵扣）、 退款模块、运费模板、评价系统等。我们今后也将不断丰富ShopWind生态，也欢迎广大开发者参与，贡献自己的代码。
 
+#### 运行环境
+
+- Nginx/Apache/IIS
+- PHP7.0+
+- MySQL5.1+
+
+  建议环境Linux+Nginx+PHP7.0+MySQL5.5.29 以上
+
+#### 安装教程
+<a href="https://forum.shopwind.net" target="_blank"> **查看常见问题/安装教程** </a>
+
+#### 演示体验
+* <a href="http://test.shopwind.net" target="_blank"> **演示体验 http://test.shopwind.net** </a>
+
+* <a href="http://test.shopwind.net/admin" target="_blank"> **后台体验 http://test.shopwind.net/admin** </a>
+* 账号:admin 密码:123456
+
+* <a href="http://test.shopwind.net/seller/login.html" target="_blank"> **商家体验 http://test.shopwind.net/seller/login.html** </a>
+* 账号:seller 密码:123456
+
 #### 页面展示
 
 ##### 首页/用户中心/分类页
@@ -75,7 +95,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 ##### 平台后台管理
 
-![后台管理](https://images.gitee.com/uploads/images/2021/0615/111058_e2714ad1_7967349.png "canvas.png")
+![后台管理](https://images.gitee.com/uploads/images/2021/1116/104058_f8d82fe6_7967349.png "605Z.png")
 
 
 #### 关于版权
@@ -107,8 +127,4 @@ ShopWind系统归属于广西南宁领众网络科技有限公司所有，早在
 
 <img src="https://www.shopwind.net/static/images/3qrcode.png">
 
-#####
-#####
-#####
-#####
 #####
