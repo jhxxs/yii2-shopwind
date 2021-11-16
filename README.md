@@ -51,12 +51,13 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 #### 演示体验
 * <a href="http://test.shopwind.net" target="_blank"> 演示体验 http://test.shopwind.net </a>
+买家测试账号:buyer 密码:123456
 
 * <a href="http://test.shopwind.net/admin" target="_blank"> 后台体验 http://test.shopwind.net/admin </a>
-* 账号:admin 密码:123456
+平台管理员账号:admin 密码:123456
 
 * <a href="http://test.shopwind.net/seller/login.html" target="_blank"> 商家体验 http://test.shopwind.net/seller/login.html </a>
-* 账号:seller 密码:123456
+ 商家测试账号:seller 密码:123456
 
 #### 页面展示
 
