@@ -97,15 +97,12 @@
               </td>
             </tr>
             <tr>
-              <th class="paddingT15"><label>{$lang.certification}</label></th>
-              <td class="paddingT15 wordSpacing5"><label for="autonym">
-                  <input name="autonym" type="checkbox" id="autonym" value="1" {if $store.certifications &&
-                    in_array('autonym', $store.certifications)}checked="checked" {/if} />
-                  {$lang.autonym}</label>
-                <label for="material">
-                  <input type="checkbox" name="material" value="1" id="material" {if $store.certifications &&
-                    in_array('material', $store.certifications)}checked="checked" {/if} />
-                  {$lang.material}</label>
+              <th class="paddingT15">{$lang.certification}</th>
+              <td class="paddingT15 wordSpacing5 layui-form">
+                  <input name="autonym" type="checkbox" value="1" {if $store.certifications &&
+                    in_array('autonym', $store.certifications)}checked {/if} title="{$lang.autonym}" lay-skin="primary"/>
+                  <input type="checkbox" name="material" value="1" {if $store.certifications &&
+                    in_array('material', $store.certifications)}checked{/if} title="{$lang.material}" lay-skin="primary"/>
               </td>
             </tr>
             <tr>
@@ -121,7 +118,7 @@
                   id="sort_order" value="{$store.sort_order}" /></td>
             </tr>
             <tr>
-              <th class="paddingT15"><label>{$lang.uploaded_image}</label></th>
+              <th class="paddingT15">{$lang.uploaded_image}</th>
               <td class="paddingT15 wordSpacing5">
                 {if $store.identity_front || $store.identity_back || $store.business_license}
                 {if $store.identity_front}<a href="{$store.identity_front|url_format}"
@@ -131,7 +128,7 @@
                 {if $store.business_license}<a href="{$store.business_license|url_format}"
                   target="_blank">{$lang.view}</a>{/if} 
                 {else}
-                <label class="field_notice">无</label>
+                <label class="gray">无</label>
                 {/if}
                 </td>
             </tr>

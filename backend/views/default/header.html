@@ -18,7 +18,7 @@
     <meta name="Description" content="{$page.description}" />
 
     <link href="{lib file='layui/css/layui.css' }" rel="stylesheet" type="text/css" />
-    <link href="//at.alicdn.com/t/font_1864554_9iybvzqhry.css" rel="stylesheet" type="text/css" />
+    <link href="//at.alicdn.com/t/font_1864554_uc6fwh4h7sm.css" rel="stylesheet" type="text/css" />
     <link href="{res file='css/font-awesome.css'}" rel="stylesheet" type="text/css" />
     <link href="{res file='css/admin.css'}" rel="stylesheet" type="text/css" />
 
@@ -56,13 +56,21 @@
             <li class="ml10 mr20"><a href="javascript:;" id="clear_cache" class="J_Tips" data-value="更新缓存"><i class="iconfont icon-qinglihuancun"></i></a></li>
             <li class="ml10 mr10"><a href="{$homeUrl}" target="_blank" class="J_Tips" data-value="访问首页"><i class="iconfont icon-home"></i></a></li>
             <li class="layui-nav-item layui-hide layui-show-md-inline-block">
-                <a href="javascript:;">
+                <a href="javascript:;" style="color: #333;">
                     <img src="{$visitor.portrait|url_format}" height="40" style="border-radius: 50%;">
+                    <span class="ml5">{$visitor.username}</span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="{url route='user/edit' id=$visitor.userid}">个人设置</a></dd>
                     <dd><a href="{url route='user/edit' id=$visitor.userid}">修改密码</a></dd>
                     <dd><a href="{url route='user/logout'}">退出登录</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-hide layui-show-md-inline-block ml20">
+                <a href="javascript:;" class="jump">平台后台</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{url route='default/index'}">平台后台</a></dd>
+                    <dd><a href="{url route='seller/index' baseUrl=$homeUrl}" target="_blank">商家后台</a></dd>
                 </dl>
             </li>
         </ul>

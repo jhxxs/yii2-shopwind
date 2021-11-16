@@ -71,11 +71,11 @@
 
 .mainnav { position: relative; z-index: 999; height: 58px; overflow: hidden; }
 .mainnav .wraper{position: fixed;left: 0;top:0;z-index: 999; /*border-bottom: 1px solid #f2f2f2; */line-height: 36px;background-color: #6F6F6F;}
-.mainnav .layui-btn {width: 90px;font-size:14px; background-color: #fff;}
+.mainnav .layui-btn {min-width: 90px;font-size:14px; background-color: #fff;}
 
 /* 面板的样式 */
 .handle {background: #ffffff; position: fixed; z-index: 2; height: calc(100% - 57px); left: 0;top:57px;}
-.handle .content {height: calc(100% + 200px);}
+.handle .content {height: calc(100% + 300px);}
 .handle_top ul li {float: left; }
 .handle_hover {display: block; font-size: 14px; border-left: 3px #333 solid;}
 .handle .scroller {

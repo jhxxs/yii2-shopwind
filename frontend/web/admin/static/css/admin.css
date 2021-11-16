@@ -854,6 +854,19 @@ form label.right {
     height: 64px;
     line-height: 64px;
 }
+.breadbtn .layui-nav-item .jump {
+    line-height: 40px; 
+    margin-top:10px; 
+    color:#fff;
+    display: inline-block;
+    border-radius: 4px; 
+    background-color: #0d6fb8;
+    padding-right: 34px;
+}
+.breadbtn .layui-nav-item .jump .layui-icon {
+    top: 10px;
+   right: 15px;
+}
 .breadbtn .iconfont {
     font-size: 20px;
     color: #666;

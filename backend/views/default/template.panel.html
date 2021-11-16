@@ -27,20 +27,32 @@
                 text: '<div class="center mt20 mb20 gray">点击“发布”后，直接打开小程序或APP查看实际效果</div>'
             });
             d.show('center');
-        })
+        });
+
+        $('#clear_file').click(function () {
+            $.getJSON(url(['template/clearfile', null, BACK_URL]), function (data) {
+                if(data.done) {
+                    layer.msg(data.msg);
+                    return true;
+                }
+                layer.msg(lang.clear_empty);
+            });
+        });
     });
 </script>
 <div id="template_nav" class="mainnav">
     <div class="wraper clearfix w-full bgf">
         <div class="float-left mt10 mb10 ml5 mr5 clearfix webkit-box box-align-center">
             <a class="inline-block fff" href="{$homeUrl}" target="_blank"><img align="absMiddle" height="20"
-                    src="{res file='images/backendlogow.png'}" ></a>
+                    src="{res file='images/backendlogow.png'}"></a>
             <a href="{url route='template/index'}" class="fs16 ml20 pl20 fff block" style="color:#fff">
                 <i class="layui-icon layui-icon-left layui-font-14 mt10 mb10"></i>
                 <span>{$page.title}</span>
             </a>
         </div>
         <div class="float-right mt10 mb10">
+            <a class="layui-btn layui-btn-primary layui-border-black mr10" href="javascript:;"
+                id="clear_file">清理垃圾</a>
             <a class="layui-btn layui-btn-primary layui-border-black mr10 J_Preview" uri="{$page.url}"
                 target="_blank">预览</a>
             <a class="layui-btn layui-btn-primary layui-border-black mr10" href="javascript:;"

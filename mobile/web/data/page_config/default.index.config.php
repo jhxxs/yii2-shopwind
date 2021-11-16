@@ -168,70 +168,36 @@ return array (
         'height' => '10',
       ),
     ),
-    '_widget_242' => 
+    '_widget_501' => 
     array (
-      'name' => 'df_titlebar',
+      'name' => 'df_rubikcube',
       'options' => 
       array (
-        'label' => '店庆特卖',
-        'txtcolor' => '#ffffff',
-        'txtbold' => '1',
-        'fontsize' => '18',
-        'linecolor' => '#e79292',
-        'theme' => 'default',
-        'image' => '',
-        'txthide' => '0',
-        'bgcolor' => '#f12d8c',
-        'space' => '0',
-      ),
-    ),
-    '_widget_692' => 
-    array (
-      'name' => 'df_imagead',
-      'options' => 
-      array (
-        'column' => '2',
+        'layout' => '1',
         'radius' => 'round',
         'ad_image_url' => 
         array (
-          0 => 'data/files/mall/template/20210824102124757.jpeg',
-          1 => 'data/files/mall/template/20210824102128800.jpeg',
-          2 => 'data/files/mall/template/20210823164309235.jpg',
+          0 => 'data/files/mall/template/20211116164151544.jpg',
+          1 => 'data/files/mall/template/20211116164157517.jpeg',
+          2 => 'data/files/mall/template/20211116164202423.jpeg',
         ),
         'ad_link_url' => 
         array (
-          0 => '1',
-          1 => '2',
-          2 => '3',
+          0 => 'goods/index?id=4',
+          1 => 'goods/index?id=4',
+          2 => 'goods/index?id=4',
         ),
-        'bgcolor' => '#f12d8c',
-        'space' => '0',
+        'bgcolor' => '',
+        'space' => '5',
       ),
     ),
-    '_widget_813' => 
+    '_widget_849' => 
     array (
       'name' => 'df_blank',
       'options' => 
       array (
-        'bgcolor' => '#f12d8c',
-        'height' => '20',
-      ),
-    ),
-    '_widget_733' => 
-    array (
-      'name' => 'df_titlebar',
-      'options' => 
-      array (
-        'label' => '品牌潮装',
-        'txtcolor' => '#ffffff',
-        'txtbold' => '1',
-        'fontsize' => '18',
-        'linecolor' => '#9bc8ef',
-        'theme' => 'default',
-        'image' => '',
-        'txthide' => '0',
-        'bgcolor' => '  #578df7',
-        'space' => '0',
+        'bgcolor' => '',
+        'height' => '10',
       ),
     ),
     '_widget_136' => 
@@ -239,6 +205,9 @@ return array (
       'name' => 'df_imagead',
       'options' => 
       array (
+        'title' => '品牌潮装',
+        'label' => '全场5折起 上不封顶',
+        'color' => '#ffffff',
         'column' => '3',
         'radius' => 'round',
         'ad_image_url' => 
@@ -254,16 +223,42 @@ return array (
           2 => '',
         ),
         'bgcolor' => '#578df7',
-        'space' => '0',
+        'space' => '10',
       ),
     ),
-    '_widget_792' => 
+    '_widget_626' => 
     array (
       'name' => 'df_blank',
       'options' => 
       array (
-        'bgcolor' => '  #578df7',
-        'height' => '20',
+        'bgcolor' => '',
+        'height' => '10',
+      ),
+    ),
+    '_widget_692' => 
+    array (
+      'name' => 'df_imagead',
+      'options' => 
+      array (
+        'title' => '店庆特卖',
+        'label' => '',
+        'color' => '#555555',
+        'column' => '2',
+        'radius' => 'round',
+        'ad_image_url' => 
+        array (
+          0 => 'data/files/mall/template/20210824102124757.jpeg',
+          1 => 'data/files/mall/template/20210824102128800.jpeg',
+          2 => 'data/files/mall/template/20210823164309235.jpg',
+        ),
+        'ad_link_url' => 
+        array (
+          0 => '1',
+          1 => '2',
+          2 => '3',
+        ),
+        'bgcolor' => '#ffffff',
+        'space' => '10',
       ),
     ),
     '_widget_280' => 
@@ -340,16 +335,15 @@ return array (
       5 => '_widget_887',
       6 => '_widget_271',
       7 => '_widget_349',
-      8 => '_widget_242',
-      9 => '_widget_692',
-      10 => '_widget_813',
-      11 => '_widget_733',
-      12 => '_widget_136',
-      13 => '_widget_792',
-      14 => '_widget_280',
-      15 => '_widget_724',
-      16 => '_widget_997',
-      17 => '_widget_811',
+      8 => '_widget_501',
+      9 => '_widget_849',
+      10 => '_widget_136',
+      11 => '_widget_626',
+      12 => '_widget_692',
+      13 => '_widget_280',
+      14 => '_widget_724',
+      15 => '_widget_997',
+      16 => '_widget_811',
     ),
   ),
 );

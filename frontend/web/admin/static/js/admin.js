@@ -35,16 +35,6 @@ $(function () {
 	systemUpgrade();
 });
 
-function clear_file() {
-	$.getJSON(url(['template/clearfile']), function (data) {
-		if (data.done) {
-			layer.msg(data.msg);
-			return true;
-		}
-		layer.msg(lang.clear_empty);
-	})
-}
-
 /**
  * 上传图片前，显示（获取）图像信息
  * @param {obj} obj 
