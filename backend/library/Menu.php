@@ -339,7 +339,7 @@ class Menu
 					'template' => array(
 						'text'  => Language::get('template_diy'),
 						'url'   => Url::toRoute('template/index'),
-						'priv'  => ['key' => 'template|all', 'depends' => 'channel|all']
+						'priv'  => ['key' => 'template|all', 'depends' => 'channel|all,gselector|all']
 					),
 					'navigation' => array(
 						'text'  => Language::get('navigation'),
