@@ -44,20 +44,20 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 - PHP7.0+
 - MySQL5.1+
 
-  建议环境Linux+Nginx+PHP7.0+MySQL5.5.29 以上
+  建议环境Linux+Nginx+PHP7.0+MySQL5.6 及以上
 
 #### 安装教程
 <a href="https://forum.shopwind.net" target="_blank"> 查看常见问题/安装教程 </a>
 
 #### 演示体验
-* <a href="http://test.shopwind.net" target="_blank"> 演示体验 http://test.shopwind.net </a>
-买家测试账号:buyer 密码:123456
+* <a href="http://test.shopwind.net" target="_blank"> 前台体验 http://test.shopwind.net </a>
+ 买家测试账号：buyer 密码：123456
 
 * <a href="http://test.shopwind.net/admin" target="_blank"> 后台体验 http://test.shopwind.net/admin </a>
-平台管理员账号:admin 密码:123456
+ 平台管理员账号：admin 密码：123456
 
 * <a href="http://test.shopwind.net/seller/login.html" target="_blank"> 商家体验 http://test.shopwind.net/seller/login.html </a>
- 商家测试账号:seller 密码:123456
+ 商家测试账号：seller 密码：123456
 
 #### 页面展示
 
