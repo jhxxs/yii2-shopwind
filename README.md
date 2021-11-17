@@ -117,9 +117,9 @@ ShopWind系统归属于广西南宁领众网络科技有限公司所有，早在
 
 * 架构介绍：[https://www.shopwind.net/product/system.html](https://www.shopwind.net/product/system.html)
 
-* 安装教程：[https://www.shopwind.net/forum/thread-105.html](https://www.shopwind.net/forum/thread-105.html)
+* 安装教程：[https://forum.shopwind.net/thread/105](https://forum.shopwind.net/thread/105)
 
-* 运营手册：[https://www.shopwind.net/forum/gid-14528-1.html](https://www.shopwind.net/forum/gid-14528-1.html)
+* 运营手册：[https://forum.shopwind.net/?categoryId=14528](https://forum.shopwind.net/?categoryId=14528)
 
 * 开发文档：[https://developer.shopwind.net](https://developer.shopwind.net)
 
