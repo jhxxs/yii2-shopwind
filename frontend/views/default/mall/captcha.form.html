@@ -1,5 +1,5 @@
 <div class="dialog-bd captcha-form">
-    <ul class="tab J_Tab clearfix">
+    <ul class="tab J_Tab clearfix ml20 mr20">
         <li class="active" codeType="phone">手机短信验证</li>
         <li codeType="email">邮箱验证</li>
     </ul>
@@ -10,8 +10,8 @@
                 <ul class="each">
                     <li class="clearfix">
                         <p class="first">您的手机号</p>
-                        <p>
-                            <input type="hidden" name="phone_mob" value="{$user.phonb_mob}" /> {$user.phone_mob}
+                        <p class="f60">
+                            <input type="hidden" name="phone_mob" value="{$user.phonb_mob}" /> {$user.phone_mob|default:'请先配置手机号'}
                         </p>
                     </li>
                     <li class="clearfix">
@@ -25,8 +25,8 @@
                 <ul class="each hidden">
                     <li class="clearfix">
                         <p class="first">您的邮箱</p>
-                        <p>
-                            <input type="hidden" name="email" value="{$user.email}" /> {$user.email}
+                        <p class="f60">
+                            <input type="hidden" name="email" value="{$user.email}" /> {$user.email|default:'请先配置邮箱'}
                         </p>
                     </li>
                     <li class="clearfix">

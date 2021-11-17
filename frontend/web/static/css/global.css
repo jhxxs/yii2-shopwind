@@ -248,7 +248,7 @@ img.lazyload{background:#fff url(../images/loading.gif) center  center no-repeat
 
 /* captcha.form.html */
 .captcha-form .tab li {	border-bottom: 0;	float: left; background: #ddd;	line-height: 35px;	height: 35px;	width: 50%;	text-align: center;	cursor: pointer;}
-.captcha-form .tab li.active {	background: #fff}
+.captcha-form .tab li.active {	background: #1E9FFF; color: #fff}
 .captcha-form .captcha-fields{ line-height:40px;}
 .captcha-form .captcha-fields p {	float:left;}
 .captcha-form .captcha-fields p.first{width:80px;}
