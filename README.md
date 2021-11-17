@@ -50,14 +50,9 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * <a href="https://forum.shopwind.net" target="_blank"> 查看常见问题/安装教程 </a>
 
 #### PC体验
-* <a href="http://test.shopwind.net" target="_blank"> 前台体验 http://test.shopwind.net </a>
- 买家测试账号：buyer 密码：123456
-
-* <a href="http://test.shopwind.net/admin" target="_blank"> 后台体验 http://test.shopwind.net/admin </a>
- 平台管理员账号：admin 密码：123456
-
-* <a href="http://test.shopwind.net/seller/login.html" target="_blank"> 商家体验 http://test.shopwind.net/seller/login.html </a>
- 商家测试账号：seller 密码：123456
+* 前台体验：<a href="http://test.shopwind.net" target="_blank"> http://test.shopwind.net </a> 买家测试账号：buyer 密码：123456
+* 后台体验：<a href="http://test.shopwind.net/admin" target="_blank">  http://test.shopwind.net/admin </a> 平台管理员账号：admin 密码：123456
+* 商家体验：<a href="http://test.shopwind.net/seller/login.html" target="_blank"> http://test.shopwind.net/seller/login.html </a> 商家测试账号：seller 密码：123456
 
 #### 移动端体验（商业版）
 * H5端体验：<a href="https://h5.shopwind.net" target="_blank"> https://h5.shopwind.net </a> 买家测试账号：18978189192 密码：111111
