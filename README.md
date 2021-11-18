@@ -53,7 +53,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * 商家体验：<a href="http://test.shopwind.net/seller/login.html" target="_blank"> http://test.shopwind.net/seller/login.html </a> 商家测试账号：seller 密码：123456
 
 #### 移动端体验（商业版）
-* H5端体验：<a href="https://h5.shopwind.net" target="_blank"> https://h5.shopwind.net </a> 买家测试账号：18978189192 密码：111111
+* H5端体验：<a href="https://h5.shopwind.net" target="_blank"> https://h5.shopwind.net </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
 
 #### 小程序/APP体验（商业版）
 * 微信小程序（手机浏览器点击链接）：<a href="https://wxaurl.cn/VUdm2kw795s" target="_blank"> https://wxaurl.cn/VUdm2kw795s </a> 
