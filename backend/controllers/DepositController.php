@@ -552,7 +552,12 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		
 		if($post->field && $post->search_name && in_array($post->field, array_keys($this->getSearchOption()))) {
-			$query->andWhere([$post->field => $post->search_name]);
+			if($post->field == 'username') {
+				$userid = UserModel::find()->select('userid')->where(['username' => $post->search_name])->scalar();
+				$query->andWhere(['userid' => intval($userid)]);
+			} else {
+				$query->andWhere([$post->field => $post->search_name]);
+			}
 		}
 		if($post->pay_status) {
 			$query->andWhere(['pay_status' => (strtoupper($post->pay_status) == 'ON') ? 'ON' : 'OFF']);

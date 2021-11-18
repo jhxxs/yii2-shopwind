@@ -227,7 +227,7 @@ class Menu
 					'account' => array(
 						'text' => Language::get('deposit_account'),
 						'url'  => Url::toRoute('deposit/index'),
-						'priv' => ['key' => 'deposit|account', 'depends' => 'deposit|edit,deposit|editcol,deposit|index|deposit|delete,deposit|export,deposit|monthbill,deposit|downloadbill']
+						'priv' => ['key' => 'deposit|account', 'depends' => 'deposit|edit,deposit|editcol,deposit|index,deposit|delete,deposit|export,deposit|monthbill,deposit|downloadbill']
 					 ),
 					'trade' => array(
 						'text' => Language::get('trade_manage'),
