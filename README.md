@@ -48,7 +48,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * <a href="https://forum.shopwind.net" target="_blank"> 查看常见问题/安装教程 </a>
 
 #### PC体验
-* 前台体验：<a href="http://test.shopwind.net" target="_blank"> http://test.shopwind.net </a> 买家测试账号：buyer 密码：123456
+* 前台体验：<a href="http://test.shopwind.net" target="_blank"> http://test.shopwind.net </a> 买家测试账号：buyer 密码：123456  支付密码：123456
 * 后台体验：<a href="http://test.shopwind.net/admin" target="_blank">  http://test.shopwind.net/admin </a> 平台管理员账号：admin 密码：123456
 * 商家体验：<a href="http://test.shopwind.net/seller/login.html" target="_blank"> http://test.shopwind.net/seller/login.html </a> 商家测试账号：seller 密码：123456
 
@@ -60,7 +60,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * Android（安卓版）体验：<a href="https://appgallery.huawei.com/#/app/C103448437" target="_blank"> https://appgallery.huawei.com/#/app/C103448437 </a>
 * iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
 * 商家端体验（小程序）：<a href="https://wxaurl.cn/gIG5wMZSOFc" target="_blank"> https://wxaurl.cn/gIG5wMZSOFc </a>
-* 通用体验账号：买家（账号：18978189192   密码：111111）、商家（账号：18978189171  密码：111111）
+* 通用体验账号：买家（账号：18978189192   密码：111111  支付密码：111111）、商家（账号：18978189171  密码：111111）
 
 #### 页面展示
 
