@@ -332,7 +332,7 @@
               <li class="subbox clearfix">
                 <label class="subbox-title">手机专享：</label>
                 <div class="subbox-body"> <span class="clearfix">
-                  <label class="switch-checkbox-radio box-align-center float-left J_SwtcherInput {if $exclusive.selected neq '0'}checked{/if}" for="exclusive[status]"><em class="block flex1 gray"></em><span class="switcher-style block"></span></label>
+                  <label class="switch-checkbox-radio box-align-center float-left J_SwtcherInput {if $exclusive.selected neq '0'}checked{/if}" for="exclusive[status]"><span class="switcher-style block"></span></label>
                   <input type="checkbox" name="exclusive[status]" value="1" id="exclusive[status]" class="J_ExclusiveCheckbox hidden" {if $exclusive.selected neq '0'}checked="checked" {/if}/>
                   <em class="gray ml10 inline-block" style="margin-top:3px;">{$exclusive.desc}</em> </span>
                   <div class="J_ExclusiveDetailSetting mt10 {if $exclusive.selected eq '0'}hidden{/if}"> 享
@@ -346,7 +346,7 @@
               <li class="subbox clearfix">
                 <label class="subbox-title">商品上架：</label>
                 <div class="subbox-body">
-                  <label class="switch-checkbox-radio box-align-center J_SwtcherInput {if $goods.if_show}checked{/if}" for="if_show"><em class="block flex1 gray"></em><span class="switcher-style block"></span></label>
+                  <label class="switch-checkbox-radio box-align-center J_SwtcherInput {if $goods.if_show}checked{/if}" for="if_show"><span class="switcher-style block"></span></label>
                   <input type="checkbox" name="if_show" value="1" id="if_show" class="hidden" {if $goods.if_show}checked="checked" {/if}/>
                 </div>
               </li>
