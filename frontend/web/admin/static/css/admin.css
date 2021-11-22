@@ -421,9 +421,7 @@ select {
 .blue {
     color: #1E9FFF;
 }
-a.blue:hover {
-    color: #f60 !important;
-}
+
 .bold {
     font-weight: bold;
 }
@@ -1662,6 +1660,6 @@ i.fa {
 .layui-nav-tree .layui-nav-item > a {
     cursor:default;
 }
-.layui-table-fixed-r a:hover {
+.layui-table-fixed-r a:hover  {
     color: #f60;
 }

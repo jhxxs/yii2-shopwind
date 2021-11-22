@@ -14,7 +14,7 @@
             <input class="queryInput" type="text" name="buyer_name" value="{$smarty.get.buyer_name|escape}" />
             {$lang.store_name}
             <input class="infoTableInput mr10 ml10" type="text" name="store_name" value="{$smarty.get.store_name|escape}" />
-            <label>{$lang.search_status}</label>
+            <label class="mr5">{$lang.search_status}</label>
             <select class="querySelect" name="status">
               <option value="">{$lang.no_limit}</option>
               {html_options options=$status_list selected=$smarty.get.status}
@@ -27,7 +27,7 @@
             {$lang.add_time_to}
             <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
               class="pick_date" />
-            <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm box-align-center width7"
+            <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7"
               value="{$lang.query}" />
             <!--{if $filtered}-->
             <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center"

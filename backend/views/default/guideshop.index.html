@@ -19,7 +19,7 @@
 						<option value="1" {if $smarty.get.status eq '1'} selected{/if}>{$lang.open}</option>
 						<option value="2" {if $smarty.get.status eq '2'} selected{/if}>{$lang.close}</option>
 					</select>
-					<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm box-align-center width7" value="{$lang.query}" />
+					<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7" value="{$lang.query}" />
 					<!--{if $filtered}-->
 					<a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='guideshop/index'}">{$lang.cancel_query}</a>
 					<!--{/if}-->

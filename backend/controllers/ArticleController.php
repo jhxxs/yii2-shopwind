@@ -46,7 +46,7 @@ class ArticleController extends \common\controllers\BaseAdminController
 
 	public function actionIndex()
 	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'cate_id', 'articletype']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'cate_id']);
 		
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -218,7 +218,7 @@ class ArticleController extends \common\controllers\BaseAdminController
 	{
 		if($query === null) {
 			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
-				if(in_array($field, ['cate_id', 'title', 'articletype'])) {
+				if(in_array($field, ['cate_id', 'title'])) {
 					return true;
 				}
 			}
@@ -233,9 +233,6 @@ class ArticleController extends \common\controllers\BaseAdminController
 				$allId = array();
 			}
 			$query->andWhere(['in', 'a.cate_id', $allId]);
-		}
-		if($post->articletype) {
-			($post->articletype == 1) ? $query->andWhere(['a.store_id' => 0]) : $query->andWhere(['!=', 'a.store_id', 0]);
 		}
 
 		return $query;
