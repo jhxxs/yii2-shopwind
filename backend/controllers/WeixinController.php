@@ -353,7 +353,7 @@ class WeixinController extends \common\controllers\BaseAdminController
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
-			return Message::display(Language::get('setting_successed'));
+			return Message::display(Language::get('applet_successed'));
 		}
 	}
 }
