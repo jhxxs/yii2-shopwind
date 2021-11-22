@@ -155,7 +155,7 @@ class TeambuyController extends \common\controllers\BaseSellerController
 			return Message::warning(Language::get('no_such_teambuy'));
 		}
 		
-		if(!LimitbuyModel::deleteAll(['id' => $post->id, 'store_id' => $this->visitor['store_id']])) {
+		if(!TeambuyModel::deleteAll(['id' => $post->id, 'store_id' => $this->visitor['store_id']])) {
 			return Message::warning(Language::get('drop_fail'));
 		}
 		
