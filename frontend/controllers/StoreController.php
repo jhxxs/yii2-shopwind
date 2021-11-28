@@ -58,7 +58,7 @@ class StoreController extends \common\controllers\BaseMallController
 		if(($store = $model->formData($post, 20)) === false) {
 			return Message::warning($model->errors);
 		}
-		
+	
 		// 页面公共参数
 		$this->params = array_merge($this->params, ['store' => $store], Page::getAssign('store', $post->id));
 

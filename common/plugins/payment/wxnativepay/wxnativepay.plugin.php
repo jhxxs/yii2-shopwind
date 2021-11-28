@@ -61,8 +61,12 @@ class Wxnativepay extends BasePayment
 		$sdk->payTradeNo = $payTradeNo;
 		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
-		
-		$params = $this->createPayform($sdk->getPayform($orderInfo), $this->gateway, 'post');
+
+		if(($result = $sdk->getPayform($orderInfo)) === false) {
+		    return array($payTradeNo, ['payResult' => false, 'errMsg' => $sdk->errors]);    
+		}
+	
+		$params = $this->createPayform($result, $this->gateway, 'post');
         return array($payTradeNo, $params);
 	}
 	

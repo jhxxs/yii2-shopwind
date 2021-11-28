@@ -9,19 +9,10 @@
 						<input type="hidden" name="r" value="article/index" />
 						{$lang.title}
 						<input class="queryInput" type="text" name="title" value="{$smarty.get.title|escape}" />
-						{$lang.select_acategory}
+						<label class="mr5">{$lang.select_acategory}</label>
 						<select class="querySelect" id="cate_id" name="cate_id">
 							<option value="">{$lang.select_pls}</option>
 							{html_options options=$acategories selected=$smarty.get.cate_id}
-						</select>
-						<label>{$lang.articletype}</label>
-						<select name="articletype" class="querySelect">
-							<option value="">{$lang.select_pls}</option>
-							<option value="1" {if $smarty.get.articletype eq 1} selected="selected" {/if}>
-								{$lang.backend_article}
-							</option>
-							<option value="2" {if $smarty.get.articletype eq 2} selected="selected" {/if}>
-								{$lang.store_article}</option>
 						</select>
 						<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7"
 							value="{$lang.query}" />
@@ -69,11 +60,6 @@
 				, { field: 'article_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
 				, { field: 'title', title: '标题', edit: 'text', width: 450 }
 				, { field: 'cate_name', title: '文章分类', width: 160 }
-				, {
-					field: 'store_id', title: '文章归属', width: 160, sort: true, templet: function (res) {
-						return res.store_id > 0 ? lang.store_article : lang.backend_article;
-					}
-				}
 				, { field: 'add_time', title: '添加时间', width: 180, sort: true }
 				, {
 					field: 'if_show', title: '显示', width: 120, sort: true, align: 'center', templet: function (res) {

@@ -58,7 +58,7 @@ class Weixin
 	{
 		$api = $this->apiList('AccessToken');
 		$param = array('appid' => $this->config['appid'], 'secret' => $this->config['appsecret']);
-
+		
 		$response = json_decode(Basewind::curl($this->combineUrl($api, $param)));
 		if($response->errcode) {
 			$this->errors = $response->errmsg;
@@ -195,12 +195,11 @@ class Weixin
 		$api = $this->apiList('getWxaUrlLink');
 		$param = array('access_token' => $this->getAccessToken());
 		
-		if(!($buffer = Basewind::curl($this->combineUrl($api, $param), 'post', json_encode($post), true))) {
+		if(!($urllink = Basewind::curl($this->combineUrl($api, $param), 'post', json_encode($post), true))) {
 			return false;
 		}
 
-		// 返回的图片Buffer
-		return $buffer;
+		return $urllink;
 	}
 	
 	public function combineUrl($url, $param)

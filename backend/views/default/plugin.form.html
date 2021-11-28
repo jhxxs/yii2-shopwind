@@ -28,7 +28,7 @@
               <th class="paddingT15"> <label for="plugin_{$conf}">{$info.text}：</label></th>
               <td class="paddingT15 wordSpacing5">
                 <!--{if $info.type eq 'text'}-->
-                <input type="text" name="config[{$conf}]" value="{$config.$conf}" size="{$info.size}" />
+                <input type="text" name="config[{$conf}]" value="{$config.$conf}" size="{$info.size}" placeholder="{$info.placeholder}" />
                 <!--{elseif $info.type eq 'select'}-->
                 <select name="config[{$conf}]">
                   {html_options options=$info.items selected=$config.$conf}

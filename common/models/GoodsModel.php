@@ -133,8 +133,11 @@ class GoodsModel extends ActiveRecord
 		$cache->delete($cachekey);
 	}
 
-	/* 设置/获取商品浏览历史 */
-	public static function history($id = 0, $num = 10)
+	/**
+	 * 设置/获取商品浏览历史 
+	 * @var boolean $supple 补全
+	 */
+	public static function history($id = 0, $num = 10, $supple = false)
 	{
 		$result = array();
 		$allId  = array();
@@ -151,13 +154,14 @@ class GoodsModel extends ActiveRecord
 					continue;
 				}
 
-				if (empty($list[$allId[$i]]['default_image'])) {
-					$list[$allId[$i]]['default_image'] = Yii::$app->params['default_goods_image'];
-				}
-
 				if (count($result) < $num) {
 					$result[] = $list[$allId[$i]];
 				}
+			}
+
+			if($supple && count($result) < $num) {
+				$list = parent::find()->select('goods_id,goods_name,default_image, price')->where(['if_show' => 1, 'closed' => 0])->limit($num - count($result))->asArray()->all();
+				$result = array_merge($result, $list);
 			}
 		}
 		if ($id) $allId[] = $id;

@@ -101,9 +101,8 @@ class UploadController extends \common\controllers\BaseUserController
 			if(in_array($instance, ['goods_image']))
 			{
 				// 生成缩略图
-				$thumbnail = $filePath . '.thumb.'.$model->file->extension;
-				\yii\imagine\Image::thumbnail(Def::fileSavePath() . DIRECTORY_SEPARATOR . $filePath, 400, 400, \Imagine\Image\ManipulatorInterface::THUMBNAIL_OUTBOUND)->save(Def::fileSavePath() . DIRECTORY_SEPARATOR . $thumbnail, ['quality' => 100]);
-					
+				$thumbnail = $model->thumbnail($filePath, 400, 400);
+
 				// 更新商品相册
 				$imageModel = new GoodsImageModel();
 				$imageModel->goods_id = $post->item_id;
