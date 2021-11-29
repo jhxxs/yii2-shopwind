@@ -159,7 +159,11 @@ class SDK {
      */
     public function upload($object, $file)
     {
-        $options = ['Content-Type' => 'image/jpg'];//getimagesize($file)['mime']];
+        $mime = getimagesize($file)['mime'];
+        if($mime && substr($mime, 0, 6) == 'image/') {
+            $options = ['Content-Type' => 'image/jpg'];
+        }
+   
         return $this->getClient()->uploadFile($this->bucket, $object, $file, $options);
     }
     
