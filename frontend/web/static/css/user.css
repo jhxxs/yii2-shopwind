@@ -320,15 +320,15 @@ select {border: 1px solid #d9d9d9;padding:5px;border-radius:3px}
 .eject_btn .ico1 {background: url(../images/member/ico.gif) no-repeat 15px -655px;}
 .eject_btn .ico2 {background: url(../images/member/ico.gif) no-repeat 15px -188px;}
 .eject_btn .ico3 {background: url(../images/member/ico.gif) no-repeat 12px -943px;}
-.eject_btn_two {width: 137px;height: 32px;line-height: 32px;background: #1CE882;}
-.eject_pos1 {width: 95px;height: 32px;line-height: 32px;position: absolute;top: -34px; left:375px;z-index: 300; border:1px solid #1CE882; border-bottom:0; border-radius:4px 4px 0 0; cursor:pointer}
+.eject_btn_two {width: 137px;height: 32px;line-height: 32px;background: #0092D2;}
+.eject_pos1 {width: 95px;height: 34px;line-height: 34px;position: absolute;top: -34px; left:375px;z-index: 300; border-radius:4px 4px 0 0; cursor:pointer}
 .eject_pos2 {position: absolute;top: 20px;right: 170px;z-index: 3;}
 .eject_pos3 {position: absolute;top: 5px;right: 240px;z-index: 3;}
 .eject_pos4 {position: absolute;top: 5px;right: 130px;z-index: 3;}
 .eject_btn_two b {display: block;height: 32px;color:#fff; font-weight:normal;font-size: 13px;cursor: pointer;}
 .eject_btn_two .ico1 {width: 107px;padding-left: 30px;background: url(../images/member/ico.gif) no-repeat 15px -1330px;}
 .eject_btn_two .ico2 {width: 97px;padding-left: 40px;background: url(../images/member/ico.gif) no-repeat 15px -1282px;}
-.eject_btn_two .ico3 {padding-left: 32px;background: url(../images/member/ico.gif) no-repeat 10px -1416px; }
+.eject_btn_two .ico3 {text-align:center; }
 .eject_btn_two .ico4 {width: 102px;padding-left: 35px;background: url(../images/member/ico.gif) no-repeat 12px -1710px;}
 .eject_btn .ico5 {width: 102px;padding-left: 35px;background: url(../images/member/ico.gif) no-repeat 15px -655px;}
 .eject_btn_three {width: 97px;height: 32px;line-height: 32px;background:#19ACF7;}
@@ -416,7 +416,7 @@ span[fieldname=closed].wrong_ico {display: block;width: 11px;height: 11px;overfl
 .table .ware_text a {color: #3e3e3e;text-decoration: none;}
 .table .ware_text a:hover {text-decoration: underline;}
 .table .email {display: inline-block;vertical-align: middle;width: 47px;height: 17px;background: url(../images/member/btn.gif) no-repeat 0 -41px;margin: 0 auto}
-.table .position1 {float: left;padding-top: 3px;}
+.table .position1 {float: left;padding-top: 6px;}
 .table .position2 {float: right;padding-right: 10px;}
 .tr_color th {color: #919191;}
 .tr_align td {text-align: center;}

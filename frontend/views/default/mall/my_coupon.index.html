@@ -25,7 +25,7 @@
               <td class="align2">{$coupon.start_time|date_format:"%Y-%m-%d"} {$lang.to} <!--{if $coupon.end_time}-->{$coupon.end_time|date_format:"%Y-%m-%d"}<!--{else}-->{$lang.no_limit}<!--{/if}--></td>
               <td class="align2"><!--{if $coupon.min_amount}-->{$lang.min_amount_desc}{$coupon.min_amount|price_format}<!--{else}-->{$lang.no_limit}<!--{/if}--></td>
               <td class="align2">{if $coupon.store_name}<a href="{url route='store/index' id=$coupon.store_id}">{$coupon.store_name}</a>{else}{$lang.plat}{/if}</td>
-              <td class="align2"><!--{if $coupon.valid}--><img src="{res file='images/usable.gif'}" /><!--{else}--><img src="{res file='image}/unusable.gif'}" /><!--{/if}--></td>
+              <td class="align2"><!--{if $coupon.valid}--><img src="{res file='images/usable.gif'}" /><!--{else}--><img src="{res file='images/unusable.gif'}" /><!--{/if}--></td>
               <td class="align2"><a class="delete J_AjaxRequest" href="javascript:;" confirm="{$lang.drop_confirm}" uri="{url route='my_coupon/delete' id=$coupon.coupon_sn}">{$lang.drop}</a></td>
             </tr>
             <!-- {/foreach} --> 

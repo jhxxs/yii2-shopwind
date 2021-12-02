@@ -52,7 +52,7 @@
 .store-info .content .dl-c-s{display: block;padding: 6px 0px 6px 7px;width:201px;}
 .store-info .content .dl-c-s dt,.store-info .content .dl-c-s dd{display:block;vertical-align:top;color: #666;letter-spacing: normal;word-spacing: normal;float:left;}
 
-.store-info .content .go2store{text-align: center;padding: 10px 0 20px;}
+.store-info .content .go2store{text-align: center;padding: 15px 0 15px;}
 .store-info .content .go2store a{color: #005EA6;margin: 0 10px;}
 .store-info .content .go2store a:hover{color: #DA542E;}
 
@@ -114,7 +114,7 @@
 .goods-list-shop .content li:hover {box-shadow: 0 15px 30px rgba(0,0,0,.1);-webkit-transform: translate3d(0,-2px,0); transform: translate3d(0,-2px,0);}
 .goods-list-shop .content li:nth-child(4n) {margin-right: 0;}
 .goods-list-shop .content li dt a,.goods-list-shop .content li dt a img{width:100%;display:block;text-align:center; font-size: 14px;}
-.goods-list-shop .content li .desc{height:40px;line-height:18px; overflow:hidden; word-break: break-all;margin-bottom:10px}
+.goods-list-shop .content li .desc{height:38px;line-height:18px; overflow:hidden; word-break: break-all;margin-bottom:10px}
 .goods-list-shop .content li .price{font-size:16px;color:#DA542E;}
 .goods-list-shop .content li .price strong{ display:inline-block;vertical-align:middle; font-weight:normal}
 .goods-list-shop .content li .price del{color:#999;font-size:12px;margin-right:10px;}
@@ -150,11 +150,9 @@
 .credit-recorder table .border-r-0{border-right:0px;}
 .credit-recorder table .border-b-0 td,.credit-recorder table .border-b-0 th{border-bottom:0px;}
 
-.credit-detail{}
 .user-menu{height:50px;border:1px #ddd solid; line-height: 50px; font-size: 14px;}
 .user-menu li.active a {color: #DA542E}
 
-.credit-detail .detail{}
 .credit-detail .detail th,.credit-detail .detail td{text-align:center; height:40px;line-height:40px;border-bottom:1px solid #ddd;}
 .credit-detail .detail table{border-collapse: collapse;width:100%;}
 .credit-detail .detail .table-header th{color: #a9a9a9;font-weight:normal;}

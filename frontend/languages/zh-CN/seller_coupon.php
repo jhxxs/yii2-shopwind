@@ -64,4 +64,5 @@ return array(
 	'end_time' 			=> '结束时间',
 	'select_handle'		=> '选择操作',
 	'extend_no_enough'  => '没有足够的优惠券',
+    'drop_disabled' => '优惠券不存在或优惠券已发行不允许删除'
 );

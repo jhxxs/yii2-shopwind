@@ -130,10 +130,14 @@ class Seller_couponController extends \common\controllers\BaseSellerController
 			return Message::warning(Language::get('no_coupon'));
 		}
 		
-		$coupons = CouponModel::find()->select('coupon_id')->where(['store_id' => $this->visitor['store_id']])->andWhere(['in', 'coupon_id', explode(',', $post->id)])->andWhere('available = 0 OR (available = 1 AND end_time < :end_time)', [':end_time' => Timezone::gmtime()])->column();
+		$coupons = CouponModel::find()->select('coupon_id')
+			->where(['store_id' => $this->visitor['store_id']])
+			->andWhere(['in', 'coupon_id', explode(',', $post->id)])
+			->andWhere('available = 0 OR (available = 1 AND end_time < :end_time)', [':end_time' => Timezone::gmtime()])
+			->column();
 		
 		if(empty($coupons) || !is_array($coupons)) {
-			return Message::warning(Language::get('no_coupon'));
+			return Message::warning(Language::get('drop_disabled'));
 		}
 		
 		if(!CouponModel::deleteAll(['in', 'coupon_id', $coupons])) {
