@@ -25,104 +25,34 @@
 				<!--{/foreach}--> 
 			</div>
 		</div>
-      <div class="header_cart J_GlobalPop">
+      	<div class="header_cart {if $carts_top.kinds eq 0}J_GlobalPop{/if}">
         	<div class="item">
 			<div class="title clearfix"> <b></b><a href="{url route='cart/index'}">去购物车结算</a><em>></em> </div>
 			<div class="shoping"><span class="count-cart J_C_T_GoodsKinds">{$carts_top.kinds|default:0}</span></div>
 			<div class="shadow"></div>
-			<div class="cart-list eject-box J_GlobalPopSub J_HasGoods"> 
-				<!--{if $carts_top.items}-->
-                <h4>最新加入的商品</h4>
-				<div class="goods-list">
-					<!--{foreach from=$carts_top.items item=cart name=fe_cart key=key}-->
-					<div {if $smarty.foreach.fe_cart.last}style="border:0px;"{/if} class="clearfix list J_CartItem-{$key}">
-						<div class="goods-img mt5"> <a href="{url route='goods/index' id=$cart.goods_id}" target="_top"><img alt="{$cart.goods_name}" src="{$cart.goods_image|url_format}" width="40" height="40"></a> </div>
-						<div class="goods-title"> <a title="{$cart.goods_name}" href="{url route='goods/index' id=$cart.goods_id}" target="_top">{$cart.goods_name}</a> </div>
-						<div class="goods-admin clearfix">
-							<div class="mini-cart-count"><strong class="mini-cart-price J_ItemPrice-{$key}">{$cart.price|price_format}</strong> ×<span class="J_ItemQuantity-{$key}">{$cart.quantity}</span></div>
-						</div>
-					</div>
-					<!--{/foreach}--> 
-				</div>
-				<div class="total"><a href="{url route='cart/index'}">去购物车查看</a> </div>
-				<!--{else}-->
-				<div class="nogoods clearfix J_NoGoods"> <b></b>购物车中还没有商品，赶紧选购吧！ </div>
-				<!--{/if}--> 
+			<!--{if $carts_top.kinds eq 0}-->
+			<div class="cart-list eject-box">
+				<div class="nogoods clearfix"> <b></b>购物车中还没有商品，赶紧选购吧！ </div>
 			</div>
+			<!--{/if}-->
             </div>
 		</div>
    </div>
-    <div  class="w-full mall-nav relative {if !$index}not-index J_ShowCategory{/if}">
-		<div class="mall-bg w">
-			<ul class="w clearfix">
-				<li class="allcategory float-left"> <a class="allsort" {if !$gcategories}href="{url route='category/index'}"{/if}>所有商品分类<b></b></a> 
-					<div class="allcategory-list {if !$index}hidden{/if}">
-						<div class="content clearfix J_Gcategory"> 
-							<!--{foreach from=$gcategories item=$categories name=fe_categories}-->
-							<!--{if ($index && $smarty.foreach.fe_categories.iteration le 7) || !$index}-->
-							<div class="item {if $index}index{/if}" item-id="{$categories.items.0.groupid},{$categories.items.0.cate_id}">
-								<div class="pborder">
-									<ins class="cat-iconfont ico-{$smarty.foreach.fe_categories.iteration}"></ins>
-									<p> 
-										<!--{foreach from=$categories.items item=category name=fe_category}--> 
-										<a href="{url route='search/index' cate_id=$category.cate_id}" target="_blank">{$category.cate_name|escape}</a> {if !$smarty.foreach.fe_category.last}<a href="javascript:;">、</a>{/if} 
-										<!--{/foreach}--> 
-									</p>
-									<!--{if $index}-->
-									<h3>
-										<!--{foreach from=$categories.subitems item=child name=fe_child}-->
-										<a href="{url route='search/index' cate_id=$child.cate_id}" class="child">{$child.cate_name|escape}</a>
-										<!--{/foreach}-->
-                                    </h3>
-                                    <!--{/if}-->
-								</div>
-								<div class="pop" style="top: 0;">
-									<div class="catlist float-left"></div>
-								</div>
-							</div>
-							<!--{/if}-->
-							<!--{/foreach}-->
-						</div>
-					</div>
-				</li>
-				<li class="each float-left inline-block"><a class="{if $index}current{/if}" href="{$siteUrl}">{$lang.home}</a></li>
-				<!--{foreach from=$navs.middle item=nav name=fe_nav}-->
-				<li class="each float-left inline-block"><a class="{if !$index and stristr($app->request->url,$nav.link)}current{/if}" href="{$nav.link|url_format}"{if $nav.open_new} target="_blank"{/if}>{$nav.title|escape}{if $smarty.foreach.fe_nav.iteration eq 1}<span class="absolute block">HOT</span>{/if}</a></li>
-				<!--{/foreach}-->
-			</ul>
-		</div>
-	</div>
 </div>
 <!--{if $store}-->
 <div id="nav" class="w-full">
     <div class="banner">
-    	<a href="{url route='store/index' id=$store.store_id}" class="w-full block" style="background:url(
-        	{if $store.store_banner}
-            {$store.store_banner|url_format}
-            {else}
-            {res file='images/store_banner.png'}
-            {/if}
-        ) no-repeat center center; height:119px;"></a>
+    	<a href="{url route='store/index' id=$store.store_id}" class="w-full block" style="background:url({$store.store_banner|default:'static/images/store_banner.png'|url_format}) no-repeat center center; height:110px;"></a>
     </div>
-	<div class="shop-nav w-full" {if $store.nav_color} style="background:{$store.nav_color}"{/if}>
+	<div class="shop-nav w-full">
         <ul class="w J_ShopNav">
             <li><a href="{url route='store/index' id=$store.store_id}"><span>{$lang.store_index}</span></a></li>
-           
+			<li><a {if $app->controller->action->id eq 'search' && !$smarty.get.cate_id} class="current"{/if} href="{url route='store/search' id=$store.store_id}"><span>{$lang.all_goods}</span></a></li>
+			<li><a {if $app->controller->action->id eq 'credit'} class="current"{/if} href="{url route='store/credit' id=$store.store_id}"><span>{$lang.credit_evaluation}</span></a></li>
             <!--{foreach from=$store.gcategories item=item}-->
-            <li><a href="{url route='store/search' id=$store.store_id cate_id=$item.id from='nav'}"><span>{$item.value|escape}</span></a></li>
+            <li><a {if $app->controller->action->id eq 'search' && $smarty.get.cate_id eq $item.id} class="current"{/if} href="{url route='store/search' id=$store.store_id cate_id=$item.id}"><span>{$item.value|escape}</span></a></li>
             <!--{/foreach}-->
             
-            <!--{foreach from=$store.store_navs item=nav}-->
-            <li><a href="{url route='store/article' id=$nav.store_id article_id=$nav.article_id}"><span>{$nav.title|escape}</span></a></li>
-            <!--{/foreach}-->
-            <li><a href="{url route='store/credit' id=$store.store_id}"><span>{$lang.credit_evaluation}</span></a></li>
-            
-            <!--{if $app->controller->id eq 'store' && $app->controller->action->id eq 'search' && $smarty.get.id && !$smarty.get.cate_id}-->
-            <li><a class="current" href="{url route='store/search' id=$smarty.get.id}"><span>{$lang.all_goods}</span></a></li>
-            <!--{/if}-->
-            <!--{if $app->controller->id eq 'store' && $app->controller->action->id eq 'search' && $smarty.get.cate_id && !$smarty.get.from}-->
-            <li><a class="current" href="{url route='store/search' cate_id=$smarty.get.cate_id}"><span>{$lang.goods_search}</span></a></li>
-            <!--{/if}-->
             <!--{if $app->controller->id eq 'goods' && $smarty.get.id}-->
             <li><a class="current" href="{url route='goods/index' id=$goods.goods_id}"><span>{$lang.goods_detail}</span></a></li>
             <!--{/if}--> 

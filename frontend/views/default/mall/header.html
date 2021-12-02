@@ -1,6 +1,6 @@
 {include file="top.html"}
 <div id="header" class="w-full">
-	<div class="shop-t w clearfix pb10 mb10 mt5">
+	<div class="shop-t w clearfix pb20 mb10 mt5">
 		<div class="logo mt10"> <a href="{$siteUrl}" title="{$app->params['site_title']}"><img height="60" alt="{$app->params['site_title']}" src="{$app->params['site_logo']|url_format}" /></a> </div>
 		<div class="top-search"> 
 			<div class="top-search-box clearfix">
@@ -25,30 +25,16 @@
 				<!--{/foreach}--> 
 			</div>
 		</div>
-		<div class="header_cart J_GlobalPop">
+		<div class="header_cart {if $carts_top.kinds eq 0}J_GlobalPop{/if}">
         	<div class="item">
 			<div class="title clearfix"> <b></b><a href="{url route='cart/index'}">去购物车结算</a><em>></em> </div>
 			<div class="shoping"><span class="count-cart J_C_T_GoodsKinds">{$carts_top.kinds|default:0}</span></div>
 			<div class="shadow"></div>
-			<div class="cart-list eject-box J_GlobalPopSub J_HasGoods"> 
-				<!--{if $carts_top.items}-->
-                <h4>最新加入的商品</h4>
-				<div class="goods-list">
-					<!--{foreach from=$carts_top.items item=cart name=fe_cart key=key}-->
-					<div {if $smarty.foreach.fe_cart.last}style="border:0px;"{/if} class="clearfix list J_CartItem-{$key}">
-						<div class="goods-img mt5"> <a target="_blank" href="{url route='goods/index' id=$cart.goods_id}"><img src="{$cart.goods_image|url_format}" width="40" height="40"></a> </div>
-						<div class="goods-title"> <a target="_blank" href="{url route='goods/index' id=$cart.goods_id}">{$cart.goods_name}</a> </div>
-						<div class="goods-admin clearfix">
-							<div class="mini-cart-count"><strong class="mini-cart-price J_ItemPrice-{$key}">{$cart.price|price_format}</strong> ×<span class="J_ItemQuantity-{$key}">{$cart.quantity|default:1}</span></div>
-						</div>
-					</div>
-					<!--{/foreach}--> 
-				</div>
-				<div class="total"><a href="{url route='cart/index'}">去购物车查看</a> </div>
-				<!--{else}-->
-				<div class="nogoods clearfix J_NoGoods"> <b></b>购物车中还没有商品，赶紧选购吧！ </div>
-				<!--{/if}--> 
+			<!--{if $carts_top.kinds eq 0}-->
+			<div class="cart-list eject-box">
+				<div class="nogoods clearfix"> <b></b>购物车中还没有商品，赶紧选购吧！ </div>
 			</div>
+			<!--{/if}-->
             </div>
 		</div>
 	</div>
@@ -80,7 +66,7 @@
 		<div class="mall-bg w">
 			<ul class="w clearfix">
 				<li class="allcategory float-left"> <a class="allsort" {if !$gcategories}href="{url route='category/index'}"{/if}>所有商品分类<b></b></a> 
-					<div class="allcategory-list {if !$index}hidden{/if}">
+					<div class="allcategory-list {if $index}index{else}hidden{/if}">
 						<div class="content clearfix J_Gcategory"> 
 							<!--{foreach from=$gcategories item=$categories name=fe_categories}-->
 							<!--{if ($index && $smarty.foreach.fe_categories.iteration le 7) || !$index}-->

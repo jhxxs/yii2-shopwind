@@ -80,5 +80,4 @@ return array(
     'views' => '人气',
     'no_such_category' => '很抱歉!该分类不存在',
 	'all_sort'				=> '综合排序',
-	'business_scope'=>'主营业务',
 );

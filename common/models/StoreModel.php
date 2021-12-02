@@ -78,11 +78,8 @@ class StoreModel extends ActiveRecord
 		if (!empty($result['certification'])) {
 			$result['certifications'] = explode(',', $result['certification']);
 		}
-		if (!empty($result['store_slides'])) {
-			$result['store_slides'] = json_decode($result['store_slides'], true);
-		}
-		if (!empty($result['wap_store_slides'])) {
-			$result['wap_store_slides'] = json_decode($result['wap_store_slides'], true);
+		if (!empty($result['swiper'])) {
+			$result['swiper'] = json_decode($result['swiper'], true);
 		}
 		return $result;
 	}
@@ -104,24 +101,6 @@ class StoreModel extends ActiveRecord
 
 				if (Basewind::getCurrentApp() == 'pc') {
 					$store['gcategories'] = GcategoryModel::getTree($store_id);
-					$store['owner'] = UserModel::find()->select('userid,username')->where(['userid' => $store_id])->asArray()->one();
-					$store['store_navs'] = ArticleModel::find()->select('article_id,title,store_id')->where(['store_id' => $store_id, 'cate_id' => Def::STORE_NAV, 'if_show' => 1])->orderBy(['sort_order' => SORT_ASC])->limit(10)->asArray()->all();
-					//$store['qrcode'] = Page::generateQRCode('store', array('store_id' => $store_id), true);
-
-					// 取得左侧热卖商品
-					$query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,default_image,price,sales')->joinWith('goodsStatistics gst', false)->where(['store_id' => $store_id, 'if_show' => 1, 'closed' => 0])->limit(10)->orderBy(['sales' => SORT_DESC, 'g.goods_id' => SORT_DESC])->asArray()->all();
-					foreach ($query as $key => $goods) {
-						empty($goods['default_image']) && $goodsList[$key]['default_image'] = Yii::$app->params['default_goods_image'];
-					}
-					$store['hot_saleslist'] = $query;
-
-					// 取得左侧收藏商品
-					$query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,default_image,price,collects')->joinWith('goodsStatistics gst', false)->where(['store_id' => $store_id, 'if_show' => 1, 'closed' => 0])->limit(10)->orderBy(['collects' => SORT_DESC, 'g.goods_id' => SORT_DESC])->asArray()->all();
-
-					foreach ($query as $key => $goods) {
-						empty($goods['default_image']) && $goodsList[$key]['default_image'] = Yii::$app->params['default_goods_image'];
-					}
-					$store['collect_goodslist'] = $query;
 				}
 
 				if (Basewind::getCurrentApp() == 'wap') {
@@ -305,13 +284,13 @@ class StoreModel extends ActiveRecord
 			}
 
 			// 商品评分(描述相符)
-			$goodsEvaluation = 0;
+			$goodsEvaluation = 5.0000;
 
 			// 服务评分
-			$serviceEvaluation = 0;
+			$serviceEvaluation = 5.0000;
 
 			// 物流评分
-			$shippedEvaluation = 0;
+			$shippedEvaluation = 5.0000;
 
 			// 这里取最多6000条交易记录，也可以像淘宝一样，取近6个月的交易完成的数据
 			$query = OrderModel::find()->select('order_id,service_evaluation,shipped_evaluation')

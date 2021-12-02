@@ -27,7 +27,7 @@
          <dl class="float-left">
            <dt><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"><img width="160" height="160" src="{$goods.default_image|url_format}" /></a></dt>
            <dd class="desc"><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank">{$goods.goods_name|escape|truncate:42}</a></dd>
-           <dd class="price clearfix"><em>{$goods.price}</em><span>{$lang.zjcj}{$goods.sales}{$lang.bi}</span></dd>
+           <dd class="price clearfix"><em>{$goods.price}</em><span>最近成交{$goods.sales|default:0}笔</span></dd>
            <dd class="service"></dd>
          </dl> 
          <!--{/foreach}-->

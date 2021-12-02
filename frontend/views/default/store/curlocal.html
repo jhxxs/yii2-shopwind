@@ -1,7 +1,7 @@
-<div class="location w-shop mt10 mb10">
+<div class="location w-shop clearfix">
     <!--{foreach from=$_curlocal item=lnk}-->
     <!--{if $lnk.url}-->
-    <a href="{$lnk.url}">{$lnk.text|escape}</a> <span>></span>
+    <a class="inline-block" href="{$lnk.url}">{$lnk.text|escape}</a> <span>></span>
     <!--{else}-->
     {$lnk.text|escape}
     <!--{/if}-->

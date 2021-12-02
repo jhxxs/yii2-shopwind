@@ -64,7 +64,7 @@
               <td class="paddingT15 wordSpacing5"> {if $store.identity_front}<a
                   href="{$store.identity_front|url_format}" target="_blank" class="mr20"><img
                     src="{$store.identity_front|url_format}" alt="{$lang.view}" height="30" /></a>{/if}
-                {if $store.identity_back}<a href="{$store.identity_back}" target="_blank" class="mr20"><img
+                {if $store.identity_back}<a href="{$store.identity_back|url_format}" target="_blank" class="mr20"><img
                     src="{$store.identity_back|url_format}" alt="{$lang.view}" height="30" /></a>{/if}
                 {if $store.business_license}<a href="{$store.business_license|url_format}" target="_blank"
                   class="mr20"><img src="{$store.business_license|url_format}" alt="{$lang.view}"

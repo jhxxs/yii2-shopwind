@@ -58,13 +58,10 @@ class StoreController extends \common\controllers\BaseMallController
 		if(($store = $model->formData($post, 20)) === false) {
 			return Message::warning($model->errors);
 		}
-	
+
 		// 页面公共参数
 		$this->params = array_merge($this->params, ['store' => $store], Page::getAssign('store', $post->id));
 
-		// 头部商品分类
-		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
-	
 		$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.lazyload.js');
 		
 		$this->params['page'] = Page::seo(['title' => $store['store_name']]);
@@ -115,9 +112,6 @@ class StoreController extends \common\controllers\BaseMallController
 		// 页面公共参数
 		$this->params = array_merge($this->params, ['store' => $store], Page::getAssign('store', $post->id));
 		
-		// 头部商品分类
-		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
-		
 		$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.lazyload.js');
 		
 		$this->params['page'] = Page::seo(['title' => $this->params['search_name'] . ' - ' . $store['store_name']]);
@@ -145,9 +139,6 @@ class StoreController extends \common\controllers\BaseMallController
 		
 		// 页面公共参数
 		$this->params = array_merge($this->params, ['store' => $store], Page::getAssign('store', $post->id));
-		
-        // 头部商品分类
-		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
 		
 		$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.lazyload.js');
 		
@@ -227,10 +218,7 @@ class StoreController extends \common\controllers\BaseMallController
 				$list['all']['six_month_before']++;
 			}
 		}
-		$this->params['credits'] = $list;		
-		
-        // 头部商品分类
-		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
+		$this->params['credits'] = $list;
 		
 		$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.lazyload.js');
 		

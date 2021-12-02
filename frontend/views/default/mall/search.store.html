@@ -1,6 +1,6 @@
 {include file="header.html"}
 <div id="main" class="w-full">
-  <div id="page-search-store" class="w mt10 mb10"> {include file="curlocal.html"}
+  <div id="page-search-store" class="w mb20 mt20">
     <div class="w mb20 border relative wrap-by">
       <div class="search-by by-category relative">
         <!--{foreach from=$scategories item=scategory name=fe_scategory}-->
@@ -71,28 +71,25 @@
             <div class="store-info clearfix">
               <div class="row_1 float-left"><a href="{url route='store/index' id=$store.store_id}" target="_blank"><img class="lazyload" initial-url="{$store.store_logo|url_format}" width="80" height="80" /></a></div>
               <div class="row_2 float-left">
-                <h2><a href="{url route='store/index' id=$store.store_id}" target="_blank">{$store.store_name|escape}</a></h2>
+                <h2><a href="{url route='store/index' id=$store.store_id}" target="_blank">{$store.store_name|escape}</a> 
+                  <!--{if $store.credit_value ge 0}--> 
+                  <img src="{$store.credit_image|url_format}" align="absMiddle" /> 
+                  <!--{/if}-->
+                </h2>
                 <div class="d-info"> <span>{$lang.address}{$lang.colon}</span><em>{$store.address|escape}</em> </div>
                 <div class="owner_info"> <span>{$lang.owner}{$lang.colon}</span> <a href="{url route='store/index' id=$store.store_id}">{$store.owner_name|escape}</a> <a href="tencent://message/?uin={$store.im_qq|default:'561223725'}&Site={$homeUrl}&Menu=yes"><img border="0" align="absMiddle" src="http://wpa.qq.com/pa?p=2:{$store.im_qq|default:'561223725'}:41" /></a></div>
               </div>
               <div class="row_3 float-left">
                 <div class="rate-info">
-                  <p> <strong>{$lang.store_evaluation}</strong> {$lang.compare_insdusty} </p>
+                  
                   <ul>
-                    <li> {$lang.goods_evaluation} <span class="credit">{$store.dynamicEvaluation.goods.value}</span> <span class="{$store.dynamicEvaluation.goods.compare.name}"> <i></i> {$lang.{$store.dynamicEvaluation.goods.compare.name}} <em><!--{if $store.dynamicEvaluation.goods.compare.value eq 0}-->----<!--{else}-->{$store.dynamicEvaluation.goods.value}<!--{/if}--></em> </span> </li>
-                    <li> {$lang.service_evaluation} <span class="credit">{$store.dynamicEvaluation.service.value}</span> <span class="{$store.dynamicEvaluation.service.compare.name}"> <i></i> {$lang.{$store.dynamicEvaluation.service.compare.name}} <em><!--{if $store.dynamicEvaluation.service.compare.value eq 0}-->----<!--{else}-->{$store.dynamicEvaluation.service.compare.value}<!--{/if}--></em> </span> </li>
-                    <li> {$lang.shipped_evaluation} <span class="credit">{$store.dynamicEvaluation.shipped.value}</span> <span class="{$store.dynamicEvaluation.shipped.compare.name}"> <i></i> {$lang.{$store.dynamicEvaluation.shipped.compare.name}} <em><!--{if $store.dynamicEvaluation.shipped.compare.value eq 0}-->----<!--{else}-->{$store.dynamicEvaluation.shipped.compare.value}<!--{/if}--></em> </span> </li>
+                    <li> {$lang.goods_evaluation} <span class="credit">{$store.dynamicEvaluation.goods.value}</span>  </li>
+                    <li> {$lang.service_evaluation} <span class="credit">{$store.dynamicEvaluation.service.value}</span>  </li>
+                    <li> {$lang.shipped_evaluation} <span class="credit">{$store.dynamicEvaluation.shipped.value}</span>  </li>
                   </ul>
                 </div>
               </div>
               <div class="row_4 float-left">
-                <p> 
-                  <!--{if $store.credit_value ge 0}--> 
-                  <img src="{$store.credit_image|url_format}" /> 
-                  <!--{else}--> 
-                  {$store.credit_value} 
-                  <!--{/if}-->
-                </p>
                 <p>{$store.sgrade_name}</p>
                 <p>{$lang.praise_rate}{$lang.colon}{$store.praise_rate|default:0}%</p>
                 <p>{$lang.store_all_sold}<b>{$store.sales|default:0}</b>{$lang.count_of_order}</p>
@@ -101,7 +98,7 @@
             </div>
             
             <!--{if $store.goodslist}-->
-            <div class="store-goods mt5 mb5 J_Slides"> <b></b> <a class="prev" href="javascript:;"></a> <a class="next" href="javascript:;"></a>
+            <div class="store-goods mt5 mb5 J_Swiper"> <b></b> <a class="prev" href="javascript:;"></a> <a class="next" href="javascript:;"></a>
               <div class="clr"></div>
               <!--for ie -->
               <div class="scroller">
@@ -141,7 +138,7 @@ $(function (){
 		setFilterOrder('{$smarty.get.orderby}', this);
 	});
 	
-	$('.J_Slides').each(function(index, element) {
+	$('.J_Swiper').each(function(index, element) {
   		$(this).slide({ mainCell:".ks-switchable-content", titCell:".ks-switchable-nav span", effect:"leftLoop", scroll:1, vis:5, trigger:"click", prevCell:".prev", nextCell:".next", titOnClassName:"ks-active", autoPlay:false});
     });
 });

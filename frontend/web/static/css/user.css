@@ -46,7 +46,7 @@ a:hover {color: #108EE9;text-decoration:none}
 .width_normal {width: 195px;}
 .width_long {width: 340px;}
 input[type="text"], input[type="password"],textarea {border: 1px solid #d9d9d9;padding:5px 5px;font-family: Arial, Helvetica, sans-serif;font-size: 14px;color: #666;background: #fff; border-radius:3px}
-select {border: 1px solid #d9d9d9;padding:3px 5px;border-radius:3px}
+select {border: 1px solid #d9d9d9;padding:5px;border-radius:3px}
 
 .clearfix:after {content: '\20';display: block;height: 0;clear: both;}
 .text1 {border: 1px solid #ccc;padding: 2px;font-family: Arial, Helvetica, sans-serif;font-size: 14px;color: #666;background: url(../images/text.gif) repeat-x;}
@@ -495,7 +495,7 @@ span[fieldname=closed].wrong_ico {display: block;width: 11px;height: 11px;overfl
 .relative2 {padding-left: 20px;position: relative;z-index: 1;}
 .information .photo {float: left;}
 .information .photo p {height: 120px;margin-bottom: 10px;}
-.information .photo b {display: block;width: 120px;height: 32px;position: relative;background:#19ACF7;color:#fff; font-weight:normal}
+.information .photo b {display: inline-block;width: 120px;height: 32px;position: relative;background:#19ACF7;color:#fff; font-weight:normal}
 .information .photo b .file1 {position: relative;top: 0;left: 0px;z-index: 2;width: 120px;height: 32px;display: block}
 .information .photo b .file2 {position: absolute;top: 0;right: 0px;z-index: 1;width: 120px;height: 32px;display: block}
 .information .photo .explain {display: block;color: #9d9d9d;margin-top: 10px;}
@@ -637,20 +637,20 @@ span[fieldname=closed].wrong_ico {display: block;width: 11px;height: 11px;overfl
 .add_spec h2 {border-bottom: 2px solid #e3e3e3;color: #3f3f3f;height: 32px;line-height: 32px;}
 .add_spec p {color: #9d9d9d;padding: 10px;}
 .add_spec ul {overflow: hidden;}
-.add_spec .th {padding: 3px 0;margin-bottom: 10px;border-top: 2px solid #e3e3e3;border-bottom: 1px solid #e3e3e3;background: #f8f8f8;}
+.add_spec .th {padding: 15px 0;margin-bottom: 10px;background: #f8f8f8;}
 .add_spec .td {padding-bottom: 10px;}
 .add_spec li {float: left;margin-left: 6px;display: inline;}
 .add_spec li input {text-align: center;}
-.distance1 {width: 70px;height: 26px;line-height: 26px;text-align: center;color: #919191;}
+.distance1 {width: 75px;height: 26px;line-height: 26px;text-align: center;color: #919191;}
 .distance2 {width: 150px;height: 26px;line-height: 26px;text-align: center;color: #919191;}
-.distance3 {width: 40px;height: 26px;line-height: 26px;text-align: center;color: #919191;}
+.distance3 {width: 60px;height: 26px;line-height: 26px;text-align: center;color: #919191;}
 .add_spec span {margin: 2px;}
 .add_spec .up_btn {display: block;float: left;margin-right: 4px;width: 10px;height: 10px;overflow: hidden;cursor: pointer;background: url(../images/member/ico.gif) 0 -1122px;}
 .add_spec .down_btn {display: block;float: left;margin-right: 4px;width: 10px;height: 10px;overflow: hidden;cursor: pointer;background: url(../images/member/ico.gif) 0 -1144px;}
 .add_spec .delete_btn {display: block;float: left;margin-right: 4px;width: 10px;height: 10px;overflow: hidden;cursor: pointer;background: url(../images/member/ico.gif) 0 -634px;}
-.add_spec .add {display: block;width: 566px;padding-left: 24px;height: 42px;line-height: 42px;color: #919191;border-top: 1px solid #e2e2e2;border-bottom: 1px solid #e2e2e2;background: url(../images/member/ico.gif) no-repeat 8px -1165px;}
+.add_spec .add {display: block;width: 95%;padding-left: 24px;height: 42px;line-height: 42px;color: #919191;border-top: 1px solid #e2e2e2;background: url(../images/member/ico.gif) no-repeat 8px -1165px;}
 .add_spec .add:hover {color: red;}
-.btn_wrap {padding: 15px 0 10px;width: 596px;border-top: 2px solid #e3e3e3;margin-top: 1px;text-align: center;}
+.btn_wrap {padding: 15px 0 10px;width: 100%;border-top: 1px solid #e3e3e3;margin-top: 1px;text-align: center;}
 .btn_wrap .btn {border: 0;width: 120px;height: 32px;background: url(../images/member/btn.gif) no-repeat 0 -253px;cursor: pointer;font-weight:normal;color: #3f3d3e;}
 .add_spec_bottom {position: absolute;top: 6px;left: -7px;width: 552px;height: 3px;overflow: hidden;background: #000;-moz-opacity: 0.2;opacity: .2;filter: alpha(opacity=20);}
 .editor_add {padding: 7px 3px 3px;overflow: hidden;background: #f5f5f5 url(../images/member/editor.gif) repeat-x 0 top;}
@@ -869,7 +869,7 @@ em {font-style: normal}
 a {text-decoration: none}
 a:hover {color: #108ee9;}
 
-.btn-alipay, .btn-alipay span, .btn-alipay input {display: inline-block;background:#19ACF7; font-weight:normal;height: 31px;line-height: 31px;border: 0;text-align: center;text-decoration: none;cursor: pointer; border-radius:4px; min-width:60px;}
+.btn-alipay, .btn-alipay span, .btn-alipay input {display: inline-block;background:#19ACF7; font-weight:normal;height: 36px;line-height: 36px;font-size: 14px; border: 0;text-align: center;text-decoration: none;cursor: pointer; border-radius:4px; min-width:100px;}
 .btn-alipay input {color: #fff;}
 .btn-alipay {color: #fff;position: relative;margin-right: 10px;}
 .btn-alipay:hover {background-position: 0 -392px;color: #fff;}
@@ -895,7 +895,7 @@ a:hover {color: #108ee9;}
 .deposit-config dd.btn-alipay {margin-top: 30px;}
 .deposit-config dd botton {margin-left: 10px;border: 1px #ddd solid;background: #f1f1f1;height: 20px;line-height: 20px;padding: 4px;cursor: pointer}
 .deposit-account h1 {float: left;color: #4D4D4D;}
-.deposit-account .explain {float: left;margin-left: 14px;color: #999999}
+.deposit-account .explain {float: left;margin-left: 14px;color: #999999; line-height: 20px;}
 .deposit-account .account-info {border-bottom: 1px #ddd solid;padding-bottom: 30px;margin-bottom: 30px;}
 .deposit-account .account-info p {border-bottom: 2px #808080 solid;font-size: 22px;margin-bottom: 20px;padding-bottom: 10px;}
 .deposit-account .account-info .explain a {display: inline-block;color: #999999;font-family: Tahoma, Geneva, sans-serif;text-decoration: none}
@@ -1309,7 +1309,7 @@ a:hover {color: #108ee9;}
 .publish .subbox{ margin-top:20px; }
 .publish .subbox-body {font:12px/1.5 tahoma,arial}
 .publish .subbox-title{float:left; width:72px; text-align:right;padding-right:8px; padding-top:4px;}
-.publish .border-field{border:1px #09F solid; background:#2FACFF; color:#fff;padding:2px 5px 2px 5px;}
+.publish .border-field{border:1px #09F solid; background:#2FACFF; color:#fff;padding:4px; border-radius: 3px;}
 .publish .btn-gedit{ display:inline-block; background:url(../images/member/input-bg.png) repeat-x scroll; border:1px #ddd solid; padding:2px 4px 2px 4px; text-decoration:none; color:#404040; box-shadow:2px 2px 2px #888888; margin-left:10px;}
 .publish .btn-gedit:hover{color:#404040; text-decoration:none}
 .publish .subbox-body{width:715px;float:left}	  
@@ -1624,6 +1624,9 @@ border-radius: 4px; margin-top: 8px; color: #333; cursor: pointer;}
 .page-apply .again-margin{margin-left:40px; margin-bottom:10px;}
 .page-apply .again-margin p{width:200px; height:auto; text-align:left; margin-top:6px;}
 .page-apply .again-margin p a{margin-left:4px;}
+.page-apply .apply-submit .type-file-image{ position: relative; cursor: pointer;}
+.page-apply .apply-submit .type-file-image img {width: 64px; height: 64px;}
+.page-apply .apply-submit .type-file-image span { position: absolute; bottom: 0;left: 0; background-color: #000; opacity: 0.6;width: 100%; color:#fff;}
 
 
 .apply-submit{ padding:20px 0;}
@@ -1642,7 +1645,7 @@ border-radius: 4px; margin-top: 8px; color: #333; cursor: pointer;}
 .apply-submit dl dd .field_notice{ color:#999;}
 .apply-submit select{margin:0 5px 5px 0; color: #777; background-color: #FFF; /*height: 25px;*/ vertical-align: middle; *display: inline; padding:5px 2px; border: solid 1px #CCC; *zoom:1;}
 .apply-submit select option { line-height: 16px; display: block; height: 16px; padding: 2px;}
-.page-apply .content .btn-apply{ font-size:16px; display:inline-block;background:#27A9E3; width:250px; height:35px; line-height:35px; border:0; border-radius:2px}
+.page-apply .content .btn-apply{ font-size:14px; display:inline-block;background:#27A9E3; width:250px; height:40px; line-height:40px; border:0; border-radius:2px}
 .page-apply .content .btn-apply:hover{color:#fff; background:#89D4FF}
 .apply-submit label.error { color: #333; line-height: 18px; background: url(../images/joinin_pic.png) no-repeat -468px -134px; vertical-align: middle; display: inline-block; height: 18px; padding: 1px 5px 1px 20px; margin-left: 4px; color:red;*display: inline;}
 .apply-submit label.validate_right{border:0;width:16px; height:16px;background:#ffffff url(../images/sucess.png) no-repeat scroll center center; position:absolute;right:5px;top:8px;}

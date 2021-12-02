@@ -39,7 +39,7 @@
 #header .header_cart .title a,#header .header_cart .title b,#header .header_cart .title em{display:block;line-height:30px;height:30px;float:left;}
 #header .header_cart .title a{height:30px;color:#666;}
 #header .header_cart .title b{width:30px;background:url(../images/cart-ico.png) no-repeat center 2px;}
-#header .header_cart .title em{top: 0px;right: 0px;overflow: hidden;position: absolute; width:18px; height:18px;font-family:simsun}
+#header .header_cart .title em{top: 8px;right: 2px;overflow: hidden;position: absolute; width:16px; height:16px; line-height: 16px; font-family:simsun; font-weight: bold;}
 #header .header_cart .eject-box{border: 1px solid #ddd;background: #fff;position: absolute;top: 30px;right:-1px;display:none;z-index:2;}
 
 #header .header_cart .shoping{position: absolute;top: -13px;left: 20px;color: #fff;}
@@ -64,7 +64,7 @@
 #header .header_cart .hover .shadow{position:absolute;top:24px;right:0px;background:#fff;height:8px;width:100%;z-index:15;}
 #header .header_cart .hover .member-nav-title b{background:url(../images/20130330A_1.png) -116px -54px no-repeat;}
 #header .header_cart .hover .member-nav-title em{border-color:transparent  transparent  #CCCCCC transparent;top:7px;}
-#header .header_cart .hover, #header .header_cart .hover .eject-box{webkit-box-shadow: 0 0 10px #DDD;box-shadow: 0 0 10px #DDD;display:block;}
+#header .header_cart .hover, #header .header_cart .hover .eject-box{-webkit-box-shadow: 0 6px 10px #DDD;box-shadow: 0 6px 10px #DDD;display:block;}
 
 
 /* mall-nav */
@@ -89,7 +89,8 @@
 #header .allcategory-list{position:absolute;left:0;top:44px;}
 
 
-.allcategory-list{width:231px; background-color: rgba(0,0,0,0.6); text-align:left;z-index:100;border-bottom:1px #2b2b2b solid}
+.allcategory-list{width:231px; background-color: rgba(0,0,0); text-align:left;z-index:100;border-bottom:1px #2b2b2b solid}
+.allcategory-list.index {background-color: rgba(0,0,0, 0.6);}
 .allcategory-list .content{border-top:1px #2b2b2b solid;}
 .allcategory-list .item{float:left; height:40px;line-height:20px;z-index:99;}
 .allcategory-list .index{height:71.23px;}

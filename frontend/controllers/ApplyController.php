@@ -54,17 +54,20 @@ class ApplyController extends \common\controllers\BaseUserController
 		if($this->checkApply() !== true) {
 			return Message::warning($this->errors);
 		}
+
+		// 直接进入申请页面
+		return $this->redirect(['apply/fill']);
 		
-		$this->params['articles'] = ArticleModel::find()->select('title,description')->where(['in', 'article_id', [1,2,3]])->orderBy(['article_id' => SORT_ASC])->asArray()->all();
+		// $this->params['articles'] = ArticleModel::find()->select('title,description')->where(['in', 'article_id', [1,2,3]])->orderBy(['article_id' => SORT_ASC])->asArray()->all();
 		
-		// 当前位置
-		$this->params['_curlocal'] = Page::setLocal(Language::get('apply'), Url::toRoute('apply/index'), Language::get('apply_index'));
+		// // 当前位置
+		// $this->params['_curlocal'] = Page::setLocal(Language::get('apply'), Url::toRoute('apply/index'), Language::get('apply_index'));
 			
-		// 当前用户中心菜单
-		$this->params['_usermenu'] = Page::setMenu('apply', 'apply_index');
+		// // 当前用户中心菜单
+		// $this->params['_usermenu'] = Page::setMenu('apply', 'apply_index');
 			
-		$this->params['page'] = Page::seo(['title' => Language::get('apply_index')]);
-        return $this->render('../apply.index.html', $this->params);
+		// $this->params['page'] = Page::seo(['title' => Language::get('apply_index')]);
+        // return $this->render('../apply.index.html', $this->params);
 	}
 	
 	/* 签署协议 */

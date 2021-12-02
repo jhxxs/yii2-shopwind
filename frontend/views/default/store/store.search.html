@@ -1,25 +1,26 @@
 {include file="header.html"}
 <div id="page-store-index">
-  <div class="w-shop clearfix mt20">
-    <div class="col-sub w210"> {include file="left.html"} </div>
-    <div class="col-main ml10 w980">
-      <div class="search-goods goods-list-shop mb10 border">
-        <div class="title clearfix border-b">
-          <h3 class="float-left"> {$search_name|escape} </h3>
-        </div>
+  <div class="w-shop clearfix pt20">
+   
+  
+      <div class="search-goods goods-list-shop mb10">
+        <div class="pb10 ml5">
+          <p class="strong fs18">{$search_name|escape}</p>
+      </div>
         <ul class="content w-full clearfix">
-          <!--{foreach from=$goodslist item=goods name=fe_goods}-->
+          <!--{foreach from=$goodslist item=item name=fe_item}-->
           <li class="float-left">
             <dl>
-              <dt class="border"> <a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"> <img class="lazyload" initial-url="{$goods.default_image|url_format}" /> </a> </dt>
-              <dd class="desc mt10"> <a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"> {$goods.goods_name|escape|truncate:42} </a> </dd>
-              <dd class="price mt10 w-full clearfix"> <strong> {$goods.price|price_format} </strong> <em> <a href="{url route='goods/salelog' id=$goods.goods_id}" target="_blank">售出{$goods.sales|default:0} </a> &nbsp;|&nbsp; <a href="{url route='goods/comment' id=$goods.goods_id}" target="_blank">评价{$goods.comments|default:0} </a> </em> </dd>
+              <dt> <a href="{url route='goods/index' id=$item.goods_id}" target="_blank"> <img class="lazyload" initial-url="{$item.default_image|url_format}" /> </a> </dt>
+              <dd class="desc mt10"> <a href="{url route='goods/index' id=$item.goods_id}" target="_blank"> {$item.goods_name|escape|truncate:42} </a> </dd>
+              <dd class="price mt10 mb10 clearfix"><span>{$item.price|price_format}</span><em
+                class="float-right gray fs12">已售{$item.sales|default:0}件</em></dd>
             </dl>
           </li>
           <!--{/foreach}-->
         </ul>
       </div>
-      <div class="clearfix">{include file="page.bottom.html"}</div> </div>
-  </div>
+      <div class="clearfix mb20 pb20 center">{include file="page.bottom.html"}</div> </div>
+ 
 </div>
 {include file="footer.html"}

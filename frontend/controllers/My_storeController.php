@@ -122,27 +122,27 @@ class My_storeController extends \common\controllers\BaseSellerController
 		}
 	}
 	
-	public function actionSlides()
+	public function actionSwiper()
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true);
 		
-		if(!($store = StoreModel::find()->select('store_slides')->where(['store_id' => $this->visitor['store_id']])->asArray()->one())) {
+		if(!($store = StoreModel::find()->select('swiper')->where(['store_id' => $this->visitor['store_id']])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_store'));
 		}
-		$store['store_slides'] = json_decode($store['store_slides'], true);
+		$store['swiper'] = json_decode($store['swiper'], true);
 		
 		if(!Yii::$app->request->isPost)
 		{
 			$this->params['store'] = $store;
 			
 			// 当前位置
-			$this->params['_curlocal'] = Page::setLocal(Language::get('my_store'), Url::toRoute('my_store/index'), Language::get('store_slides'));
+			$this->params['_curlocal'] = Page::setLocal(Language::get('my_store'), Url::toRoute('my_store/index'), Language::get('swiper'));
 			
 			// 当前用户中心菜单
-			$this->params['_usermenu'] = Page::setMenu('my_store', 'store_slides');
+			$this->params['_usermenu'] = Page::setMenu('my_store', 'swiper');
 
-			$this->params['page'] = Page::seo(['title' => Language::get('store_slides')]);
-			return $this->render('../my_store.slides.html', $this->params);
+			$this->params['page'] = Page::seo(['title' => Language::get('swiper')]);
+			return $this->render('../my_store.swiper.html', $this->params);
 		}
 		else 
 		{
@@ -150,17 +150,17 @@ class My_storeController extends \common\controllers\BaseSellerController
 			
 			for($key = 0; $key < 3; $key++)
 			{
-				if(($filePath = UploadedFileModel::getInstance()->upload('store_slides_url['.$key.']', $this->visitor['store_id'], Def::BELONG_STORE_SLIDES, 0, 'slides_'.($key+1)))) {
-					$store['store_slides'][$key]['url'] = $filePath;	
+				if(($filePath = UploadedFileModel::getInstance()->upload('swiper_url['.$key.']', $this->visitor['store_id'], Def::BELONG_STORE_SWIPER, 0, 'swiper_'.($key+1)))) {
+					$store['swiper'][$key]['url'] = $filePath;	
 				}
-				$store['store_slides'][$key]['link'] = $post['store_slides_link'][$key];
-				if(!isset($store['store_slides'][$key]['url']) || empty($store['store_slides'][$key]['url'])) {
-					unset($store['store_slides'][$key]);
+				$store['swiper'][$key]['link'] = $post['swiper_link'][$key];
+				if(!isset($store['swiper'][$key]['url']) || empty($store['swiper'][$key]['url'])) {
+					unset($store['swiper'][$key]);
 				}
 			}
-			StoreModel::updateAll(['store_slides' => json_encode($store['store_slides'])], ['store_id' => $this->visitor['store_id']]);
+			StoreModel::updateAll(['swiper' => json_encode($store['swiper'])], ['store_id' => $this->visitor['store_id']]);
 			
-			return Message::display(Language::get('edit_ok'), ['my_store/slides']);
+			return Message::display(Language::get('edit_ok'), ['my_store/swiper']);
 		}
 	}
 	
@@ -176,21 +176,21 @@ class My_storeController extends \common\controllers\BaseSellerController
 	}
 	
 	/* 异步删除附件 */
-    public function actionDeleteslides()
+    public function actionDeleteswiper()
     {
         $id = intval(Yii::$app->request->get('id', 0));
      
-		if(!($store = StoreModel::find()->select('store_slides')->where(['store_id' => $this->visitor['store_id']])->asArray()->one())) {
+		if(!($store = StoreModel::find()->select('swiper')->where(['store_id' => $this->visitor['store_id']])->asArray()->one())) {
 			return Message::warning(Language::get('drop_fail'));
 		}
-		$store['store_slides'] = json_decode($store['store_slides'], true);
-		foreach($store['store_slides'] as $key => $val) {
+		$store['swiper'] = json_decode($store['swiper'], true);
+		foreach($store['swiper'] as $key => $val) {
 			if($key == $id) {
 				UploadedFileModel::deleteFileByName($val['url']);
-				unset($store['store_slides'][$key]);
+				unset($store['swiper'][$key]);
 			}
 		}
-		StoreModel::updateAll(['store_slides' => json_encode($store['store_slides'])], ['store_id' => $this->visitor['store_id']]);
+		StoreModel::updateAll(['swiper' => json_encode($store['swiper'])], ['store_id' => $this->visitor['store_id']]);
 		return Message::display(Language::get('drop_ok'));
     }
 	
@@ -203,8 +203,8 @@ class My_storeController extends \common\controllers\BaseSellerController
                 'url'   => Url::toRoute('my_store/index'),
             ),
 			array(
-                'name'  => 'store_slides',
-                'url'   => Url::toRoute('my_store/slides'),
+                'name'  => 'swiper',
+                'url'   => Url::toRoute('my_store/swiper'),
             ),
 			array(
                 'name'  => 'store_map',

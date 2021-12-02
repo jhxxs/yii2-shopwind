@@ -124,3 +124,18 @@ function loadGcategories()
 		}
 	})
 }
+
+/**
+ * 上传图片前，显示（获取）图像信息
+ * @param {obj} obj 
+ */
+ function getTempPathcallback(obj) {
+	getTempPath(obj, function (res) {
+		var imgObj = $(obj).parent().find('.type-file-image');
+		if (imgObj.find('img').length > 0) {
+			imgObj.find('img').attr('src', res);
+		} else {
+			imgObj.html('<img class="block" src="' + res + '"><span>修改图片</span>');
+		}
+	});
+}

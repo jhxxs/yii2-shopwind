@@ -1,7 +1,7 @@
 {include file="header.html"}
 <div id="main" class="w-full">
   <div id="page-search-goods" class="w mb20 mt20">
-    <div class="w mb10"> {include file='curlocal.html'} 
+    <div class="w mb10">
       <!--{foreach from=$flagstore item=item name=fe_item}-->
       <div class="flagstore mb10">
         <div class="item">
@@ -86,7 +86,7 @@
       
       <div class="glist">
         <div class="clearfix">
-          <div class="list-sort J_ListSort">
+          <div class="list-sort J_ListSort mb20">
             <form>
               <div class="J_FilterArea float-left filter-area"> <span> {if $provinces.selected.city}
                 {$provinces.selected.city}
@@ -94,7 +94,7 @@
                 {$provinces.selected.province}
                 {else}所在地{/if} </span><b></b>
                 <div class="fa-list hidden">
-                  <div class="fa-hd clearfix"> <a class="J_AllArea" href="javascript:;">所有地区</a> <span>{$provinces.selected.province} {$provinces.selected.city}</span>
+                  <div class="fa-hd clearfix"> <a class="J_AllArea" href="javascript:;">所有地区</a> <span class="float-right">{$provinces.selected.province} {$provinces.selected.city}</span>
                     <button class="J_SelProvince">确定</button>
                   </div>
                   <ul class="fa-loc province clearfix">
@@ -106,8 +106,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="display_mod float-left clearfix J_ChangeDisplayMode" id="goodsDisplayMode"> <a class="qh-list list" hidefocus="true" href="javascript:;"><i></i>列表</a> <a class="qh-squares squares" hidefocus="true" href="javascript:;"><i></i>大图</a> </div>
-              <div class="float-left btn-order clearfix"> 
+              <div class="float-left btn-order clearfix">
                 <!--<span>{$lang.order_by}{$lang.colon}</span>--> 
                 <!--{foreach from=$orders item=order key=k name=fe_order}--> 
                 <!--{if !$k}--> 
@@ -125,16 +124,16 @@
                   </b> <a class="ui-btn-s-primary">{$lang.submit}</a> </div>
               </div>
               <!--{if !$goodsListEmptyRecommended}-->
-              <div class="clearfix">{include file="page.top.html"}</div>
+              <div class="clearfix"><div class="float-right mr5">{include file="page.top.html"}</div></div>
               <!--{/if}-->
             </form>
           </div>
           <!--{if $goodsListEmptyRecommended}-->
-          <div class="notice-word">
+          <div class="notice-word mt20">
             <p class="yellow-big">{$lang.no_records_and_give_order}</p>
           </div>
           <!--{/if}-->
-          <div class="{$display_mode} w clearfix" data-cookie="goodsDisplayMode"> 
+          <div class="squares w clearfix"> 
             <!--{foreach from=$goods_list item=goods name=fe_goods}-->
             <div {if $smarty.foreach.fe_goods.iteration % 5 eq 0}style="margin-right:0px;"{/if} class="item">
               <dl class="clearfix dl-{$goods.goods_id}">
@@ -150,7 +149,7 @@
                 <dd class="desc"><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank" title="{$goods.goods_name|escape}">{$goods.goods_name|escape}</a></dd>
                 <dd class="store-info"><a href="{url route='store/index' id=$goods.store_id}" target="_blank">{$goods.store_name}</a></dd>
                 <dd class="delivery twofloat clearfix hidden"><em></em><span></span></dd>
-                <dd class="static clearfix"> <span class="sales">成交量 <em>{$goods.sales}</em></span> <span class="valuation">评价 <b>{$goods.comments}</b></span> <span style="margin-right:0px;border:0px; text-align:center"> </span> </dd>
+                <dd class="static clearfix"> <span class="sales">成交量 <em>({$goods.sales|default:0})</em></span> <span class="valuation">评价 <b>({$goods.comments|default:0})</b></span> </dd>
               </dl>
             </div>
             <!--{/foreach}--> 
@@ -162,15 +161,14 @@
       </div>
     </div>
     <!--{if $recommend_goods}-->
-    <div class="recommend">
-      <div class="title"><span></span>{$lang.recommend_goods}</div>
+    <div class="recommend mt20">
+      <div class="title mb20 center"><span>猜你喜欢</span></div>
       <div class="content clearfix"> 
         <!--{foreach from=$recommend_goods item=goods name=fe_goods}-->
-        <dl class="mb20" style="{if $smarty.foreach.fe_goods.first || $smarty.foreach.fe_goods.iteration % 5 eq 1}padding-left:0;{/if}{if $smarty.foreach.fe_goods.iteration % 5 eq 0}padding-right:0{/if}">
-          <dt><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"><img width="214" height="214"  src="{$goods.default_image|default:$app->params['default_goods_image']|url_format}" /></a></dt>
-          <dd class="desc"><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank">{$goods.goods_name|escape|truncate:48}</a></dd>
-          <dd class="price twofloat clearfix mt10"><em><b>&yen;</b>{$goods.price}</em><span>{$lang.zjcj}{$goods.sales}{$lang.bi}</span></dd>
-          <dd class="service"></dd>
+        <dl class="mb20" style="{if $smarty.foreach.fe_goods.first || $smarty.foreach.fe_goods.iteration % 5 eq 1}margin-left:0;{/if}{if $smarty.foreach.fe_goods.iteration % 5 eq 0}margin-right:0{/if}">
+          <dt><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"><img src="{$goods.default_image|default:$app->params['default_goods_image']|url_format}" /></a></dt>
+          <dd class="desc"><a href="{url route='goods/index' id=$goods.goods_id}" target="_blank">{$goods.goods_name|escape}</a></dd>
+          <dd class="price twofloat clearfix mt10"><em class="float-left">{$goods.price|price_format}</em><span class="float-right">最近成交{$goods.sales|default:0}笔</span></dd>
         </dl>
         <!--{/foreach}--> 
       </div>

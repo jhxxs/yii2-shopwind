@@ -1,21 +1,4 @@
 $(function(){
-	
-    if($.getCookie("goodsDisplayMode")) {
-		$(".J_ChangeDisplayMode").find('.'+$.getCookie('goodsDisplayMode')).addClass('filter-'+$.getCookie("goodsDisplayMode")+'-cur');
-	} else {
-		$(".J_ChangeDisplayMode").find('.squares').addClass('filter-squares-cur');
-	}
-	$(".J_ChangeDisplayMode a").click(function(){
-		var currMode = $("*[data-cookie='"+$(this).parent().attr('id')+"']").hasClass('list') == true ? 'list' : 'squares';
-		var showMode = $(this).hasClass('list') == true ? 'list' : 'squares';
-		
-		$(this).parent().find('a').removeClass('filter-'+currMode+'-cur').removeClass('filter-'+showMode+'-cur');
-		$(this).addClass('filter-'+currMode+'-cur');
-
-		$("*[data-cookie='"+$(this).parent().attr('id')+"']").removeClass(currMode).addClass(showMode);
-		$.setCookie($(this).parent().attr('id'), showMode);
-	});
-	
 	$('.sub-images img').click(function(){
 		$(this).parent().find('img').each(function(){
 			$(this).removeClass('active');

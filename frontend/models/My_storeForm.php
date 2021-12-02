@@ -67,7 +67,6 @@ class My_storeForm extends Model
 		$model->address = $post->address;
 		$model->tel = $post->tel;
 		$model->im_qq = $post->im_qq;
-		$model->im_ww = $post->im_ww;
 		
 		if(isset($post->store_logo) && $post->store_logo) {
 			$model->store_logo = $post->store_logo;
@@ -78,8 +77,6 @@ class My_storeForm extends Model
 		
 		// for PC
 		if(isset($post->description)) $model->description = $post->description;
-		if(isset($post->business_scope)) $model->business_scope = $post->business_scope;
-		if(isset($post->nav_color)) $model->nav_color = '#'.$post->nav_color;
 		
 		if(!$model->save()) {
 			$this->errors = $model->errors ? $model->errors : Language::get('edit_fail');

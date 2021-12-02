@@ -34,7 +34,7 @@ class Seller_orderViewForm extends Model
 	
 	public function formData($post = null)
 	{
-		if(!$post->order_id || !($orderInfo = OrderModel::find()->alias('o')->select('o.order_id,o.buyer_id,o.seller_id,o.order_amount,o.discount,o.payment_code,o.payment_name,o.pay_message,o.pay_time,o.ship_time,o.finished_time,o.express_no,o.postscript,o.status,o.order_sn,o.add_time as order_add_time, s.store_name,s.region_name,s.address,s.im_qq,s.im_ww')->joinWith('store s', false)->joinWith('orderExtm')->with('orderGoods')->with('orderLog')->where(['o.order_id' => $post->order_id, 'seller_id' => $this->store_id])->asArray()->one())) {
+		if(!$post->order_id || !($orderInfo = OrderModel::find()->alias('o')->select('o.order_id,o.buyer_id,o.seller_id,o.order_amount,o.discount,o.payment_code,o.payment_name,o.pay_message,o.pay_time,o.ship_time,o.finished_time,o.express_no,o.postscript,o.status,o.order_sn,o.add_time as order_add_time, s.store_name,s.region_name,s.address,s.im_qq')->joinWith('store s', false)->joinWith('orderExtm')->with('orderGoods')->with('orderLog')->where(['o.order_id' => $post->order_id, 'seller_id' => $this->store_id])->asArray()->one())) {
 			$this->errors = Language::get('no_such_order');
 			return false;
 		}

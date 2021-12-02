@@ -10,7 +10,7 @@
         </div>
         <div class="info clearfix">
           <dl class="col-1 float-left">
-            <dt> <span>{$lang.welcome}</span><strong>{$visitor.username|escape}</strong> <a href="{url route='user/profile'}">{$lang.edit_profile}</a> </dt>
+            <dt><strong>{$visitor.username|escape}</strong> <a href="{url route='user/profile'}">{$lang.edit_profile}</a> <a class="ml10" href="{url route='user/logout'}">退出登录</a></dt>
             <dd class="gray"> <span>{$lang.last_login}{$lang.colon}{$visitor.last_login|date_format:"%Y.%m.%d %H:%M:%S"}</span> <span>{$lang.last_ip}{$lang.colon}{$visitor.last_ip}</span> </dd>
           </dl>
         </div>
@@ -34,16 +34,16 @@
         </div>
         <!--{else}-->
         <div class="clearfix w-full">
-          <div class="welitem clearfix"> <a class="wrap" href="{url route='my_message/index' folder='newpm'}">
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='my_message/index'}">
             <p>未读短信息</p>
             <h3>{$new_message|default:0}</h3>
             </a> </div>
-          <div class="welitem clearfix"> <a class="wrap" href="{url route='friend/index'}">
-            <p>好友数</p>
-            <h3>{$visitor.friends|default:0}</h3>
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='deposit/index'}">
+            <p>我的余额</p>
+            <h3>{$visitor.money|default:0}</h3>
             </a> </div>
           <div class="welitem clearfix"> <a class="wrap" href="{url route='my_integral/index'}">
-            <p>商城积分</p>
+            <p>我的积分</p>
             <h3>{$visitor.integral|default:0}</h3>
             </a> </div>
         </div>
@@ -51,7 +51,7 @@
         <div class="buyer-notice">
           <div class="box-notice box">
             <div class="hd">
-              <h2>{$lang.buyer_remind}</h2>
+              <h2>订单提醒</h2>
             </div>
             <div class="bd dealt">
               <div class="list clearfix">

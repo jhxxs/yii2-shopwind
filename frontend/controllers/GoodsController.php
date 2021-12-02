@@ -72,7 +72,7 @@ class GoodsController extends \common\controllers\BaseMallController
 		GoodsStatisticsModel::updateStatistics($post->id, 'views');
 		
 		// 搭配套餐
-		$this->params['goods']['meals'] = MealGoodsModel::getMealGoods($post->id);
+		// $this->params['goods']['meals'] = MealGoodsModel::getMealGoods($post->id);
 		
 		// 商品属性
 		$this->params['goods']['props'] = $this->getGoodsProps($post->id);
@@ -81,7 +81,7 @@ class GoodsController extends \common\controllers\BaseMallController
 		$this->params['gcomments'] = array_merge($this->getComments($post->id, 10), GoodsStatisticsModel::getCommectStatistics($post->id));
 		
 		// 浏览历史
-		$this->params['goods']['historys'] = GoodsModel::history($post->id, 10);
+		$this->params['goods']['historys'] = GoodsModel::history($post->id, 5, true);
 		
 		$this->params['_head_tags'] = Resource::import('goodsinfo.js');
 		$this->params['_foot_tags'] = Resource::import([
@@ -113,11 +113,17 @@ class GoodsController extends \common\controllers\BaseMallController
 		$this->params['gcomments'] = array_merge(['list' => $list, 'count' => $count], GoodsStatisticsModel::getCommectStatistics($post->id));
 		$this->params['pagination'] = Page::formatPage($page);
 
+		// 浏览历史
+		$this->params['goods']['historys'] = GoodsModel::history($post->id, 5, true);
+
 		$this->params['_head_tags'] = Resource::import('goodsinfo.js');
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.plugins/fresco/fresco.js,jquery.plugins/raty/jquery.raty.js,cart.js,jquery.plugins/jquery.lazyload.js',
             'style' =>  'jquery.plugins/fresco/fresco.css'
 		]);
+
+		// 当前位置
+		$this->params['_curlocal'] = Page::setLocal($this->getCurlocal($this->params['goods']['cate_id']));
 		
 		$this->params['page'] = Page::seo(['title' => $this->params['goods']['goods_name']]);
 		return $this->render('../goods.comments.html', $this->params);
@@ -135,12 +141,18 @@ class GoodsController extends \common\controllers\BaseMallController
 		list($list, $page, $count) = array_values($this->getSaleLogs($post->id, 20));
 		$this->params['gsales'] = ['list' => $list, 'count' => $count];
 		$this->params['pagination'] = Page::formatPage($page);
+
+		// 浏览历史
+		$this->params['goods']['historys'] = GoodsModel::history($post->id, 5, true);
 	
 		$this->params['_head_tags'] = Resource::import('goodsinfo.js');
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.plugins/fresco/fresco.js,jquery.plugins/raty/jquery.raty.js,cart.js,jquery.plugins/jquery.lazyload.js',
             'style' =>  'jquery.plugins/fresco/fresco.css'
 		]);
+
+		// 当前位置
+		$this->params['_curlocal'] = Page::setLocal($this->getCurlocal($this->params['goods']['cate_id']));
 		
 		$this->params['page'] = Page::seo(['title' => $this->params['goods']['goods_name']]);
 		return $this->render('../goods.salelog.html', $this->params);
@@ -165,6 +177,9 @@ class GoodsController extends \common\controllers\BaseMallController
 			list($list, $page, $count) = array_values($this->getGoodsQas($get->id, 20));
 			$this->params['gqas'] = ['list' => $list, 'count' => $count];
 			$this->params['pagination'] = Page::formatPage($page);
+
+			// 浏览历史
+			$this->params['goods']['historys'] = GoodsModel::history($post->id, 5, true);
 		
 			$this->params['_head_tags'] = Resource::import('goodsinfo.js');
 			$this->params['_foot_tags'] = Resource::import([
@@ -172,6 +187,9 @@ class GoodsController extends \common\controllers\BaseMallController
 				'style' =>  'jquery.plugins/fresco/fresco.css'
 			]);
 			
+			// 当前位置
+			$this->params['_curlocal'] = Page::setLocal($this->getCurlocal($this->params['goods']['cate_id']));
+
 			$this->params['page'] = Page::seo(['title' => $this->params['goods']['goods_name']]);
 			return $this->render('../goods.qa.html', $this->params);   
         }
@@ -241,9 +259,6 @@ class GoodsController extends \common\controllers\BaseMallController
 	/* 获取商品页，评价页，销售页等公共数据 */
 	private function setGoodsCommonInfo($id = 0)
 	{
-		// 头部商品分类
-		$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
-		
 		$goods = GoodsModel::find()->alias('g')->select('g.*,gst.sales,gst.comments,gi.max_exchange')->joinWith('goodsStatistics gst', false)->joinWith('goodsIntegral gi', false)->with(['goodsImage'=>function($query){$query->orderBy('sort_order');}])->with('goodsSpec')->where(['g.goods_id' => $id])->asArray()->one();
 		
 		if(!$id || !$goods) {

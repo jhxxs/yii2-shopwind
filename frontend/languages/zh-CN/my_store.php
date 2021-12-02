@@ -2,14 +2,12 @@
 return array(
     'store_logo' => '店铺标志',
     'store_banner' => '店铺横幅',
-	'store_slides' => '店铺轮播',
+	'swiper' => '店铺轮播',
     'description' => '店铺简介',
     'edit_ok' => '保存设置成功',
     'address' => '详细地址',
     'tel' => '联系电话',
     'im_qq' => '联系QQ',
-    'im_ww' => '阿里旺旺',
-    'my_store_index' => '我的店铺首页',
     'not_empty'  => '此项不允许为空',
     'maxlength'  => '店铺名称最多20个字符',
     'allow_tel'  => '电话号码由数字、加号、减号、空格、括号组成,并不能少于6位',
@@ -28,6 +26,4 @@ return array(
 	'map' => '店铺地图',
 	'region_address_empty'	=> '所在地区/详细地址不能为空',
 	'no_such_store'			=> '没有该店铺',
-	'business_scope_note'			=> '如：女装上衣 t恤 衬衫 长袖 纯色 打底裤',
-	'business_scope'				=> '主营业务',
 );

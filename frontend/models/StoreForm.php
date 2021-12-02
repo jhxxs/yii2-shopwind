@@ -47,21 +47,13 @@ class StoreForm extends Model
 		// 取得推荐商品
 		$store['recommendedGoods'] = $this->getGoodsList($post->id, 'recommend', $pageper);
 		
-        // 取得最新商品
-		$store['newGoods'] = $this->getGoodsList($post->id, 'new', $pageper);
-		
 		// 取得热卖商品
-		$store['saleGoods'] = $this->getGoodsList($post->id, 'sale', $pageper);
-		
-		// 取得热门商品
-		if(Basewind::getCurrentApp() == 'wap') {
-			$store['hotGoods'] = $this->getGoodsList($post->id, 'hot', $pageper);
-		}
+		$store['saleGoods'] = $this->getGoodsList($post->id, 'sale', 10);
 		
 		return $store;
 	}
 	
-	private function getGoodsList($store_id = 0, $gType = 'recommend', $pageper = 20, $cached = true)
+	private function getGoodsList($store_id = 0, $gType = 'recommend', $pageper = 10, $cached = true)
 	{
 		$cache = Yii::$app->cache;
 		$cachekey = md5((__METHOD__).var_export(func_get_args(), true));

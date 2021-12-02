@@ -79,7 +79,7 @@ return array(
     'install_initdata'          => '安装测试数据',
     'setup_config'          => '建立初始配置',
     'lock_install'          => '锁定安装程序',
-    'install_done'          => '结束安装',
+    'install_done'          => '结束创建表',
     'gd_missing'          => '缺少GD库',
     'successed'          => '成功',
     'failed'          => '失败',

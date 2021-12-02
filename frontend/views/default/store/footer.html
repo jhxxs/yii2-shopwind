@@ -27,8 +27,8 @@
       </dl>
       <dl>
         <dt class="fts-4">商家入驻</dt>
-        <dd><a href="https://www.shopwind.net">优质商家入驻商城</a></dd>
-        <dd><a href="https://www.shopwind.net">了解ShopWind</a></dd>
+        <dd><a href="https://www.shopwind.net">优质商家入驻</a></dd>
+        <dd><a href="https://www.shopwind.net">大客户绿色通道</a></dd>
       </dl>
     </div>
   </div>
@@ -58,48 +58,19 @@
       </div>
     </div>
     <ul class="float-right ewm clearfix">
-      <li> <img src="{res file='images/qrcode_for_gh_8658dbe202f2_258.jpg'}" width="100" alt="微信官网">
-        <p>微信关注</p>
+      <li> <img src="{res file='images/qrcode_for_gh_8658dbe202f2_258.jpg'}" width="80" alt="微信官网">
+        <p>关注公众号</p>
       </li>
-      <li> <img src="{res file='images/jiaqun-86696159.png'}" width="100" alt="ShopWind开发群">
+      <li> <img src="{res file='images/jiaqun-86696159.png'}" width="80" alt="ShopWind开发群">
         <p>开发交流群</p>
       </li>
     </ul>
   </div>
   <div class="foot-fixed J_FootFixed">
     <div class="foot-fixed-box"> 
-	    <a class="cart j-icon J_F_CardItem" href="{url route='cart/index'}"><i></i><em class="count-cart J_C_T_GoodsKinds">{$carts_top.kinds|default:0}</em></a>
-      <a class="qq j-icon J_Icon"><i>qq</i></a> 
-      <a class="tel j-icon J_Icon"><i>tel</i></a> 
-      <a class="code j-icon J_Icon"><i>code</i></a> 
       <a class="backtop j-icon J_Icon"><i>back_top</i></a>
-      <div class="tencent j-tencent j-box J_Box"> 
-        <a href="tencent://message/?uin={$store.im_qq|default:'544500267'}&Site={$siteUrl}&Menu=yes"><i class="tencent-i">tencent</i><b class="tencent-b"><span class="tencent-span"><img style="overflow: hidden; width: 39px; height: 45px; left: 3px;" class="tencent-qq" src="{res file='images/qq-tencent.png'}" alt=""></span></b>
-          <p class="tencent-p">在线客服<br>
-          点击交谈</p>
-        </a>
-      </div>
-      <div class="tel j-box J_Box"><strong>服务热线：</strong>
-        <p>010-555888</p>
-        <i></i>
-      </div>
-      <div class="code j-box J_Box"><img width="155" height="155" src="{res file='images/qrcode_for_gh_8658dbe202f2_258.jpg'}" alt="">
-        <p>关注微信公众号</p>
-        <i></i>
-      </div>
     </div>
   </div>
-  <script type="text/javascript">
-  	$(function(){
-		$(".J_FootFixed").find(".J_Icon").hover(function(){  
-        	$(".J_FootFixed").find(".J_Box").eq($(this).index()-1).show().siblings(".J_Box").hide();
-		});
-		$(".J_FootFixed").hover(function(){
-		}, function(){
-			$(".J_FootFixed").find(".J_Box").hide();
-		});
-	});
-  </script> 
 </div>
 <script type="text/javascript" src="{lib file='layui/layui.js'}" charset="{$app->charset}"></script>
 <script type="text/javascript" src="{lib file='jquery.plugins/SuperSlide/jquery.SuperSlide.2.1.2.js'}" charset="{$app->charset}"></script>

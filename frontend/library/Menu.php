@@ -97,37 +97,33 @@ class Menu
 					'url'   => Url::toRoute(['my_message/index']),
 					'name'  => 'my_message',
 				),
-				'friend'  => array(
-					'text'  => Language::get('friend'),
-					'url'   => Url::toRoute(['friend/index']),
-					'name'  => 'friend',
-				),
+				// 'friend'  => array(
+				// 	'text'  => Language::get('friend'),
+				// 	'url'   => Url::toRoute(['friend/index']),
+				// 	'name'  => 'friend',
+				// ),
 				'deposit' => array(
 					'text'	=> Language::get('deposit'),
 					'url'	=> Url::toRoute(['deposit/index']),
 					'name'  => 'deposit',
 				),
-				'my_report' => array(
-					'text'	=> Language::get('my_report'),
-					'url'	=> Url::toRoute(['my_report/index']),
-					'name'  => 'my_report',
-				),
 				'my_coupon'  => array(
 					'text'  => Language::get('my_coupon'),
 					'url'   => Url::toRoute(['my_coupon/index']),
 					'name'  => 'my_coupon',
+				),
+				'my_integral'  => array(
+					'text'  => Language::get('my_integral'),
+					'url'   => Url::toRoute(['my_integral/index']),
+					'name'  => 'my_integral',
+				),
+				'my_report' => array(
+					'text'	=> Language::get('my_report'),
+					'url'	=> Url::toRoute(['my_report/index']),
+					'name'  => 'my_report',
 				)
 			)
 		);
-	
-		if(IntegralSettingModel::getSysSetting('enabled'))
-		{
-			$menu['my_account']['submenu']['my_integral'] = array(
-				'text'  => Language::get('my_integral'),
-				'url'   => Url::toRoute(['my_integral/index']),
-				'name'  => 'my_integral',
-			);
-		}
 	
 		// 我是买家
 		$menu['im_buyer'] = array(
@@ -145,21 +141,21 @@ class Menu
 					'url'  => Url::toRoute(['refund/index']),
 					'name' => 'refund_apply',
 				),
-				'my_question' =>array(
-					'text'  => Language::get('my_question'),
-					'url'   => Url::toRoute(['my_question/index']),
-					'name'  => 'my_question',
+				'my_address'  => array(
+					'text'  => Language::get('my_address'),
+					'url'   => Url::toRoute(['my_address/index']),
+					'name'  => 'my_address',
 				),
 				'my_favorite'  => array(
 					'text'  => Language::get('my_favorite'),
 					'url'   => Url::toRoute(['my_favorite/index']),
 					'name'  => 'my_favorite',
 				),
-				'my_address'  => array(
-					'text'  => Language::get('my_address'),
-					'url'   => Url::toRoute(['my_address/index']),
-					'name'  => 'my_address',
-				)	
+				'my_question' =>array(
+					'text'  => Language::get('my_question'),
+					'url'   => Url::toRoute(['my_question/index']),
+					'name'  => 'my_question',
+				)
 			)
 		);
 			
@@ -185,21 +181,7 @@ class Menu
 				'url'   => Url::toRoute(['my_goods/index']),
 				'name'  => 'my_goods',
 			);
-			$menu['im_seller']['submenu']['my_qa'] = array(
-				'text'  => Language::get('my_qa'),
-				'url'   => Url::toRoute(['my_qa/index']),
-				'name'  => 'my_qa',
-			);
-			$menu['im_seller']['submenu']['my_comment'] = array(
-				'text'  => Language::get('my_comment'),
-				'url'   => Url::toRoute(['my_comment/index']),
-				'name'  => 'my_comment',
-			);
-			$menu['im_seller']['submenu']['my_category'] = array(
-				'text'  => Language::get('my_category'),
-				'url'   => Url::toRoute(['my_category/index']),
-				'name'  => 'my_category',
-			);
+			
 			$menu['im_seller']['submenu']['seller_order'] = array(
 				'text'  => Language::get('seller_order'),
 				'url'   => Url::toRoute(['seller_order/index']),
@@ -210,6 +192,11 @@ class Menu
 				'text' => Language::get('refund_receive'),
 				'url'  => Url::toRoute(['refund/receive']),
 				'name' => 'refund_receive',
+			);
+			$menu['im_seller']['submenu']['my_comment'] = array(
+				'text'  => Language::get('my_comment'),
+				'url'   => Url::toRoute(['my_comment/index']),
+				'name'  => 'my_comment',
 			);
 			$menu['im_seller']['submenu']['my_store']  = array(
 				'text'  => Language::get('my_store'),
@@ -228,11 +215,11 @@ class Menu
 				'name'  => 'my_delivery',
 			);
 				
-			$menu['im_seller']['submenu']['my_navigation'] = array(
-				'text'  => Language::get('my_navigation'),
-				'url'   => Url::toRoute(['my_navigation/index']),
-				'name'  => 'my_navigation',
-			);
+			// $menu['im_seller']['submenu']['my_navigation'] = array(
+			// 	'text'  => Language::get('my_navigation'),
+			// 	'url'   => Url::toRoute(['my_navigation/index']),
+			// 	'name'  => 'my_navigation',
+			// );
 			  
 			$menu['im_seller']['submenu']['seller_coupon']  = array(
 				'text'  => Language::get('seller_coupon'),
@@ -245,6 +232,16 @@ class Menu
 				'text' => Language::get('appmarket'),
 				'url'  => Url::toRoute(['appmarket/index']),
 				'name' => 'appmarket',
+			);
+			$menu['im_seller']['submenu']['my_category'] = array(
+				'text'  => Language::get('my_category'),
+				'url'   => Url::toRoute(['my_category/index']),
+				'name'  => 'my_category',
+			);
+			$menu['im_seller']['submenu']['my_qa'] = array(
+				'text'  => Language::get('my_qa'),
+				'url'   => Url::toRoute(['my_qa/index']),
+				'name'  => 'my_qa',
 			);
 				
 			// 营销中心

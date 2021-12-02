@@ -228,7 +228,7 @@ class UploadedFileModel extends ActiveRecord
 			break;
 			case Def::BELONG_GOODS_SPEC	:  	$savePath = 'data/files/store_' . $store_id . '/spec';
 			break;
-			case Def::BELONG_STORE_SLIDES : $savePath = 'data/files/store_' . $store_id . '/slides';
+			case Def::BELONG_STORE_SWIPER : $savePath = 'data/files/store_' . $store_id . '/swiper';
 			break;
 			case Def::BELONG_LIMITBUY   :	$savePath = 'data/files/store_' . $store_id . '/limitbuy';
 			break;

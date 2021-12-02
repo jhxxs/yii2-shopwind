@@ -1,13 +1,14 @@
 /* spec对象 */
-function spec(id, spec1, spec2, spec_image, price, stock, goods_id)
+function spec(spec_id, spec1, spec2, image, price, mkprice,stock, goods_id)
 {
-    this.id    = id;
+    this.spec_id = spec_id;
     this.spec1 = spec1;
     this.spec2 = spec2;
     this.price = price;
+	this.mkprice = mkprice;
     this.stock = stock;
 	this.goods_id = goods_id;
-	this.spec_image = spec_image;
+	this.image = image;
 }
 
 /* goodsspec对象 */
@@ -22,7 +23,7 @@ function goodsspec(specs, specQty, defSpec)
     {
         for(var i = 0; i < this.specs.length; i++)
         {
-            if (this.specs[i].id == this.defSpec)
+            if (this.specs[i].spec_id == this.defSpec)
             {
                 this.spec1 = this.specs[i].spec1;
                 if (this.specQty >= 2)
@@ -104,8 +105,8 @@ function goodsspec(specs, specQty, defSpec)
             {
 				var aclass ,liclass,canclick,bhidden,spec_img;
 				aclass = liclass = canclick = bhidden = spec_img = "";
-				if(specImage[i].spec_image){
-					spec_img = "<img width='40' height='40' src='" + url_format(specImage[i].spec_image) + "'/>";
+				if(specImage[i].image){
+					spec_img = "<img src='" + url_format(specImage[i].image) + "'/>";
 				}else{
 					spec_img = "<span>" + spec1Values[i] + "</span>";
 				}
@@ -149,12 +150,12 @@ function goodsspec(specs, specQty, defSpec)
             }
         }
         var spec = this.getSpec();
-		setGoodsProInfo(spec.goods_id, spec.id, spec.price);
+		setGoodsProInfo(spec);
         $("[ectype='current_spec']").html(spec.spec1 + ' ' + spec.spec2);
 		$("[ectype='goods_stock']").html(spec.stock);
-		if(spec.spec_image){
-			$(".big_pic a img").attr('src',spec.spec_image);
-			$(".big_pic a").attr('href',spec.spec_image);
+		if(spec.image){
+			$(".big_pic a img").attr('src',spec.image);
+			$(".big_pic a").attr('href',spec.image);
 			$(".tiny-pics ul li").attr('class','');
 		}
     }
@@ -209,7 +210,7 @@ function selectSpec(num, liObj)
         var spec = goodsspec.getSpec();
         if (spec != null)
         {
-			setGoodsProInfo(spec.goods_id, spec.id, spec.price);
+			setGoodsProInfo(spec);
 			$("[ectype='current_spec']").html(spec.spec1 + ' ' + spec.spec2);
             $("[ectype='goods_stock']").html(spec.stock);
         }
@@ -249,21 +250,6 @@ $(function(){
         $('.tiny-pics .list li').removeClass();
         $(this).addClass('pic_hover');
 		$('.big_pic img').attr('src', $(this).find('img').attr('src'));
-    });
-	
-	var moveNum=-62;
-	var lengthLi = ($('.tiny-pics .list li').width()) * $('.tiny-pics .list li').length - 310;
-	$('#forword').click(function(){
-        var posleftNum = $('.tiny-pics .list').position().left;
-        if($('.tiny-pics .list').position().left > -lengthLi){
-            $('.tiny-pics .list').css({'left': posleftNum + moveNum});
-        }
-    });
-	$('#backword').click(function(){
-        var posleftNum = $('.tiny-pics .list').position().left;
-        if($('.tiny-pics .list').position().left < 0){
-            $('.tiny-pics .list').css({'left': posleftNum - moveNum});
-        }
     });
     
 	/* 选中城市后，查询运费 */
@@ -330,7 +316,7 @@ function buy(toPay)
         layer.msg(lang.select_specs);
         return;
     }
-    var spec_id = goodsspec.getSpec().id;
+    var spec_id = goodsspec.getSpec().spec_id;
 
     var quantity = $("#quantity").val();
     if (quantity == '')
@@ -369,28 +355,21 @@ function load_city_logistic(template_id,store_id,city_id)
 }
 
 /* 获取促销商品，会员价格等的优惠信息 */
-function setGoodsProInfo(goods_id, spec_id, price)
+function setGoodsProInfo(spec)
 {
-	$.getJSON(url(['goods/promoinfo', {goods_id: goods_id, spec_id: spec_id}]),function(data){
+	$.getJSON(url(['goods/promoinfo', {goods_id: spec.goods_id, spec_id: spec.spec_id}]),function(data){
 		if (data.done){
 			pro_price = data.retval.price;
 			pro_type  = data.retval.type;
+
+			$("[ectype='goods_mkprice']").html(spec.mkprice ? price_format(spec.mkprice) : price_format(spec.price));
+			$("[ectype='goods_price']").html('<del>'+price_format(spec.price)+'</del>');
+			$("[ectype='goods_pro_price']").html(price_format(pro_price)).parents('dl').show();
+		} else {
 			
-			// 目前只有限时打折商品有倒计时效果
-			if($.inArray(pro_type, ['limitbuy']) > -1) {
-				$('.J_CountDown').css('display', 'block');
-			}
-			$(".J_IsPro").css('display','block');
-			$(".J_IsNotPro").css('display','none');
-			$("[ectype='goods_price']").html('<del>'+price_format(price)+'</del>');
-			$("[ectype='goods_pro_price']").html(price_format(pro_price));
-		}
-		else
-		{
-			$("[ectype='goods_price']").html(price_format(price));
-			$('.J_CountDown').css('display', 'none');
-			$(".J_IsPro").css('display','none');
-			$(".J_IsNotPro").css('display','block');
+			$("[ectype='goods_mkprice']").html(spec.mkprice ? price_format(spec.mkprice) : price_format(spec.price));
+			$("[ectype='goods_price']").html(price_format(spec.price));
+			$("[ectype='goods_pro_price']").hide();
 		}
 	});
 }

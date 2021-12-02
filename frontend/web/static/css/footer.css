@@ -1,38 +1,36 @@
-#footer{background:#181818; color:#fff; font-family:'yahei'}
-#footer a{ color:#fff; font-family:'yahei'}
-#footer a:hover{color:#fff; text-decoration:underline;}
+#footer{background:#262626; color: #fff;}
+#footer a {color: #fff;}
 
-
-#footer .foot-baozhang{ width:100%; height:86px; background:#dddddd; color:#666;}
+#footer .foot-baozhang{ width:100%; height:86px; background:#eee; color:#666;}
 #footer .foot-baozhang .flow{ height:86px; margin:auto; position:relative;}
 #footer .foot-baozhang .item{ float:left; font-family: "microsoft yahei"; font-size:18px; padding:20px 0; width:19%;}
 #footer .foot-baozhang .item.first{padding-left:50px;}
 #footer .foot-baozhang .item a{ display:block; height:46px; color:#000;}
 #footer .foot-baozhang .item i{ display:block; width:45px; height:45px; background:url(../images/ecsc_icon.png) no-repeat; float:left;}
-#footer .foot-baozhang .item span{ display:block; float:left; padding:15px 0 0 15px;}
+#footer .foot-baozhang .item span{ display:block; float:left; padding:10px 0 0 15px; font-weight: bold;}
 #footer .foot-baozhang .item .zp{ background-position:-7px -152px;}
 #footer .foot-baozhang .item .qt{ background-position:-7px -202px;}
 #footer .foot-baozhang .item .hp{ background-position:-7px -253px;}
 #footer .foot-baozhang .item .sd{ background-position:-6px -304px;}
 #footer .foot-baozhang .item .ry{ background-position:-6px -354px;}
 
-#footer .foot-service { background:#181818; padding-bottom:20px}
+#footer .foot-service { padding-bottom:20px; }
+#footer .foot-service .w {border-bottom: 1px solid #464646;padding-bottom: 10px;}
+#footer .foot-service a {color: #cccccc;}
+#footer .foot-service a:hover {color: #f33100;}
 #footer .foot-service dl{float:left;width:23%;padding-bottom:10px;margin-top:30px; text-align:left;}
-#footer .foot-service dl.dl-first{}
-#footer .foot-service dt{width:198px; height:27px; overflow:hidden; font-weight:normal; font-size:18px; float:left}
-#footer .foot-service dd{line-height:30px; clear:both;}
-#footer .foot-service dd a{color:#5e6263;}
-#footer .foot-service dd a:hover{color:#fff; text-decoration:none}
+#footer .foot-service dt{width:198px; height:34px; overflow:hidden; font-weight:normal; font-size:18px; float:left;font-weight: bold;}
+#footer .foot-service dd{line-height:22px; clear:both;}
+#footer .foot-service dl.dl-first {margin-left: 90px;}
 
-#footer .foot-group{padding:20px 0 20px;}
-#footer .foot-group .tel{margin-top:20px;}
+#footer .foot-group{ padding:20px 0 20px;}
 #footer .foot-group .tel h3{font-family: arial;font-size: 30px;color: #9ecc17;width: 200px;}
 #footer .foot-group .tel p{color:#888;width: 200px; font-size:14px;margin-top:12px;margin-left:5px;}
-#footer .foot-group .footnav{margin-left:2%; line-height:22px;margin-top:20px;}
-#footer .foot-group .footnav li{}
+#footer .foot-group .footnav{margin-left:2%; line-height:22px;}
 #footer .foot-group .footnav li span{margin:0 10px;}
 #footer .foot-group .footnav li.last{margin-right:0;}
 #footer .foot-group .footnav ul a{font-size:14px;}
+#footer .foot-group .footnav ul a:hover {color: #f33100;}
 #footer .foot-group .footnav .copy{color:#666;margin-top:10px; line-height:25px;}
 #footer .foot-group .footnav .copy a{color:#666;}
 #footer .foot-group .ewm li{float:left; width:100px;margin-left:20px;  text-align:center}

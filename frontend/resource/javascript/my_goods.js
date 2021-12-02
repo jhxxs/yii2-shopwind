@@ -15,12 +15,7 @@ $(function(){
         SPEC = {"spec_qty":0,"spec_name_1":"","spec_name_2":"","specs":null};
         spec_update();
     });
-	
-	$('.spec_image').hover(function(){
-		$(this).find('b').show();
-	},function(){
-		$(this).find('b').hide();
-	});
+    
 	
 	$('body').on('click', '.spec_image b',function(){
 		var i = $(this).parent();
@@ -161,7 +156,7 @@ function spec_editor(){
     _d.setContents($('*[ectype="dialog_contents"]').children().clone(true));
     _d.setStyle('add_spec');
     //_d.setStyle({'padding' : '0'});
-    _d.setWidth(600);
+    _d.setWidth(640);
     //ScreenLocker.style.opacity = 0;
     _d.show('center');
     hide_drop_button();

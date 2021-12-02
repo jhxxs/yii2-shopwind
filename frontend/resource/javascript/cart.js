@@ -103,6 +103,7 @@ function showFullPerferPlusBySelected()
 	var cartAllAmount = parseFloat($('.J_CartAllAmount').html().replace(/[^\d\.-]/g, ""));
 
 	$('.J_SelectStoreAll').each(function(index, element) {
+		var decrease = 0;
 		var o = $(this).parents('.J_Store-'+$(this).attr('id'));
 		if(o.find('.J_FullPerferAmount').length > 0) {
 			var fullPerferAmount = parseFloat(o.find('.J_FullPerferAmount').attr('data-value'));
@@ -286,37 +287,39 @@ function add_to_cart(spec_id, quantity, toPay, animate, obj)
 						var startBox = $('.add-to-cart').find('i');
 						var startImg = $(".main_img");
 					}
-					
-					//var cartItem = $(".header_cart"); // 飞到头部用改行
-					var cartItem = $(".J_F_CardItem"); // 飞到右边栏用该栏
+
+					var cartItem = $(".J_F_CardItem"); // 飞到右边栏用该行
+					if(cartItem.length <= 0) {
+						cartItem = $(".header_cart"); // 飞到头部用该行
+					}
 					
 					var newImg = startImg.clone().addClass('img-clone').css({top: startBox.offset().top, left: startBox.offset().left}).show();
 					newImg.appendTo("body").animate({top:cartItem.offset().top, left: cartItem.offset().left, width: 46, height:46}, {duration: 1000,  complete: setInterval(function(){newImg.remove();},2000)});
 						
 				}
 				setTimeout(function(){
-					$('.J_NoGoods').hide();
+					//$('.J_NoGoods').hide();
 					$('.J_C_T_GoodsKinds').html(data.retval.kinds);
 					
-					var html = '';
-					var template = get_cart_item();
+					// var html = '';
+					// var template = get_cart_item();
 					
-					$.each(data.retval.items,function(k, v) {
-						html += sprintf(template.find('.goods-list').html(),
-							k, 
-							url(['goods/index', {id: v.goods_id}]),
-							url_format(v.goods_image),
-							v.goods_name,
-							url(['goods/index', {id: v.goods_id}]),
-							v.goods_name,
-							price_format(v.price),
-							v.quantity
-						);
-					});
-					template.find('.goods-list').html(html);
+					// $.each(data.retval.items,function(k, v) {
+					// 	html += sprintf(template.find('.goods-list').html(),
+					// 		k, 
+					// 		url(['goods/index', {id: v.goods_id}]),
+					// 		url_format(v.goods_image),
+					// 		v.goods_name,
+					// 		url(['goods/index', {id: v.goods_id}]),
+					// 		v.goods_name,
+					// 		price_format(v.price),
+					// 		v.quantity
+					// 	);
+					// });
+					// template.find('.goods-list').html(html);
 
 					// replace_all解决的问题：页面会console凡是有src="[number]"的记录，所以先使用其他参数名再替换回来
-					$('.J_HasGoods').html(sprintf(replace_all(template.html(), 'initial-url', 'src'), data.retval.kinds, price_format(data.retval.amount), url(['cart/index'])));
+					//$('.J_HasGoods').html(sprintf(replace_all(template.html(), 'initial-url', 'src'), data.retval.kinds, price_format(data.retval.amount), url(['cart/index'])));
 					
 				}, interval);
 				
@@ -330,6 +333,6 @@ function add_to_cart(spec_id, quantity, toPay, animate, obj)
 		});
 	}
 }
-function get_cart_item() {
-	return $('<div class="cart-template"><h4>最新加入的商品</h4><div class="goods-list"><div class="clearfix list J_CartItem-[1]"><div class="goods-img mt5"><a href="[2]" target="_blank"><img initial-url="[3]" width="40" height="40"></a></div><div class="goods-title"><a title="[4]" href="[5]" target="_blank">[6]</a></div><div class="goods-admin clearfix"><div class="mini-cart-count"><strong class="mini-cart-price">[7]</strong> x[8]</div></div></div></div><div class="total"> <a href="[3]">去购物车查看</a></div></div>').clone(true);
-}
+// function get_cart_item() {
+// 	return $('<div class="cart-template"><h4>最新加入的商品</h4><div class="goods-list"><div class="clearfix list J_CartItem-[1]"><div class="goods-img mt5"><a href="[2]" target="_blank"><img initial-url="[3]" width="40" height="40"></a></div><div class="goods-title"><a title="[4]" href="[5]" target="_blank">[6]</a></div><div class="goods-admin clearfix"><div class="mini-cart-count"><strong class="mini-cart-price">[7]</strong> x[8]</div></div></div></div><div class="total"> <a href="[3]">去购物车查看</a></div></div>').clone(true);
+// }

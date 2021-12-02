@@ -12,7 +12,6 @@ return array(
     'create_time' => '注册时间',
     'last_login' => '最后登录',
     'im_qq' => 'QQ',
-    'im_ww' => '旺旺',
     'logins' => '登录次数',
     'store' => '店铺',
     'note_password' => '留空表示不修改密码',

@@ -1,33 +1,12 @@
 {include file="user.header.html"}
+<style>
+  .apply-submit .soptions .dt,.apply-submit dl dt  { width: 200px;}
+</style>
 <div id="main" class="w-full">
   <div class="page-apply">
-    <div class="w content clearfix">
-      <div class="left">
-        <div class="steps">
-          <dl class="setpbox">
-            <dt>申请步骤</dt>
-            <dd>
-              <ul>
-                <li class="succeed">入驻指南</li>
-                <li class="succeed">签订入驻协议</li>
-                <li class="current">填写店铺信息</li>
-                <li>平台审核</li>
-                <li>店铺开通</li>
-              </ul>
-            </dd>
-          </dl>
-          <dl class="setpbox contact-mall mt10">
-            <dt>平台联系方式</dt>
-            <dd>
-              <p class="tel"><span>电话：</span>18176895410</p>
-              <p class="email mt10"><span>邮箱：</span>shopwind@qq.com</p>
-            </dd>
-          </dl>
-        </div>
-      </div>
-      <div class="right">
-        <div class="title">填写店铺信息</div>
-        <div class="apply-submit">
+    <div class="w content clearfix bgf pt10" style="border-radius: 10px;">
+        <div class="title mt10 mb20 pt20 center fs18 strong">商家入驻申请</div>
+        <div class="apply-submit ">
           <form method="post" enctype="multipart/form-data">
             <div class="soptions stype clearfix {if !$store}J_Soptions{/if}">
               <div class="dt">{$lang.stype}{$lang.colon}</div>
@@ -36,7 +15,7 @@
                 <li class="{if $store.stype eq 'company'} selected{/if} {if $store}disabled{/if}" data-id="company"><h2>{{$lang.company}}</h2></li>
               </ul>
               <input name="stype" type="hidden" value="{$store.stype}" />
-              <p class="gray clearboth mb10" style="margin-left:100px;">注：主体类型设置后无法更改</p>
+              <p class="gray clearboth mb10" style="margin-left:220px;">注：主体类型设置后无法更改</p>
             </div>
 
             <div class="soptions sgrade clearfix J_Soptions">
@@ -125,41 +104,59 @@
             <dl class="clearfix">
               <dt class="pt10 mt10"><span class="f60">*</span>{$lang.upload_image}{$lang.colon}</dt>
               <dd class="pb10">
-                <div class="add-image-btn"> <em class="bg-img-1"></em>
-                  <input type="file" name="identity_front" />
+                <div class="add-image-btn"> 
+                  <input type="file" name="identity_front" onchange="getTempPathcallback(this)" />
+                  <div class="type-file-image">
+                    <!--{if $store.identity_front}-->
+                    <img class="block" src="{$store.identity_front|url_format}" width="64" height="64" />
+                    <span>修改图片</span>
+                    <!--{else}-->
+                    <em class="bg-img-1"></em>
+                    <!--{/if}-->
+                  </div>
                 </div>
               </dd>
               <dd class="depict" style="margin-top:14px;">
                 <h2>身份证正面</h2>
                 <span class="gray">请上传本人（法人）身份证原件图</span> </dd>
-              <dd class="again-margin"> {if $store.identity_front}
-                <p class="d_inline"> <a href="{$store.identity_front|url_format}" target="_blank"><img src="{$store.identity_front|url_format}" height="50" /></a> </p>{/if} </dd>
             </dl>
             <dl class="clearfix">
               <dt class="pt10 mt10"><span class="f60">*</span>{$lang.upload_image}{$lang.colon}</dt>
               <dd>
-                <div class="add-image-btn"> <em class="bg-img-2"></em>
-                  <input type="file" name="identity_back" />
+                <div class="add-image-btn">
+                  <input type="file" name="identity_back"  onchange="getTempPathcallback(this)" />
+                  <div class="type-file-image">
+                    <!--{if $store.identity_back}-->
+                    <img class="block" src="{$store.identity_back|url_format}" width="64" height="64" />
+                    <span>修改图片</span>
+                    <!--{else}-->
+                    <em class="bg-img-2"></em>
+                    <!--{/if}-->
+                  </div>
                 </div>
               </dd>
               <dd class="depict" style="margin-top:14px;">
                 <h2>身份证反面</h2>
                 <span class="gray">请上传本人（法人）身份证原件图</span> </dd>
-              <dd class="again-margin"> {if $store.identity_back}
-                <p class="d_inline"> <a href="{$store.identity_back|url_format}" target="_blank"><img src="{$store.identity_back|url_format}" height="50" /></a> </p>{/if} </dd>
             </dl>
             <dl class="clearfix J_BusinessLicense">
               <dt class="pt10 mt10"><span class="f60">*</span>{$lang.upload_permit}{$lang.colon}</dt>
               <dd>
-                <div class="add-image-btn"> <em class="bg-img-3"></em>
-                  <input type="file" name="business_license" />
+                <div class="add-image-btn">
+                  <input type="file" name="business_license" onchange="getTempPathcallback(this)" />
+                  <div class="type-file-image">
+                    <!--{if $store.business_license}-->
+                    <img class="block" src="{$store.business_license|url_format}" width="64" height="64" />
+                    <span>修改图片</span>
+                    <!--{else}-->
+                    <em class="bg-img-3"></em>
+                    <!--{/if}-->
+                  </div>
                 </div>
               </dd>
               <dd class="depict" style="margin-top:14px;">
                 <h2>营业执照</h2>
                 <span class="gray">请上传企业营业执照原件图</span> </dd>
-              <dd class="again-margin"> {if $store.business_license}
-                <p class="d_inline"> <a href="{$store.business_license|url_format}" target="_blank"><img src="{$store.business_license|url_format}" height="50" /> </a> </p>{/if} </dd>
             </dl>
             <dl class="mb20 clearfix" style="margin-top:30px;">
               <dt>&nbsp;</dt>
@@ -171,7 +168,7 @@
         </div>
       </div>
     </div>
-  </div>
+  
 </div>
 <script type="text/javascript">
 $(function(){

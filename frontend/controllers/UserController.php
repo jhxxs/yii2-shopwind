@@ -76,7 +76,7 @@ class UserController extends \common\controllers\BaseUserController
 			}
 		}
 		// 获取朋友数量
-		$this->params['visitor']['friends'] = FriendModel::find()->where(['userid' => Yii::$app->user->id])->count();
+		$this->params['visitor']['money'] = DepositAccountModel::find()->select('money')->where(['userid' => Yii::$app->user->id])->scalar();
 		
 		// 买家提醒：待付款、待确认、待评价订单数
 		$model = new \frontend\models\UserForm();

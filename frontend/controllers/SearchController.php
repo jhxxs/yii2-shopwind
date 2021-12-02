@@ -64,7 +64,7 @@ class SearchController extends \common\controllers\BaseMallController
 		if($query->count() > 0) {
 			$page = Page::getPage($query->count(), 50);
 			$goodsList = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			$this->params['pagination'] = ['top' => Page::formatPage($page, true, 'simple'), 'bottom' => Page::formatPage($page)];
+			$this->params['pagination'] = ['top' => Page::formatPage($page, true, 'simple'), 'bottom' => Page::formatPage($page, true, 'lg')];
 		}
 		else
 		{
@@ -82,13 +82,6 @@ class SearchController extends \common\controllers\BaseMallController
 			empty($goods['default_image']) && $goodsList[$key]['default_image'] = Yii::$app->params['default_goods_image'];
 		}
 		$this->params['goods_list'] = $goodsList;
-		
-		// 商品展示方式
-		$display_mode = isset($_COOKIE['goodsDisplayMode']) ? $_COOKIE['goodsDisplayMode'] : '';
-        if (empty($display_mode) || !in_array($display_mode, array('list', 'squares'))) {
-            $display_mode = 'squares';
-        }
-		$this->params['display_mode'] = $display_mode;
 		
 		// 底部推荐商品
 		$this->params['recommend_goods'] = GoodsModel::find()->alias('g')->select('g.goods_id,g.goods_name,g.default_image,g.price,gst.sales')->joinWith('goodsStatistics gst', false)->limit(5)->orderBy(['gst.views' => SORT_DESC])->asArray()->all();
@@ -123,7 +116,7 @@ class SearchController extends \common\controllers\BaseMallController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['cate_id', 'recommended', 'sgrade', 'credit_value', 'page']);
 		
-		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.owner_name,s.address,s.sgrade,s.credit_value,s.praise_rate,s.state,s.add_time,s.recommended,s.store_logo,s.im_qq,s.business_scope')->joinWith('categoryStore cs', false)->where(['state' => Def::STORE_OPEN]);
+		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.owner_name,s.address,s.sgrade,s.credit_value,s.praise_rate,s.state,s.add_time,s.recommended,s.store_logo,s.im_qq')->joinWith('categoryStore cs', false)->where(['state' => Def::STORE_OPEN]);
 		
 		$model = new \frontend\models\SearchForm();
 		$query = $model->getStoreConditions($post, $query);

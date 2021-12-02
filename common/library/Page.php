@@ -167,18 +167,7 @@ class Page
 			$model = new \frontend\models\CartForm();
 			$params['carts_top'] = $model->getCart();
 		}
-	
-		if(in_array($page, ['user'])) {
-			//$params = array_merge($params, []);
-		}
 		
-		if(in_array($page, ['store']))
-		{
-			if(is_numeric($options)) $store_id = intval($options);
-			else $store_id = (is_array($options) && isset($options['store_id'])) ? intval($options['store_id']) : 0;
-			// TODO
-		}
-
 		return $params;
 	}
 	

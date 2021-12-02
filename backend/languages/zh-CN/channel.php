@@ -2,7 +2,6 @@
 
 return array(
 	'template_setting' => '模板编辑',
-	'template_list'=>'页面列表',
     'channel_add' => '添加新页面',
 	'title'=>'页面名称',
 	'title_empty'=>'页面名称不能为空',

@@ -67,7 +67,7 @@ class Def
 	const BELONG_REFUND_MESSAGE =  	13;
 	const BELONG_LIMITBUY		=  	20;
 	const BELONG_STORE			=  	30;
-	const BELONG_STORE_SLIDES   =  	31;
+	const BELONG_STORE_SWIPER   =  	31;
 	const BELONG_GCATEGORY_ICON	=  	40;
 	const BELONG_GCATEGORY_AD	=  	41;
 	const BELONG_PORTRAIT		=  	50;
