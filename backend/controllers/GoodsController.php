@@ -195,7 +195,8 @@ class GoodsController extends \common\controllers\BaseAdminController
 			$query->andWhere(['like', 'goods_name', $post->goods_name]);
 		}
 		if($post->store_name) {
-			$query->andWhere(['like', 'store_name', $post->store_name]);
+			$id = StoreModel::find()->select('store_id')->where(['store_name' => $post->store_name])->scalar();
+			$query->andWhere(['store_id' => intval($id)]);
 		}
 		if($post->brand) {
 			$query->andWhere(['or', ['like', 'brand', $post->brand], ['like', 'goods_name', $post->brand]]);
