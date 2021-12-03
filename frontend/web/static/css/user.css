@@ -315,26 +315,14 @@ select {border: 1px solid #d9d9d9;padding:5px;border-radius:3px}
 .lookup b {display: block;width: 144px;height: 32px;padding-left: 20px;color: #3e3e3c;font-size: 14px;}
 .lookup .hide {background: url(../images/member/btn.gif) no-repeat 133px -116px;}
 .lookup .show {background: url(../images/member/btn.gif) no-repeat 133px -156px;}
-.eject_btn {width: 112px;height: 32px;line-height: 32px;position: absolute;top: -34px; left:100px;z-index: 300; border:1px solid #d9d9d9; border-bottom:0; border-radius:4px 4px 0 0; cursor:pointer}
-.eject_btn b {display: block;width: 97px;height: 32px;padding-left: 40px;color: #3e3e3c;font-size: 13px;cursor: pointer; font-weight:normal}
-.eject_btn .ico1 {background: url(../images/member/ico.gif) no-repeat 15px -655px;}
-.eject_btn .ico2 {background: url(../images/member/ico.gif) no-repeat 15px -188px;}
-.eject_btn .ico3 {background: url(../images/member/ico.gif) no-repeat 12px -943px;}
-.eject_btn_two {width: 137px;height: 32px;line-height: 32px;background: #0092D2;}
+.eject_btn {min-width: 80px;padding: 0 10px;height: 34px;line-height: 34px;position: absolute;top: -34px; left:100px;z-index: 300; border-radius:4px 4px 0 0; cursor:pointer;background: #0092D2;}
+.eject_btn b {display: block;height: 34px;color: #fff;font-size: 13px;cursor: pointer; font-weight:normal; text-align: center;}
+.eject_btn_two {width: 137px;height: 34px;line-height: 34px;background: #0092D2;}
 .eject_pos1 {width: 95px;height: 34px;line-height: 34px;position: absolute;top: -34px; left:375px;z-index: 300; border-radius:4px 4px 0 0; cursor:pointer}
 .eject_pos2 {position: absolute;top: 20px;right: 170px;z-index: 3;}
 .eject_pos3 {position: absolute;top: 5px;right: 240px;z-index: 3;}
 .eject_pos4 {position: absolute;top: 5px;right: 130px;z-index: 3;}
-.eject_btn_two b {display: block;height: 32px;color:#fff; font-weight:normal;font-size: 13px;cursor: pointer;}
-.eject_btn_two .ico1 {width: 107px;padding-left: 30px;background: url(../images/member/ico.gif) no-repeat 15px -1330px;}
-.eject_btn_two .ico2 {width: 97px;padding-left: 40px;background: url(../images/member/ico.gif) no-repeat 15px -1282px;}
-.eject_btn_two .ico3 {text-align:center; }
-.eject_btn_two .ico4 {width: 102px;padding-left: 35px;background: url(../images/member/ico.gif) no-repeat 12px -1710px;}
-.eject_btn .ico5 {width: 102px;padding-left: 35px;background: url(../images/member/ico.gif) no-repeat 15px -655px;}
-.eject_btn_three {width: 97px;height: 32px;line-height: 32px;background:#19ACF7;}
-.eject_btn_three b {display: block;height: 32px;color: #fff; font-weight:normal;font-size: 14px;cursor: pointer;}
-.eject_btn_three .ico3 {padding-left: 40px;background: url(../images/member/ico.gif) no-repeat 22px -1330px;}
-.eject_btn_three .ico4 {padding-left: 40px;background: url(../images/member/ico.gif) no-repeat 22px -1374px;}
+.eject_btn_two b {display: block;height: 34px;color:#fff; font-weight:normal;font-size: 13px;cursor: pointer; text-align: center;}
 .right_ico {display: block;width: 11px;height: 11px;overflow: hidden;background: url(../images/member/ico.gif) no-repeat 0 -1215px;cursor: pointer; margin:0 auto}
 .wrong_ico {display: block;width: 11px;height: 11px;overflow: hidden;background: url(../images/member/ico.gif) no-repeat 0 -1814px;cursor: pointer; margin:0 auto}
 .no_ico {display: block;width: 11px;height: 11px;overflow: hidden;background: url(../images/member/ico.gif) no-repeat 0 -1246px;}

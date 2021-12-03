@@ -9,6 +9,7 @@ body {
     font-family: "Microsoft Yahei", "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
     min-width: 1000px;
     background: #f3f5f7;
+    -webkit-text-size-adjust: 100% !important;
 }
 h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dt,dd,li,body,form,input,button,img,strong,em,table,td,th {
     padding: 0;
@@ -40,6 +41,7 @@ h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dt,dd,li,body,form,input,button,img,strong,em,table
 }
 input, button, select, textarea{outline: none;filter: none !important;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
+input {-webkit-appearance:none; border-radius:0;}
 
 img,table,td,th {
     border: 0;

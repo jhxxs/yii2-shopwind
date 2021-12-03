@@ -2,6 +2,7 @@
 /************** global.css - No need to modify ***************************************************/
 
 body{font-size:12px; margin:0;padding:0; min-width: 1200px; font-family:'Microsoft yahei', Tahoma, Geneva, Verdana, sans-serif}
+body {-webkit-text-size-adjust: 100% !important;}
 em,p,ul,dl,dt,dd,ins,h1,h2,h3,h4,form,ins,i,s{margin:0;padding:0; font-weight:normal; font-style:normal;text-decoration:none;}
 h1,h2,h3,h4{font-size:14px;}
 ins{text-decoration:none;}
@@ -14,6 +15,7 @@ img{border:0;}
 a{text-decoration:none;/*blr:expression(this.onFocus=this.blur());*/outline:none; font-style:normal} 
 input, button, select, textarea{outline: none;filter: none !important;background:#fff;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
+input {-webkit-appearance:none; border-radius:0;}
 
 .w-full{width:100%;}
 .w-mall,.w,.w-shop,.w-user{margin:0 auto;}

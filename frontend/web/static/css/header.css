@@ -24,7 +24,7 @@
 #header .top-search-box .select-act.hover b{top:6px;transform:rotate(180deg);-webkit-transform:rotate(180deg);}
 
 
-#header .top-search-box .submit{width:82px; height:34px;position:absolute;border:0;right:0px;top:0px; cursor:pointer;font-size:16px;color:#fff; background:#E4393C;line-height:34px;}
+#header .top-search-box .submit{width:82px; height:35px;position:absolute;border:0;right:0px;top:0px; cursor:pointer;font-size:16px;color:#fff; background:#E4393C;line-height:34px;}
 #header .top-search-box .form-fields{/*position:relative; dont use in here */width:600px;height:33px;border:1px #E4393C solid; z-index:3}
 #header .top-search-box .search-cat{ display:block; background:url(../images/header_sprites.png) 0 -97px; width:70px; padding-left:77px; line-height:36px; height:36px;color:#333; }
 #header .top-search-box .search-cat a:hover{color:#990000;}
