@@ -15,7 +15,7 @@ img{border:0;}
 a{text-decoration:none;/*blr:expression(this.onFocus=this.blur());*/outline:none; font-style:normal} 
 input, button, select, textarea{outline: none;filter: none !important;background:#fff;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
-input {-webkit-appearance:none; border-radius:0;}
+
 
 .w-full{width:100%;}
 .w-mall,.w,.w-shop,.w-user{margin:0 auto;}
