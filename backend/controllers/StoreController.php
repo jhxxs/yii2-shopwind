@@ -17,6 +17,8 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 
 use common\models\UserModel;
+use common\models\UserPrivModel;
+use common\models\GoodsModel;
 use common\models\StoreModel;
 use common\models\SgradeModel;
 use common\models\RegionModel;
@@ -267,6 +269,11 @@ class StoreController extends \common\controllers\BaseAdminController
 				if(!$model->delete()) {
 					return Message::warning($model->errors);
 				}
+				// 删除店铺管理权限表
+				UserPrivModel::deleteAll(['store_id' => $id]);
+
+				// 设置商品为禁售（不建议删除）
+				GoodsModel::updateAll(['if_show' => 0, 'closed' => 1], ['store_id' => $id]);
 			}
 		}
 		return Message::display(Language::get('drop_ok'));

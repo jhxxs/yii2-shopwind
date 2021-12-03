@@ -13,9 +13,11 @@
         </ul>
       </div>
       <!--{if $goods.props}-->
-      <div class="mb20 clearfix" style="padding:5px 0px;"> 
+      <div class="attr-list mb10 mt20 clearfix"> 
         <!--{foreach from=$goods.props item=prop}-->
-        <div style="float:left;width:20%; padding:0 20px; height:25px; line-height:25px;color:#666; white-space:nowrap; overflow:hidden"> <span title="{$prop.value|escape}">{$prop.name}{$lang.colon}{$prop.value|escape|truncate:18}</span> </div>
+        <dl class="clearfix">
+          <dt>{$prop.name}</dt><dd class="line-clamp-1" title="{$prop.value}">{$prop.value|escape|truncate:30}</dd>
+        </dl>
         <!--{/foreach}--> 
       </div>
       <!--{/if}-->

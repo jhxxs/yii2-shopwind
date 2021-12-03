@@ -285,7 +285,6 @@
 .logs .list table td,.logs .list table th{text-align:center;border:1px solid #ddd;}
 
 
-
 .goods-attr .attribute .attr-detail .add_ok_warning{position:absolute;left:270px;top:-220px;background-color: #F5F5F5;width: 320px;height: 120px;border: solid 1px #D7D7D7;box-shadow: 0 0 3px rgba(153,153,153,0.25);z-index: 1;}
 .goods-attr .attribute .attr-detail .add_ok_warning dt,.goods-attr .attribute .attr-detail .add_ok_warning dd{font-size: 12px;line-height: 20px;vertical-align: top;letter-spacing: normal;word-spacing: normal;display: inline-block;min-height: 20px;padding: 4px 0;}
 .goods-attr .attribute .attr-detail .add_ok_warning dt{font: lighter 16px/20px "Microsoft Yahei";color: #333;text-align: center;width: 100%;margin: 10px 0 5px 0;}
@@ -296,11 +295,14 @@
 .goods-attr .attribute .attr-detail .add_ok_warning dd.btn a{font: normal 12px/20px "Microsoft Yahei";color: #777;background-color: #F5F5F5;text-align: center;vertical-align: middle;display: inline-block;height: 20px;padding: 0 10px;margin-right: 2px;border-style: solid;border-width: 1px;border-color: #DCDCDC #DCDCDC #B3B3B3 #DCDCDC;cursor: pointer;}
 .goods-attr .attribute .attr-detail .add_ok_warning dd a.btn-1{background-color: #5BB75B;border-color: #52A452 #52A452 #448944 #52A452;color:#fff;}
 
+.attr-list {border-top: 1px #eee solid;}
+.attr-list dl {width: calc(50% - 2px); float: left; border: 1px #eee solid; border-top:0}
+.attr-list dl:nth-child(2n) {width: calc(50% - 1px); border-left: 0;}
+.attr-list dl dt, .attr-list dl dd {float: left;width: calc(65% - 10px); text-indent: 10px; line-height:30px;padding-right:10px;}
+.attr-list dl dt { background: #f5f5f5;  width:calc(35% - 10px);}
 
-
-.option_box{padding:20px 0;overflow:hidden; }
+.option_box{padding:20px 0;overflow:hidden;}
 .option_box .detail-info img {width: 100%;}
-
 
 /*sales_log*/
 .table_salelog table{border-collapse:collapse;}
