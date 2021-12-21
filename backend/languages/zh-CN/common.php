@@ -13,7 +13,7 @@ return array(
 	'forget_pssword' => '忘记密码',
 	'all_orders'			=>  '所有订单',
 	'appmarket' 			=>  '应用市场',
-	'deposit'				=>	'资产',
+	'myfund'				=>	'资产',
 	'refund_manage' 		=>  '退款管理',
 	'setting'				=>	'设置',
 	'credit'				=>	'信用卡',
@@ -176,7 +176,7 @@ return array(
 	'TRADE_SHIPPED'				=> '卖家已发货',
 	'TRADE_SUCCESS'				=> '交易完成',
 	'TRADE_CLOSED'				=> '交易关闭',
-	'TRADE_WAIT_ADMIN_VERIFY' 	=> '等待系统审核',
+	'TRADE_WAIT_ADMIN_VERIFY' 	=> '等待平台审核',
 	
 	// 交易类型
 	'PAY'				=> '在线支付',

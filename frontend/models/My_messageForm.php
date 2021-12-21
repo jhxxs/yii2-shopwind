@@ -40,10 +40,6 @@ class My_messageForm extends Model
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($recordlist as $key => $record)
 		{
-			if(Basewind::getCurrentApp() == 'wap') {
-		  		$recordlist[$key]['last_update'] = Timezone::localDate('Y-m-d H:i:s', $record['last_update']);
-			}
-			
 			//判断是否是新消息
 			if((($record['from_id'] == Yii::$app->user->id && $record['new'] == 2) || ($record['to_id'] == Yii::$app->user->id && $record['new'] == 1 ))) {
 				$recordlist[$key]['new'] = 1;

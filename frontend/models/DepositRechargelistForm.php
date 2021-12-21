@@ -40,10 +40,6 @@ class DepositRechargelistForm extends Model
 		foreach($recordlist as $key => $record)
 		{
 			$recordlist[$key]['status_label'] = Language::get('TRADE_'.$record['status']);
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
-			}
 		}
 		return array($recordlist, $page);
 	}

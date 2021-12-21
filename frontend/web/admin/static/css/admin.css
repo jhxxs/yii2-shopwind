@@ -41,7 +41,7 @@ h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dt,dd,li,body,form,input,button,img,strong,em,table
 }
 input, button, select, textarea{outline: none;filter: none !important;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
-input {-webkit-appearance:none; border-radius:0;}
+input[type="button"],input[type="submit"] {-webkit-appearance:none;} /* don't set input[type="text"] */
 
 img,table,td,th {
     border: 0;
@@ -1666,4 +1666,21 @@ i.fa {
 }
 .layui-table-fixed-r a:hover  {
     color: #f60;
+}
+.layui-layer.layui-layer-prompt {
+    border-radius: 10px;
+}
+.layui-layer.layui-layer-prompt .layui-layer-title {
+    border-bottom: 0;
+    padding: 0 50px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+.layui-layer.layui-layer-prompt .layui-layer-btn {
+    text-align: center;
+    padding: 0 40px 30px;
+}
+.layui-layer.layui-layer-prompt textarea.layui-layer-input {
+    height: 60px;
 }

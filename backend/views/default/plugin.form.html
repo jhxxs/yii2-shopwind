@@ -12,15 +12,15 @@
         <form method="post">
           <table class="infoTable">
             <tr>
-              <th class="paddingT15"> <label for="plugin_name">{$lang.plugin_name}：</label></th>
+              <th class="paddingT15">{$lang.plugin_name}：</th>
               <td class="paddingT15 wordSpacing5"> {$plugin.name} </td>
             </tr>
             <tr>
-              <th class="paddingT15"> <label for="plugin_desc">{$lang.plugin_description}：</label></th>
-              <td class="paddingT15 wordSpacing5"> {$plugin.desc} </td>
+              <th class="paddingT15"> {$lang.plugin_description}：</th>
+              <td class="paddingT15 wordSpacing5 gray"> <p style="max-width: 600px;">{$plugin.desc}</p> </td>
             </tr>
             <tr>
-              <th class="paddingT15"> <label for="module_desc">{$lang.version}：</label></th>
+              <th class="paddingT15">{$lang.version}：</th>
               <td class="paddingT15 wordSpacing5"> {$plugin.version} </td>
             </tr>
             <!--{foreach from=$plugin.config item=info key=conf}-->
@@ -28,7 +28,7 @@
               <th class="paddingT15"> <label for="plugin_{$conf}">{$info.text}：</label></th>
               <td class="paddingT15 wordSpacing5">
                 <!--{if $info.type eq 'text'}-->
-                <input type="text" name="config[{$conf}]" value="{$config.$conf}" size="{$info.size}" placeholder="{$info.placeholder}" />
+                <input type="text" class="width_normal" name="config[{$conf}]" value="{$config.$conf}" size="{$info.size}" placeholder="{$info.placeholder}" />
                 <!--{elseif $info.type eq 'select'}-->
                 <select name="config[{$conf}]">
                   {html_options options=$info.items selected=$config.$conf}
@@ -39,6 +39,10 @@
                 {html_radios options=$info.items checked=$config.$conf name=$info.name}
                 <!--{elseif $info.type eq 'checkbox'}-->
                 {html_checkboxes options=$info.items selected=$config.$conf name=$info.name}
+                <!--{/if}-->
+
+                <!--{if $info.desc}-->
+                <div class="notice-word mt10"><p class="nobg layui-font-12">{$info.desc}</p></div>
                 <!--{/if}-->
               </td>
             </tr>

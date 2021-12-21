@@ -1,7 +1,7 @@
 <!--{if $app->controller->id eq 'store' && in_array($app->controller->action->id, array('index', 'credit'))}-->
 <div class="store-info bgf mb20 pl10 pr10">
     <div class="title center logo pt20">
-        <img class="block" width="100" height="100" src="{$store.store_logo|url_format}" >
+        <img class="block" width="100" height="100" src="{$store.store_logo|default:$app->params['default_store_logo']|url_format}" />
         <h3 class="center mt10">
             <i class="inline-block">{if $store.joinway eq 0}自营{else if $store.stype eq 'personal'}个人{else}企业{/if}</i>
             <span>{$store.store_name|escape}</span></h3>

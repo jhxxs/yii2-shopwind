@@ -43,10 +43,6 @@ class DepositFrozenlistForm extends Model
 			// 交易的对方
 			$recordlist[$key]['partyInfo'] = DepositTradeModel::getPartyInfoByRecord(Yii::$app->user->id, $record);
 			$recordlist[$key]['status_label'] = Language::get(strtolower($record['status']));
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
-			}
 		}
 		return array($recordlist, $page);
 	}

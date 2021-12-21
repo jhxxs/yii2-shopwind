@@ -6,7 +6,7 @@
         <div class="public table deposit">
           <div class="recordlist"> 
             <!--{if $recordlist}-->
-            <div class="notice-word">
+            <div class="notice-word mb20">
               <p>冻结资金明细</p>
             </div>
             <!--{/if}-->
@@ -41,7 +41,7 @@
               <ul>
                 <!--{foreach from=$recordlist item=record}-->
                 <li class="clearfix">
-                  <div class="time">{$record.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</div>
+                  <div class="time">{$record.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</div>
                   <div class="info break-word">{$record.title|truncate:30}</div>
                   <div class="tradeNo"><span class="break-word">{$record.bizOrderId} | {$record.tradeNo}</span></div>
                   <div class="party center">{$record.partyInfo.name}</div>
@@ -63,7 +63,7 @@
               </div>
               <!--{/if}--> 
             </div>
-            <div class="mt10 clearfix center">{include file="page.bottom.html"}</div>
+            <div class="mt20 clearfix center">{include file="page.bottom.html"}</div>
           </div>
         </div>
       </div>

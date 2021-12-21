@@ -6,7 +6,7 @@
         <div class="public table deposit">
           <div class="deposit-withdraw"> 
             <!--{if $deposit_account.money gt 0}-->
-            <div class="notice-word">
+            <div class="notice-word mb20">
               <p class="yellow">将您的账户余额转出到另外的预存款账户上，请慎重填写</p>
             </div>
             <form method="get" action="{url route='deposit/transferconfirm'}">
@@ -32,9 +32,9 @@
                 </dl>
                 <dl class="clearfix">
                   <dt>&nbsp;</dt>
-                  <dd class="submit"> <span class="btn-alipay">
-                    <input type="submit" value="下一步" />
-                    </span> </dd>
+                  <dd class="submit">
+                    <input class="btn-alipay" type="submit" value="下一步" />
+                  </dd>
                 </dl>
               </div>
             </form>

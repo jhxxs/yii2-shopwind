@@ -221,7 +221,7 @@ class Menu
 			),
 			// 资产
 			'deposit' => array(
-				'text'      => Language::get('deposit'),
+				'text'      => Language::get('myfund'),
 				'ico' => 'icon-yue',
 				'children'  => array(
 					'account' => array(

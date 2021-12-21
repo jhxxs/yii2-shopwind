@@ -154,7 +154,7 @@ class Alipay extends BaseConnect
 	public function getAuthorizeURL()
 	{
 		$url = $this->gateway.'?app_id='.$this->config['appId'].'&scope=auth_user&redirect_uri='.$this->config['redirect_uri'].'&state='.mt_rand();
-		if(in_array(Basewind::getCurrentApp(), ['api', 'wap'])) {
+		if(in_array(Basewind::getCurrentApp(), ['api'])) {
 			$url = 'alipays://platformapi/startapp?appId=20000067&url='.urlencode($url);
 		}
 		

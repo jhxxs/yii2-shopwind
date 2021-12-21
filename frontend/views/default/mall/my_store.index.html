@@ -12,7 +12,7 @@
               <div class="setup">
                 <div class="clearfix">
                   <div class="photo relative1">
-                    <p><img src="{$store.store_logo|url_format}" width="120" height="120" ectype="store_logo" /></p>
+                    <p><img src="{$store.store_logo|default:$app->params['default_store_logo']|url_format}" width="120" height="120" ectype="store_logo" /></p>
                     <div class="filePicker filePicker_store_logo"
                       style=" position:absolute; left:0; top:131px; height:30px; width:120px;"></div>
                     <input type="hidden" name="store_logo" value="{$store.store_logo}" />

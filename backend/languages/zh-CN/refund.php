@@ -17,6 +17,7 @@ return array(
 	'shipped_1' => '已收到货，不退货只退款',
 	'shipped_2' => '已收到货，需退货退款',  
 	'note_for_submit' => '提交后相关货款将立即退还给买家和卖家，是否继续？',
+	'refund_view' => '退款详情',
 	
 	'refund_sn' => '退款单编号',
 	'buyer_name' => '买家',

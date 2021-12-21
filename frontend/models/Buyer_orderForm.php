@@ -51,10 +51,6 @@ class Buyer_orderForm extends Model
 					$orders[$key]['orderGoods'][$k]['goods_image'] = Yii::$app->params['default_goods_image'];
 				}
             }
-			// for WAP
-			if(Basewind::getCurrentApp() == 'wap') {
-				$orders[$key]['status_label'] = Def::getOrderStatus($order['status']);
-			}
 				
 			// 是否申请过退款
 			$tradeNo = DepositTradeModel::find()->select('tradeNo')->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $order['order_sn']])->scalar();

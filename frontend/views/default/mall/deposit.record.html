@@ -34,7 +34,7 @@
                 <ul class="ul-head clearfix">
                   <li class="paytype">支付类型</li>
                   <li class="name">消费名称</li>
-                  <li class="amount">金额</li>
+                  <li class="amount">实付款</li>
                   <!--{if $tradeInfo.refundInfo}-->
                   <li class="amount">退款</li>
                   <li class="amount">应付总额</li>
@@ -104,7 +104,7 @@
               <div class="trade-slips">
                 <dl class="clearfix">
                   <dt>对方信息：</dt>
-                  <dd> {$tradeInfo.partyInfo.name}
+                  <dd> {$tradeInfo.partyInfo.name|default:$lang.platform}
                     {if $tradeInfo.partyInfo.account}&nbsp;&nbsp;{$tradeInfo.partyInfo.account}{/if} </dd>
                 </dl>
                 <dl class="clearfix time">

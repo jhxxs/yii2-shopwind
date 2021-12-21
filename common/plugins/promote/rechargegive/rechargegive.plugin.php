@@ -9,7 +9,7 @@
  * @license https://www.shopwind.net/license/
  */
 
-namespace common\plugins\promote\cashcard;
+namespace common\plugins\promote\rechargegive;
 
 use yii;
 
@@ -17,17 +17,17 @@ use common\library\Language;
 use common\plugins\BasePromote;
 
 /**
- * @Id cashcard.plugin.php 2018.6.5 $
+ * @Id rechargegive.plugin.php 2018.6.5 $
  * @author mosir
  */
 
-class Cashcard extends BasePromote
+class Rechargegive extends BasePromote
 {
 	/**
      * 插件实例
 	 * @var string $code
 	 */
-    protected $code = 'cashcard';
+    protected $code = 'rechargegive';
 
     /**
 	 * 构造函数

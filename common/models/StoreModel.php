@@ -102,15 +102,6 @@ class StoreModel extends ActiveRecord
 				if (Basewind::getCurrentApp() == 'pc') {
 					$store['gcategories'] = GcategoryModel::getTree($store_id);
 				}
-
-				if (Basewind::getCurrentApp() == 'wap') {
-
-					// 店铺在售商品总数
-					$store['goods_count'] = GoodsModel::getCountOfStore($store_id);
-
-					// 店铺被收藏数
-					$store['collects'] = CollectModel::find()->where(['type' => 'store', 'item_id' => $store_id])->count();
-				}
 			}
 			$data = $store;
 

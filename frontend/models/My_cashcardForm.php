@@ -44,7 +44,7 @@ class My_cashcardForm extends Model
 				}
 			}
 			 
-			if(in_array(Basewind::getCurrentApp(), ['api', 'wap'])) {
+			if(in_array(Basewind::getCurrentApp(), ['api'])) {
 				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
 				$record['active_time'] > 0 && $recordlist[$key]['active_time'] = Timezone::localDate('Y-m-d H:i:s', $record['active_time']);
 				$record['expire_time'] > 0 && $recordlist[$key]['expire_time'] = Timezone::localDate('Y-m-d H:i:s', $record['expire_time']);

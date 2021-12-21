@@ -171,7 +171,7 @@ function getCheckItemIds()
 	$('.checkitem:checked').each(function(){
 		items += this.value + ',';
 	});
-	items = items.substr(0, (items.length - 1));
-		
+	items = items.substring(0, (items.length - 1));
+
 	return items;
 }

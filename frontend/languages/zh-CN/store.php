@@ -37,7 +37,6 @@ return array(
     'store_grade' => '店铺等级',
 	'more_new_goods'=>'更多新品',
 	'more_rec_goods'=>'更多推荐',
-	'more_hotsale_goods'=>'更多热卖',
 	'the_store_is_applying' => '您访问的店铺未开通！',
 	'no_such_article' => '没有相关文章',
 );

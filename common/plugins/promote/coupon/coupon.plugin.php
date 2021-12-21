@@ -27,7 +27,7 @@ class Coupon extends BasePromote
      * 插件实例
 	 * @var string $code
 	 */
-    protected $code = 'cashccouponard';
+    protected $code = 'coupon';
 
     /**
 	 * 构造函数

@@ -37,12 +37,6 @@ class DepositRecordlistForm extends Model
 		$page = Page::getPage($query->count(), $pageper);
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		
-		foreach($recordlist as $key => $record)
-		{
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
-			}
-		}
 		return array($recordlist, $page);
 	}
 	

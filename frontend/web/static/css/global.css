@@ -15,7 +15,8 @@ img{border:0;}
 a{text-decoration:none;/*blr:expression(this.onFocus=this.blur());*/outline:none; font-style:normal} 
 input, button, select, textarea{outline: none;filter: none !important;background:#fff;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
-
+input[type="button"],input[type="submit"] {-webkit-appearance:none; border-radius:0;} /* don't set input[type="text"] */
+input[type="file"]{background: none;}
 
 .w-full{width:100%;}
 .w-mall,.w,.w-shop,.w-user{margin:0 auto;}
@@ -69,10 +70,10 @@ input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shad
 .fff{color:#fff;}
 .f60{color:#ff6600;}
 .f66{color:#666;}
-.gray{color:#999;}
-.red {color: #DA542E !important}
+.gray{color:#999 !important;}
+.red {color: #DA542E !important;}
 .yahei{font-family:"Microsoft yahei";}
-.blue {color: #0092D2 !important}
+.blue {color: #0092D2 !important;}
 
 .fs18{font-size:18px}
 .fs16{font-size:16px}
@@ -235,7 +236,7 @@ img.lazyload{background:#fff url(../images/loading.gif) center  center no-repeat
 .step span{float:left;width:20%; text-align:center; display:block;}
 
 /* common notice */
-.notice-word p{background:url(../images/member/T1CqmcXllwXXXXXXXX-64-1800.png) 3px -145px no-repeat #E5F5FF;border:1px #40B3FF solid;padding:0 5px 0 25px; line-height:25px;margin-bottom:20px; text-align:left;color:#3e3e3e;}
+.notice-word p{background:url(../images/member/T1CqmcXllwXXXXXXXX-64-1800.png) 3px -145px no-repeat #E5F5FF;border:1px #40B3FF solid;padding:0 5px 0 25px; line-height:25px; text-align:left;color:#3e3e3e;}
 .notice-word p a{color:#0071BB; text-decoration:none}
 .notice-word p a:hover{color:#f60; text-decoration:underline;}
 
@@ -246,6 +247,7 @@ img.lazyload{background:#fff url(../images/loading.gif) center  center no-repeat
 .notice-word .price{color:#f60; font-weight:bold; font-family:Arial, Helvetica, sans-serif}
 .notice-word .correct{ background-position:3px -246px;}
 .notice-word .correct-nobg{border:0;background:url(../images/member/T1CqmcXllwXXXXXXXX-64-1800.png) 3px -246px no-repeat #fff}
+.notice-word .nobg {background: #E5F5FF;padding-left: 10px;border:0; border-radius: 2px;}
 
 /* empty */
 .notice-empty{text-align: center; margin:0 auto;padding:50px 0; text-align:center; vertical-align:middle}

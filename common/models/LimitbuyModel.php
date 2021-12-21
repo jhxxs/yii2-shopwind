@@ -86,11 +86,6 @@ class LimitbuyModel extends ActiveRecord
 			// 判断状态
 			$limitbuys[$key]['status'] = self::getLimitbuyStatus($limitbuy, true);
 			$limitbuys[$key]['status_label'] = Language::get($limitbuys[$key]['status']);
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$limitbuys[$key]['start_time'] = Timezone::localDate('m月d日 H:i', $limitbuy['start_time']);
-				$limitbuys[$key]['end_time'] = Timezone::localDate('m月d日 H:i', $limitbuy['end_time']);
-			}
         }
 		return $limitbuys;
 	}

@@ -57,10 +57,6 @@ class RefundForm extends Model
 			if(($record['bizIdentity'] == Def::TRADE_ORDER) && $record['bizOrderId']) {
 				if(($order = OrderModel::find()->select('order_id,order_sn,seller_name as store_name')->where(['order_sn' => $record['bizOrderId']])->asArray()->one())) {
 					
-					if(Basewind::getCurrentApp() == 'wap') {
-						$order['goodslist'] = OrderGoodsModel::find()->select('goods_id,spec_id,goods_name,goods_image,specification,price,quantity')->where(['order_id' => $order['order_id']])->asArray()->all();
-					}
-					
 					$recordlist[$key] += $order;
 				}
 			}

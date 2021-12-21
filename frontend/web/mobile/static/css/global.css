@@ -10,7 +10,7 @@ em,i{font-style:normal;}
 ul,ol{ list-style:none;}
 input, button, select, textarea{outline: none;filter: none !important;-webkit-appearance:none;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
-input {-webkit-appearance:none; border-radius:0;}
+input[type="button"],input[type="submit"] {-webkit-appearance:none; border-radius:0;} /* don't set input[type="text"] */
 input,button,select,textarea{outline:none;}
 textarea{resize:none}
 img{border:0;}

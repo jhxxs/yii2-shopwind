@@ -36,7 +36,7 @@ class RefundAgreeForm extends Model
 	 */
 	public function submit($post = null, $sendNotify = true)
 	{
-		if(!$post->id || !($refund = RefundModel::find()->alias('r')->select('r.*,dt.tradeNo,dt.bizOrderId,dt.bizIdentity,rb.phone_mob')->joinWith('depositTrade dt', false)->joinWith('refundBuyerInfo rb', false)->where(['refund_id' => $post->id, 'r.seller_id' => Yii::$app->user->id])->andWhere(['not in', 'r.status', ['SUCCESS','CLOSED']])->asArray()->one())) {
+		if(!$post->id || !($refund = RefundModel::find()->alias('r')->select('r.*,dt.tradeNo,dt.payTradeNo,dt.bizOrderId,dt.bizIdentity,rb.phone_mob')->joinWith('depositTrade dt', false)->joinWith('refundBuyerInfo rb', false)->where(['refund_id' => $post->id, 'r.seller_id' => Yii::$app->user->id])->andWhere(['not in', 'r.status', ['SUCCESS','CLOSED']])->asArray()->one())) {
 			$this->errors = Language::get('agree_disallow');
 			return false;
 		}
@@ -58,7 +58,7 @@ class RefundAgreeForm extends Model
 		$depopay_type = \common\library\Business::getInstance('depopay')->build('refund', $post);
 		$result = $depopay_type->submit(array(
 			'trade_info' => array('userid' => $order['seller_id'], 'party_id' => $order['buyer_id'], 'amount' => $amount),
-			'extra_info' => $order + array('tradeNo' => $refund['tradeNo'], 'chajia' => $chajia, 'refund_id' => $post->id, 'operator' => 'seller')
+			'extra_info' => $order + array('tradeNo' => $refund['tradeNo'], 'payTradeNo' => $refund['payTradeNo'], 'chajia' => $chajia, 'refund_sn' => $refund['refund_sn'], 'refund_id' => $post->id, 'operator' => 'seller')
 		));
 			
 		if($result !== true) {

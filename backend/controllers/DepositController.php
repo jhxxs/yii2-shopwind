@@ -73,7 +73,10 @@ class DepositController extends \common\controllers\BaseAdminController
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value) {
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
-				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
+
+				if(($username = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar())) {
+					$list[$key]['username'] = $username;
+				}
 			}
 
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);

@@ -43,12 +43,7 @@ class AppmarketMyForm extends Model
 				$recordlist[$key]['timediff'] = $timediff;
 				$recordlist[$key]['checkIsRenewal'] = true; 
 			}
-			!$record['logo'] && $recordlist[$key]['logo'] = Yii::$app->params['default_goods_image'];	
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['name'] = Language::get($record['appid']);
-				$recordlist[$key]['expired'] = Timezone::localDate('Y-m-d', $record['expired']);
-			}
+			empty($record['logo']) && $recordlist[$key]['logo'] = Yii::$app->params['default_goods_image'];
 		}
 		return array($recordlist, $page);
 	}

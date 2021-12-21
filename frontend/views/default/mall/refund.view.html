@@ -28,8 +28,8 @@
             <a class="btn-alipay pl20 pr20 J_AjaxRequest" uri="{url route='refund/agree' id=$refund.refund_id}" confirm='点击“同意退款”按钮，相关货款将退还给买家，是否继续？'>同意退款</a> 
             
             <!--{if $refund.status neq 'SELLER_REFUSE_BUYER'}-->
-        	<a class="btn-alipay pl20 pr20 btn-alipay-white" href="{url route='refund/refuse' id=$refund.refund_id}">拒绝退款</a> 
-        	<!--{/if}-->
+        	  <a class="btn-alipay pl20 pr20 btn-alipay-white" href="{url route='refund/refuse' id=$refund.refund_id}">拒绝退款</a> 
+        	  <!--{/if}-->
   
             <!--{/if}--> 
             <!--{if !$refund.intervene}--> 

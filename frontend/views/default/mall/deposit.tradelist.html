@@ -6,7 +6,7 @@
         <div class="public table deposit">
           <div class="recordlist"> 
             <!--{if $recordlist}-->
-            <div class="notice-word">
+            <div class="notice-word mb20">
               <p>显示所有交易记录</p>
             </div>
             <!--{/if}-->
@@ -39,10 +39,10 @@
               <!--{foreach from=$recordlist item=record}-->
               <ul>
                 <li class="clearfix" style="{if $record.refund} border-bottom:1px #ddd dotted;{/if}{if in_array($record.refund.status, array('CLOSED'))}color:gray{/if}">
-                  <div class="time">{$record.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</div>
+                  <div class="time">{$record.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</div>
                   <div class="info break-word">{$record.title|truncate:50} <p class="gray">{$record.buyer_remark|truncate:30}</p></div>
                   <div class="tradeNo"><span class="break-word">{$record.bizOrderId} | {$record.tradeNo}</span></div>
-                  <div class="party center">{$record.partyInfo.name}</div>
+                  <div class="party center">{$record.partyInfo.name|default:$lang.platform}</div>
                   <div class="amount center"> <strong class="price"> 
                     <!--{if $record.flow eq 'income'}--> 
                     <span class="green">+{$record.amount}</span> 

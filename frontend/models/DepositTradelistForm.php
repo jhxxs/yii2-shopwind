@@ -40,10 +40,6 @@ class DepositTradelistForm extends Model
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($recordlist as $key => $record)
 		{
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
-			}
-			
 			// 如果当前用户是交易的卖方
 			if($record['seller_id'] == Yii::$app->user->id) {
 				$recordlist[$key]['flow'] = ($record['flow'] == 'income') ?  'outlay' : 'income';	

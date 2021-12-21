@@ -5,7 +5,7 @@
       <div class="wrap">
         <div class="public table deposit">
           <div class="deposit-withdraw-confirm">
-            <div class="notice-word">
+            <div class="notice-word mb20">
               <p>向平台商提交提现申请，审核通过之后，平台将向您提交的银行卡汇款，请确保您的银行卡信息正确</p>
             </div>
             <form method="post" id="deposit-withdraw-confirm">
@@ -43,10 +43,10 @@
                   </dl>
                   <dl class="clearfix">
                     <dt>&nbsp;</dt>
-                    <dd class="submit"> <span class="btn-alipay">
+                    <dd class="submit">
                       <input type="hidden" name="bid" value="{$bank.bid}" />
-                      <input type="submit" value="确认提现" {if $withdraw.money gt $deposit_account.money} disabled="disabled" {/if}/>
-                      </span> <a class="goback" href="{url route='deposit/withdraw'}">返回修改</a> </dd>
+                      <input class="btn-alipay" type="submit" value="确认提现" {if $withdraw.money gt $deposit_account.money} disabled="disabled" {/if}/>
+                      <a class="goback" href="{url route='deposit/withdraw'}">返回修改</a> </dd>
                   </dl>
                 </div>
               </div>

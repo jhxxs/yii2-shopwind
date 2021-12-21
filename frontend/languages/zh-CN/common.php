@@ -11,7 +11,7 @@ return array(
 	'store_rate'	=> '店铺评分',
 	'goods'   		=> '商品',
 	'goods_props'	=> '商品属性',	
-	'deposit'   	=> '预存款',
+	'deposit'		=> '我的余额',
 	'cod'			=> '货到付款',
 	'credit'		=> '信用卡',
 	'debit'			=> '储蓄卡',
@@ -309,7 +309,7 @@ return array(
 	'TRADE_SHIPPED'				=> '卖家已发货',
 	'TRADE_SUCCESS'				=> '交易完成',
 	'TRADE_CLOSED'				=> '交易关闭',
-	'TRADE_WAIT_ADMIN_VERIFY' 	=> '等待系统审核',	
+	'TRADE_WAIT_ADMIN_VERIFY' 	=> '等待平台审核',	
 
 	
 	// 针对退款的状态

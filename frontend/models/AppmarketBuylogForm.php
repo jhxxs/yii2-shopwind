@@ -45,11 +45,6 @@ class AppmarketBuylogForm extends Model
 			if($record['status'] == Def::ORDER_PENDING) {
 				$recordlist[$key]['buyUrl'] = Url::toRoute(['appmarket/cashier', 'id' => $record['bid']]);
 			}
-			
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['name'] = Language::get($record['appid']);
-				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d', $record['add_time']);
-			}
 		}
 		return array($recordlist, $page);
 	}

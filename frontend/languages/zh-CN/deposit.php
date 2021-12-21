@@ -1,7 +1,6 @@
 <?php
 
 return array(
-	'deposit'					=>	'预存款',
 	'deposit_index'				=>	'资产总览',
 	'deposit_config'			=>	'账户配置',
 	'deposit_record'			=>	'交易详情',
@@ -51,7 +50,7 @@ return array(
 	'money_error'				=>	'金额不能为空且必须大于0元',
 	'money_not_enough'			=>	'您账户余额不足',
 	'withdraw_error'			=>	'提现申请提交失败',
-	'withdraw_ok_wait_verify'	=>	'提现申请提交成功，请等待管理员审核...',
+	'withdraw_ok_wait_verify'	=>	'提现申请提交成功，请等待平台审核...',
 	'second_submit'				=>	'请不要重复提交',
 	
 	'mail_captcha_failed'		=>	'邮件验证码错误或者已过期',
@@ -81,7 +80,7 @@ return array(
 	'no_data'					=>	'还没有任何记录',
 	
 	'connecting_pay_gateway'    => '正在连接支付网关, 请稍等...',
-	'has_not_account' 			=> '对不起，您还没有配置预存款帐户',
+	'has_not_account' 			=> '对不起，您还没有配置余额帐户',
 	
 	'no_record'					=> '没有交易记录',
 	

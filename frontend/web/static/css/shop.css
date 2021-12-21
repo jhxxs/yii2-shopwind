@@ -7,15 +7,6 @@
 .location span {color: #666;font-family:simsun;margin:0; }
 .location a { padding:4px 5px; font-size: 14px;}
 
-
-/*page*/
-.shop_list_page{width:100%;text-align:right;padding:10px  0px;}
-.shop_list_page .shop-page span ,.shop_list_page .shop-page a{display:inline-block;height: 20px;padding: 3px 10px;border: 1px solid #ccc;margin-left: 2px;font-family: arial;line-height: 20px;font-size: 14px;overflow: hidden;-moz-border-radius: 5px;-webkit-border-radius: 5px;text-decoration:none;color:#005aa0}
-.shop_list_page .shop-page .page_hover{color:#E4393C;border: 0;padding: 4px 11px;}
-.shop_list_page .shop-page .page_link:hover,.shop_list_page .shop-page .down:hover,.shop_list_page .shop-page .former:hover{background:#005aa0;border:1px solid #005aa0;color:#fff}
-/*page end*/
-
-
 /*nav*/
 .shop-nav { height:40px;background:#3E4789; overflow:hidden}
 .shop-nav li { float: left;}
@@ -160,17 +151,12 @@
 .credit-detail .detail table div{color: #2953a6;}
 .credit-detail .detail table .price{color: #DA542E;font-size:14px;}
 
-
-
 /****************store credit end ***************************************************/
 
 
 
 
 /****************goods relative *******************************************************/
-
-/*goods-info*/
-
 
 /*col-sub*/
 .zoom-pics{width:430px;position:relative; z-index:100}
@@ -255,24 +241,11 @@
 .goods-attr .attribute .attr-detail .buy-btn .buy-now {background-color: #E4393C;}
 .goods-attr .attribute .attr-detail .buy-btn .buy-now:hover {background-color:#E4393C}
 .goods-attr .attribute .attr-detail .buy-btn .add-to-cart{background-color: #fff; border: 1px #E4393C solid; color: #E4393C;}
-
-
-.i-want-join{position:absolute;left:270px;top:-220px;background-color: #F5F5F5;width: 410px;height:auto;border: solid 1px #D7D7D7;box-shadow: 0 0 3px rgba(153,153,153,0.25);padding:20px;}
-.i-want-join table{width:100%;}
-.i-want-join table th,.i-want-join table td{text-align:left;height:30px;}
-.i-want-join .buyer-info{height:30px;line-height:30px;}
-.i-want-join .close-btn{font: 10px/12px Verdana;color: #999;text-align: center;width: 12px;height: 12px;float: right;margin: -5px 5px 0 0;cursor: pointer;position:absolute;right:0px;top:10px;}
 .goods-attr .attribute .attr-detail .buy-btn .input{height:32px;border:0px;cursor:pointer;}
 .goods-attr .attribute .attr-detail .gr-btn span,.goods-attr .attribute .attr-detail .gr-btn input,.goods-attr .attribute .attr-detail .gr-btn a{display:inline-block;vertical-align:middle;}
 
-
-
-
-/* .goods-attr .attribute .attr-detail .rate .countdown .time{font-size:20px;color: #E4393C;margin-right:3px;} */
-
 .promo-price-type i{display:block;border:1px solid #E3C8BD; color:#B68571;padding:1px 3px 1px 3px !important; border-radius:2px; font-style:normal;margin-right:10px;margin-top:-2px;}
 .lefttime {background: url(../images/clock.png) left 2px no-repeat;padding-left: 22px; background-size: 33%; margin-left: 30px;}
-/* .goods-attr .attribute .attr-detail .rate .countdown .tm{font-size:14px;color: #E4393C;margin-right: 3px;} */
 
 .discount-info b{display: inline-block;font-style:normal;vertical-align: middle;font-family: tahoma,arial;font-weight:normal}
 .discount-info .d-name{padding: 0 5px;color: #fff;border-radius: 2px;background:#E4393C;height: 20px;line-height: 20px;}
@@ -284,18 +257,7 @@
 .logs .list table tr{height:30px;}
 .logs .list table td,.logs .list table th{text-align:center;border:1px solid #ddd;}
 
-
-.goods-attr .attribute .attr-detail .add_ok_warning{position:absolute;left:270px;top:-220px;background-color: #F5F5F5;width: 320px;height: 120px;border: solid 1px #D7D7D7;box-shadow: 0 0 3px rgba(153,153,153,0.25);z-index: 1;}
-.goods-attr .attribute .attr-detail .add_ok_warning dt,.goods-attr .attribute .attr-detail .add_ok_warning dd{font-size: 12px;line-height: 20px;vertical-align: top;letter-spacing: normal;word-spacing: normal;display: inline-block;min-height: 20px;padding: 4px 0;}
-.goods-attr .attribute .attr-detail .add_ok_warning dt{font: lighter 16px/20px "Microsoft Yahei";color: #333;text-align: center;width: 100%;margin: 10px 0 5px 0;}
-.goods-attr .attribute .attr-detail .add_ok_warning dt span{font: 10px/12px Verdana;color: #999;text-align: center;display: inline-block;width: 12px;height: 12px;float: right;margin: -5px 5px 0 0;cursor: pointer;}
-.goods-attr .attribute .attr-detail .add_ok_warning dd{text-align: center;width: 100%;margin: 0 0 5px 0;}
-.goods-attr .attribute .attr-detail .add_ok_warning dd .bold_mly{color: #D93600;vertical-align: middle;font-style:normal}
-.goods-attr .attribute .attr-detail .add_ok_warning .btn{ box-shadow:none;padding:6px 0px;}
-.goods-attr .attribute .attr-detail .add_ok_warning dd.btn a{font: normal 12px/20px "Microsoft Yahei";color: #777;background-color: #F5F5F5;text-align: center;vertical-align: middle;display: inline-block;height: 20px;padding: 0 10px;margin-right: 2px;border-style: solid;border-width: 1px;border-color: #DCDCDC #DCDCDC #B3B3B3 #DCDCDC;cursor: pointer;}
-.goods-attr .attribute .attr-detail .add_ok_warning dd a.btn-1{background-color: #5BB75B;border-color: #52A452 #52A452 #448944 #52A452;color:#fff;}
-
-.attr-list {border-top: 1px #eee solid;}
+.attr-list {border-top: 1px #eee solid; color: #666;}
 .attr-list dl {width: calc(50% - 2px); float: left; border: 1px #eee solid; border-top:0}
 .attr-list dl:nth-child(2n) {width: calc(50% - 1px); border-left: 0;}
 .attr-list dl dt, .attr-list dl dd {float: left;width: calc(65% - 10px); text-indent: 10px; line-height:30px;padding-right:10px;}

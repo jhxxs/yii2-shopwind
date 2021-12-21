@@ -23,7 +23,8 @@ body {font-size: 12px;font-family: Helvetica Neue For Number,-apple-system,Blink
 .align4 {text-align: right;padding-right: 30px;}
 a {text-decoration: none}
 a:hover {color: #108EE9;text-decoration:none}
-.gray-color {color: #808080;}
+.gray {color: #999;}
+.bold {font-weight:bolder;}
 .mt15 {margin-top: 15px;}
 .width1 {width: 30px;}
 .width2 {width: 77px;}
@@ -248,7 +249,7 @@ select {border: 1px solid #d9d9d9;padding:5px;border-radius:3px}
 .sign_box .sign_con {width: 300px;padding: 5px 0;overflow: hidden;}
 #warning {border: red 1px solid;background: #FFB7B7;color: #000;padding: 3px 10px;margin-bottom: 10px;display: none;color: #000;font-weight: normal;}
 #warning label {display: block;margin: 3px 0px;}
-#warning label.error {color: #000;font-weight: normal;}
+#warning label.error {color: #000;font-weight: normal; font-size: 12px;}
 /*  8  small window*/
 .content1 {padding: 20px;color: #666;}
 .content1 h1 {font-size: 16px;color: #000;margin-bottom: 15px;}
@@ -741,7 +742,7 @@ span[fieldname=closed].wrong_ico {display: block;width: 11px;height: 11px;overfl
 .add_ico {background: url(../images/member/ico.gif) no-repeat 0 -1529px;}
 .sub_ico {background: url(../images/member/ico.gif) no-repeat 0 -1475px;}
 .child_ico {background: url(../images/member/ico.gif) no-repeat 25px -1578px;padding-left: 40px;}
-.bold {font-weight:normal;padding-left: 20px;}
+
 
 /* form avalidate */
 form .field_notice {color: #9C9C9C;margin-left: 5px;}
@@ -857,13 +858,10 @@ em {font-style: normal}
 a {text-decoration: none}
 a:hover {color: #108ee9;}
 
-.btn-alipay, .btn-alipay span, .btn-alipay input {display: inline-block;background:#19ACF7; font-weight:normal;height: 36px;line-height: 36px;font-size: 14px; border: 0;text-align: center;text-decoration: none;cursor: pointer; border-radius:4px; min-width:100px;}
-.btn-alipay input {color: #fff;}
+.btn-alipay{display: inline-block;background:#19ACF7; font-weight:normal;height: 36px;line-height: 36px;font-size: 13px; border: 0;text-align: center;text-decoration: none;cursor: pointer; border-radius:4px !important; min-width:100px;}
 .btn-alipay {color: #fff;position: relative;margin-right: 10px;}
 .btn-alipay:hover {background-position: 0 -392px;color: #fff;}
-.btn-alipay span, .btn-alipay input {padding: 0 22px;font-size: 14px;}
 .btn-alipay-white {color: #fff;background:gray; }
-.btn-alipay-white span, .btn-alipay-white input {background:gray;}
 
 .pop-tips {display: inline-block;position: relative;text-align: left}
 .pop-tips em {display: block;background: url(../images/member/1ucjDOnsb7.png) no-repeat 0 -124px;width: 14px;height: 16px;cursor: pointer;}
@@ -887,11 +885,7 @@ a:hover {color: #108ee9;}
 .deposit-account .account-info {border-bottom: 1px #ddd solid;padding-bottom: 30px;margin-bottom: 30px;}
 .deposit-account .account-info p {border-bottom: 2px #808080 solid;font-size: 22px;margin-bottom: 20px;padding-bottom: 10px;}
 .deposit-account .account-info .explain a {display: inline-block;color: #999999;font-family: Tahoma, Geneva, sans-serif;text-decoration: none}
-.deposit-account .account-info .explain a:hover {text-decoration: underline}
-.deposit-account .account-info .action {float: right;text-align: right;}
-.deposit-account .account-info .action a {color: #0088CC;text-decoration: none;margin-left: 6px;margin-right: 5px;}
-.deposit-account .account-info .action a:hover {text-decoration: underline;color: #f60;}
-.deposit-account .account-info .action h2 {font-weight:normal;color: #666;font-size: 12px;display: inline-block}
+.deposit-account .account-info .explain a:hover { color: #ff6600;}
 .deposit-account .account-info .balanceNum {clear: both;color: #808080;padding-top: 10px;}
 .deposit-account .account-info .balanceNum em {font-size: 30px;font-weight:normal;color: #4C4C4C;font-style: normal;margin-right: 3px;display: inline-block}
 .deposit-account .account-info .balanceNum b {color: #0088CC;font-weight: normal}
@@ -964,21 +958,18 @@ a:hover {color: #108ee9;}
 .icon-cashier-wxnativepay{ background-position:0px -1062px;}
 
 .bank-add .captcha input {float: left;margin-right: 3px;width: 80px;}
-.bank-add .captcha a {display: inline-block;float: left;}
+.bank-add .captcha a {display: inline-block;}
 .tradelist {margin-bottom: 30px;}
 .tradelist .title {margin-bottom: 10px;width: 100%;}
 .tradelist .subtit {background: #EFF0F1;}
-.tradelist .list {}
 .tradelist ul {padding:10px 0; border-bottom:1px #EFF0F1 solid }
 .tradelist li {float: left;width: 140px;padding: 5px 0 5px 0; text-align:center}
 .tradelist .list li {line-height: 20px; padding:10px 0 10px 0;}
-.tradelist li.tradeNo {word-wrap: break-word;word-break: break-all;width:145px;padding-right:7px;font-family: Tahoma, Geneva, sans-serif}
+.tradelist li.tradeNo {text-align: left; word-wrap: break-word;word-break: break-all;width:145px;padding-right:7px;font-family: Tahoma, Geneva, sans-serif}
 .tradelist li.info {width: 140px; text-align:left;padding-right: 20px;}
-.tradelist li.party {}
-.tradelist li.amount {/*text-align: center;*/ width: 120px;}
-.tradelist li.status {/*text-align: center;*/}
+.tradelist li.amount { width: 120px;}
 .tradelist li.detail {text-align: center;width: 35px;}
-.tradelist .list-more {text-align: right;height: 40px;line-height: 40px;}
+.tradelist .list-more {text-align: right;}
 .tradelist a {color: #0077FF;text-decoration: none}
 .tradelist a:hover {text-decoration: underline;color: #f60;}
 .deposit-withdraw dt {width: 100px;text-align: right;padding-right: 40px;}

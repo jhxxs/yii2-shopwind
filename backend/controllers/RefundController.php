@@ -91,7 +91,7 @@ class RefundController extends \common\controllers\BaseAdminController
 			return Message::warning(Language::get('no_such_refund'));
 		}
 		
-		if(!($tradeInfo = DepositTradeModel::find()->select('bizOrderId')->where(['tradeNo' => $refund['tradeNo']])->asArray()->one())) {
+		if(!($tradeInfo = DepositTradeModel::find()->select('bizOrderId,payTradeNo')->where(['tradeNo' => $refund['tradeNo']])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_trade'));
 		}
 		if(!($orderInfo = OrderModel::find()->with('orderGoods')->where(['order_sn' => $tradeInfo['bizOrderId']])->asArray()->one())) {
@@ -139,7 +139,7 @@ class RefundController extends \common\controllers\BaseAdminController
 			$depopay_type    = \common\library\Business::getInstance('depopay')->build('refund', $post);
 			$result = $depopay_type->submit(array(
 				'trade_info' => array('userid' => $orderInfo['seller_id'], 'party_id' => $orderInfo['buyer_id'], 'amount' => $amount),
-				'extra_info' => $orderInfo + array('tradeNo' => $refund['tradeNo'], 'chajia' => $chajia, 'refund_id' => $get->id, 'operator' => 'admin')
+				'extra_info' => $orderInfo + array('tradeNo' => $refund['tradeNo'], 'payTradeNo' => $tradeInfo['payTradeNo'], 'chajia' => $chajia, 'refund_sn' => $refund['refund_sn'], 'refund_id' => $get->id, 'operator' => 'admin')
 			));
 				
 			if($result !== true) {
