@@ -17,6 +17,7 @@ use yii\base\Model;
 use common\models\OrderModel;
 use common\models\RefundModel;
 use common\models\IntegralModel;
+use common\models\DistributeModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -65,6 +66,9 @@ class RefundAgreeForm extends Model
 			$this->errors = $depopay_type->errors;
 			return false;
 		}
+
+        // 退款后（非全额退款），处理订单商品三级返佣 
+		DistributeModel::distributeInvite($order);
 			
 		// 退款后的积分处理（积分返还，积分赠送）
 		IntegralModel::returnIntegral($order);
