@@ -51,7 +51,6 @@ return array(
    'wxmenu_desc_2'		=> '2. 每个一级菜单下不能多于5个二级菜单，二级菜单字数不能超过8个字，添加菜单时，请不要超出规定',
    'createmenu'			=> '生成菜单', 
    'menu_empty'			=> '菜单为空，生成失败',
-   'createmenu_fail'	=> '菜单生成失败，错误代码：%s，错误说明：%s',
    'createmenu_successed'=> '生成菜单成功', 
    
    'textmsg' 			=> '文字消息',
