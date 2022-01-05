@@ -21,6 +21,7 @@ return array(
    'gatewayUrl' 		=> 'URL(服务器地址)',
    
    'weixin_menu'		=> '自定义菜单',
+   'weixin_addmenu'  => '添加自定义菜单',
    'menus_list' 		=> '列表',
    'menu_name'			=> '菜单名称',
    'parent' 			=> '上级菜单',

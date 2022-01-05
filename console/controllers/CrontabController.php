@@ -12,6 +12,7 @@
 namespace console\controllers;
 
 use Yii;
+use yii\base\InvalidRouteException;
 use yii\console\Controller;
 
 /**

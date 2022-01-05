@@ -14,7 +14,9 @@ namespace common\plugins\connect\weixin;
 use yii;
 
 use common\models\WeixinSettingModel;
+
 use common\library\Basewind;
+use common\library\Language;
 
 /**
  * @Id SDK.php 2018.6.6 $
@@ -72,14 +74,18 @@ class SDK
 	
 	public function getUserInfo($resp = null)
 	{
-		$response = false;
-		
-		if($resp->access_token) 
-		{
-			$url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$resp->access_token."&openid=".$resp->openid;
-			$response = Basewind::curl($url);
-			$response = json_decode($response);
+		if(!$resp->access_token) {
+			$this->errors = Language::get('access_token_empty');
+			return false;
 		}
+		
+		$url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$resp->access_token."&openid=".$resp->openid;
+		$response = json_decode(Basewind::curl($url));
+		if($response->errcode) {
+			$this->errors = $response->errmsg;
+			return false;
+		}
+		
 		return $response;
 	}
 	
