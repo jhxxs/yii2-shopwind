@@ -16,6 +16,7 @@ use yii;
 use common\library\Def;
 use common\library\Language;
 
+use common\plugins\payment\wxh5pay\lib\JsApi_pub;
 use common\plugins\payment\wxh5pay\lib\UnifiedOrder_pub;
 use common\plugins\payment\wxh5pay\lib\Notify_pub;
 
@@ -117,6 +118,46 @@ class SDK
 		//从统一支付接口获取到mweb_url
 		return $unifiedOrderResult["mweb_url"].'&redirect_url='.urlencode($this->returnUrl);
 	}
+
+	public function getRefundform($orderInfo)
+	{
+		$jsApi = new JsApi_pub($this->config);
+
+        $unified = array(
+            'appid' => $this->config['AppID'],
+            'mch_id' => $this->config['MchID'],
+            'nonce_str' => $jsApi->createNonceStr(),
+            'total_fee' => $orderInfo['total'] * 100,       //订单金额
+            'refund_fee' => $orderInfo['amount'] * 100,       //退款金额
+            'sign_type' => 'MD5',           //签名类型 支持HMAC-SHA256和MD5，默认为MD5
+            //'transaction_id'=>'',               //微信订单号
+            'out_trade_no'=> $this->payTradeNo,        //商户订单号
+            'out_refund_no'=> $orderInfo['refund_sn'],        //商户退款单号
+            //'refund_desc'=> '',     //退款原因（选填）
+            //'notify_url'=> $this->notifyUrl
+        );
+        $unified['sign'] = $jsApi->getSign($unified);
+		$responseXml = $jsApi->postXmlSSLCurl($jsApi->arrayToXml($unified), 'https://api.mch.weixin.qq.com/secapi/pay/refund');
+		if($responseXml === false) {
+			$this->errors = $jsApi->errors;
+			return false;
+		}
+        $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if ($unifiedOrder === false) {
+            $this->errors = 'parse xml error';
+			return false;
+        }
+        if ($unifiedOrder->return_code != 'SUCCESS') {
+            $this->errors = $unifiedOrder->return_msg;
+			return false;
+        }
+        if ($unifiedOrder->result_code != 'SUCCESS') {
+            $this->errors = $unifiedOrder->err_code;
+			return false;
+        }
+        return true;
+	}
+
 	public function verifyNotify($orderInfo, $notify)
 	{
 		// 验证与本地信息是否匹配。这里不只是付款通知，有可能是发货通知，确认收货通知

@@ -19,7 +19,7 @@ namespace common\plugins\connect\qq;
 return array(
     'code' => 'qq',
     'name' => '腾讯QQ登录',
-    'desc' => '适用于PC端或H5端QQ登录',
+    'desc' => '适用于PC端或H5端登录/APP登录，只需要填写QQ互联开放平台的网站应用秘钥',
     'author' => 'SHOPWIND',
 	'website' => 'https://www.shopwind.net',
     'version' => '1.0',

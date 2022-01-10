@@ -22,6 +22,8 @@ use common\plugins\payment\wxh5pay\lib\WxPayConf_pub;
 class Common_util_pub
 {
 	var $_config;
+
+	var $errors;
 	
 	function __construct($config) {
 		$this->_config = $config;
@@ -167,8 +169,9 @@ class Common_util_pub
 		else 
 		{ 
 			$error = curl_errno($ch);
-			echo "curl出错，错误码:$error"."<br>"; 
-			echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+			$this->errors = "curl出错，错误码:$error";
+			//echo "curl出错，错误码:$error"."<br>"; 
+			//echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
 			curl_close($ch);
 			return false;
 		}
@@ -196,10 +199,10 @@ class Common_util_pub
 		//使用证书：cert 与 key 分别属于两个.pem文件
 		//默认格式为PEM，可以注释
 		curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
-		curl_setopt($ch,CURLOPT_SSLCERT, WxPayConf_pub::SSLCERT_PATH);
+		curl_setopt($ch,CURLOPT_SSLCERT, dirname(dirname(__FILE__)) .'/' . WxPayConf_pub::SSLCERT_PATH);
 		//默认格式为PEM，可以注释
 		curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
-		curl_setopt($ch,CURLOPT_SSLKEY, WxPayConf_pub::SSLKEY_PATH);
+		curl_setopt($ch,CURLOPT_SSLKEY, dirname(dirname(__FILE__)) .'/' . WxPayConf_pub::SSLKEY_PATH);
 		//post提交方式
 		curl_setopt($ch,CURLOPT_POST, true);
 		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
@@ -211,8 +214,9 @@ class Common_util_pub
 		}
 		else { 
 			$error = curl_errno($ch);
-			echo "curl出错，错误码:$error"."<br>"; 
-			echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+			$this->errors = "curl出错，错误码:$error";
+			//echo "curl出错，错误码:$error"."<br>"; 
+			//echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
 			curl_close($ch);
 			return false;
 		}

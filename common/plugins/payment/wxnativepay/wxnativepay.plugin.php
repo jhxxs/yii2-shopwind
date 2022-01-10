@@ -69,6 +69,23 @@ class Wxnativepay extends BasePayment
 		$params = $this->createPayform($result, $this->gateway, 'post');
         return array($payTradeNo, $params);
 	}
+
+	/**
+	 * 提交退款请求（原路退回）
+	 */
+	public function refund($orderInfo)
+	{
+		$sdk = $this->getClient();
+		$sdk->payTradeNo = $orderInfo['payTradeNo'];
+		$sdk->notifyUrl = $this->createNotifyUrl($orderInfo['payTradeNo']);
+
+		$result = $sdk->getRefundform($orderInfo);
+		if(!$result) {
+			$this->errors = $sdk->errors;
+			return false;
+		}
+		return true;
+	}
 	
 	/* 获取通知地址 公众号支付/扫码支付/APP支付可共用该地址 */
     public function createNotifyUrl($payTradeNo = '')

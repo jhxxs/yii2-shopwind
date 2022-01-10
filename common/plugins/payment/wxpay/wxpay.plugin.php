@@ -73,6 +73,23 @@ class Wxpay extends BasePayment
 		
 		return array($payTradeNo, ['redirect' => $url]);
     }
+
+	/**
+	 * 提交退款请求（原路退回）
+	 */
+	public function refund($orderInfo)
+	{
+		$sdk = $this->getClient();
+		$sdk->payTradeNo = $orderInfo['payTradeNo'];
+		$sdk->notifyUrl = $this->createNotifyUrl($orderInfo['payTradeNo']);
+
+		$result = $sdk->getRefundform($orderInfo);
+		if(!$result) {
+			$this->errors = $sdk->errors;
+			return false;
+		}
+		return true;
+	}
 	
 	public function getParameters($wxcode, $orderInfo, $payTradeNo = '')
 	{

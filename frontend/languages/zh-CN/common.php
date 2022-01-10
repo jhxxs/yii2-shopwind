@@ -344,6 +344,8 @@ return array(
     'message' => '短消息',
     'confirm'   => '确认',
     'cancel'   => '取消',
+	'finished' => '完成',
+	'frozen' => '冻结',
     'notice'    => '注意',
     'buyer_name'    => '买家',
     'export' => '导出',
@@ -543,5 +545,6 @@ return array(
     'only_pint'     => '此项仅能为正整数',
 	'small_le'      => '此项应小于等于',
 	'col_not_empty'     => '此项不能为空',
-	'handle_exception'	=> '业务异常'
+	'handle_exception'	=> '业务异常',
+	'sys_notice' => '系统提示'
 );

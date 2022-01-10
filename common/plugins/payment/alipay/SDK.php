@@ -18,6 +18,7 @@ use common\library\Language;
 
 use common\plugins\payment\alipay\lib\AopClient;
 use common\plugins\payment\alipay\lib\request\AlipayTradePagePayRequest;
+use common\plugins\payment\alipay\lib\request\AlipayTradeRefundRequest;
 
 /**
  * @Id SDK.php 2018.7.19 $
@@ -128,6 +129,38 @@ class SDK
 		
 		return $result;
 	}
+
+	public function getRefundform($orderInfo)
+    {
+		$aop = new AopClient();
+		$aop->appId 				= $this->appId;
+		$aop->rsaPrivateKey 		= $this->rsaPrivateKey;
+		$aop->alipayrsaPublicKey 	= $this->alipayrsaPublicKey;
+		$aop->postCharset 			= Yii::$app->charset;
+		$aop->signType 				= $this->signType;
+		
+		$biz_content = array(
+			//'refund_reason' => '',
+			'out_trade_no'  => $this->payTradeNo,
+			'refund_amount'  => $orderInfo['amount'],
+			'out_request_no' => $orderInfo['refund_sn'], // 标识一次退款请求，需要保证在交易号下唯一，如需部分退款，则此参数必传
+		);
+
+ 		$request = new AlipayTradeRefundRequest();
+		$request->setBizContent(json_encode($biz_content));
+		$result = $aop->execute($request); 
+
+		$responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+		$resultCode = $result->$responseNode->code;
+		if(empty($resultCode) || $resultCode != 10000) {
+			$this->errors = $result->$responseNode->sub_msg ? $result->$responseNode->sub_msg : $result->$responseNode->msg;
+			return false;
+		} 
+
+		return true;
+	}
+
+
 	public function verifyNotify($orderInfo, $notify)
 	{
 		// 验证与本地信息是否匹配。这里不只是付款通知，有可能是发货通知，确认收货通知

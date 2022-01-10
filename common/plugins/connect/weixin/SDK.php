@@ -50,6 +50,11 @@ class SDK
 	public $redirect_uri = null;
 
 	/**
+	 * 抓取错误
+	 */
+	public $errors;
+
+	/**
 	 * 构造函数
 	 */
 	public function __construct(array $config)
@@ -61,15 +66,17 @@ class SDK
 	
 	public function getAccessToken($code = '')
 	{
-		if($code && ($result = Basewind::curl($this->getOpenIdUrl($code)))) {
-			$result = json_decode($result);
-			if(!$result->errcode) {
-				$response = $result;
-				$response->unionid = isset($result->unionid) ? $result->unionid : $result->openid;
-			}
+		$response = json_decode(Basewind::curl($this->getOpenIdUrl($code)));
+		if($response->errcode) {
+			$this->errors = $response->errmsg;
+			return false;
 		}
-		
-		return $response ? $response : false;
+
+		if(!isset($response->unionid)) {
+			$response->unionid = $response->openid;
+		}
+
+		return $response;
 	}
 	
 	public function getUserInfo($resp = null)

@@ -67,7 +67,7 @@ class RefundAgreeForm extends Model
 			return false;
 		}
 
-        // 退款后（非全额退款），处理订单商品三级返佣 
+		// 退款后（非全额退款），处理订单商品三级返佣 
 		DistributeModel::distributeInvite($order);
 			
 		// 退款后的积分处理（积分返还，积分赠送）

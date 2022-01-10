@@ -48,7 +48,7 @@ return array(
         ),
         'KEY'   => array(        //商户密钥
             'text'  => Language::get('key'),
-			'desc'  => Language::get('key_desc'),
+			'desc'  => sprintf(Language::get('key_desc'), 'wxpay'),
             'type'  => 'text',
         ),
         

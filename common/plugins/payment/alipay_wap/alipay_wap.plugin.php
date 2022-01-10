@@ -73,6 +73,23 @@ class Alipay_wap extends BasePayment
 
 		return array($payTradeNo, ['redirect' => $url]);
     }
+
+	/**
+	 * 提交退款请求（原路退回）
+	 */
+	public function refund($orderInfo)
+	{
+		$sdk = $this->getClient();
+		$sdk->payTradeNo = $orderInfo['payTradeNo'];
+		$sdk->notifyUrl = $this->createNotifyUrl($orderInfo['payTradeNo']);
+
+		$result = $sdk->getRefundform($orderInfo);
+		if(!$result) {
+			$this->errors = $sdk->errors;
+			return false;
+		}
+		return true;
+	}
 	
 	/* 获取通知地址（不支持带参数，另：因为电脑支付和手机支付参数一致，所以可以使用相同的通知地址） */
     public function createNotifyUrl($payTradeNo = '')

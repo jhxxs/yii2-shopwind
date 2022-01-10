@@ -250,6 +250,9 @@ class DepositController extends \common\controllers\BaseUserController
 
 			// 生成支付URL或表单
 			list($payTradeNo, $payform) = Plugin::getInstance('payment')->build($payment_code, $post)->getPayform($orderInfo);
+			if($payform['payResult'] === false) {
+				return Message::warning($payform['errMsg']);
+			}
 			$this->params['payform'] = array_merge($payform, ['payTradeNo' => $payTradeNo]);
 				
 			// 跳转到真实收银台
