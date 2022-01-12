@@ -64,6 +64,7 @@ return array(
 	'region_error' => '请填写地址信息',
 	'coupon' => '优惠券',
 	'apply_verify'  => '店铺审核状态',
+    'store_verfiying' 	=> '店铺正在审核中',
     'stype' => '主体类型',
     'company' => '企业',
     'personal' => '个人'
