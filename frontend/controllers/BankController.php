@@ -13,21 +13,25 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 
-use common\models\BankModel;
+use common\models\GcategoryModel;
+use common\models\BrandModel;
+use common\models\GoodsModel;
+use common\models\CollectModel;
+use common\models\NavigationModel;
 
 use common\library\Basewind;
 use common\library\Language;
 use common\library\Message;
+use common\library\Resource;
 use common\library\Page;
 
 /**
- * @Id BankController.php 2018.4.16 $
- * @author mosir
+ * @Id BrandController.php 2018.7.20 $
+ * @author MH
  */
 
-class BankController extends \common\controllers\BaseUserController
+class BrandController extends \common\controllers\BaseMallController
 {
 	/**
 	 * 初始化
@@ -38,116 +42,71 @@ class BankController extends \common\controllers\BaseUserController
 	{
 		parent::init();
 		$this->view  = Page::setView('mall');
-		$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'));
-	}
-
-    public function actionIndex()
-    {
-		return $this->redirect(['bank/add']);
+		$this->params = ArrayHelper::merge($this->params, Page::getAssign('mall'), [
+			'navs'	=> NavigationModel::getList()
+		]);
 	}
 	
-	public function actionAdd()
+	public function actionIndex()
 	{
-		if(!Yii::$app->request->isPost)
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['cate_id', 'page', 'pageper']);
+		
+		if(Yii::$app->request->isAjax)
 		{
-			$model = new \frontend\models\BankForm();
-			$this->params['bankList'] = $model->getBankList();
+			$query = BrandModel::find()->where(['if_show' => 1])->orderBy(['sort_order' => SORT_ASC,'recommended'=> SORT_DESC, 'brand_id' => SORT_ASC]);
+			if($post->cate_id) {
+				$query->andWhere(['cate_id' => $post->cate_id]);
+			}
+			$page = Page::getPage($query->count(), $post->pageper);
+			$brandsList = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			
-			// 当前位置
-			$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('bank_add'));
-			
-			// 当前用户中心菜单
-			$this->params['_usermenu'] = Page::setMenu('deposit', 'bank_add');
-			
-			$this->params['page'] = Page::seo(['title' => Language::get('bank_add')]);
-        	return $this->render('../bank.form.html', $this->params);
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			return array('result' => array_values($brandsList), 'totalPage' => $page->getPageCount());
 		}
 		else
 		{
-			$model = new \frontend\models\BankForm();
-        	if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
-				return Message::display(Language::get('add_ok'), ['deposit/index']);
-			}
-			return Message::warning($model->errors);
-		}
+			$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
+			$this->params['categories'] = GcategoryModel::getList(0,0);
+			
+			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.infinite.js');
+			$this->params['infiniteParams'] = json_encode(ArrayHelper::toArray($post));
+			
+			$this->params['page'] = Page::seo(['title' => Language::get('all_brands')]);
+       	 	return $this->render('../brand.index.html', $this->params);
+		}	
 	}
 	
-	public function actionEdit()
+	public function actionView()
 	{
-		if(!Yii::$app->request->isPost)
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'page', 'pageper']);
+		
+		$brand = BrandModel::find()->where(['brand_id' => $post->id])->asArray()->one();
+		if(empty($brand)) {
+			return Message::warning(Language::get('no_such_brand'));
+		}
+		
+		if(Yii::$app->request->isAjax)
 		{
-			$model = new \frontend\models\BankForm();
-			$this->params['bankList'] = $model->getBankList();
-			$this->params['card'] = BankModel::find()->where(['bid' => intval(Yii::$app->request->get('bid'))])->asArray()->one();
+			$query = GoodsModel::find()->where(['if_show' => 1, 'closed' => 0, 'brand' => $brand['brand_name']])->joinWith('goodsStatistics gst',false)->orderBy(['sales' => SORT_DESC]);
+			$page = Page::getPage($query->count(), $post->pageper);		
+			$goodsList = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			
-			// 当前位置
-			$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('bank_edit'));
-			
-			// 当前用户中心菜单
-			$this->params['_usermenu'] = Page::setMenu('deposit', 'bank_edit');
-			
-			$this->params['page'] = Page::seo(['title' => Language::get('bank_edit')]);
-        	return $this->render('../bank.form.html', $this->params);
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			return array('result' => array_values($goodsList), 'totalPage' => $page->getPageCount());
 		}
 		else
-		{
-			$model = new \frontend\models\BankForm(); //$model->setScenario('update');
-        	if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
-				return Message::display(Language::get('edit_ok'), ['deposit/index']);
-			}
-			return Message::warning($model->errors);
-		}
-	}
-	
-	public function actionDelete()
-	{
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['bid']);
-		if(!$post->bid || !($bank = BankModel::find()->where(['userid' => Yii::$app->user->id, 'bid' => $post->bid])->one())) {
-			return Message::warning(Language::get('no_such_bank'));
-		}
-		if($bank->delete() == false) {
-			return Message::warning(Language::get('drop_failed'));	
-		}
-		return Message::display(Language::get('drop_ok'), ['deposit/index']);
-	}
-	
-	/* 三级菜单 */
-    public function getUserSubmenu()
-    {
-        $submenus =  array(
-            array(
-                'name'  => 'deposit_index',
-                'url'   => Url::toRoute('deposit/index'),
-            ),
-            array(
-                'name'  => 'deposit_config',
-                'url'   => Url::toRoute('deposit/config'),
-            ),
-			array(
-                'name'  => 'deposit_tradelist',
-                'url'   => Url::toRoute('deposit/tradelist'),
-            ),
-            array(
-                'name'  => 'deposit_recordlist',
-                'url'   => Url::toRoute('deposit/recordlist'),
-            ),
-			array(
-                'name'  => 'deposit_indraw',
-                'url'   => Url::toRoute('deposit/drawlist'),
-            ),
-			array(
-                'name'  => 'bank_add',
-                'url'   => Url::toRoute('bank/add'),
-            ),
-        );
-		if(in_array($this->action->id, ['edit'])) 
-		{
-			$submenus[] = array(
-				'name' => 'bank_edit',
-				'url'  => ''
-			);
-		}
+		{			
+			$this->params['collects'] = CollectModel::find()->where(['item_id' => $post->id,  'type' => 'brand'])->count();
+			$this->params['goods_count'] = GoodsModel::find()->select('goods_id')->where(['if_show' => 1, 'closed' => 0, 'brand' => $brand['brand_name']])->count();
 
-        return $submenus;
-    }
+			$this->params['brand'] = $brand;
+			$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
+	
+			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.infinite.js');
+			$this->params['infiniteParams'] = json_encode(ArrayHelper::toArray($post));
+					
+			$this->params['page'] = Page::seo(['title' => Language::get('brand_goods')]);
+       	 	return $this->render('../brand.view.html', $this->params);
+		}
+	}
 }
