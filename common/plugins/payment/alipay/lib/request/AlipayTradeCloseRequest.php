@@ -6,7 +6,7 @@ namespace common\plugins\payment\alipay\lib\request;
  * ALIPAY API: alipay.trade.close request
  *
  * @author auto create
- * @since 1.0, 2016-11-09 22:08:22
+ * @since 1.0, 2021-09-13 21:02:24
  */
 class AlipayTradeCloseRequest
 {

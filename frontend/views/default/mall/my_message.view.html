@@ -9,7 +9,7 @@
               <div class="user">
                 <p><img src="{$message.portrait|default:$app->params['default_user_portrait']|url_format}" width="50" height="50" /></p>
                 <h3><span>{$message.username}</span><br />
-                  {$message.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</h3>
+                  {$message.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</h3>
               </div>
               <div class="txt">{$message.content}</div>
             </div>
@@ -19,7 +19,7 @@
               <div class="user">
                 <p><img src="{$reply.portrait|default:$app->params['default_user_portrait']|url_format}" width="50" height="50" /></p>
                 <h3><span>{$reply.username|escape}</span><br />
-                  {$reply.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</h3>
+                  {$reply.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</h3>
               </div>
               <div class="txt">{$reply.content}</div>
             </div>

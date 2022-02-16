@@ -14,6 +14,7 @@ namespace common\plugins\payment\alipay;
 use yii;
 use yii\helpers\Url;
 
+use common\library\Basewind;
 use common\library\Language;
 
 use common\plugins\BasePayment;
@@ -27,12 +28,6 @@ use common\plugins\payment\alipay\SDK;
 class Alipay extends BasePayment
 {
 	/**
-	 * 网关地址
-	 * @var string $gateway
-	 */
-	protected $gateway = 'https://openapi.alipay.com/gateway.do';
-
-	/**
      * 支付插件实例
 	 * @var string $code
 	 */
@@ -44,26 +39,36 @@ class Alipay extends BasePayment
      */
 	private $client = null;
 	
-	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $redirect = true)
+	/**
+	 * 提交支付请求
+	 */
+	public function pay($orderInfo = array())
     {
 		// 支付网关商户订单号
-		$payTradeNo = parent::getPayTradeNo($orderInfo);
+		$payTradeNo = $this->getPayTradeNo($orderInfo);
 		
-		// 给其他页面使用
-		foreach($orderInfo['tradeList'] as $key => $value) {
-			$orderInfo['tradeList'][$key]['payTradeNo'] = $payTradeNo;
-		}
-
 		$sdk = $this->getClient();
-		$sdk->gateway = $this->gateway;
-		$sdk->code = $this->code;
 		$sdk->payTradeNo = $payTradeNo;
 		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
-	
-		$params = $this->createPayform($sdk->getPayform($orderInfo), $this->gateway, 'post');
-        return array($payTradeNo, $params);
+		$sdk->terminal = $this->getTerminal();
+
+		$params = $sdk->getPayform($orderInfo);
+		if(!$params) {
+			$this->errors = $sdk->errors;
+			return false;
+		}
+
+		if($sdk->terminal == 'APP') {
+			$params = ['orderInfo' => $params];
+		} else if($sdk->terminal == 'WAP') {
+			$params = ['redirect' => $params];
+		} else {
+			header("location: $params");
+			exit(0);
+		}
+
+        return array_merge($params, ['payTradeNo' => $payTradeNo]);
     }
 
 	/**
@@ -73,7 +78,6 @@ class Alipay extends BasePayment
 	{
 		$sdk = $this->getClient();
 		$sdk->payTradeNo = $orderInfo['payTradeNo'];
-		$sdk->notifyUrl = $this->createNotifyUrl($orderInfo['payTradeNo']);
 
 		$result = $sdk->getRefundform($orderInfo);
 		if(!$result) {
@@ -83,14 +87,14 @@ class Alipay extends BasePayment
 		return true;
 	}
 	
-	/* 获取通知地址（不支持带参数，另：因为电脑支付和手机支付参数一致，所以可以使用相同的通知地址） */
+	/* 获取通知地址（不支持带参数） */
     public function createNotifyUrl($payTradeNo = '')
     {
         return Url::toRoute(['paynotify/alipay'], true);
     }
 
     /* 返回通知结果 */
-    public function verifyNotify($orderInfo, $strict = false)
+    public function verifyNotify($orderInfo, $strict = true)
     {
         if (empty($orderInfo)) {
 			$this->errors = Language::get('order_info_empty');
@@ -98,12 +102,9 @@ class Alipay extends BasePayment
         }
 		
 		$notify = $this->getNotify();
-		
-		// 预留，如果发现签名失败，可考虑此
-		$notify['fund_bill_list'] = stripslashes($notify['fund_bill_list']);
 
         // 验证通知是否可信
-        if (!($sign_result = $this->verifySign($notify, $strict)))
+        if (!$this->verifySign($notify, $strict))
         {
             // 若本地签名与网关签名不一致，说明签名不可信
             $this->errors = Language::get('sign_inconsistent');
@@ -119,7 +120,7 @@ class Alipay extends BasePayment
     }
 
     /* 验证签名是否可信 */
-    private function verifySign($notify, $strict = false)
+    private function verifySign($notify, $strict = true)
     {
 		// 验证签名
 		if($strict == true) {
@@ -127,10 +128,6 @@ class Alipay extends BasePayment
 		}
 		return true;
     }
-	
-	public function verifyResult($result = false) {
-		return parent::verifyResult($result);
-	} 
 	
 	public function getNotifySpecificData() {
 		$notify = $this->getNotify();

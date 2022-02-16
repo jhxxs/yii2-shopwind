@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\library\Language;
 use common\business\BaseDepopay;
 
 /**
@@ -32,10 +33,10 @@ class OutlayDepopay extends BaseDepopay
 	 */
 	public $_payType   	= 'INSTANT';
 	
-	public function _handle_trade_info($trade_info, $checkAmount = true)
+	public function _handle_trade_info($trade_info, $extra_info = [])
 	{
-		// 如果是退款操作，无需验证金额是否足够
-		if($checkAmount === false){
+		// 只有余额支付（且不是退款交易），才需验证金额是否足够
+		if($extra_info['payment_code'] !== 'deposit' || $extra_info === false) {
 			return true;
 		}
 		
@@ -63,5 +64,29 @@ class OutlayDepopay extends BaseDepopay
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * 插入支出（扣款）记录，并变更账户余额
+	 */
+	public function _insert_record_info($trade_info, $extra_info)
+	{	
+		// 加此判断，目的为允许提交订单金额为零的处理
+		if($trade_info['amount'] == 0) {
+			return true;
+		}
+
+		$data_record = array(
+			'tradeNo'		=>	$extra_info['tradeNo'],
+			'userid'		=>	$trade_info['userid'],
+			'amount'		=> 	$trade_info['amount'],
+			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $trade_info['amount'], 'reduce'), // 同时更新余额
+			'tradeType'		=>  $this->_tradeType,
+			'flow'			=>	$this->_flow,
+			'name'			=>  $trade_info['name'] ? $trade_info['name'] : Language::get($this->_tradeType),
+		);
+
+		// 插入支出记录
+		return parent::_insert_deposit_record($data_record, false);
 	}
 }

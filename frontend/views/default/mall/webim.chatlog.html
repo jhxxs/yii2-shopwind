@@ -19,9 +19,9 @@ body {
     <li class="{if $visitor.userid eq $item.fromid}layim-chat-mine{/if}">
       <div class="layim-chat-user"><img src="{$item.avatar|url_format}"> <cite> 
         <!--{if $visitor.userid eq $item.fromid}--> 
-        <i>{$item.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</i>{$item.fromName}
+        <i>{$item.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</i>{$item.fromName}
         <!--{else}--> 
-        {$item.fromName}<i>{$item.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</i> 
+        {$item.fromName}<i>{$item.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</i> 
         <!--{/if}--> 
         </cite> </div>
       <div class="layim-chat-text">{$item.formatContent}</div>

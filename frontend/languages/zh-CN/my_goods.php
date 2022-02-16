@@ -35,6 +35,7 @@ return array(
     'price' => '价格',
     'stock' => '库存',
     'sku' => '货号',
+    'note_for_isnew' => '勾选后在移动端将显示新款标',
     'note_for_recommended' => '被推荐的商品会显示在店铺首页',
     'note_for_add_spec' => '您最多可以添加两种商品规格（如：颜色，尺码）如商品没有规格则不用添加',
     'note_for_add_spec_popup' => '您最多可以添加两种规格（如：颜色和尺码）规格名称可以自定义,如只有一项规格另一项留空;<br/>规格图片关联第一项规格，如果第一项规格名称相同，请把规格图片放置在该规格名称最前面的一项',
@@ -96,7 +97,6 @@ return array(
     'charset' => '字符编码',
     'import_taobao_csv' => '第一步：导入CSV文件',
     'upload_taobao_image' => '第二步：上传商品图片',
-    'note_for_taobao_file' => '导入程序默认从第二行执行导入，请保留CSV文件第一行的标题行，最大2M',
     'add_scategory' => '新增分类',
     'upload_goods_image' => '上传商品图片',
     'set_cover' => '设为封面',
@@ -159,4 +159,5 @@ return array(
     'spec_not_complate' => '规格填写不完整',
     'spec_name_required' => '规格名称请至少填写一个',
 	'follow_spec_price_invalid' => '以下规格价格未填写或格式有误:',
+    
 );

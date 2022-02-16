@@ -172,7 +172,8 @@ class DepositAccountModel extends ActiveRecord
 		return false;
 	}
 	
-	/** 更新冻结金额，增加（如提现）或减少，并返回最新的冻结金额
+	/**
+	 * 更新冻结金额，增加（如提现）或减少，并返回最新的冻结金额
 	 * @var string $change  add|reduce
 	 */
 	public static function updateDepositFrozen($userid = 0, $amount = 0, $change = 'add')
@@ -189,6 +190,7 @@ class DepositAccountModel extends ActiveRecord
 			self::createDepositAccount($userid);
 			return self::updateDepositFrozen($userid, $amount, $change);
 		}
+		
 		return false;
 	}
 	
@@ -219,7 +221,6 @@ class DepositAccountModel extends ActiveRecord
 				
 		$lang_bill = array(
 			'end_time'		=>  '日期',
-			'tradeTypeName'	=>	'交易类型',
 			'tradeNo' 		=> 	'交易号',
     		'bizOrderId'	=> 	'商户订单号',
     		'other_account' => 	'对方账号',
@@ -242,12 +243,10 @@ class DepositAccountModel extends ActiveRecord
 		foreach($monthbill as $key => $bill)
     	{
 			$bill_value['end_time']		= Timezone::localDate('Y-m-d H:i:s', $bill['end_time']);
-			$bill_value['tradeTypeName']= $bill['tradeTypeName'];
 			$bill_value['tradeNo']		= $bill['tradeNo'];
 			$bill_value['bizOrderId']	= $bill['bizOrderId'];
 			$bill_value['balance']		= $bill['balance'];
 			$bill_value['payment_code'] = Language::get($bill['payment_code']);
-			$bill_value['fundchannel']	= $bill['fundchannel'];
 			$bill_value['title']		= $bill['title'];
 			$bill_value['remark']   	= $bill['remark'];
 			
@@ -261,8 +260,9 @@ class DepositAccountModel extends ActiveRecord
 			
 			// 交易的对方信息
 			$partyInfo = DepositTradeModel::getPartyInfoByRecord($userid, $bill);
-			$bill_value['other_account'] = $partyInfo['name'];
-			if($partyInfo['account']) $bill_value['other_account'] .= '('.$partyInfo['account'].')';
+			if($partyInfo) {
+				$bill_value['other_account'] = $partyInfo['name'];
+			}
 			
         	$record_xls[] = $bill_value;
     	}

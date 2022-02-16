@@ -78,11 +78,8 @@ class BuyappDepopay extends OutlayDepopay
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info);
-		
-        if (!$base_info)
-        {
-            // 基本信息验证不通过
+        $base_info = parent::_handle_trade_info($trade_info, $extra_info);
+        if (!$base_info) {
             return false;
         }
 		
@@ -94,10 +91,12 @@ class BuyappDepopay extends OutlayDepopay
 			return false;
 		}
 		
-		// 插入收支记录，并变更账户余额
-		if(!$this->_insert_record_info($tradeNo, $trade_info, $extra_info)) {
-			$this->setErrors('50020');
-			return false;
+		// 如果是余额支付，则处理收支记录，并变更账户余额
+		if($extra_info['payment_code'] == 'deposit') {
+			if(!$this->_insert_record_info($tradeNo, $trade_info, $extra_info)) {
+				$this->setErrors('50020');
+				return false;
+			}
 		}
 		
 		// 修改购买应用状态为交易完成
@@ -113,28 +112,6 @@ class BuyappDepopay extends OutlayDepopay
 		}
 	
 		return true;
-	}
-	
-	/* 插入收支记录，并变更账户余额 */
-	private function _insert_record_info($tradeNo, $trade_info, $extra_info)
-	{
-		$result = true;
-		
-		//  加此判断，目的为允许提交订单金额为零的处理
-		if($trade_info['amount'] > 0)
-		{
-			$data_record = array(
-				'tradeNo'		=>	$tradeNo,
-				'userid'		=>	$trade_info['userid'],
-				'amount'		=> 	$trade_info['amount'],
-				'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $trade_info['amount'], 'reduce'),
-				'tradeType'		=>  $this->_tradeType,
-				'tradeTypeName' => 	Language::get(strtoupper($this->_tradeType)),
-				'flow'			=>	$this->_flow,
-			);
-			$result = parent::_insert_deposit_record($data_record);
-		}
-		return $result;
 	}
 	
 	public function _update_order_period($trade_info, $extra_info)

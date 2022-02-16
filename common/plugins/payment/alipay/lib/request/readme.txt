@@ -5,5 +5,6 @@ alipay.trade.fastpay.refund.query 	统一收单交易退款查询接口
 alipay.trade.query 	统一收单线下交易查询接口
 alipay.trade.close 	统一收单交易关闭接口
 alipay.data.dataservice.bill.downloadurl.query 	查询对账单下载地址
+alipay.fund.trans.uni.transfer 转账到支付宝接口
 
 

@@ -45,7 +45,7 @@ return array(
 	'pay_status_enable'			=> 	'余额支付已开启',
 	'pay_status_closed'			=>	'余额支付已关闭',
 	
-	'select_bank_error'			=>	'请选择提现到哪张银行卡',
+	'bank_error'				=>	'提现银行卡信息有误',
 	'bank_not_you'				=>	'此银行卡不是您名下的，请不要提现到该卡',
 	'money_error'				=>	'金额不能为空且必须大于0元',
 	'money_not_enough'			=>	'您账户余额不足',
@@ -87,9 +87,11 @@ return array(
 	'recharge_bank_empty' 		=> '您还没有设置银行卡信息，不能进行线下充值',
 	'recharge_money_error' 		=> '充值金额不能为空且必须大于0',
 	'withdraw_money_error' 		=> '提现金额不能为空且必须大于0',
+	'withdraw_account_empty'	=> '提现账号不能为空',
+	'withdraw_name_error'		=> '真实姓名为空或不对会导致提现失败',
 	'captcha_empty'				=> '请输入验证码',
 	'pending_order_note'		=> '提交订单后，48小时内未支付，交易自动关闭',
-	'refund_success_note'		=> '退款成功，退款金额已返还至您的预存款余额中',
+	'refund_success_note'		=> '退款成功，退款金额已返还',
 	
 	'refund_to_buyer'			=> '退款给买家',
 	'hasrefund'					=> '有退款',

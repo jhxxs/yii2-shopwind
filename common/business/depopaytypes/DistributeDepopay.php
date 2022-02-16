@@ -145,7 +145,6 @@ class DistributeDepopay extends IncomeDepopay
 		$model->amount = $money;
 		$model->status = 'SUCCESS';
 		$model->payment_code = 'deposit';
-		$model->fundchannel = Language::get('deposit');
 		$model->tradeCat = $this->_tradeCat;
 		$model->payType = $this->_payType;
 		$model->flow = $change == 'add' ? 'income' : 'outlay';
@@ -162,7 +161,6 @@ class DistributeDepopay extends IncomeDepopay
 			$query->amount = $model->amount;
 			$query->balance = parent::_update_deposit_money($model->buyer_id, $model->amount, $change);
 			$query->tradeType = $this->_tradeType;
-			$query->tradeTypeName = Language::get('transfer');
 			$query->flow = $model->flow;
 			$query->name = $model->title;
 			$query->remark = isset($options['remark']) ? $options['remark'] : '';			

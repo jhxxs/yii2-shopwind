@@ -72,7 +72,6 @@ class DepositRechargeForm extends Model
 		$model->tradeCat = ($post->money_change == 'add') ? 'RECHARGE' : 'CHARGE';
 		$model->payType	= 'INSTANT';
 		$model->flow = ($post->money_change == 'add') ? 'income' : 'outlay';
-		$model->fundchannel = Language::get('deposit');
 		$model->title = ($post->money_change == 'add') ? Language::get('recharge') : Language::get('chargeback');
 		$model->buyer_remark = $post->remark;
 		$model->add_time = Timezone::gmtime();
@@ -105,7 +104,6 @@ class DepositRechargeForm extends Model
 		$record->amount = $model->amount;
 		$record->balance = DepositAccountModel::updateDepositMoney($model->buyer_id, $model->amount, $post->money_change);
 		$record->tradeType = $model->tradeCat;
-		$record->tradeTypeName = $model->title;
 		$record->flow = $model->flow;
 		$record->remark = isset($post->remark) ? $post->remark : (($post->money_change == 'add') ? Language::get('system_recharge') : Language::get('system_chargeback'));
 		if(!$record->save()) {

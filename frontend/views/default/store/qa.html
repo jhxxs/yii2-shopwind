@@ -4,7 +4,7 @@
     <div class="leave-word">
       <dl class="t clearfix">
         <dt>{$lang.qa_friend}{$lang.colon}</dt>
-        <dd> <span><!-- {if $item.username} -->{$item.username}<!--{else}-->{$lang.guest}<!-- {/if} --></span> <i class="ml20">{$item.time_post|date_format:"%Y.%m.%d %H:%M:%S"}</i> </dd>
+        <dd> <span><!-- {if $item.username} -->{$item.username}<!--{else}-->{$lang.guest}<!-- {/if} --></span> <i class="ml20">{$item.time_post|date_format:"%Y-%m-%d %H:%M:%S"}</i> </dd>
       </dl>
       <dl class="leave-con clearfix">
         <dt>{$lang.question_content}： </dt>
@@ -17,7 +17,7 @@
         <dt>{$lang.store_reply}：</dt>
         <dd>
           <p>{$item.reply_content|escape|nl2br}</p>
-          <i>{$item.time_reply|date_format:"%Y.%m.%d %H:%M:%S"}</i> </dd>
+          <i>{$item.time_reply|date_format:"%Y-%m-%d %H:%M:%S"}</i> </dd>
       </dl>
       <!-- {/if} --> 
     </div>

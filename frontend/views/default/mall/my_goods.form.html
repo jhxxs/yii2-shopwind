@@ -237,7 +237,7 @@
                         </ul>
                         <div class="clear"></div>
                       </div>
-                      <div class="notice-word" style="margin-right:14px;">
+                      <div class="notice-word mb10" style="margin-right:14px;">
                         <p class="yellow">注：第一张为商品主图，也即是在前台页面显示。将鼠标移至图片上可以调整顺序。</p>
                       </div>
                     </div>
@@ -356,6 +356,13 @@
                   <label class="switch-checkbox-radio inline-block box-align-center float-left J_SwtcherInput {if $goods.recommended}checked{/if}" for="recommended"><span class="switcher-style block"></span></label>
                   <input type="checkbox" name="recommended" value="1" id="recommended" class="hidden" {if $goods.recommended}checked="checked" {/if}/>
                   <span class="gray float-left block mt5 ml10">{$lang.note_for_recommended}</span> </div>
+              </li>
+              <li class="subbox clearfix">
+                <label class="subbox-title">新款上市：</label>
+                <div class="subbox-body clearfix">
+                  <label class="switch-checkbox-radio inline-block box-align-center float-left J_SwtcherInput {if $goods.isnew}checked{/if}" for="isnew"><span class="switcher-style block"></span></label>
+                  <input type="checkbox" name="isnew" value="1" id="isnew" class="hidden" {if $goods.isnew}checked="checked" {/if}/>
+                  <span class="gray float-left block mt5 ml10">{$lang.note_for_isnew}</span> </div>
               </li>
               <li class="subbox clearfix">
                 <label class="subbox-title">商品标签：</label>

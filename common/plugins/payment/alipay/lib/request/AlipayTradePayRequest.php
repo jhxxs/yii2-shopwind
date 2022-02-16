@@ -6,7 +6,7 @@ namespace common\plugins\payment\alipay\lib\request;
  * ALIPAY API: alipay.trade.pay request
  *
  * @author auto create
- * @since 1.0, 2017-08-16 18:03:52
+ * @since 1.0, 2021-11-04 17:32:34
  */
 class AlipayTradePayRequest
 {

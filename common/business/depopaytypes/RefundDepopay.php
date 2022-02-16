@@ -58,9 +58,9 @@ class RefundDepopay extends OutlayDepopay
         }
 		
 		//$tradeNo = $extra_info['tradeNo'];
-
+		
 		// 如果是在线付款的退款，走原路退回通道
-		if(in_array($extra_info['payment_code'], ['alipay', 'alipay_app', 'alipay_wap', 'wxpay', 'wxmppay', 'wxapppay', 'wxh5pay', 'wxnativepay'])) {
+		if(in_array($extra_info['payment_code'], ['alipay', 'wxpay', 'wxmppay', 'wxapppay'])) {
 			if(!$this->originalRefund($trade_info, $extra_info)) {
 				return false;
 			}
@@ -110,17 +110,8 @@ class RefundDepopay extends OutlayDepopay
 		], ['refund_id' => $extra_info['refund_id']]);
 		
 		// 判断是平台客服处理退款，还是卖家同意退款
-		if(isset($extra_info['operator']) && ($extra_info['operator'] == 'admin')) 
-		{
-			$refund_goods_fee    = $this->post->refund_goods_fee ? round($this->post->refund_goods_fee, 2) : 0;
-			$refund_shipping_fee = $this->post->refund_shipping_fee ? round($this->post->refund_shipping_fee, 2) : 0;
-			$refund_total_fee    = $refund_goods_fee + $refund_shipping_fee;
-			
-			$content = sprintf(Language::get('admin_agree_refund_content_change'), 
-								Language::get('admin'), $refund_goods_fee, $refund_shipping_fee, $this->post->content);
-			
-			RefundModel::updateAll(['refund_total_fee' => $refund_total_fee, 'refund_goods_fee' => $refund_goods_fee, 'refund_shipping_fee' => $refund_shipping_fee, 'intervene' => 1], ['refund_id' => $extra_info['refund_id']]);
-			
+		if(isset($extra_info['operator']) && ($extra_info['operator'] == 'admin')) {
+			$content = sprintf(Language::get('admin_agree_refund_content_change'), Language::get('admin'), $this->post->content);
 			$owner_id = UserPrivModel::find()->select('userid')->where(['privs' => 'all', 'store_id' => 0])->orderBy(['userid' => SORT_ASC])->scalar();
 		} 
 		else 
@@ -158,11 +149,6 @@ class RefundDepopay extends OutlayDepopay
 			return false;
 		}
 		
-		// 判断是管理员处理退款，还是卖家同意退款
-		if(isset($extra_info['operator']) && ($extra_info['operator'] == 'admin')) {
-			$remark = Language::get('admin_agree_refund_order_status_change');
-		} else $remark = Language::get('seller_agree_refund_order_status_change');
-
 		// 记录订单操作日志
 		$model = new OrderLogModel();
 		$model->order_id  		= $extra_info['order_id'];
@@ -198,8 +184,8 @@ class RefundDepopay extends OutlayDepopay
 			'amount'		=>  $trade_info['amount'],
 			'balance'		=>	parent::_update_deposit_money($trade_info['party_id'],  $trade_info['amount']), // 增加后的余额
 			'tradeType' 	=>  $this->_tradeType,
-			'tradeTypeName'	=>  Language::get('trade_refund_return'),
 			'flow'			=>	'income',
+			'name'			=>	Language::get('trade_refund_return'),
 		);
 		return parent::_insert_deposit_record($data_record, false);
 	}
@@ -240,8 +226,8 @@ class RefundDepopay extends OutlayDepopay
 			'amount'		=>  $extra_info['chajia'],
 			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $extra_info['chajia']), // 增加后的余额
 			'tradeType' 	=>  $this->_tradeType,
-			'tradeTypeName'	=>  Language::get('trade_refund_pay'),
 			'flow'			=>	'income',
+			'name'			=>	Language::get('trade_refund_pay'),
 		);
 		
 		return parent::_insert_deposit_record($data_record, false);

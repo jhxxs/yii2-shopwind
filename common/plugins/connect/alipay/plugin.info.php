@@ -30,11 +30,11 @@ return array(
         ),
         'rsaPublicKey' => array(
             'type' => 'text',
-            'text' => '商户公钥'
+            'text' => '应用公钥'
         ),
 		'rsaPrivateKey' => array(
 			'type' => 'text',
-            'text' => '商户私钥'
+            'text' => '应用私钥'
 		),
 		'alipayrsaPublicKey'   => array(
 			'type'  => 'text',
@@ -55,11 +55,11 @@ return array(
         ),
         'rsaPublicKey_wap' => array(
             'type' => 'text',
-            'text' => '商户公钥（H5端）'
+            'text' => '应用公钥（H5端）'
         ),
 		'rsaPrivateKey_wap' => array(
 			'type' => 'text',
-            'text' => '商户私钥（H5端）'
+            'text' => '应用私钥（H5端）'
 		),
 		'alipayrsaPublicKey_wap'   => array(
 			'type'  => 'text',

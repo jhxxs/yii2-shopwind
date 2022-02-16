@@ -66,7 +66,7 @@ class RefundController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.status,r.created,r.intervene,r.refund_reason, r.shipped,rb.username as buyer_name,s.store_name,s.store_id')
+			$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,tradeNo,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.status,r.created,r.finished,r.intervene,r.refund_reason, r.shipped,rb.username as buyer_name,s.store_name,s.store_id')
 				->joinWith('refundBuyerInfo rb', false)
 				->joinWith('store s', false);
 			$query = $this->getConditions($post, $query)->orderBy(['refund_id' => SORT_DESC]);
@@ -75,7 +75,9 @@ class RefundController extends \common\controllers\BaseAdminController
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value)
 			{
+				$list[$key]['order_sn'] =  DepositTradeModel::find()->select('bizOrderId')->where(['tradeNo' => $value['tradeNo']])->scalar();
 				$list[$key]['created'] = Timezone::localDate('Y-m-d H:i:s', $value['created']);
+				$list[$key]['finished'] = Timezone::localDate('Y-m-d H:i:s', $value['finished']);
 				$list[$key]['status'] = Language::get('REFUND_'.strtoupper($value['status']));
 			}
 
@@ -131,6 +133,13 @@ class RefundController extends \common\controllers\BaseAdminController
 			$refund_goods_fee    = $post->refund_goods_fee ? round($post->refund_goods_fee, 2) : 0;
 			$refund_shipping_fee = $post->refund_shipping_fee ? round($post->refund_shipping_fee, 2) : 0;
 			$refund_total_fee    = $refund_goods_fee + $refund_shipping_fee;
+
+			RefundModel::updateAll([
+				'refund_total_fee' => $refund_total_fee, 
+				'refund_goods_fee' => $refund_goods_fee, 
+				'refund_shipping_fee' => $refund_shipping_fee, 
+				'intervene' => 1
+			], ['refund_id' => $get->id]);
 			
 			$amount	= round(floatval($refund_total_fee), 2);
 			$chajia	= $refund['total_fee'] - $amount;

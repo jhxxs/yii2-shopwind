@@ -37,7 +37,6 @@
                 <div class="tradeNo">商户订单号 | 交易号</div>
                 <div class="method">收/支</div>
                 <div class="money">金额(元)</div>
-                <div class="fundchannel">资金渠道</div>
                 <div class="status">状态</div>
                 <div class="handle">操作</div>
               </li>
@@ -46,12 +45,11 @@
               <ul>
                 <!--{foreach from=$recordlist item=record}-->
                 <li class="clearfix">
-                  <div class="time">{$record.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</div>
+                  <div class="time">{$record.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</div>
                   <div class="info">{$record.title} <p class="gray">{$record.buyer_remark}</p></div>
                   <div class="tradeNo">{$record.bizOrderId} | {$record.tradeNo}</div>
                   <div class="method"><span class="green">{$lang.income}</span></div>
                   <div class="money">{$record.amount}</div>
-                  <div class="fundchannel">{$record.fundchannel}</div>
                   <div class="status"> <span class="{if in_array($record.status, array('CLOSED'))}gray{elseif !in_array($record.status, array('SUCCESS'))}f60{/if}">{$record.status_label}</span> </div>
                   <div class="handle"> <a href="{url route='deposit/record' tradeNo=$record.tradeNo}">查看</a> </div>
                 </li>

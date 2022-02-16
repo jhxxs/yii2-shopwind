@@ -5,18 +5,18 @@
       <div class="wrap">
         <div class="public table bank">
           <div class="bank-add">
-            <div class="notice-word">
+            <div class="notice-word mb20">
               <p>当您申请提现时平台会向您这里设置的银行卡汇款，请确保您的银行卡是正确的。</p>
             </div>
             <form method="post">
               <div class="form">
                 <dl class="bank-list clearfix">
-                  <dt>开户银行</dt>
+                  <dt><span class="mt5 block">选择银行</span></dt>
                   <dd>
                     <ul class="ui-list-icons clearfix">
-                      <!--{foreach from=$bankList item=bank key=key name=fe_bank}-->
+                      <!--{foreach from=$banks item=bank key=key name=fe_bank}-->
                       <li>
-                        <input type="radio" name="short_name" id="{$key}" value="{$key}" {if $smarty.foreach.fe_bank.first || $card.short_name eq $key}checked="checked"{/if} />
+                        <input type="radio" name="code" id="{$key}" value="{$key}" {if $smarty.foreach.fe_bank.first || $card.code eq $key}checked="checked"{/if} />
                         <label class="  icon-box current " for="{$key}" > <span class="icon-cashier icon-cashier-{$key}" title="{$bank}">&nbsp;</span> </label>
                       </li>
                       <!--{/foreach}-->
@@ -24,33 +24,22 @@
                   </dd>
                 </dl>
                 <dl class="clearfix">
-                  <dt>卡 号</dt>
+                  <dt>卡<s style="margin:0 6px;">&nbsp;</s>号</dt>
                   <dd>
-                    <input type="text" name="num" class="text width_normal" value="{$card.num}" />
+                    <input type="text" name="account" class="text width_normal" value="{$card.account}" />
                   </dd>
                 </dl>
                 <dl class="clearfix">
-                  <dt>户 名</dt>
+                  <dt>户<s style="margin:0 6px;">&nbsp;</s>名</dt>
                   <dd>
-                    <input type="text" name="account_name" class="text width_normal" value="{$card.account_name}" />
+                    <input type="text" name="name" class="text width_normal" value="{$card.name}" />
                   </dd>
                 </dl>
                 <dl class="clearfix">
-                  <dt>开户支行</dt>
+                  <dt>开户行</dt>
                   <dd>
-                    <input type="text" name="open_bank" class="text width_normal" value="{$card.open_bank}" />
-                    <span class="gray">示例：XXX银行XXX支行</span> </dd>
-                </dl>
-                <dl class="clearfix">
-                  <dt>卡类型</dt>
-                  <dd>
-                    <label>
-                      <input type="radio" name="type" value="debit" {if $smarty.get.type eq 'debit' || $card.type eq 'debit' || !$card} checked="checked" {/if} />
-                      储蓄卡（借记卡）</label>
-                    <label>
-                      <input type="radio" name="type" value="credit" {if $smarty.get.type eq 'credit' || $card.type eq 'credit'} checked="checked" {/if} />
-                      信用卡（贷记卡）</label>
-                  </dd>
+                    <input type="text" name="area" class="text width_normal" value="{$card.area}" />
+                    <span class="gray">示例：XXX支行</span> </dd>
                 </dl>
                 <dl class="clearfix">
                   <dt>验证码</dt>
@@ -60,9 +49,7 @@
                 </dl>
                 <dl class="clearfix">
                   <dt>&nbsp;</dt>
-                  <dd> <span class="btn-alipay">
-                    <input type="submit"  value="{$lang.submit}" />
-                    </span> </dd>
+                  <dd><input class="btn-alipay" type="submit"  value="{$lang.submit}" /> </dd>
                 </dl>
               </div>
             </form>

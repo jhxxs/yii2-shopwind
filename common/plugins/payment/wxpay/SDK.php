@@ -13,16 +13,27 @@ namespace common\plugins\payment\wxpay;
 
 use yii;
 
+use common\library\Basewind;
 use common\library\Language;
 use common\library\Def;
 
-use common\plugins\payment\wxpay\lib\JsApi_pub;
-use common\plugins\payment\wxpay\lib\UnifiedOrder_pub;
-use common\plugins\payment\wxpay\lib\Notify_pub;
+use WeChatPay\Builder;
+use WeChatPay\Crypto\Rsa;
+use WeChatPay\Crypto\AesGcm;
+use WeChatPay\Util\PemUtil;
+use WeChatPay\Formatter;
 
 /**
  * @Id SDK.php 2018.7.19 $
  * @author mosir
+ * 
+ * docs: JSAPI支付：https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_1.shtml
+ * docs: Native支付（扫码）：https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_4_1.shtml
+ * docs: APP支付：https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_2_1.shtml
+ * docs: 小程序支付：https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_1.shtml
+ * docs: H5支付：https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_3_1.shtml
+ * docs: 申请退款：https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_9.shtml
+ * docs：不使用SDK签名/验签参考：https://blog.csdn.net/qq_32550561/article/details/117751562
  */
 
 class SDK
@@ -31,13 +42,49 @@ class SDK
 	 * 网关地址
 	 * @var string $gateway
 	 */
-	public $gateway = null;
+	public $gateway = 'https://api.mch.weixin.qq.com';
 
 	/**
-     * 支付插件实例
-	 * @var string $code
+	 * 应用ID
+	 * @var string $appId
 	 */
-	public $code = null;
+	public $appId;
+
+	/**
+	 * 应用秘钥
+	 * @var string $appSecret
+	 */
+	public $appSecret;
+
+	/**
+	 * 直连商户号
+	 * @var string $mchId
+	 */
+	public $mchId;
+
+	/**
+	 * 商户apiv3秘钥
+	 * @var string $mchKey
+	 */
+	public $mchKey;
+
+	/**
+	 * 商户证书序列号
+	 * @var string $serialNo
+	 */
+	public $serialNo;
+
+	/**
+	 * 商户证书文件
+	 * @var string $clientKey
+	 */
+	public $clientKey;
+
+	/**
+	 * 微信证书文件
+	 * @var string $wechatKey
+	 */
+	public $wechatKey;
 
 	/**
 	 * 支付交易号
@@ -58,10 +105,17 @@ class SDK
 	public $returnUrl;
 
 	/**
-	 * 插件配置信息
-	 * @var array $config
+	 * 授权CODE
+	 * @var string $wxcode
 	 */
-	private $config;
+	public $wxcode;
+
+	/**
+	 * 支付终端
+	 * @var string $terminal
+	 * @return string APP|WAP|PC|MP
+	 */
+	public $terminal;
 
 	/**
 	 * 抓取错误
@@ -74,91 +128,94 @@ class SDK
 	public function __construct(array $config)
 	{
 		foreach($config as $key => $value) {
-            $this->$key = $value;
+
+			if(substr($value, -3) == 'pem') {
+				$value = dirname(__FILE__) . DIRECTORY_SEPARATOR . $value;
+			}
+			$this->$key = $value;
 		}
-		$this->config = $config;
 	}
 	
-	public function getPayform($orderInfo = array(), $post = null)
+	/**
+	 * 预下单
+	 */
+	public function getPayform($orderInfo = array())
 	{
-		$jsApi = new JsApi_pub($this->config);
-		return $jsApi->createOauthUrlForCode($this->returnUrl);
+	    try {
+
+			$extraParams = $this->getExtraParams();
+			$response = $this->getInstance()->chain($this->getMethod())->post(['json' => array_merge([
+				'mchid'        => $this->mchId,
+				'out_trade_no' => $this->payTradeNo,
+				'appid'        => $this->appId,
+				'description'  => $orderInfo['title'], // length <= 128
+				'notify_url'   => $this->notifyUrl,
+				'amount'       => [
+					'total'    => round($orderInfo['amount'] * 100, 2),
+					'currency' => 'CNY'
+				]], $extraParams)
+			]);
+
+			$result = $response->getBody();
+			if($response->getStatusCode() != 200) {
+				$this->errors = $result;
+			} else {
+		    	$result = json_decode($result, true);
+			}
+			
+	    } catch (\Exception $e) {
+            if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
+                $this->errors = json_decode($e->getResponse()->getBody())->message;
+            }
+			if(!$this->errors) {
+				$this->errors = $e->getMessage() . $e->getTraceAsString();
+			}
+	    }
+
+		return $result ? $result : false;
 	}
 
-	public function getRefundform($orderInfo)
+	/**
+	 * 订单退款
+	 * 由微信处理原路返回策略
+	 * @desc 为了更好的处理业务，调用成功即认为微信退款成功（支付宝也即同步调用），暂不考虑异步通知的情况
+	 */
+	public function getRefundform($orderInfo = array())
 	{
-		$jsApi = new JsApi_pub($this->config);
+		try {
 
-        $unified = array(
-            'appid' => $this->config['AppID'],
-            'mch_id' => $this->config['MchID'],
-            'nonce_str' => $jsApi->createNonceStr(),
-            'total_fee' => $orderInfo['total'] * 100,       //订单金额
-            'refund_fee' => $orderInfo['amount'] * 100,       //退款金额
-            'sign_type' => 'MD5',           //签名类型 支持HMAC-SHA256和MD5，默认为MD5
-            //'transaction_id'=>'',               //微信订单号
-            'out_trade_no'=> $this->payTradeNo,        //商户订单号
-            'out_refund_no'=> $orderInfo['refund_sn'],        //商户退款单号
-            //'refund_desc'=> '',     //退款原因（选填）
-            //'notify_url'=> $this->notifyUrl
-        );
-        $unified['sign'] = $jsApi->getSign($unified);
-		$responseXml = $jsApi->postXmlSSLCurl($jsApi->arrayToXml($unified), 'https://api.mch.weixin.qq.com/secapi/pay/refund');
-		if($responseXml === false) {
-			$this->errors = $jsApi->errors;
+			$response = $this->getInstance()->chain($this->getMethod(true))->post(['json' => [
+				'out_trade_no' => $this->payTradeNo,
+				'out_refund_no'=> $orderInfo['refund_sn'],
+				//'notify_url'   => $this->notifyUrl,
+				//'reason' => '',
+				'amount'       => [
+					'refund'   => $orderInfo['amount'] * 100,
+					'total'    => $orderInfo['total'] * 100,
+					'currency' => 'CNY'
+				]]
+			]);
+
+			if($response->getStatusCode() != 200) {
+				$this->errors = $response->getBody();
+				return false;
+			}
+			return true;
+			
+	    } catch (\Exception $e) {
+            if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
+                $this->errors = json_decode($e->getResponse()->getBody())->message;
+            }
+			if(!$this->errors) {
+				$this->errors = $e->getMessage() . $e->getTraceAsString();
+			}
 			return false;
-		}
-        $unifiedOrder = simplexml_load_string($responseXml, 'SimpleXMLElement', LIBXML_NOCDATA);
-        if ($unifiedOrder === false) {
-            $this->errors = 'parse xml error';
-			return false;
-        }
-        if ($unifiedOrder->return_code != 'SUCCESS') {
-            $this->errors = $unifiedOrder->return_msg;
-			return false;
-        }
-        if ($unifiedOrder->result_code != 'SUCCESS') {
-            $this->errors = $unifiedOrder->err_code;
-			return false;
-        }
-        return true;
+	    }
 	}
-	
-	public function getParameters($wxcode, $orderInfo, $payTradeNo = '')
-    {
-		$jsApi = new JsApi_pub($this->config);
-		
-		$jsApi->setCode($wxcode);
-		$openid = $jsApi->getOpenId(); // 获取openid https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4
-		
-		if(!$openid) {
-			$this->errors = Language::get('openid_empty');
-			return false;
-		}
-		
-		// 使用统一支付接口
-		$unifiedOrder = new UnifiedOrder_pub($this->config);
-		
-		// body max length <= 128
-		if(strlen($orderInfo['title']) > 128) {
-			$body = mb_substr($orderInfo['title'],0,40, Yii::$app->charset);// 代表40个字 120个字符
-		} else $body = $orderInfo['title'];
-	
-		// 设置统一支付接口参数
-		$unifiedOrder->setParameter("openid", $openid);
-		$unifiedOrder->setParameter("body", $body);//商品描述
-	
-		$unifiedOrder->setParameter("out_trade_no", $payTradeNo);//商户订单号 
-		$unifiedOrder->setParameter("total_fee", $orderInfo['amount'] * 100);//总金额
-		$unifiedOrder->setParameter("notify_url", $this->notifyUrl);//通知地址 
-		$unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
-		
-		$prepay_id = $unifiedOrder->getPrepayId();
-		$jsApi->setPrepayId($prepay_id);
-		$jsApiParameters = $jsApi->getParameters();
-		
-		return $jsApiParameters;
-	}
+
+	/**
+	 * 验证通知
+	 */
 	public function verifyNotify($orderInfo, $notify)
 	{
 		// 验证与本地信息是否匹配。这里不只是付款通知，有可能是发货通知，确认收货通知
@@ -168,15 +225,14 @@ class SDK
             $this->errors = Language::get('order_inconsistent');
             return false;
         }
-        if ($orderInfo['amount'] != round($notify['total_fee']/100,2))
+        if ($orderInfo['amount'] * 100 != $notify['amount']['total'])
 		{
             // 支付的金额与实际金额不一致
             $this->errors = Language::get('price_inconsistent');
             return false;
         }
 	
-        //至此，说明通知是可信的，订单也是对应的，可信的
-		if(($notify['return_code'] == 'SUCCESS') && ($notify['result_code'] == 'SUCCESS')) {
+		if($notify['trade_state'] == 'SUCCESS') {
 			$order_status = Def::ORDER_ACCEPTED;
 		} else {
 			$this->errors = Language::get('undefined_status');
@@ -185,33 +241,255 @@ class SDK
 	
 		return array('target' => $order_status);
 	}
-	
+
+	/**
+	 * 验证签名
+	 */
 	public function verifySign($notify)
-    {
-		$notify_pub = new Notify_pub($this->config);
-		
-		unset($notify['payTradeNo']);
-		$notify_pub->data = $notify;
-		
-		return $notify_pub->checkSign();
-	}
-	
-	public function verifyResult($result) 
-    {
-		$notify= new Notify_pub($this->config);
-		
-        if ($result)
-        {
-			$notify->setReturnParameter("return_code","SUCCESS");//设置返回码	
-        }
-		else
-		{
-			$notify->setReturnParameter("return_code","FAIL");//返回状态码
-			$notify->setReturnParameter("return_msg","SIGNATURE FAIL");//返回信息
+	{
+		$headers = Yii::$app->request->headers;
+		$inWechatpaySignature = $headers->get('wechatpay-signature');
+		$inWechatpayTimestamp = $headers->get('wechatpay-timestamp');
+		$inWechatpaySerial = $headers->get('wechatpay-serial');
+		$inWechatpayNonce = $headers->get('wechatpay-nonce');
+		$inBody = file_get_contents('php://input');
+
+		// 根据通知的平台证书序列号，查询本地平台证书文件
+		$platformPublicKeyInstance = Rsa::from(file_get_contents($this->wechatKey), Rsa::KEY_TYPE_PUBLIC);
+
+		// 检查通知时间偏移量，允许5分钟之内的偏移
+		$timeOffsetStatus = 300 >= abs(Formatter::timestamp() - (int)$inWechatpayTimestamp);
+		$verifiedStatus = Rsa::verify(
+			// 构造验签名串
+			Formatter::joinedByLineFeed($inWechatpayTimestamp, $inWechatpayNonce, $inBody),
+			$inWechatpaySignature,
+			$platformPublicKeyInstance
+		);
+		if ($timeOffsetStatus && $verifiedStatus) {
+			return true;
 		}
-		
-		//回应微信
-		$returnXml = $notify->returnXml();
-		echo $returnXml;
+
+		return false;
+	}
+
+	/**
+	 * 应答微信通知
+	 */
+	public function verifyResult($result = false) 
+	{
+		if($target) {
+			$result = ['code' => 'SUCCESS', 'message' => ''];
+		} else {
+			$result = ['code' => 'FAIL', 'message' => 'fail'];
+		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * 获取解密后的数据
+	 */
+	public function getNotify()
+	{
+		if(!$this->mchKey) {
+			return false;
+		}
+
+	    // 转换通知的JSON文本消息为PHP Array数组
+		$inBodyObj = json_decode(file_get_contents('php://input'));
+		// 加密文本消息解密
+		$inBodyResource = AesGcm::decrypt($inBodyObj->resource->ciphertext, $this->mchKey, $inBodyObj->resource->nonce, $inBodyObj->resource->associated_data);
+		// 把解密后的文本转换为PHP Array数组
+		$inBodyResourceArray = (array)json_decode($inBodyResource, true);
+	    
+	    // 解密后的结果
+		return $inBodyResourceArray;
+	}
+
+	/**
+	 * 获取支付工厂类
+	 */
+	private function getInstance()
+	{
+		// 商户证书文件
+	    $merchantPrivateKeyFilePath = file_get_contents($this->clientKey);
+	    
+	    // 从本地文件中加载商户API私钥，商户API私钥会用来生成请求的签名
+		$merchantPrivateKeyInstance = Rsa::from($merchantPrivateKeyFilePath, Rsa::KEY_TYPE_PRIVATE);
+	
+		// 从本地文件中加载微信支付平台证书，用来验证微信支付应答的签名
+		$platformCertificateFilePath = file_get_contents($this->wechatKey);
+		$platformPublicKeyInstance = Rsa::from($platformCertificateFilePath, Rsa::KEY_TYPE_PUBLIC);
+
+		// 获取微信支付平台证书序列号
+		$platformCertificateSerial = PemUtil::parseCertificateSerialNo($platformCertificateFilePath);
+	
+		$instance = Builder::factory([
+			'mchid'      => $this->mchId,
+			'serial'     => $this->serialNo, // 商户API证书序列号
+			'privateKey' => $merchantPrivateKeyInstance,
+			'certs'      => [
+				$platformCertificateSerial => $platformPublicKeyInstance
+			]
+		]);
+
+		return $instance;
+	}
+
+	/**
+	 * 获取适用的接口接方法
+	 * 因为有类继承，考虑全部终端
+	 */
+	public function getMethod($isrefund = false)
+	{
+		if($isrefund) {
+			return 'v3/refund/domestic/refunds';
+		}
+
+		if($this->terminal == 'APP') {
+			return 'v3/pay/transactions/app';
+		}
+
+		// H5
+		if($this->terminal == 'WAP' && !Basewind::isWeixin()) {
+			return 'v3/pay/transactions/h5';
+		}
+
+		// 公众号&&小程序
+		if(Basewind::isWeixin()) {
+			return 'v3/pay/transactions/jsapi';
+		}
+
+		// PC扫码
+		return 'v3/pay/transactions/native';
+	}
+
+	/**
+	 * 获取接口拓展参数
+	 * 因为有类继承，考虑全部终端
+	 */
+	public function getExtraParams() 
+	{
+		// APP
+		if($this->terminal == 'APP') {
+			return [];
+		}
+
+		// H5
+		if($this->terminal == 'WAP' && !Basewind::isWeixin()) {
+			$scene_info = ['scene_info' => ['payer_client_ip' => Yii::$app->request->userIP, 'h5_info' => ['type' => 'wap']]];
+			return $scene_info;
+		}
+
+		// 公众号&&小程序
+		if(Basewind::isWeixin()) {
+			$payer = ['payer' => ['openid' => $this->getOpenId($this->wxcode)]];
+			return $payer;
+		}
+
+		return [];
+	}
+
+	/**
+	 * 获取OPENID
+	 */
+	public function getOpenId($wxcode = '')
+	{
+		if(!$wxcode) {
+			return false;
+		}
+
+		if(!($openid = $this->createOauthUrlForOpenid($wxcode))) {
+			return false;
+		}
+
+		return $openid;
+	}
+
+	/**
+	 * 获取CODE Url
+	 */
+	public function createOauthUrlForCode()
+	{
+		$urlObj["appid"] =  $this->appId;
+		$urlObj["redirect_uri"] = $this->returnUrl;
+		$urlObj["response_type"] = "code";
+		$urlObj["scope"] = "snsapi_base";
+		$urlObj["state"] = "STATE#wechat_redirect";
+		$bizString = $this->formatBizQueryParaMap($urlObj, false);
+		return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
+	}
+
+	/**
+	 * 获取公众号的OPENID
+	 */
+	public function createOauthUrlForOpenid($code)
+	{
+		$urlObj["appid"] = $this->appId;
+		$urlObj["secret"] = $this->appSecret;
+		$urlObj["code"] = $code;
+		$urlObj["grant_type"] = "authorization_code";
+		$bizString = $this->formatBizQueryParaMap($urlObj, false);
+		$url = "https://api.weixin.qq.com/sns/oauth2/access_token?".$bizString;
+
+		$result = Basewind::curl($url);
+		if(!$result) {
+			return false;
+		}
+		$result = json_decode($result);
+		if($result->errcode || !$result->openid) {
+			$this->errors = $result->errmsg;
+			return false;
+		}
+		return $result->openid;
+	}
+
+	/**
+	 * 公众号支付参数（小程序与此一致）
+	 */
+	public function getParameters($prepay_id)
+	{
+		$params["appId"] = $this->appId;
+	    $params["timeStamp"] = (string)Formatter::timestamp();
+	    $params["nonceStr"] = Formatter::nonce();
+		$params["package"] = "prepay_id=$prepay_id";
+	    $params["paySign"] = $this->getSign($params);
+		$params["signType"] = "RSA";
+		return $params;
+	}
+
+	/**
+	 * 获取签名
+	 */
+	public function getSign($params)
+    {
+		// 商户私钥
+		$merchantPrivateKeyFilePath = file_get_contents($this->clientKey);
+		$merchantPrivateKeyInstance = Rsa::from($merchantPrivateKeyFilePath);
+
+		return Rsa::sign(Formatter::joinedByLineFeed(...array_values($params)), $merchantPrivateKeyInstance);
     }
+
+	/**
+	 * 	作用：格式化参数，签名过程需要使用
+	 */
+	public function formatBizQueryParaMap($paraMap, $urlencode)
+	{
+		$buff = "";
+		ksort($paraMap);
+		foreach ($paraMap as $k => $v)
+		{
+		    if($urlencode)
+		    {
+			   $v = urlencode($v);
+			}
+			//$buff .= strtolower($k) . "=" . $v . "&";
+			$buff .= $k . "=" . $v . "&";
+		}
+		$reqPar;
+		if (strlen($buff) > 0) 
+		{
+			$reqPar = substr($buff, 0, strlen($buff)-1);
+		}
+		return $reqPar;
+	}
 }

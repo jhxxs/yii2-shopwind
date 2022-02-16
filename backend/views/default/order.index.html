@@ -67,7 +67,10 @@
       , cols: [[
         { type: 'checkbox', fixed: 'left' }
         , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
-        , { field: 'order_sn', title: '订单编号', width: 200, edit: 'text' }
+        , { field: 'order_sn', title: '订单编号', width: 200 }
+        , { field: 'tradeNo', title: '交易号', width: 200, templet: function(res) {
+            return res.tradeNo ? res.tradeNo : '';
+        }}
         , { field: 'store_name', title: '店铺名称', width: 160 }
         , { field: 'buyer_name', title: '买家', width: 150 }
         , { field: 'order_amount', title: '订单金额', width: 125, sort: true, align: 'center' }

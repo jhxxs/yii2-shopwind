@@ -96,7 +96,8 @@ class CashierController extends \common\controllers\BaseUserController
 	{
 		$orderId = Basewind::trimAll(Yii::$app->request->get('orderId'), true);
 
-		if (!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) 
+		{
 			list($errorMsg, $orderInfo) = DepositTradeModel::checkAndGetTradeInfo($orderId, Yii::$app->user->id);
 			if ($errorMsg !== false) {
 				return Message::warning($errorMsg);
@@ -143,7 +144,9 @@ class CashierController extends \common\controllers\BaseUserController
 
 			$this->params['page'] = Page::seo(['title' => Language::get('cashier')]);
 			return $this->render('../cashier.index.html', $this->params);
-		} else {
+		} 
+		else 
+		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			if (empty($post->payment_code)) {
 				return Message::warning(Language::get('pls_select_paymethod'));
@@ -162,7 +165,7 @@ class CashierController extends \common\controllers\BaseUserController
 				return Message::warning($errorMsg);
 			}
 
-			$payment = Plugin::getInstance('payment')->build();
+			$payment = Plugin::getInstance('payment')->build($post->payment_code, $post);
 			list($all_payments, $cod_payments, $errorMsg) = $payment->getAvailablePayments($orderInfo, true, true);
 			if ($errorMsg !== false) {
 				return Message::warning($errorMsg);
@@ -185,16 +188,49 @@ class CashierController extends \common\controllers\BaseUserController
 			}
 
 			// 生成支付URL或表单
-			list($payTradeNo, $payform) = Plugin::getInstance('payment')->build($post->payment_code, $post)->getPayform($orderInfo);
-			if($payform['payResult'] === false) {
-				return Message::warning($payform['errMsg']);
+			$payform = $payment->pay($orderInfo);
+			if($payform === false) {
+				return Message::warning($payment->errors);
 			}
-			$this->params['payform'] = array_merge($payform, ['payTradeNo' => $payTradeNo]);
+			$this->params['payform'] = $payform;
 
-			// 跳转到真实收银台
+			// 跳转
 			$this->params['page'] = Page::seo(['title' => Language::get('cashier')]);
 			return $this->render('../cashier.payform.html', $this->params);
 		}
+	}
+
+	/**
+	 * 适用于在PC访问微信客户端
+	 * 此处是获取微信授权回调（带CODE）
+	 */
+	public function actionWxpay()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+
+		if(empty($post->code)) {
+			// TODO
+		}
+
+		if (!$post->payTradeNo || !($orderInfo = DepositTradeModel::getTradeInfoForNotify($post->payTradeNo))) {
+			return Message::warning(Language::get('order_info_empty'));
+		 }
+		 
+		 if(!in_array($orderInfo['payment_code'], array('wxpay'))){
+			 return Message::warning(Language::get('Hacking Attempt'));
+		 }
+			 
+		 $payment = Plugin::getInstance('payment')->build($orderInfo['payment_code'], $post);
+		 $jsApiParameters = $payment->getParameters($orderInfo, $post->code);
+
+		 $this->params['payform'] = array(
+			'jsApiParameters' => $jsApiParameters,
+			'orderUrl' => Url::toRoute(['paynotify/index', 'payTradeNo' => $post->payTradeNo]),
+		);
+	
+		$this->params['page'] = Page::seo(['title' => $orderInfo['title']]);
+        return $this->render('../cashier.wxpay.html', $this->params);
+
 	}
 
 	/* 针对微信扫码支付，通过此返回结果实现自动跳转 */

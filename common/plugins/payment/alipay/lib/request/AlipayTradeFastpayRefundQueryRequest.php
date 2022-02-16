@@ -6,7 +6,7 @@ namespace common\plugins\payment\alipay\lib\request;
  * ALIPAY API: alipay.trade.fastpay.refund.query request
  *
  * @author auto create
- * @since 1.0, 2017-03-23 19:11:54
+ * @since 1.0, 2021-09-13 21:02:30
  */
 class AlipayTradeFastpayRefundQueryRequest
 {

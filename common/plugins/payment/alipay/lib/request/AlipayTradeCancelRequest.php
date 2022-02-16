@@ -6,7 +6,7 @@ namespace common\plugins\payment\alipay\lib\request;
  * ALIPAY API: alipay.trade.cancel request
  *
  * @author auto create
- * @since 1.0, 2017-03-23 10:05:50
+ * @since 1.0, 2021-09-16 16:06:17
  */
 class AlipayTradeCancelRequest
 {

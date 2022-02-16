@@ -57,15 +57,6 @@ return array (
       '@yii/gii' => $vendorDir . '/yiisoft/yii2-gii/src',
     ),
   ),
-  'devanych/yii2-cart' => 
-  array (
-    'name' => 'devanych/yii2-cart',
-    'version' => '1.2.1.0',
-    'alias' => 
-    array (
-      '@devanych/cart' => $vendorDir . '/devanych/yii2-cart',
-    ),
-  ),
   'yiisoft/yii2-queue' => 
   array (
     'name' => 'yiisoft/yii2-queue',

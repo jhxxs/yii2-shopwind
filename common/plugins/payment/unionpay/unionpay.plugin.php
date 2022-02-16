@@ -26,12 +26,6 @@ use common\plugins\payment\unionpay\SDK;
 class Unionpay extends BasePayment
 {
 	/**
-	 * 网关地址
-	 * @var string $gateway
-	 */
-	protected $gateway = 'https://gateway.95516.com/gateway/api/frontTransReq.do';
-	
-	/**
      * 支付插件实例
 	 * @var string $code
 	 */
@@ -44,25 +38,17 @@ class Unionpay extends BasePayment
 	private $client = null;
 	
 	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $redirect = true)
+	public function pay($orderInfo = array())
     {
 		// 支付网关商户订单号
-		$payTradeNo = parent::getPayTradeNo($orderInfo);
-		
-		// 给其他页面使用
-		foreach($orderInfo['tradeList'] as $key => $value) {
-			$orderInfo['tradeList'][$key]['payTradeNo'] = $payTradeNo;
-		}
-
+		$payTradeNo = $this->getPayTradeNo($orderInfo);
+	
 		$sdk = $this->getClient();
-		$sdk->gateway = $this->gateway;
-		$sdk->code = $this->code;
 		$sdk->payTradeNo = $payTradeNo;
 		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
 	
-		$params = $this->createPayform($sdk->getPayform($orderInfo), $this->gateway, 'post');
-        return array($payTradeNo, $params);
+		return $this->createPayform($sdk->getPayform($orderInfo), $this->gateway, 'post');
     }
 
     /* 返回通知结果 */

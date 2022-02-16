@@ -56,7 +56,7 @@ class My_integralLogsForm extends Model
 			$integralLogs[$key]['name'] = Language::get($val['type']);
 			
 			if(Basewind::getCurrentApp() == 'pc') {
-				$integralLogs[$key]['state'] = IntegralModel::getStatusLabel($val['state']);
+				$integralLogs[$key]['state'] = Language::get($val['state']);
 				$integralLogs[$key]['order_sn'] = OrderModel::find()->select('order_sn')->where(['order_id' => $val['order_id']])->scalar();
 			}
 		}

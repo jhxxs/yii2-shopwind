@@ -32,31 +32,25 @@ class BaseDepopay
 	 * 交易类型
 	 * @var string $otype
 	 */
-	protected $otype = '';
+	protected $otype;
 	
 	/**
 	 * 页面提交参数
 	 * @var object $post
 	 */
-	public $post = null;
+	public $post;
 
 	/**
 	 * 其他额外参数
 	 * @var array $params
 	 */
-	public $params = array();
+	public $params;
 
 	/**
 	 * 错误捕捉
 	 * @var object $errors
 	 */
-	public $errors = null;
-
-	/**
-	 * 错误代码集合
-	 * @var array $errorCode
-	 */
-	public $errorCode = [];
+	public $errors;
 	
 	public function __construct($otype, $post = null, $params = array())
 	{
@@ -130,7 +124,6 @@ class BaseDepopay
 	/* 插入账户收支记录，并变更账户余额 */
 	public function _insert_deposit_record($params = array(), $changeBalance = true)
 	{
-		// $data is array
 		$model = new DepositRecordModel();
 		foreach($params as $key => $val) {
 			$model->$key = $val;
@@ -141,7 +134,7 @@ class BaseDepopay
 					$model->delete();
 					return false;
 				}
-				return true; //$model->record_id;
+				return true;
 			}
 			return true;
 		}
@@ -177,7 +170,6 @@ class BaseDepopay
 			'tradeCat'		=>	'SERVICE',// 服务费
 			'payType'		=>	'INSTANT', 
 			'flow'			=>	'outlay',
-			'fundchannel'   =>  Language::get('deposit'),
 			'title'			=>	Language::get('chargeback'),
 			'add_time'		=>	$time,
 			'pay_time'		=>	$time,
@@ -197,7 +189,6 @@ class BaseDepopay
 				'amount'		=>  $fee,
 				'balance'		=>	$this->_update_deposit_money($trade_info['userid'], $fee, 'reduce'),
 				'tradeType'		=>  'SERVICE',
-				'tradeTypeName' => 	Language::get('SERVICE'),
 				'flow'			=>	'outlay',
 				'name'			=>	Language::get('chargeback'),
 				'remark'		=>  $remark,
@@ -207,7 +198,7 @@ class BaseDepopay
 	}
 	
 	/**
-	 * 如果是使用余额支付，且买家账户有不可提现金额
+	 * 如果是使用余额支付，且账户有不可提现金额
 	 * 则解除该部分金额的提现额度限制，避免不可提现金额一直存在
 	 */
 	public function relieveUserNodrawal($tradeNo, $userid = 0, $money = 0)
@@ -225,26 +216,16 @@ class BaseDepopay
 		return false;
 	}
 
-	public function getErrors()
+	public function setErrors($errorCode = '', $errorMsg = '')
 	{
-		$ex = new DepopayException();
-		if(is_array($this->errorCode) && count($this->errorCode) > 1){
-			$error = '';
-			foreach($this->errorCode as $k => $code)
-			{
-				$error .= ($k+1) . '. '. $ex->errorMsg[$code].'<br>';
+		if(!$errorCode) {
+			$ex = new DepopayException();
+			if(isset($ex->errorMsg[$errorCode])) {
+				$this->errors = $ex->errorMsg[$errorCode];
 			}
-			return $error;
 		}
-		return $ex->errorMsg[$this->errorCode[0]];
-	}
-
-	public function setErrors($errorCode = '')
-	{
-		if(!empty($errorCode)) {
-			$this->errorCode[] = $errorCode;
-			$this->errors = $this->getErrors();
-		}
+		
+		$this->errors = $errorMsg;
 	}
 }
 
@@ -280,9 +261,11 @@ class DepopayException
 			"50022" => "操作异常！买家确认收货后无法正常修改交易状态。",
 			"50023" => "交易异常！取消订单中退回给买家款项时出现插入错误。",
 			"50024" => "交易异常！无法正确修改交易状态信息。",
+			"50025" => "交易异常！支付接口未配置",
 			"60001" => "交易异常！购买应用中无法正常支付",
 			"60002" => "更新所购买应用的过期时间出现异常！",
 			"60003" => "无法正常变更购买应用记录中的状态",
+			"70001" => "提现到支付宝钱包接口异常",
         );
     }  
 }

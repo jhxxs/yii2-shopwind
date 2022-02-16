@@ -25,32 +25,44 @@ return array(
     'name'      => Language::get('wxpay'),
     'subname'   => Language::get('wxpay'),
     'desc'      => Language::get('wxpay_desc'),
-    'is_online' => '1',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
-    'version'   => '1.0',
+    'version'   => '3.0',
     'currency'  => Language::get('wxpay_currency'),
     'config'    => array(
-        'AppID'   => array(        // 公众号开发者应用ID
+        'appId'   => array(        // 应用ID
             'text'  => Language::get('appid'),
             'desc'  => Language::get('appid_desc'),
             'type'  => 'text',
         ),
-		'AppSecret' => array(         // 公众号开发者应用密钥
-            'text'  => Language::get('appsecret'),
-            'desc'  => Language::get('appsecret_desc'),
+        'appSecret'   => array(        // 应用ID
+            'text'  => Language::get('AppSecret'),
+            'type'  => 'text',
+        ),
+        'mchId'     => array(        //商户号
+            'text'  => Language::get('mchid'),
+            'type'  => 'text',
+        ),
+        'mchKey'   => array(        //商户密钥
+            'text'  => Language::get('mchkey'),
+            'type'  => 'text',
+        ),
+        'serialNo' => array(         // 证书序列号
+            'text'  => Language::get('serialno'),
+            'desc'  => Language::get('serialno_desc'),
             'type'      => 'text',
         ),
-        'MchID'     => array(        //商户号
-            'text'  => Language::get('mchid'),
-            'desc'  => Language::get('mchid_desc'),
+        'clientKey'     => array(        // 商户证书文件
+            'text'  => Language::get('clientkey'),
+            'desc'  => Language::get('pemPath_desc'),
+            'placeholder' => 'cacert/apiclient_key.pem',
             'type'  => 'text',
         ),
-        'KEY'   => array(        //商户密钥
-            'text'  => Language::get('key'),
-			'desc'  => sprintf(Language::get('key_desc'), 'wxpay'),
+        'wechatKey'     => array(        // 微信平台证书文件
+            'text'  => Language::get('wechatkey'),
+            'desc'  => Language::get('wxpemPath_desc'),
+            'placeholder' => 'cacert/wechatpay.pem',
             'type'  => 'text',
-        ),
-        
-    ),
+        )
+    )
 );

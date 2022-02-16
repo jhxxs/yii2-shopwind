@@ -71,6 +71,11 @@ class Buyer_orderEvaluateForm extends Model
 			if (($model = OrderGoodsModel::find()->where(['spec_id' => intval($spec_id), 'order_id' => $orderInfo['order_id']])->one())) {
 				$model->evaluation = $item['value'];
 				$model->comment = addslashes($item['comment']);
+
+				// 用户评价晒图
+				if(isset($post['evaluations']['images'][$spec_id])) {
+					$model->images = json_encode($post['evaluations']['images'][$spec_id]);
+				}
 				if ($model->save()) {
 
 					// 更新店铺信用度

@@ -6,7 +6,7 @@ namespace common\plugins\payment\alipay\lib\request;
  * ALIPAY API: alipay.data.dataservice.bill.downloadurl.query request
  *
  * @author auto create
- * @since 1.0, 2016-09-20 16:35:20
+ * @since 1.0, 2021-10-27 20:07:51
  */
 class AlipayDataDataserviceBillDownloadurlQueryRequest
 {

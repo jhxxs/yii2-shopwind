@@ -62,15 +62,15 @@ $(function(){
           </tr>
           <tr>
             <th><span>下单时间</span></th>
-            <td><span>{$order.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</span></td>
+            <td><span>{$order.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</span></td>
             <th><span>付款时间</span></th>
-            <td><span>{if $order.pay_time}{$order.pay_time|date_format:"%Y.%m.%d %H:%M:%S"}{/if}</span></td>
+            <td><span>{if $order.pay_time}{$order.pay_time|date_format:"%Y-%m-%d %H:%M:%S"}{/if}</span></td>
           </tr>
           <tr>
             <th><span>发货时间</span></th>
-            <td><span>{if $order.ship_time}{$order.ship_time|date_format:"%Y.%m.%d %H:%M:%S"}{/if}</span></td>
+            <td><span>{if $order.ship_time}{$order.ship_time|date_format:"%Y-%m-%d %H:%M:%S"}{/if}</span></td>
             <th><span>完成时间</span></th>
-            <td><span>{if $order.finished_time}{$order.finished_time|date_format:"%Y.%m.%d %H:%M:%S"}{/if}</span></td>
+            <td><span>{if $order.finished_time}{$order.finished_time|date_format:"%Y-%m-%d %H:%M:%S"}{/if}</span></td>
           </tr>
           <tr>
             <td colspan="4" align="left"><span>收货人信息</span></td>

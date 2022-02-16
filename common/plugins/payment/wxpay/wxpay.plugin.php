@@ -14,6 +14,7 @@ namespace common\plugins\payment\wxpay;
 use yii;
 use yii\helpers\Url;
 
+use common\library\Basewind;
 use common\library\Language;
 
 use common\plugins\BasePayment;
@@ -26,12 +27,6 @@ use common\plugins\payment\wxpay\SDK;
 
 class Wxpay extends BasePayment
 {
-	/**
-	 * 网关地址
-	 * @var string $gateway
-	 */
-	protected $gateway = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
-
     /**
      * 支付插件实例
 	 * @var string $code
@@ -44,35 +39,77 @@ class Wxpay extends BasePayment
      */
 	private $client = null;
 	
-	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $redirect = true)
+	/**
+	 * 提交支付请求
+	 * 兼容公众号支付/扫码支付/H5支付
+	 */
+	public function pay($orderInfo = array())
     {
 		// 支付网关商户订单号
-		$payTradeNo = parent::getPayTradeNo($orderInfo);
-		
-		// 给其他页面使用
-		foreach($orderInfo['tradeList'] as $key => $value) {
-			$orderInfo['tradeList'][$key]['payTradeNo'] = $payTradeNo;
-		}
-		
+		$payTradeNo = $this->getPayTradeNo($orderInfo);
+	
 		$sdk = $this->getClient();
-		//$sdk->gateway = $this->gateway;
-		//$sdk->code = $this->code;
-		//$sdk->payTradeNo = $payTradeNo;
-		//$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
+		$sdk->payTradeNo = $payTradeNo;
+		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
-		
-		if(($url = $sdk->getPayform($orderInfo)) === false) {
+		$sdk->terminal = $this->getTerminal();
+
+		// 公众号
+		if(Basewind::isWeixin()) {
+			$url = $sdk->createOauthUrlForCode();
+
+			// 公众号打开PC页面
+			if($sdk->terminal == 'PC') {
+				header("location:$url");
+				exit();
+			}
+
+			// 公众号打开H5页面，到H5页去跳转
+			$params['redirect'] = $url;
+		}
+
+		// H5（非微信浏览器）/扫码
+		if(!isset($params['redirect']))
+		{
+			$params = $sdk->getPayform($orderInfo);
+			if(!$params) {
+				$this->errors = $sdk->errors;
+				return false;
+			}
+			if(isset($params['h5_url'])) {
+				$params = ['redirect' => $params['h5_url']];
+			}
+		}
+
+        return array_merge($params, ['payTradeNo' => $payTradeNo]);
+    }
+	
+	/**
+	 * 针对授权回调后获取的参数
+	 */
+	public function getParameters($orderInfo, $code = '')
+	{
+		$sdk = $this->getClient();
+		$sdk->payTradeNo = $this->params->payTradeNo;
+		$sdk->notifyUrl = $this->createNotifyUrl($this->params->payTradeNo);
+		$sdk->returnUrl = $this->createReturnUrl($this->params->payTradeNo);
+		$sdk->terminal = $this->getTerminal();
+		$sdk->wxcode = $code;
+
+		$params = $sdk->getPayform($orderInfo);
+		if(!$params) {
 			$this->errors = $sdk->errors;
 			return false;
 		}
-		if($redirect) {
-			header("location:$url"); // don't use Yii::$app->response->redirect($url); 
-			exit();
+
+		$result = $sdk->getParameters($params['prepay_id']);
+		if(!$result) {
+			$this->errors = $sdk->errors;
+			return false;
 		}
-		
-		return array($payTradeNo, ['redirect' => $url]);
-    }
+
+		return $result;
+	}
 
 	/**
 	 * 提交退款请求（原路退回）
@@ -91,24 +128,12 @@ class Wxpay extends BasePayment
 		return true;
 	}
 	
-	public function getParameters($wxcode, $orderInfo, $payTradeNo = '')
-	{
-		$sdk = $this->getClient();
-		$sdk->gateway = $this->gateway;
-		$sdk->code = $this->code;
-		$sdk->payTradeNo = $payTradeNo;
-		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
-		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
-		
-		$jsApiParameters = $sdk->getParameters($wxcode, $orderInfo, $payTradeNo);
-		
-		return $jsApiParameters;
-	}
-	
-	/* 获取返回地址 */
+	/**
+	 * 获取返回地址 
+	 */
 	public function createReturnUrl($payTradeNo = '')
 	{
-		// for API
+		// for API H5
 		if($this->params->callback) {
 			return $this->params->callback . '?payTradeNo='.$payTradeNo;
 		}
@@ -116,14 +141,18 @@ class Wxpay extends BasePayment
 		return Url::toRoute(['cashier/wxpay', 'payTradeNo' => $payTradeNo], true);
 	}
 	
-	/* 获取通知地址 公众号支付/扫码支付/APP支付可共用该地址 */
+	/**
+	 * 获取通知地址 
+	 */
     public function createNotifyUrl($payTradeNo = '')
     {
         return Url::toRoute(['paynotify/wxpay'], true);
     }
 
-    /* 返回通知结果 */
-    public function verifyNotify($orderInfo, $strict = false)
+    /**
+	 * 验证通知结果 
+	 */
+    public function verifyNotify($orderInfo, $strict = true)
     {
         if (empty($orderInfo)) {
 			$this->errors = Language::get('order_info_empty');
@@ -131,15 +160,15 @@ class Wxpay extends BasePayment
         }
 		
 		$notify = $this->getNotify();
-		
+
         // 验证通知是否可信
-        if (!($sign_result = $this->verifySign($notify, $strict)))
+        if (!$this->verifySign($notify, $strict))
         {
             // 若本地签名与网关签名不一致，说明签名不可信
             $this->errors = Language::get('sign_inconsistent');
             return false;
         }
-		
+
 		$sdk = $this->getClient();
 		if(!($result = $sdk->verifyNotify($orderInfo, $notify))) {
 			$this->errors = $sdk->errors;
@@ -147,24 +176,42 @@ class Wxpay extends BasePayment
 		}
 		return $result;
     }
+	
+	/**
+	 * 应答微信通知
+	 */
+	public function verifyResult($result = false) 
+	{
+		return $this->getClient()->verifyResult($result);
+	}
 
-    /* 验证签名是否可信 */
-    private function verifySign($notify, $strict = false)
+	/**
+	 * 验证签名是否可信 
+	 */
+    private function verifySign($notify, $strict = true)
     {
-		// 验证签名
+		// 异步通知需要严格验签
 		if($strict == true) {
 			return $this->getClient()->verifySign($notify);
 		}
 		return true;
     }
-	
-	public function verifyResult($result = false) {
-		return $this->getClient()->verifyResult($result);
+
+	/**
+	 * 获取解密通知信息
+	 */
+	public function getNotify() 
+	{
+		if(!$this->params) {
+			return $this->getClient()->getNotify();
+		}
+		return json_decode($this->params, true);
 	}
 	
-	public function getNotifySpecificData() {
+	public function getNotifySpecificData() 
+	{
 		$notify = $this->getNotify();
-		return array(round($notify['total_fee']/100, 2), $notify['transaction_id'], 'payment_bank' => $notify['bank_type']);
+		return array(round($notify['amount']['total']/100, 2), $notify['transaction_id']);
 	}
 
 	/**

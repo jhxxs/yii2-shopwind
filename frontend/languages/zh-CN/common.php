@@ -57,8 +57,7 @@ return array(
 
 	'refund_apply' => '我的退款',
 	'refund_receive' =>'退款管理',
-	'seller_agree_refund_content_change' => '卖家（%s）已经同意了退款申请，退款成功！',
-	'seller_agree_refund_order_status_change' => '卖家同意退款，该订单中的所有商品都处于处理完毕状态，故订单状态自动转为已完成',
+	'seller_agree_refund_content_change' => '卖家（%s）已经同意了退款申请，退款达成！',
 	'deposit_pay_status_close' => '对不起，您尚未配置好预存款账户或者没有开启余额支付，不能付款！',
 	
 	'shipped'		=>	'卖家已发货',
@@ -80,7 +79,7 @@ return array(
 	'platform'			=>	'平台',
 	'alipay' 			=>	'支付宝',
 	'online_recharge' => '在线充值',
-	'frozen' => '冻结中',
+
 	'ckgwc'    => '1.查看购物车',
 	'qrddxx'   => '2.确认订单信息',
 	'fk'       => '3.付款',
@@ -132,10 +131,7 @@ return array(
 	'return_integral_for_cancel_order' => '订单取消，退回冻结的积分',
     'admin_handle'=>'管理员操作',
 	'return_integral'=>'退回积分',
-	'integral_finished' => '完成',
-	'frozen' => '冻结',
 	'integral_balance_not_enough' => '积分余额不足',
-	'integral_cancel' => '取消',
 
     'username'  =>  '用户名',
     'password'  =>  '密&nbsp;&nbsp;&nbsp;码',

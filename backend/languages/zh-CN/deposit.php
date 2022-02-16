@@ -63,8 +63,7 @@ return array(
 	'edit_ok'       =>  '编辑成功',
 	'edit_error'    =>  '编辑失败',
 	'confirm_pay' 	=> '您确定完成汇款了么？',
-	'verify_ok'     =>  '审核通过',
-	'verify_error'  =>  '审核失败',
+	'drawal_ok'     =>  '提现处理完成',
 	'golist' 		=>  '返回列表',
 	'drop_notice'   =>  '请注意：删除记录将对你的收支明细以及账户余额平衡产生不可恢复的影响，如果您知悉后仍然决定删除，可联系技术删除本行提示代码后即可成功执行',
 	
@@ -80,10 +79,8 @@ return array(
 	'account_list' => '资金账户',
 	'deposit_tradelist' => '交易记录',
 	'orderId' => '商户订单号',
-	'card_info' => '提现到',
 	'deposit_drawlist' => '提现记录',
 	'deposit_rechargelist' => '充值记录',
-	'is_online' => '充值方式',
 	
 	'month' => '月份',
 	'income_count' => '收入笔数',
@@ -98,10 +95,12 @@ return array(
 	'rerify_ok' => '审核成功!',
 	'agree' => '同意',
 	'refuse' => '拒绝',
-	'refuse_reason' => '拒绝原因',
 	'charge_money' => '服务费金额（元）',
 	'monthbill' => '月账单列表',
 	'no_such_account' => '没有该资金账户',
 	'regive_rate' => '充值返现率',
 	'note_regive_rate' => '每笔充值会获得一定比率的返现金额，请填写小数，如：0.015，保留小数点后3位',
+	'drawtype_disallow' => '目前在线转账只支持提现至支付宝渠道',
+	'interface_disabled' => '接口未配置',
+	'drawal_status_error' => '该笔提现不支持操作，处理失败！'
 );

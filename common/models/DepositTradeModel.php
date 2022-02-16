@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
 use common\models\OrderModel;
 use common\models\DepositAccountModel;
 use common\models\UserModel;
+use common\models\StoreModel;
 use common\models\AppbuylogModel;
 
 use common\library\Def;
@@ -121,17 +122,6 @@ class DepositTradeModel extends ActiveRecord
 			else $samePayTradeNo = parent::find()->where(['payTradeNo' => current($tempPayTradeNo)])->indexBy('trade_id')->asArray()->all();
 			if(count($samePayTradeNo) != count($orderInfo['tradeList'])) {
 				$genPayTradeNo = true;
-				
-				// 为避免交易影响，置空商户交易号（这样做的目的是，如果不置空，那么当买家又发起单交易支付时， 会继续使用原商户交易号，导致支付的金额不匹配
-				$diff = array_diff(array_keys($samePayTradeNo), array_keys($orderInfo['tradeList']));
-				if(parent::updateAll(['payTradeNo' => ''], ['in', 'trade_id', $diff]))
-				{
-					// 创建一个该笔商户订单号的副本，以便支付通知返回后找不到交易交易记录，无法处理已支付的资金退回问题
-					$tempTradeInfo = json_encode($samePayTradeNo);
-					$path = Yii::getAlias('@webroot') . '/data/files/mall/tradelog';
-					@mkdir($path, 0777, true);
-					file_put_contents($path . '/' . md5(current($tempPayTradeNo)).'.log', $tempTradeInfo, LOCK_EX);
-				}
 			}
 			
 			if($genPayTradeNo === false) {
@@ -221,7 +211,7 @@ class DepositTradeModel extends ActiveRecord
 				$tradeInfo['seller'] = Language::get('platform_appmarket');
 			}
 					
-			$tradeInfo['name'] = substr($tradeInfo['title'], 9);
+			$tradeInfo['name'] = $tradeInfo['title'];
 			$result['tradeList'][$tradeInfo['trade_id']] = $tradeInfo;
 						
 			// 计算合并付款的总金额
@@ -257,30 +247,6 @@ class DepositTradeModel extends ActiveRecord
 		
 		// 当支付变更后，置空受影响的商户交易号后，这里获取到的tradeList，要么就是空，要么就是全部待付款的交易记录
 		$tradeList 	= parent::find()->where(['payTradeNo' => $payTradeNo])->indexBy('trade_id')->asArray()->all();
-		
-		if(empty($tradeList)) 
-		{
-			/* 如果没找到交易记录，那么说明交易变更了，从交易日志中获取交易数据，待异步通知验证通过后，充值支付的金额到余额账户
-			 * 情况一: 还有待付款的交易，继续完成交易流程
-			 * 情况二: 没有待付款的交易，仅做充值就完结
-			 */
-			$tradelog = Yii::getAlias('@webroot') . '/data/files/mall/tradelog/'.md5($payTradeNo).'.log';
-			if(file_exists($tradelog))
-			{
-				$tradeList = json_decode(file_get_contents($tradelog), true);
-				if(!empty($tradeList)) {
-					$returnMoney = true; // 资金退回标记
-					foreach($tradeList as $tradeInfo) {
-						if($tradeInfo['status'] == 'PENDING') 
-							$returnMoney = false;
-							break;
-					}
-					$result['RETURN_MONEY'] = $returnMoney;
-					$result['tradelogfile'] = $tradelog;
-				}
-			}	
-		}
-		
 		if($tradeList)
 		{
 			$firstTradeInfo = current($tradeList);
@@ -339,23 +305,17 @@ class DepositTradeModel extends ActiveRecord
 			
 		// 找出对方信息
 		if($party_id) {
-			$partyInfo = DepositAccountModel::find()->select('real_name as name, account')->where(['userid' => $party_id])->asArray()->one();
-			empty($partyInfo['name']) && $partyInfo['name'] = $partyInfo['account'];
-			
-			$partyInfo['portrait'] = UserModel::find()->select('portrait')->where(['userid' => $party_id])->scalar();
-			if(empty($partyInfo['portrait'])) {
+			if($record['bizIdentity'] == Def::TRADE_ORDER && $party_id != $userid) {
+				$partyInfo = StoreModel::find()->select('store_name as name, store_logo as portrait')->where(['store_id' => $party_id])->asArray()->one();
+			}
+			if(!$partyInfo) {
+				$partyInfo = UserModel::find()->select('username as name,portrait')->where(['userid' => $party_id])->asArray()->one();
+			}
+			if($partyInfo && !$partyInfo['portrait']) {
 				$partyInfo['portrait'] = Yii::$app->params['default_user_portrait'];
 			}
 		}
-		else {
-			if(in_array($record['tradeCat'], array('WITHDRAW', 'RECHARGE')) && $record['fundchannel']) {
-				$partyInfo = array('name' => $record['fundchannel']);
-			}
-			elseif(in_array($record['bizIdentity'], array(Def::TRADE_BUYAPP))) { // 此处使用商户业务类型来判断并不合适，以后再优化
-				$partyInfo = array('name' => Language::get('platform_appmarket'));
-			}
-			else $partyInfo = array('name' => Language::get('platform'));
-		}
+
 		return $partyInfo;
 	}
 	
@@ -375,9 +335,6 @@ class DepositTradeModel extends ActiveRecord
 			if(in_array($orderInfo['bizIdentity'], array(Def::TRADE_ORDER)) && in_array(strtoupper($payment_code), array('COD'))) {
 				$edit_data['payType'] = 'COD';
 			}
-			
-			// 资金渠道
-			$edit_data['fundchannel'] = Language::get(strtolower($payment_code));
 			
 			$model = parent::find()->select('trade_id')->where(['trade_id' => $tradeInfo['trade_id']])->one();
 			foreach($edit_data as $k => $v) {

@@ -144,15 +144,14 @@ CREATE TABLE IF NOT EXISTS `swd_article` (
 --
 DROP TABLE IF EXISTS `swd_bank`;
 CREATE TABLE IF NOT EXISTS `swd_bank` (
-  `bid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `bank_name` varchar(100) NOT NULL,
-  `short_name` varchar(20) DEFAULT NULL,
-  `account_name` varchar(20) DEFAULT '',
-  `open_bank` varchar(100) DEFAULT NULL,
-  `type` varchar(10) DEFAULT 'debit',
-  `num` varchar(50) DEFAULT '',
-  PRIMARY KEY (`bid`)
+  `bank` varchar(100) NOT NULL,
+  `code` varchar(20) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `account` varchar(50) NOT NULL,
+  `area` varchar(100) DEFAULT '',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -442,31 +441,13 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_record` (
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `amount` decimal(10,2) DEFAULT '0' COMMENT '收支金额',
   `balance` decimal(10,2) DEFAULT '0' COMMENT '账户余额',
-  `flow` varchar(10) DEFAULT 'outlay' COMMENT '收支',
-  `tradeType` varchar(20) DEFAULT 'PAY' COMMENT '交易类型',
-  `tradeTypeName` varchar(20) DEFAULT '在线支付' COMMENT '交易类型名称',
+  `flow` varchar(10) DEFAULT 'outlay' COMMENT '资金方向',
+  `tradeType` varchar(20) DEFAULT 'PAY' COMMENT '收支类型',
   `name` varchar(100) DEFAULT '' COMMENT '名称',
   `remark` varchar(255) DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`record_id`),
   KEY `tradeNo` (`tradeNo`),
   KEY `userid` (`userid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `swd_deposit_refund`
---
-DROP TABLE IF EXISTS `swd_deposit_refund`;
-CREATE TABLE IF NOT EXISTS `swd_deposit_refund` (
-  `refund_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `record_id` int(11) NOT NULL,
-  `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `amount` decimal(10,2) DEFAULT '0',
-  `status` varchar(30) DEFAULT '',
-  `remark` varchar(255) DEFAULT '',
-  PRIMARY KEY (`refund_id`),
-  KEY `record_id` (`record_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -507,7 +488,6 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_trade` (
   `tradeCat` varchar(20) DEFAULT NULL COMMENT '交易分类',
   `payType` varchar(20) DEFAULT NULL COMMENT '支付类型(担保即时)',
   `flow` varchar(10) DEFAULT 'outlay' COMMENT '资金流向',
-  `fundchannel` varchar(20) DEFAULT '' COMMENT '资金渠道',
   `payTerminal` varchar(10) DEFAULT '' COMMENT '支付终端',
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '交易标题',
   `buyer_remark` varchar(255) DEFAULT '' COMMENT '买家备注',
@@ -533,7 +513,10 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_withdraw` (
   `draw_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `orderId` varchar(30) NOT NULL,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `card_info` text DEFAULT '',
+  `drawtype` varchar(20) NOT NULL DEFAULT 'bank',
+  `account` varchar(50) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `bank` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`draw_id`),
   KEY `orderId` (`orderId`),
   KEY `userid` (`userid`)
@@ -713,6 +696,7 @@ CREATE TABLE IF NOT EXISTS `swd_goods` (
   `default_spec` int(11) unsigned DEFAULT '0',
   `default_image` varchar(255) DEFAULT NULL,
   `video` varchar(255) DEFAULT NULL,
+  `isnew` tinyint(4) unsigned DEFAULT '0',
   `recommended` tinyint(4) unsigned DEFAULT '0',
   `price` decimal(10,2) DEFAULT '0.00',
   `mkprice` decimal(10,2) DEFAULT '0.00',
@@ -1116,8 +1100,6 @@ CREATE TABLE IF NOT EXISTS `swd_order` (
   `pay_alter` tinyint(1) unsigned DEFAULT '0',
   `flag` int(1) DEFAULT '0',
   `memo` varchar(255) DEFAULT '',
-  `checkout` int(1) DEFAULT '0',
-  `checkout_time` int(11) DEFAULT NULL,
   `adjust_amount` decimal(10,2) DEFAULT '0.00',
   `guider_id` int(10) unsigned DEFAULT '0',
   PRIMARY KEY (`order_id`),
@@ -1162,8 +1144,9 @@ CREATE TABLE IF NOT EXISTS `swd_order_goods` (
   `goods_image` varchar(255) DEFAULT NULL,
   `evaluation` tinyint(1) unsigned DEFAULT '0',
   `comment` varchar(255) DEFAULT '',
+  `images` text DEFAULT '',
   `is_valid` tinyint(1) unsigned DEFAULT '1',
-  `reply_comment` text DEFAULT NULL,
+  `reply_comment` varchar(255) DEFAULT NULL,
   `reply_time` int(11) DEFAULT NULL,
   `inviteType` varchar(20) DEFAULT '',
   `inviteRatio` varchar(255) DEFAULT '',
@@ -1326,7 +1309,7 @@ CREATE TABLE IF NOT EXISTS `swd_refund` (
   `shipped` int(11) DEFAULT '0',
   `intervene` int(1) DEFAULT '0',
   `created` int(11) DEFAULT NULL,
-  `end_time` int(11) DEFAULT NULL,
+  `finished` int(11) DEFAULT NULL,
   PRIMARY KEY (`refund_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

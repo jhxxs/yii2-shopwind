@@ -31,7 +31,7 @@ class DepositRecordlistForm extends Model
 	
 	public function formData($post = null, $pageper = 4) 
 	{
-		$query = DepositRecordModel::find()->alias('dr')->select('dr.userid,dr.amount,dr.balance,dr.flow,dr.tradeTypeName,dt.tradeNo,dt.bizOrderId,dt.buyer_id,dt.seller_id,dt.status,dt.fundchannel,add_time,pay_time,end_time')->joinWith('depositTrade dt', false)->where(['userid' => Yii::$app->user->id])->orderBy(['record_id' => SORT_DESC]);
+		$query = DepositRecordModel::find()->alias('dr')->select('dr.userid,dr.amount,dr.balance,dr.flow,dr.name,dr.remark,dt.tradeNo,dt.bizOrderId,dt.buyer_id,dt.seller_id,dt.status,title,add_time,pay_time,end_time')->joinWith('depositTrade dt', false)->where(['userid' => Yii::$app->user->id])->orderBy(['record_id' => SORT_DESC]);
 		$query = $this->getConditions($post, $query);
 		
 		$page = Page::getPage($query->count(), $pageper);

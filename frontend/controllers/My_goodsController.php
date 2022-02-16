@@ -63,7 +63,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['sgcate_id']);
 		
-		$query = GoodsModel::find()->alias('g')->select('g.goods_id,g.goods_name,g.cate_name,g.default_image,g.brand,g.spec_qty,g.price,g.if_show,g.recommended,g.closed,gs.stock,gs.sku')->joinWith('goodsDefaultSpec gs', false)->where(['store_id' => $this->visitor['store_id']])->orderBy(['goods_id' => SORT_DESC]);
+		$query = GoodsModel::find()->alias('g')->select('g.goods_id,g.goods_name,g.cate_name,g.default_image,g.brand,g.spec_qty,g.price,g.if_show,g.isnew,g.recommended,g.closed,gs.stock,gs.sku')->joinWith('goodsDefaultSpec gs', false)->where(['store_id' => $this->visitor['store_id']])->orderBy(['goods_id' => SORT_DESC]);
 		if($post->keyword) {	
 			$query->andWhere(['or', ['like', 'goods_name', $post->keyword],['like', 'brand', $post->keyword],['like', 'cate_name', $post->keyword]]);
 		}
@@ -537,6 +537,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			'brand'            		=> $post['brand'],
             'if_show'             	=> intval($post['if_show']),
             'last_update'      		=> Timezone::gmtime(),
+			'isnew'					=> intval($post['isnew']),
             'recommended'      		=> intval($post['recommended']),
 	    	'dt_id' 				=> intval($post['dt_id']),
             'tags'             		=> $post['tags']

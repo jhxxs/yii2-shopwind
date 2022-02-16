@@ -67,10 +67,7 @@ return array(
 	'sellgoods'				=>	'卖出商品',
 	'and_more'				=>	'等多件',
 	'status'				=>  '状态',
-	'admin_agree_refund_content_change' => '%s已处理本次退款，处理结果为：商品退款金额为：%s 元，退运费金额: %s 元。<br> %s',
-	'admin_agree_refund_order_status_change' => '平台客服处理退款，该订单中的所有商品都处于处理完毕状态，故订单状态自动转为已完成',
-	
-	
+	'admin_agree_refund_content_change' => '%s已处理本次退款，退款达成！处理结果为：%s',
 	
     'distribution_prop' => '分配属性',
     'goods_prop' => '商品属性',

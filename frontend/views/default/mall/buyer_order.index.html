@@ -55,7 +55,7 @@
                   <label>{$lang.order_sn}：</label>
                   {$order.order_sn}
                   <label>{$lang.add_time}：</label>
-                  {$order.add_time|date_format:"%Y.%m.%d %H:%M:%S"} <a href="{url route='store/index' id=$order.seller_id}" target="_blank" style="margin-left:15px;">{$order.seller_name|escape}</a> <a target="_blank" href="{url route='my_message/send' to_id=$order.seller_id}" class="email"></a> </p>
+                  {$order.add_time|date_format:"%Y-%m-%d %H:%M:%S"} <a href="{url route='store/index' id=$order.seller_id}" target="_blank" style="margin-left:15px;">{$order.seller_name|escape}</a> <a target="_blank" href="{url route='my_message/send' to_id=$order.seller_id}" class="email"></a> </p>
               </th>
             </tr>
             

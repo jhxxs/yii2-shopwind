@@ -189,7 +189,7 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = DepositTradeModel::find()->select('trade_id,tradeNo,bizOrderId,title,amount,status,flow,buyer_id,add_time,pay_time,end_time');
+			$query = DepositTradeModel::find()->select('trade_id,tradeNo,payTradeNo,bizOrderId,title,amount,status,flow,buyer_id,add_time,pay_time,end_time');
 
 			$query = $this->getTradeConditions($post, $query)->orderBy(['trade_id' => SORT_DESC]);
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
@@ -235,7 +235,7 @@ class DepositController extends \common\controllers\BaseAdminController
 		else
 		{
 			$query = DepositWithdrawModel::find()->alias('dw')
-				->select('dw.draw_id,dw.userid,dw.orderId,dw.card_info,dt.trade_id,dt.tradeNo,dt.add_time,dt.end_time,dt.amount,dt.status')
+				->select('dw.*,dt.trade_id,dt.tradeNo,dt.add_time,dt.end_time,dt.amount,dt.status')
 				->joinWith('depositTrade dt', false);
 			$query = $this->getTradeConditions($post, $query)->orderBy(['draw_id' => SORT_DESC]);
 			
@@ -245,11 +245,7 @@ class DepositController extends \common\controllers\BaseAdminController
 			{
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
-				$list[$key]['status'] = Language::get(strtolower($value['status']));
 				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
-
-				$card_info = unserialize($value['card_info']);
-				$list[$key]['card_info'] = $card_info['bank_name'].'<span class="gray">(开户行：'.$card_info['open_bank'].'，账号：'.$card_info['account_name'].'，卡号：'.$card_info['num'].'，'.Language::get($card_info['type']).')</span>';
 			}
 
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
@@ -260,67 +256,63 @@ class DepositController extends \common\controllers\BaseAdminController
 	public function actionDrawverify()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
-		if(!$post->id || !($draw = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
+		if(!$post->id || !($record = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_draw'));
 		}
-		if($draw['status'] != 'WAIT_ADMIN_VERIFY') {
-			return Message::warning(Language::get('verify_error'));
+		if($record['status'] != 'WAIT_ADMIN_VERIFY') {
+			return Message::warning(Language::get('drawal_status_error'));
+		}
+		if($post->method == 'online' && $record['drawtype'] != 'alipay') {
+			return Message::warning(Language::get('drawtype_disallow'));
 		}
 		
 		// 变更交易状态
-		if(($model = DepositTradeModel::find()->where(['tradeNo' => $draw['tradeNo']])->one())) {
-			$model->status = 'SUCCESS';
-			$model->end_time = Timezone::gmtime();
-			if(!$model->save()) {
-				return Message::warning($model->errors);
-			}
-			// 扣减当前用户的冻结金额
-			if(!DepositAccountModel::updateDepositFrozen($draw['userid'], $draw['amount'], 'reduce')) {
-				// TODO...
-			}
+		$model = new DepositWithdrawModel();
+		if(!$model->handleMoney($record['tradeNo'], $post->method)) {
+			return Message::warning($model->errors);
 		}
-		return Message::display(Language::get('verify_ok'));
+
+		return Message::display(Language::get('drawal_ok'));
 	}
 	
 	/* 提现审核（拒绝） */
 	public function actionDrawrefuse()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
-		if(!$post->id || !($draw = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
+		if(!$post->id || !($record = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_draw'));
 		}
-		if($draw['status'] != 'WAIT_ADMIN_VERIFY') {
-			return Message::warning(Language::get('verify_error'));
+		if($record['status'] != 'WAIT_ADMIN_VERIFY') {
+			return Message::warning(Language::get('drawal_status_error'));
 		}
 		if(!$post->remark) {
 			return Message::warning(Language::get('refuse_remark_empty'));
 		}
 		
 		// 变更交易状态
-		if(($model = DepositTradeModel::find()->where(['tradeNo' => $draw['tradeNo']])->one())) {
+		if(($model = DepositTradeModel::find()->where(['tradeNo' => $record['tradeNo']])->one())) {
 			$model->status = 'CLOSED';
 			$model->end_time = Timezone::gmtime();
 			if(!$model->save()) {
 				return Message::warning($model->errors);
 			}
 			// 管理员增加备注（拒绝原因）
-			DepositRecordModel::updateAll(['remark' => $post->remark], ['tradeNo' => $draw['tradeNo'], 'userid' => $draw['userid'], 'tradeType' => 'WITHDRAW']);
+			DepositRecordModel::updateAll(['remark' => $post->remark], ['tradeNo' => $record['tradeNo'], 'userid' => $record['userid'], 'tradeType' => 'WITHDRAW']);
 		
 			// 扣减当前用户的冻结金额
-			if(!DepositAccountModel::updateDepositFrozen($draw['userid'], $draw['amount'], 'reduce')) {
-				// TODO...
-			}
+			DepositAccountModel::updateDepositFrozen($record['userid'], $record['amount'], 'reduce');
+
 			// 将冻结金额退回到账户余额（变更账户余额）
-			$record = new DepositRecordModel();
-			$record->tradeNo = $draw['tradeNo'];
-			$record->userid = $draw['userid'];
-			$record->amount = $draw['amount'];
-			$record->balance = DepositAccountModel::updateDepositMoney($draw['userid'], $draw['amount']);
-			$record->tradeType =  'TRANSFER';
-			$record->tradeTypeName = Language::get('draw_return');
-			$record->flow = 'income';
-			$record->remark = $post->remark;
-			if(!$record->save()) {
+			$quyery = new DepositRecordModel();
+			$quyery->tradeNo = $record['tradeNo'];
+			$quyery->userid = $record['userid'];
+			$quyery->amount = $record['amount'];
+			$quyery->balance = DepositAccountModel::updateDepositMoney($record['userid'], $record['amount']);
+			$quyery->tradeType =  'TRANSFER';
+			$quyery->name = Language::get('draw_return');
+			$quyery->flow = 'income';
+			$quyery->remark = $post->remark;
+			if(!$quyery->save()) {
 				// TODO...
 			}
 		}

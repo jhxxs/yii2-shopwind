@@ -7,7 +7,7 @@
       <div class="mb20 mt10 ml10 clearfix">
         <div class="state float-left pl10">{$lang.order_status}&nbsp;:&nbsp;<strong>{Def::getOrderStatus($order.status)}</strong></div>
         <div class="num float-left">{$lang.order_sn}&nbsp;:&nbsp;{$order.order_sn}</div>
-        <div class="time float-left">{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y.%m.%d %H:%M:%S"}</div>
+        <div class="time float-left">{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y-%m-%d %H:%M:%S"}</div>
       </div>
       <h3>{$lang.order_info}</h3>
       <dl class="info">
@@ -40,15 +40,15 @@
             <!--{if $order.pay_message}-->
             <li>{$lang.pay_message}&nbsp;:&nbsp;{$order.pay_message|escape}</li>
             <!--{/if}-->
-            <li>{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y.%m.%d %H:%M:%S"}</li>
+            <li>{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y-%m-%d %H:%M:%S"}</li>
             <!--{if $order.pay_time}-->
-            <li>{$lang.pay_time}&nbsp;:&nbsp;{$order.pay_time|date_format:"%Y.%m.%d %H:%M:%S"}</li>
+            <li>{$lang.pay_time}&nbsp;:&nbsp;{$order.pay_time|date_format:"%Y-%m-%d %H:%M:%S"}</li>
             <!--{/if}--> 
             <!--{if $order.ship_time}-->
-            <li>{$lang.ship_time}&nbsp;:&nbsp;{$order.ship_time|date_format:"%Y.%m.%d %H:%M:%S"}</li>
+            <li>{$lang.ship_time}&nbsp;:&nbsp;{$order.ship_time|date_format:"%Y-%m-%d %H:%M:%S"}</li>
             <!--{/if}--> 
             <!--{if $order.finished_time}-->
-            <li>{$lang.finished_time}&nbsp;:&nbsp;{$order.finished_time|date_format:"%Y.%m.%d %H:%M:%S"}</li>
+            <li>{$lang.finished_time}&nbsp;:&nbsp;{$order.finished_time|date_format:"%Y-%m-%d %H:%M:%S"}</li>
             <!--{/if}-->
           </ul>
         </div>

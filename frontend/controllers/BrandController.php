@@ -96,9 +96,9 @@ class BrandController extends \common\controllers\BaseMallController
 		}
 		else
 		{			
-			$this->params['collects'] = CollectModel::find()->where(['item_id' => $post->id,  'type' => 'brand'])->count();
+			$this->params['collects'] = CollectModel::find()->where(['item_id' => $post->id, 'type' => 'brand'])->count();
 			$this->params['goods_count'] = GoodsModel::find()->select('goods_id')->where(['if_show' => 1, 'closed' => 0, 'brand' => $brand['brand_name']])->count();
-
+			
 			$this->params['brand'] = $brand;
 			$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
 	

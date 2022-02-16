@@ -307,18 +307,18 @@ class GoodsController extends \common\controllers\BaseMallController
 	/* 取得商品评价 */
     private function getComments($goods_id = 0, $pageper = 10, $commented = false)
     {
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['evaluation']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 	
 		$query = OrderGoodsModel::find()->alias('og')->select('og.evaluation,og.comment,og.reply_comment,og.reply_time,o.buyer_id,o.buyer_name,o.evaluation_status,o.evaluation_time')->joinWith('order o', false)->where(['goods_id' => $goods_id, 'o.evaluation_status' => 1])->orderBy(['o.evaluation_time' => SORT_DESC]);
 		if($commented) {
 			$query->andWhere(['>', 'comment', '']);
 		}
 		
-		// 数据库字段记录的是5分制，3分为中评
+		// 数据库字段记录的是5分制，3分为中评，小于3分是差评，大于3分是好评
 		if(isset($post->level)) {
-			if($post->level == 1) $query->andWhere(['<', 'evaluation', 3]);
-			if($post->level == 2) $query->andWhere(['=', 'evaluation', 3]);
-			if($post->level == 3) $query->andWhere(['>', 'evaluation', 3]);
+			if($post->level == 'bad') $query->andWhere(['<', 'evaluation', 3]);
+			if($post->level == 'middle') $query->andWhere(['=', 'evaluation', 3]);
+			if($post->level == 'good') $query->andWhere(['>', 'evaluation', 3]);
 		}
 		$page = Page::getPage($query->count(), $pageper);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();

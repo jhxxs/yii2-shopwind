@@ -21,7 +21,7 @@
                 <!--{/if}--></td>
               <td class="width13"><img class="makesmall" width="48" height="48" src="{$message.user.portrait|default:$app->params['default_user_portrait']|url_format}" style="vertical-align:middle; margin-right:5px;" /><span class="username">{$message.user.username}</span></td>
               <td class="link2 {if $message.new eq 1}font_bold{/if}">{$message.content|unescape|strip_tags|truncate:100:"...":true}</td>
-              <td class="align2 color1 width8">{$message.last_update|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+              <td class="align2 color1 width8">{$message.last_update|date_format:"%Y-%m-%d %H:%M:%S"}</td>
               <td class="width8"><a href="{url route='my_message/view' msg_id=$message.msg_id}" class="desc">{$lang.view_detail}</a> 
                 <!--{if $app->controller->action->id neq 'announcepm'}--><a confirm="{$lang.drop_confirm}" uri="{url route='my_message/delete' msg_id=$message.msg_id}" class="J_AjaxRequest delete pointer">{$lang.drop}</a><!--{/if}--></td>
             </tr>

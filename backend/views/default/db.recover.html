@@ -29,7 +29,7 @@
                             <td class="align_center w30"><input value="{$backup.name}" class='checkitem'
                                     type="checkbox" /></td>
                             <td align="left" width="350"><i ectype="expand" class="layui-icon layui-icon-addition"></i>{$backup.name|escape}</td>
-                            <td class="align_center">{$backup.date|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+                            <td class="align_center">{$backup.date|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                             <td class="align_center">{$backup.size}KB</td>
                             <td class="align_center">{count($backup.vols)}</td>
                             <td class="handler bDiv" style=" background:none; width:220px;">
@@ -43,7 +43,7 @@
                         <tr class="tatr2" style="display:none" parent="{$backup.name}">
                             <td class="firstCell"></td>
                             <td align="left" width="350"><span class="ml20">{$vol.name|escape}</span></td>
-                            <td>{$vol.date|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+                            <td>{$vol.date|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                             <td>{$vol.size}KB</td>
                             <td></td>
                             <td class="handler bDiv" style=" background:none; width:220px;">

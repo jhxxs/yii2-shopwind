@@ -11,7 +11,7 @@
         <div class="info clearfix">
           <dl class="col-1 float-left">
             <dt><strong>{$visitor.username|escape}</strong> <a href="{url route='user/profile'}">{$lang.edit_profile}</a> <a class="ml10" href="{url route='user/logout'}">退出登录</a></dt>
-            <dd class="gray"> <span>{$lang.last_login}{$lang.colon}{$visitor.last_login|date_format:"%Y.%m.%d %H:%M:%S"}</span> <span>{$lang.last_ip}{$lang.colon}{$visitor.last_ip}</span> </dd>
+            <dd class="gray"> <span>{$lang.last_login}{$lang.colon}{$visitor.last_login|date_format:"%Y-%m-%d %H:%M:%S"}</span> <span>{$lang.last_ip}{$lang.colon}{$visitor.last_ip}</span> </dd>
           </dl>
         </div>
       </div>

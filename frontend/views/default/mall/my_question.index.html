@@ -15,7 +15,7 @@
               <td></td>
               <td><h3 style="padding:0;">{$lang.question_content}{$lang.colon}</h3>
                 <p>{$question.question_content|escape|nl2br}</p></td>
-              <td><span class="time">{$question.time_post|date_format:"%Y.%m.%d %H:%M:%S"}</span></td>
+              <td><span class="time">{$question.time_post|date_format:"%Y-%m-%d %H:%M:%S"}</span></td>
             </tr>
             <!--{if $question.reply_content neq ''}-->
             
@@ -23,7 +23,7 @@
               <td></td>
               <td><h3 style="padding:0;"><span class="color8">{$lang.store_reply}{$lang.colon}</span></h3>
                 <p><span class="color3">{$question.reply_content|escape}</span></p></td>
-              <td><span class="time">{$question.time_reply|date_format:"%Y.%m.%d %H:%M:%S"}</span></td>
+              <td><span class="time">{$question.time_reply|date_format:"%Y-%m-%d %H:%M:%S"}</span></td>
             </tr>
             <!-- {else} -->
             

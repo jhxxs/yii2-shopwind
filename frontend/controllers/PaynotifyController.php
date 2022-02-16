@@ -15,6 +15,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 
 use common\models\DepositTradeModel;
+use common\models\RefundModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -78,32 +79,46 @@ class PaynotifyController extends \common\controllers\BaseMallController
         return $this->render('../paynotify.index.html', $this->params);
 	}
 	
-	/* 当异步通知Url不可以带参数时使用此 */
 	public function actionAlipay()
 	{
 		return $this->notify(Yii::$app->request->post('out_trade_no', 0));
 	}
 	
-	/* 当异步通知Url不可以带参数时使用此 */
 	public function actionWxpay()
 	{
-		$notify = Plugin::getInstance('payment')->build()->getNotify();
-		return $this->notify($notify['out_trade_no']);
+		$notify = Plugin::getInstance('payment')->build('wxpay')->getNotify();
+		return $this->notify($notify['out_trade_no'], json_encode($notify));
+	}
+
+	public function actionWxmppay()
+	{
+		$notify = Plugin::getInstance('payment')->build('wxmppay')->getNotify();
+		return $this->notify($notify['out_trade_no'], json_encode($notify));
+	}
+
+	public function actionWxapppay()
+	{
+		$notify = Plugin::getInstance('payment')->build('wxapppay')->getNotify();
+		return $this->notify($notify['out_trade_no'], json_encode($notify));
 	}
 	
-	/* 当异步通知Url不可以带参数时使用此 */
 	public function actionUnionpay()
 	{
 		return $this->notify(Yii::$app->request->post('out_trade_no', 0));
 	}
 	
-	/* 当异步通知Url可以带参数时可使用此 */
+	/**
+	 * 当异步通知Url可以带参数时可使用此
+	 */
  	public function actionNotify()
 	{
 		return $this->notify(Yii::$app->request->post('payTradeNo', 0));
 	}
 	
-	private function notify($payTradeNo)
+	/**
+	 * 支付异步通知
+	 */
+	private function notify($payTradeNo, $params = null)
 	{
 		if(empty($payTradeNo)) {
 			return Message::warning(Language::get('order_info_empty'));
@@ -119,7 +134,7 @@ class PaynotifyController extends \common\controllers\BaseMallController
 			return Message::warning(Language::get('forbidden'));
 		}
 		
-		$payment = Plugin::getInstance('payment')->build($payment_code);
+		$payment = Plugin::getInstance('payment')->build($payment_code, $params);
 		if(!($payment_info = $payment->getInfo()) || !$payment_info['enabled']) {
 			return Message::warning(Language::get('no_such_payment'));
         }
@@ -127,14 +142,17 @@ class PaynotifyController extends \common\controllers\BaseMallController
 		if(($notify_result = $payment->verifyNotify($orderInfo, true)) === false) {
 			return $payment->verifyResult(false);
 		}
+
+		// 到此支付通知数据已经验证完毕，记录下第三方支付平台的部分交易参数
+		$payment->updateTradeInfo($payTradeNo);
 		
-		// 当支付结果通知验证成功后，说明买家已经实际支付了款项，那么处理业务逻辑 
-		list($notifyMoney, $outTradeNo) = $payment->getNotifySpecificData();
-		
-		// 将买家在支付网关支付的钱（兼容处理充值的订单），充值到余额账户里（增加收支记录，变更账户余额）
-		if(!($result = $payment->handleRechargeAfterNotify($orderInfo, $notify_result, $outTradeNo))) {
-			//return Message::warning(Language::get('recharge_error'));
-			return $payment->verifyResult(false);
+		// 充值订单（处理充值逻辑）
+		if(in_array($orderInfo['bizIdentity'], array(Def::TRADE_RECHARGE))) 
+		{
+			if(!($result = $payment->handleRechargeAfterNotify($orderInfo, $notify_result))) {
+				//return Message::warning($payment->errors);
+				return $payment->verifyResult(false);
+			}
 		}	
 			
 		// 购物订单（处理购物逻辑）

@@ -75,7 +75,7 @@ class InstallController extends \common\controllers\BaseInstallController
 
 		$check_env = Install::getInstance()->build()->checkEnv(array(
             'php_version'   =>  array(
-                'required'  => '>= 5.4',
+                'required'  => '>= 7.2',
                 'checker'   => 'phpChecker',
             ),
             'gd_version'   	=>  array(

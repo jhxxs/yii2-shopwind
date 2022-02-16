@@ -56,7 +56,7 @@
                   <label>订单号：</label>
                   {$order.order_sn}
                   <label>成交时间：</label>
-                  {$order.add_time|date_format:"%Y.%m.%d %H:%M:%S"} </p>
+                  {$order.add_time|date_format:"%Y-%m-%d %H:%M:%S"} </p>
                 <div class="memo float-right J_Memo"> <a uri="{url route='seller_order/memo' order_id=$order.order_id}" dialog_width="450" dialog_title="{$lang.memo}" ectype="dialog"  dialog_id="seller_order_memo" id="order{$order.order_id}_action_memo" class="flag flag{$order.flag}" /></a>
                   <p class="pop">{$order.memo}</p>
                 </div>

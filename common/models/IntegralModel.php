@@ -162,17 +162,6 @@ class IntegralModel extends ActiveRecord
 		}
 	}
 	
-	/* 积分变动的状态，完成，取消，冻结 */
-	public static function getStatusLabel($string = '')
-	{
-		$status = array(
-			'finished' => 'integral_finished',
-			'frozen'   => 'integral_frozen',
-			'cancel'   => 'integral_cancel'
-		);
-		return isset($status[$string]) ? Language::get($status[$string]) : '';
-	}
-	
 	/* 订单页，获取积分信息，以便做验证 */
 	public static function getIntegralByOrders(array $goodsList)
 	{

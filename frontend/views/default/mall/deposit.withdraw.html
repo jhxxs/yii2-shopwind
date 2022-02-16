@@ -4,49 +4,66 @@
     <div class="wrapful">{include file="user.submenu.html"}
       <div class="wrap">
         <div class="public table deposit">
-          <div class="deposit-withdraw"> 
-            <!--{if $deposit_account.money gt 0}--> 
-            <!--{if !$myBank.list}-->
-            <div class="notice-word">
-              <p>您还没有设置提现银行卡，请先设置后再申请提现。<a href="{url route='bank/add'}">马上设置</a></p>
-            </div>
-            <!--{else}-->
-            <div class="notice-word">
-              <p>向平台商提交提现申请，审核通过之后，平台将向您提交的银行卡汇款，请确保您的银行卡信息正确</p>
-            </div>
-            <form method="get" id="deposit-withdraw" action="{url route='deposit/withdrawconfirm'}">
-             <!--{if !$app->urlManager->enablePrettyUrl}-->
-      		<input type="hidden" name="r" value="deposit/withdrawconfirm" />
-      		<!--{/if}-->
+          <div class="deposit-withdraw">
+            <!--{if $deposit_account.money gt 0}-->
+            <form method="post">
               <div class="title clearfix">
-                <h2 class="float-left">提取余额到银行卡</h2>
-                <p class="float-left">余额：<strong>{$deposit_account.money}</strong> 元</p>
+                <h2 class="float-left yahei">可提现余额：<strong>{$deposit_account.money|price_format}</strong>元</h2>
                 <!--{if $deposit_account.nodrawal gt 0}-->
-                <p class="float-left" style="margin-left: 0;">，不可提现金额：<strong>{$deposit_account.nodrawal}</strong> 元</p>
+                <p class="float-left" style="margin-left: 0;">，不可提现金额：{$deposit_account.nodrawal|price_format}元</p>
                 <!--{/if}-->
-                <div class="float-right link"> <a class="add-bank" href="{url route='bank/add' type=debit}">添加银行卡</a> <a href="{url route='deposit/drawlist'}">提现记录</a> </div>
+                <div class="float-right link"> <a class="add-bank" href="{url route='bank/add' type=debit}">添加银行卡</a> <a
+                    href="{url route='deposit/drawlist'}">提现记录</a> </div>
               </div>
               <div class="form">
                 <dl class="clearfix">
-                  <dt>选择银行卡：</dt>
-                  <dd>   
-                    <!--{foreach from=$myBank.list item=bank name=fe_bank}-->
-                    <div class="bank-each clearfix {if $smarty.foreach.fe_bank.first} selected {/if}">
-                      <div class="radio float-left">
-                        <input name="bid" type="radio" value="{$bank.bid}" {if $smarty.foreach.fe_bank.first} checked="checked" {/if}/>
-                      </div>
-                      <div class="bank-name float-left">{$bank.bank_name}</div>
-                      <div class="bank-num float-left">{$bank.num}</div>
-                      <div class="action float-right"> <a href="{url route='bank/edit' bid=$bank.bid}">{$lang.edit}</a> </div>
+                  <dt>提现到：</dt>
+                  <dd>
+                    <select name="drawtype">
+                      <option value="alipay">支付宝钱包</option>
+                      <!-- <option value="wxpay">微信钱包</option> -->
+                      <option value="bank">银行卡</option>
+                    </select>
+                  </dd>
+                </dl>
+                <dl class="clearfix" ectype="alipay">
+                  <dt>支付宝账户：</dt>
+                  <dd>
+                    <input type="text" name="account" class="text width_normal" placeholder="shopwind@qq.com" />
+                    <div class="notice-word mt10">
+                      <p class="yellow">支付宝登录账号，邮箱或手机号格式</p>
                     </div>
-                    <!--{/foreach}--> 
+                  </dd>
+                </dl>
+                <dl class="clearfix hidden" ectype="bank">
+                  <dt>银行卡：</dt>
+                  <dd>
+                    <!--{if $banks}-->
+                    <select name="id">
+                      <!--{foreach from=$banks item=item}-->
+                      <option value="{$item.id}">{$item.bank}({$item.account})</option>
+                      <!--{/foreach}-->
+                    </select>
+                    <!--{else}-->
+                    <div class="notice-word"><p class="yellow">还没设置提现银行卡，<a href="{url route='bank/add'}">点此设置</a></p></div>
+                    <!--{/if}-->
+                  </dd>
+                </dl>
+                <dl class="clearfix">
+                  <dt>真实姓名：</dt>
+                  <dd>
+                    <input type="text" name="name" class="text width_normal" />
+                    <div class="notice-word mt10">
+                      <p class="nobg gray">与该账户一致的真实姓名</p>
+                    </div>
                   </dd>
                 </dl>
                 <dl class="clearfix">
                   <dt>提现金额：</dt>
                   <dd>
-                    <input type="text" name="money" class="text" value="" />
-                    元</dd>
+                    <input type="text" name="money" class="text width_short" value="100" />
+                    元
+                  </dd>
                 </dl>
                 <dl class="clearfix">
                   <dt>&nbsp;</dt>
@@ -56,12 +73,12 @@
                 </dl>
               </div>
             </form>
-            <!--{/if}--> 
+
             <!--{else}-->
             <div class="notice-word">
               <p>您目前账户余额为<span class="f60">0</span>元，不能申请提现。</p>
             </div>
-            <!--{/if}--> 
+            <!--{/if}-->
           </div>
         </div>
       </div>
@@ -69,13 +86,33 @@
   </div>
 </div>
 <script type="text/javascript">
-$(function(){
-	$('#deposit-withdraw').submit(function(){
-		if($(this).find('input[name="money"]').val()=='' || $(this).find('input[name="money"]').val() <= 0) {
-			layer.msg('{$lang.withdraw_money_error}');
-			return false;
-		}
-	});
-})
+  $(function () {
+    $('select[name="drawtype"]').change(function(){
+      if($(this).val() == 'alipay') {
+        $('*[ectype="bank"]').hide();
+        $('*[ectype="alipay"]').show();
+      } else {
+        $('*[ectype="bank"]').show();
+        $('*[ectype="alipay"]').hide();
+      }
+    });
+    $('form').submit(function () {
+      if ($(this).find('select[name="drawtype"]').val() == 'alipay' && $(this).find('input[name="account"]').val() == '') {
+        layer.msg(lang.withdraw_account_empty);
+        return false;
+      }
+      if ($(this).find('input[name="name"]').val() == '') {
+        layer.msg(lang.withdraw_name_error);
+        return false;
+      }
+      if ($(this).find('input[name="money"]').val() == '' || $(this).find('input[name="money"]').val() <= 0) {
+        layer.msg(lang.withdraw_money_error);
+        return false;
+      }
+      ajax_form('deposit_withdrawconfirm', '提现验证', url(['deposit/withdrawconfirm', $.extend($('form').serializeJson(), { title: '提现验证' })]), '500', '', '0.45');
+      return false;
+    });
+  })
 </script>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
 {include file="user.footer.html"}

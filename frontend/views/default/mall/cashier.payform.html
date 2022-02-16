@@ -1,4 +1,4 @@
-<!--{if $payform.payment_code eq 'wxnativepay'}-->
+<!--{if $payform.code_url}-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +40,7 @@ body {
 <div class="w">
   <div class="hd">{$lang.wxnativepay}</div>
   <div class="bd">
-    <p><img class="qrcode" alt="{$lang.wxnativepay}" src="{url route='cashier/wxnativepay' code=$payform.params.code_url}" /></p>
+    <p><img class="qrcode" alt="{$lang.wxnativepay}" src="{url route='cashier/wxnativepay' code=$payform.code_url}" /></p>
     <div class="status">{$lang.use_wxnativepay}</div>
   </div>
 </div>

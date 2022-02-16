@@ -20,6 +20,7 @@ use common\models\RefundModel;
 use common\models\DepositTradeModel;
 use common\models\OrderGoodsModel;
 use common\models\RefundMessageModel;
+use common\models\UserModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -41,9 +42,11 @@ class RefundForm extends Model
 	 */
 	public function formData($post = null, $pageper = 4)
 	{
-		$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.title,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.created,r.status,r.intervene,rbi.username as buyer_name,rsi.username as seller_name,dt.bizOrderId,dt.bizIdentity')
-			->joinWith('refundBuyerInfo rbi', false)->joinWith('refundSellerInfo rsi', false)
-			->joinWith('depositTrade dt', false)->orderBy(['created' => SORT_DESC]);
+		$query = RefundModel::find()->alias('r')
+			->select('r.refund_id,r.refund_sn,r.title,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.created,r.finished,r.status,r.intervene,dt.bizOrderId,dt.bizIdentity')
+			->joinWith('depositTrade dt', false)
+			->orderBy(['created' => SORT_DESC]);
+
 		if($this->visitor == 'seller') {
 			$query->where(['r.seller_id' => Yii::$app->user->id]);
 		} else {
@@ -51,19 +54,21 @@ class RefundForm extends Model
 		}
 
 		$page = Page::getPage($query->count(), $pageper);
-		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-		foreach ($recordlist as $key => $record)
+		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+		foreach ($list as $key => $value)
         {
-			if(($record['bizIdentity'] == Def::TRADE_ORDER) && $record['bizOrderId']) {
-				if(($order = OrderModel::find()->select('order_id,order_sn,seller_name as store_name')->where(['order_sn' => $record['bizOrderId']])->asArray()->one())) {
-					
-					$recordlist[$key] += $order;
+			$list[$key]['buyer_name'] = UserModel::find()->select('username')->where(['userid' => $value['buyer_id']])->scalar();
+			$list[$key]['seller_name'] = UserModel::find()->select('username')->where(['userid' => $value['seller_id']])->scalar();
+
+			if(($value['bizIdentity'] == Def::TRADE_ORDER) && $value['bizOrderId']) {
+				if(($order = OrderModel::find()->select('order_id,order_sn,seller_name as store_name')->where(['order_sn' => $value['bizOrderId']])->asArray()->one())) {
+					$list[$key] += $order;
 				}
 			}
-			$recordlist[$key]['status_label'] = Language::get('REFUND_'.strtoupper($record['status']));
+			$list[$key]['status_label'] = Language::get('REFUND_'.strtoupper($value['status']));
         }
 
-		return array($recordlist, $page);
+		return array($list, $page);
 	}
 	
 	/**

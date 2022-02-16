@@ -28,14 +28,16 @@ class DepositRechargeForm extends Model
 {
 	public $errors = null;
 	
-	/* 获取充值交易（如没有则创建） */
-	public function formData($post = null)
+	/**
+	 * 获取充值交易（如没有则创建） 
+	 */
+	public function formData(&$post = null)
 	{
 		// 创建新的充值交易
 		if(empty($post->tradeNo)) 
 		{
 			$tradeNo = DepositTradeModel::genTradeNo();
-			$payment_code = $post->payment_code;
+			//$payment_code = $post->payment_code;
 			
 			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
 			$depopay_type = Business::getInstance('depopay')->build('recharge', $post);
@@ -43,16 +45,15 @@ class DepositRechargeForm extends Model
 			// 插入充值记录表，状态为：待付款
 			$result = $depopay_type->submit(array(
 				'trade_info' =>  array('userid' => Yii::$app->user->id, 'party_id' => 0, 'amount' => $post->money),
-				'extra_info' =>  array('tradeNo' => $tradeNo, 'is_online' => 1)
+				'extra_info' =>  array('tradeNo' => $tradeNo)
 			));
 				
 			if(!$result) {
 				$this->errors = $depopay_type->errors;
 				return false;
 			}
-			
 		}
-		// 这是再次发起的充值操作（原先已经创建了充值交易）
+		// 这是发起充值后没付款，再次去付款的操作（原先已经创建了充值交易）
 		else
 		{
 			$tradeNo = $post->tradeNo;
@@ -61,15 +62,15 @@ class DepositRechargeForm extends Model
 				$this->errors = Language::get('no_data');
 				return false;
 			}
-			$payment_code = $tradeInfo->payment_code;
+			$post->payment_code = $tradeInfo->payment_code;
 		}
 		
-		$payment = Plugin::getInstance('payment')->build();
-		$all_payments = $payment->getEnabled(0, true, ['not in', 'code', ['deposit', 'cod']]);
-		if(!in_array($payment_code, $payment->getKeysOfPayments($all_payments))) {
-			$this->errors = Language::get('payment_not_available');
-			return false;
-		}
-		return array($tradeNo, $payment_code);
+		// $payment = Plugin::getInstance('payment')->build(null, $post);
+		// $all_payments = $payment->getEnabled(0, true, ['not in', 'code', ['deposit', 'cod']]);
+		// if(!in_array($post->payment_code, $payment->getKeysOfPayments($all_payments))) {
+		// 	$this->errors = Language::get('payment_not_available');
+		// 	return false;
+		// }
+		return array($tradeNo, []);
 	}
 }

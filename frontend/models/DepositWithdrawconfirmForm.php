@@ -33,8 +33,19 @@ class DepositWithdrawconfirmForm extends Model
 
 	public function valid($post, $strict = true)
 	{
-		if (!($bank = BankModel::find()->where(['bid' => $post->bid])->exists())) {
-			$this->errors = Language::get('select_bank_error');
+		if(empty($post->account)) {
+			$this->errors = Language::get('withdraw_account_empty');
+			return false;
+		}
+	
+		// 提现到银行卡，验证银行卡信息
+		if($post->drawtype == 'bank' && empty($post->bank)) {
+			$this->errors = Language::get('bank_error');
+			return false;
+		}
+
+		if(empty($post->name)) {
+			$this->errors = Language::get('withdraw_name_error');
 			return false;
 		}
 

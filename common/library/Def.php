@@ -57,9 +57,9 @@ class Def
 	const BELONG_ARTICLE 		=	1;
 	const BELONG_GOODS 			=  	2;
 	const BELONG_MEAL			=  	5;
-	const BELONG_APPMARKET		=  	7;
-	const BELONG_BRAND_LOGO		=  	8;
-	const BELONG_BRAND_IMAGE	=   81;
+	const BELONG_APPMARKET		=  	6;
+	const BELONG_BRAND_LOGO		=  	7;
+	const BELONG_BRAND_IMAGE	=   8;
 	const BELONG_WEIXIN			=  	9;
 	const BELONG_SETTING		=  	10;
 	const BELONG_GOODS_SPEC     =  	11;		//  商品规格图
@@ -76,6 +76,7 @@ class Def
 	const BELONG_REPORT			=   53;
 	const BELONG_GUIDESHOP		=	61;		// 团长门店招牌
 	const BELONG_POSTER 		=  	70;		// 海报图
+	const BELONG_EVALUATE		= 	80;		// 买家评价晒图
 	
 	/* 上传图片大小限制 */
 	const IMAGE_FILE_SIZE		=   2097152;   	// 普通图片大小限制2MB = 2*1024*1024

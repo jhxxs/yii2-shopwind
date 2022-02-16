@@ -26,39 +26,54 @@ return array(
     'name'      => Language::get('alipay'),
     'subname'   => Language::get('alipay'),
     'desc'      => Language::get('alipay_desc'),
-    'is_online' => '1',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
-    'version'   => '1.0',
+    'version'   => '2.0',
     'currency'  => Language::get('alipay_currency'),
     'config'    => array(
         'appId'   => array(        //APPID
             'text'  => Language::get('appId'),
-            'desc'  => Language::get('appId_desc'),
             'type'  => 'text',
         ),
-		'rsaPublicKey'       => array(        // 应用公钥
-            'text'  => Language::get('rsaPublicKey'),
-            'desc'  => Language::get('rsaPublicKey_desc'),
-            'type'  => 'text',
-        ),
-        'rsaPrivateKey'       => array(        // 应用私钥
+		// 'rsaPublicKey'       => array(        // 应用公钥
+        //     'text'  => Language::get('rsaPublicKey'),
+        //     'desc'  => Language::get('rsaPublicKey_desc'),
+        //     'type'  => 'text',
+        // ),
+        'rsaPrivateKey' => array(        // 应用私钥
             'text'  => Language::get('rsaPrivateKey'),
-            'desc'  => Language::get('rsaPrivateKey_desc'),
             'type'  => 'text',
         ),
-        'alipayrsaPublicKey'   => array(        // 支付宝公钥
-            'text'  => Language::get('alipayrsaPublicKey'),
-			'desc'  => Language::get('alipayrsaPublicKey_desc'),
-            'type'  => 'text',
+        // 'alipayrsaPublicKey'   => array(        // 支付宝公钥
+        //     'text'  => Language::get('alipayrsaPublicKey'),
+		// 	'desc'  => Language::get('alipayrsaPublicKey_desc'),
+        //     'type'  => 'text',
+        // ),
+        'appCertPath' => array(
+            'text' => Language::get('appCertPath'),
+            'desc' => Language::get('certPath_desc'),
+            'placeholder' => 'cacert/appCertPublicKey_20189898909876.crt',
+            'type' => 'text',
+        ),
+        'alipayCertPath' => array(
+            'text' => Language::get('alipayCertPath'),
+            'desc' => Language::get('certPath_desc'),
+            'placeholder' => 'cacert/alipayCertPublicKey_RSA2.crt',
+            'type' => 'text',
+        ),
+        'rootCertPath' => array(
+            'text' => Language::get('rootCertPath'),
+            'desc' => Language::get('certPath_desc'),
+            'placeholder' => 'cacert/alipayRootCert.crt',
+            'type' => 'text',
         ),
 		'signType'  => array(         // 签名类型
             'text'      => Language::get('signType'),
             'type'      => 'select',
             'items'     => array(
                 'RSA2'   => Language::get('signType_RSA2'),
-				'RSA'    => Language::get('signType_RSA'),
-            ),
-        ),
-    ),
+				//'RSA'    => Language::get('signType_RSA'),
+            )
+        )
+    )
 );

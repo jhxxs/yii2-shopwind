@@ -6,7 +6,7 @@
         <div class="public refund_form refund_view">
           <ul class="refund_info">
             <li>退款编号：{$refund.refund_sn}</li>
-            <li>申请时间：{$refund.created|date_format:"%Y.%m.%d %H:%M:%S"}</li>
+            <li>申请时间：{$refund.created|date_format:"%Y-%m-%d %H:%M:%S"}</li>
             <li>退款状态：{$refund.status_label}</li>
             <li>订单总额：{$refund.total_fee|price_format} <span class="gray">(含运费)</span></li>
             <div class="refund_fee_detail">
@@ -61,7 +61,7 @@
               <!--{foreach from=$refund.messagelist item=message name=fe_message}-->
               <div class="title clearfix">
                 <h3> {if $message.owner_id eq $visitor.userid}{$lang.self}{else}{$lang.{$message.owner_role}}{/if} </h3>
-                <span>{$message.created|date_format:"%Y.%m.%d %H:%M:%S"}</span> </div>
+                <span>{$message.created|date_format:"%Y-%m-%d %H:%M:%S"}</span> </div>
               <div class="content" {if $smarty.foreach.fe_message.last} style="border-bottom:1px #ddd solid"{/if}> {$message.content} 
                 <!--{if $message.image}-->
                 <p style="margin-top:10px;"><img src="{$message.image|url_format}" width="200" /></p>

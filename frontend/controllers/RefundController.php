@@ -144,6 +144,9 @@ class RefundController extends \common\controllers\BaseUserController
 	public function actionView()
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
+		if($post->role == 'seller') {
+			Yii::$app->session->set('userRole', 'seller');
+		}
 		
 		$model = new \frontend\models\RefundViewForm();
 		list($refund, $page) = $model->formData($post, 5);
@@ -214,7 +217,7 @@ class RefundController extends \common\controllers\BaseUserController
 		
 		if(RefundModel::deleteAll(['refund_id' => $post->id])) {
 			if(RefundMessageModel::deleteAll(['refund_id' => $post->id])) {
-				return Message::display(Language::get('refund_cancel_ok'), ['deposit/record', 'tradeNo' => $refund->tradeNo]);
+				return Message::display(Language::get('refund_cancel_ok'));
 			}
 		}
 		return Message::warning(Language::get('refund_cancel_fail'));
@@ -255,7 +258,7 @@ class RefundController extends \common\controllers\BaseUserController
 			return Message::warning($model->errors);
 		}
 		
-		return Message::display(Language::get('seller_agree_refund_ok'), ['refund/view', 'id' => $post->id]);	
+		return Message::display(Language::get('seller_agree_refund_ok'), ['refund/view', 'id' => $post->id, 'role' => 'seller']);	
 	}
 	
 	/* 卖家拒绝退款 */
@@ -290,7 +293,7 @@ class RefundController extends \common\controllers\BaseUserController
 			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
-			return Message::display(Language::get('refuse_ok'), ['refund/view', 'id' => $post->id]);
+			return Message::display(Language::get('refuse_ok'), ['refund/view', 'id' => $post->id, 'role' => 'seller']);
 		}
 	}
 	

@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\library\Language;
 use common\business\BaseDepopay;
 
 /**
@@ -32,7 +33,7 @@ class IncomeDepopay extends BaseDepopay
 	 */
 	public $_payType   	= 'INSTANT';
 	
-	public function _handle_trade_info($trade_info, $checkAmount = true)
+	public function _handle_trade_info($trade_info, $extra_info = [])
 	{
 		// 验证金额
 		if(isset($trade_info['amount'])) {
@@ -65,5 +66,29 @@ class IncomeDepopay extends BaseDepopay
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * 插入收入记录，并变更账户余额
+	 */
+	public function _insert_record_info($trade_info, $extra_info)
+	{	
+		// 加此判断，目的为允许提交订单金额为零的处理
+		if($trade_info['amount'] == 0) {
+			return true;
+		}
+
+		$data_record = array(
+			'tradeNo'		=>	$extra_info['tradeNo'],
+			'userid'		=>	$trade_info['userid'],
+			'amount'		=> 	$trade_info['amount'],
+			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $trade_info['amount'], 'add'), // 同时更新余额
+			'tradeType'		=>  $this->_tradeType,
+			'flow'			=>	$this->_flow,
+			'name'			=>  $trade_info['name'] ? $trade_info['name'] : Language::get($this->_tradeType),
+		);
+
+		// 插入收入记录
+		return parent::_insert_deposit_record($data_record, false);
 	}
 }

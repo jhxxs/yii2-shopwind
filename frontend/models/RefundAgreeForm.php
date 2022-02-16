@@ -51,6 +51,9 @@ class RefundAgreeForm extends Model
 			$this->errors = Language::get('no_such_order');
 			return false;
 		}
+
+		// 修改为卖家处理退款
+		RefundModel::updateAll(['intervene' => 0], ['refund_id' => $post->id]);
 		
 		$amount	= $refund['refund_total_fee'];
 		$chajia	= round($refund['total_fee'] - $amount, 2);

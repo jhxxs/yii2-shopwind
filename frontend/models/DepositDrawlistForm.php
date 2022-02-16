@@ -32,7 +32,7 @@ class DepositDrawlistForm extends Model
 	
 	public function formData($post = null, $pageper = 4) 
 	{
-		$query = DepositTradeModel::find()->alias('dt')->select('dt.tradeNo,dt.bizOrderId,dt.amount,dt.status,dt.title,dt.add_time,dw.card_info')->joinWith('depositWithdraw dw', false)->where(['tradeCat' => 'WITHDRAW', 'buyer_id' => Yii::$app->user->id])->orderBy(['trade_id' => SORT_DESC]);
+		$query = DepositTradeModel::find()->alias('dt')->select('dt.tradeNo,dt.bizOrderId,dt.amount,dt.status,dt.title,dt.add_time,dw.drawtype,dw.account,dw.name,dw.bank')->joinWith('depositWithdraw dw', false)->where(['tradeCat' => 'WITHDRAW', 'buyer_id' => Yii::$app->user->id])->orderBy(['trade_id' => SORT_DESC]);
 		$query = $this->getConditions($post, $query);
 	
 		$page = Page::getPage($query->count(), $pageper);
@@ -40,14 +40,6 @@ class DepositDrawlistForm extends Model
 		foreach($recordlist as $key => $record)
 		{	
 			$recordlist[$key]['status_label'] = Language::get('TRADE_'.$record['status']);
-			
-			if(Basewind::getCurrentApp() == 'pc') {
-				$card_info = unserialize($record['card_info']);
-				$recordlist[$key]['card_info']  = $card_info;
-			}
-			if(Basewind::getCurrentApp() == 'wap') {
-				$recordlist[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $record['add_time']);
-			}
 		}
 		return array($recordlist, $page);
 	}

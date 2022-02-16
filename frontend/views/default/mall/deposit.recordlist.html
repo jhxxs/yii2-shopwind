@@ -42,7 +42,7 @@
               <ul>
                 <li class="clearfix">
                   <div class="time">{$record.pay_time|date_format:"%Y-%m-%d %H:%M:%S"}</div>
-                  <div class="info break-word"> {$record.title} <p class="gray">{$record.remark}</p></div>
+                  <div class="info break-word"> {$record.name|default:$record.title} <p class="gray">{$record.remark}</p></div>
                   <div class="tradeNo">{$record.bizOrderId} | {$record.tradeNo}</div>
                   <div class="income"><strong class="price green">{if $record.flow eq 'income'}+{$record.amount}{else}&nbsp;{/if}</strong></div>
                   <div class="defray"><strong class="price f60">{if $record.flow eq 'outlay'}-{$record.amount}{else}&nbsp;{/if}</strong></div>

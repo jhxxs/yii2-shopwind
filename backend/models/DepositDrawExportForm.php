@@ -33,9 +33,9 @@ class DepositDrawExportForm extends Model
 			'add_time' 			=> '申请时间',
 			'tradeNo'			=> '交易号',
 			'orderId'			=> '商户订单号',
-			'account_name'		=> '收款人姓名',
-			'num' 				=> '收款人银行账号',
-			'bank_name' 		=> '开户行',
+			'drawtype'			=> '提现渠道',
+			'name'				=> '收款人姓名',
+			'account' 			=> '收款账号',
 			'amount'			=> '提现金额',
 			'status'			=> '状态',
 			'remark'			=> '提现备注',
@@ -54,14 +54,15 @@ class DepositDrawExportForm extends Model
 				if($k == 'status') {
 					$value[$k] = Language::get(strtolower($value[$k]));
 				}
+				if($k == 'drawtype') {
+					$value[$k] = $value[$k] == 'alipay' ? '支付宝' : ($value[$k] == 'wxpay' ? '微信' : '银行卡');
+				}
+				if($k == 'account') {
+					$value[$k] = $value['bank'] ? $value['bank'].'('.$value[$k].')' : $value[$k];
+				}
 
 				$record_value[$k] = $value[$k] ? $value[$k] : '';
 			}
-
-			$card_info = unserialize($value['card_info']);
-			$record_value['account_name'] 	= $card_info['account_name'];
-			$record_value['num']			= $card_info['num'];
-			$record_value['bank_name']		= $card_info['bank_name'] . $card_info['open_bank'];
 	
         	$record_xls[] = $record_value;
     	}

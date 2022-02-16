@@ -42,7 +42,7 @@ class TransferDepopay extends OutlayDepopay
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info);
+        $base_info = parent::_handle_trade_info($trade_info, $extra_info);
         if (!$base_info) {
             return false;
         }
@@ -80,7 +80,6 @@ class TransferDepopay extends OutlayDepopay
 			'amount'		=>	$trade_info['amount'],
 			'status'		=>	'SUCCESS',
 			'payment_code'  =>  'deposit',
-			'fundchannel'	=> 	Language::get('deposit'),
 			'tradeCat'		=>	$this->_tradeCat,
 			'payType'		=>  $this->_payType,
 			'flow'			=>	$this->_flow,
@@ -98,32 +97,18 @@ class TransferDepopay extends OutlayDepopay
 		
 		if($model->save(false) == true)
 		{
-			// 转出的账户
-			$data_record = array(
-				'tradeNo'		=>	$extra_info['tradeNo'],
-				'userid'		=> 	$trade_info['userid'],
-				'amount'		=>  $trade_info['amount'],
-				'balance'		=>	parent::_update_deposit_money($trade_info['userid'], $trade_info['amount'], 'reduce'),// 减少后的余额
-				'tradeType'		=>  $this->_tradeType,
-				'tradeTypeName' => 	Language::get(strtoupper($this->_tradeType)),
-				'flow'			=>	$this->_flow,
-			);
-			
-			$step1 = parent::_insert_deposit_record($data_record, false);
-			
-			if($step1)
+			// 转出记录
+			if(parent::_insert_record_info($trade_info, $extra_info))
 			{
 				// 转入的账户
-				//$data_record['tradeNo']		= 	$extra_info['tradeNo'];
-				$data_record['userid']			= 	$trade_info['party_id'];
-				$data_record['balance']			=	parent::_update_deposit_money($trade_info['party_id'], $trade_info['amount']); // 增加后的余额
-				//$data_record['tradeType']   	=   $this->_tradeType;
-				//$data_record['tradeTypeName'] =   Language::get(strtoupper($this->_tradeType));
-				$data_record['flow']			=	'income';
-	
-				$step2 = parent::_insert_deposit_record($data_record, false);
-				
-				if(!$step2) {
+				$data_record['tradeNo']			= $extra_info['tradeNo'];
+				$data_record['userid'] 			= $trade_info['party_id'];
+				$data_record['balance']			= parent::_update_deposit_money($trade_info['party_id'], $trade_info['amount']); // 增加后的余额
+				$data_record['tradeType']		= $this->_tradeType;
+				$data_record['flow']			= 'income';
+				$data_record['amount'] 			= $trade_info['amount'];
+
+				if(!parent::_insert_deposit_record($data_record, false)) {
 					$this->setErrors("50012");
 					return false;
 				}

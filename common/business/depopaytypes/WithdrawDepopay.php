@@ -15,7 +15,6 @@ use yii;
 
 use common\models\DepositTradeModel;
 use common\models\DepositWithdrawModel;
-use common\models\BankModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -43,11 +42,10 @@ class WithdrawDepopay extends OutlayDepopay
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info);
-		$bank_info = $this->_handle_bank_info($this->post->bid, $trade_info['userid']);
-        if (!$base_info || !$bank_info) {
-            return false;
-        }
+        $base_info = parent::_handle_trade_info($trade_info, $extra_info);
+		if(!$base_info) {
+			return false;
+		}
 		
 		//$tradeNo = $extra_info['tradeNo'];
 		
@@ -63,7 +61,7 @@ class WithdrawDepopay extends OutlayDepopay
 			return false;
 		}
 		
-		// 插入提现银行的一些信息
+		// 保存提现信息
 		if(!$this->_insert_withdraw_info($trade_info, $extra_info)){
 			$this->setErrors("50019");
 			return false;
@@ -75,8 +73,6 @@ class WithdrawDepopay extends OutlayDepopay
 	/* 插入收支记录，并变更账户余额 */
 	public function _insert_record_info($trade_info, $extra_info)
 	{
-		$bank = BankModel::find()->where(['bid' => intval($this->post->bid)])->asArray()->one();
-		
 		$time 				= Timezone::gmtime();
 		$bizOrderId			= DepositTradeModel::genTradeNo(12, 'bizOrderId');
 		
@@ -89,7 +85,6 @@ class WithdrawDepopay extends OutlayDepopay
 			'amount'		=>	$trade_info['amount'],
 			'status'		=>	'WAIT_ADMIN_VERIFY',
 			'payment_code'  =>  'deposit',
-			'fundchannel'  	=>  $bank['bank_name'],
 			'tradeCat'		=>	$this->_tradeCat,
 			'payType'		=>  $this->_payType,
 			'flow'			=>	$this->_flow,
@@ -112,7 +107,6 @@ class WithdrawDepopay extends OutlayDepopay
 				'amount'		=>  $trade_info['amount'],
 				'balance'		=>	parent::_update_deposit_money($trade_info['userid'], $trade_info['amount'], 'reduce'), // 扣除后的余额
 				'tradeType'		=>  $this->_tradeType,
-				'tradeTypeName' => 	Language::get(strtoupper($this->_tradeType)),
 				'flow'			=>	$this->_flow,
 			);
 			return parent::_insert_deposit_record($data_record, false);
@@ -121,25 +115,17 @@ class WithdrawDepopay extends OutlayDepopay
 	
 	public function _insert_withdraw_info($trade_info, $extra_info)
 	{
-		$bank = BankModel::find()->where(['bid' => intval($this->post->bid)])->asArray()->one();
-		unset($bank['bid'], $bank['userid']);
-		
-		$tradeInfo = DepositTradeModel::find()->select('bizOrderId')->where(['tradeNo' => $extra_info['tradeNo']])->one();
-	
 		$model = new DepositWithdrawModel();
-		$model->orderId = $tradeInfo->bizOrderId;
+		$model->orderId = DepositTradeModel::find()->select('bizOrderId')->where(['tradeNo' => $extra_info['tradeNo']])->scalar();
 		$model->userid = $trade_info['userid'];
-		$model->card_info = serialize($bank);
+		$model->drawtype = $this->post->drawtype;
+		$model->account = $this->post->account;
+		$model->name = $this->post->name;
+		
+		if($this->post->drawtype == 'bank') {
+			$model->bank = $this->post->bank;
+		}
 		
 		return $model->save(false);
-	}
-	
-	public function _handle_bank_info($bid, $userid)
-	{
-		if(!(BankModel::checkBankOfUser($bid, $userid))) {
-			$this->setErrors("50018");
-			return false;
-		}
-		return true;
 	}
 }

@@ -96,7 +96,7 @@ class IntegralController extends \common\controllers\BaseAdminController
 			{
 				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
 				$list[$key]['type'] = Language::get($value['type']);
-				$list[$key]['state'] = IntegralModel::getStatusLabel($value['state']);
+				$list[$key]['state'] = Language::get($value['state']);
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 			}
 

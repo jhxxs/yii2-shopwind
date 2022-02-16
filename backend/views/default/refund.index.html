@@ -68,12 +68,14 @@
         { type: 'checkbox', fixed: 'left' }
         , { field: 'refund_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
         , { field: 'refund_sn', title: '退款编号', width: 200 }
-        , { field: 'buyer_name', title: '买家', width: 120 }
-        , { field: 'store_name', title: '店铺名', width: 150 }
+        , { field: 'order_sn', title: '订单号', width: 200 }
         , { field: 'total_fee', title: '交易金额', width: 125, sort: true, align: 'center' }
         , { field: 'refund_total_fee', title: '退款金额', width: 125, sort: true }
-        , { field: 'created', title: '申请时间', width: 170, sort: true, align: 'center' }
         , { field: 'status', title: '退款状态', width: 250, sort: true, align: 'center' }
+        , { field: 'buyer_name', title: '买家', width: 120 }
+        , { field: 'store_name', title: '店铺名', width: 150 }
+        , { field: 'created', title: '申请时间', width: 170, sort: true, align: 'center' }
+        , { field: 'finished', title: '完成时间', width: 170, sort: true, align: 'center' }
         , { field: 'refund_reason', title: '退款原因', width: 250, sort: true, align: 'center' }
         , {
           field: 'shipped', title: '收货情况', width: 250, sort: true, align: 'center', templet: function (res) {

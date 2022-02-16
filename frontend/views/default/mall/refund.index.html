@@ -24,7 +24,7 @@
               <td><a href="{url route='store/index' id=$refund.seller_id}" target="_blank">{$refund.store_name}</a></td>
               <td>{$refund.total_fee}</td>
               <td>{$refund.refund_total_fee}</td>
-              <td style="color:gray">{$refund.created|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+              <td style="color:gray">{$refund.created|date_format:"%Y-%m-%d %H:%M:%S"}</td>
               <td style="color:#FF4F01"> {$refund.status_label} 
                 <!--{if !in_array($refund.status, ['CLOSED', 'SUCCESS']) && $refund.intervene}-->
                 <div style="color:#62B44B">（客服已介入处理）</div>

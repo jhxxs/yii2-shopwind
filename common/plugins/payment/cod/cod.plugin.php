@@ -33,7 +33,7 @@ class Cod extends BasePayment
 	 * 网关地址
 	 * @var string $gateway
 	 */
-	protected $gateway = null;
+	public $gateway;
 
     /**
      * 支付插件实例
@@ -42,29 +42,23 @@ class Cod extends BasePayment
 	protected $code = 'cod';
 	
 	/* 获取支付表单 */
-    public function getPayform(&$orderInfo = array(), $redirect = true)
+    public function pay($orderInfo = array())
     {
 		// 支付网关商户订单号
-		$payTradeNo = parent::getPayTradeNo($orderInfo);
-		
-		// 给其他页面使用
-		foreach($orderInfo['tradeList'] as $key => $value) {
-			$orderInfo['tradeList'][$key]['payTradeNo'] = $payTradeNo;
-		}
+		$payTradeNo = $this->getPayTradeNo($orderInfo);
 		
 		// 因为是货到付款，所以直接处理业务
-		if($this->payNotify($orderInfo, $payTradeNo) === false) {
+		if($this->payNotify($payTradeNo) === false) {
 			($this->errors === null) && $this->errors = Language::get('pay_fail');
 			return false;
 		}
 		
 		// 处理完业务后，显示结果通知页面
 		$this->gateway = Url::toRoute(['paynotify/index'], true);
-		$params = $this->createPayform(['payTradeNo' => $payTradeNo], $this->gateway, 'get');
-        return array($payTradeNo, $params);
+		return $this->createPayform(['payTradeNo' => $payTradeNo], $this->gateway, 'get');
 	}
 	
-	public function payNotify($orderInfo = array(), $payTradeNo = '')
+	public function payNotify($payTradeNo = '')
 	{
 		if(empty($payTradeNo)) {
 			$this->errors = Language::get('order_info_empty');

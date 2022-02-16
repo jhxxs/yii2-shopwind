@@ -86,7 +86,7 @@ class My_integralForm extends Model
 		
 		foreach($list as $key => $value)
 		{
-			$list[$key]['state'] = IntegralModel::getStatusLabel($value['state']);
+			$list[$key]['state'] = Language::get($value['state']);
 			$list[$key]['name'] = Language::get($value['type']);
 			if($value['order_id']) {
 				$list[$key]['order_sn'] = OrderModel::find()->select('order_sn')->where(['order_id' => $value['order_id']])->scalar();

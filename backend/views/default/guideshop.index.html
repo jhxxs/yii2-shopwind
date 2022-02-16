@@ -59,7 +59,7 @@
 				, { field: 'phone_mob', title: '团长电话', width: 200 }
 				, { field: 'name', title: '门店名称', width: 160 }
 				, { field: 'address', title: '门店地址', width: 300 }
-				, { field: 'guider_rate', title: '团长返佣比率', width: 160, sort: true }
+				, { field: 'guider_rate', title: '团长返佣比率', width: 160, edit: 'text', sort: true }
 				, { field: 'created', title: '申请时间', width: 180, sort: true, align: 'center' }
 				, { fixed: 'right', field: 'status', title: '状态', width: 160, sort: true }
 			]]
@@ -81,6 +81,13 @@
 			if (obj.event === 'export') {
 				window.location.href = url(['guideshop/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
 			}
+		});
+		//监听行单元格编辑事件
+		table.on('edit(tablegrid)', function (obj) {
+			var fieldObj = $(obj.tr).find('[data-field="' + obj.field + '"]');
+			ajaxRequest(fieldObj, url(['guideshop/editcol', { id: obj.data.id, column: obj.field, value: obj.value }]), function () {
+				obj.update();
+			});
 		});
 	});
 </script>

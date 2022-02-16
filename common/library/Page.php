@@ -345,7 +345,7 @@ class Page
 	  if(!empty($config['image'])){
 		foreach ($config['image'] as $key => $val) {
 		  $val = array_merge($imageDefault,$val);
-		  $val['url'] = str_replace("https://", "http://", $val['url']); // for https 临时解决方案
+		  $val['url'] = str_replace("https://", "http://", $val['url']); // for https 临时解决方案，不要开启强制https
 		  $info = getimagesize($val['url']);
 		  $function = 'imagecreatefrom'.image_type_to_extension($info[2], false);
 		  if($val['stream']){   //如果传的是字符串图像流

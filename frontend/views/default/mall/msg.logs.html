@@ -19,7 +19,7 @@
               <td class="align2">{$log.receiver}</td>
               <td>{$log.content|escape}</td>
               <td class="align2">{$log.quantity}</td>
-              <td class="align2">{$log.time|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+              <td class="align2">{$log.time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
               <td class="align2">{if $log.status}{$lang.send_success}{else}{$lang.send_failed}{/if}</td>
             </tr>
             <!-- {foreachelse} -->

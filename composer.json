@@ -31,7 +31,9 @@
         "qiniu/php-sdk": "^7.2",
         "yiisoft/yii2-redis": "~2.0.0",
         "2amigos/qrcode-library": "~1.1",
-        "mk-j/php_xlsxwriter": "^0.38.0"
+        "mk-j/php_xlsxwriter": "^0.38.0",
+        "guzzlehttp/psr7": "~1.6.1",
+        "wechatpay/wechatpay": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

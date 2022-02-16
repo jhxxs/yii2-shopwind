@@ -51,8 +51,8 @@
                   <td width="50" class="align2"><a href="{url route='goods/index' id=$limitbuy.goods_id}" target="_blank"><img src="{$limitbuy.default_image|url_format}" width="50" height="50"  /></a></td>
                   <td width="140"><a href="{url route='goods/index' id=$limitbuy.goods_id}" target="_blank">{$limitbuy.goods_name|escape|truncate:30}</a></td>
                   <td width="60" align="align2"><a target="_blank" href="{url route='goods/index' id=$limitbuy.goods_id}">{$limitbuy.title|escape}</a></td>
-                  <td width="100" class="align2">{$limitbuy.start_time|date_format:"%Y.%m.%d %H:%M:%S"}</td>
-                  <td width="100" class="align2">{$limitbuy.end_time|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+                  <td width="100" class="align2">{$limitbuy.start_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
+                  <td width="100" class="align2">{$limitbuy.end_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                   <td width="80" class="align2">{$limitbuy.price}</td>
                   <td width="80" class="align2">{$limitbuy.pro_price}</td>
                   <td width="80" class="align2">{$limitbuy.status_label}</td>

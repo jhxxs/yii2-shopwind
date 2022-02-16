@@ -43,36 +43,34 @@ class Deposit extends BasePayment
 	protected $code = 'deposit';
 
 	/* 获取支付表单 */
-	public function getPayform(&$orderInfo = array(), $redirect = true)
+	public function pay($orderInfo = array())
 	{
 		// 支付网关商户订单号
-		$payTradeNo = parent::getPayTradeNo($orderInfo);
-
-		// 给其他页面使用
-		foreach ($orderInfo['tradeList'] as $key => $value) {
-			$orderInfo['tradeList'][$key]['payTradeNo'] = $payTradeNo;
-		}
+		$payTradeNo = $this->getPayTradeNo($orderInfo);
 
 		// 因为是余额支付，所以直接处理业务
-		if ($this->payNotify($orderInfo, $payTradeNo) === false) {
-			return array($payTradeNo, ['payResult' => false, 'errMsg' => $this->errors ? $this->errors : Language::get('pay_fail')]);
+		if ($this->payNotify($payTradeNo) === false) {
+			if($this->errors) $this->errors = Language::get('pay_fail');
+			return false;
 		}
+
+		// 传给页面需要
+		$params['payTradeNo'] = $payTradeNo;
 
 		// 处理完业务后，显示结果通知页面
 		if (Basewind::getCurrentApp() != 'api') {
 			$this->gateway = Url::toRoute(['paynotify/index'], true);
-
-			$params = ['payTradeNo' => $payTradeNo];
+			
 			if (!Yii::$app->urlManager->enablePrettyUrl) {
 				$params['r'] = 'paynotify/index';
 			}
 			$params = $this->createPayform($params, $this->gateway, 'get');
 		}
 		
-		return array($payTradeNo, $params ? $params : ['payResult' => true]);
+		return array_merge($params, ['payTradeNo' => $payTradeNo, 'status' => 'SUCCESS']);
 	}
 
-	public function payNotify($orderInfo = array(), $payTradeNo = '')
+	public function payNotify($payTradeNo = '')
 	{
 		if (empty($payTradeNo)) {
 			$this->errors = Language::get('order_info_empty');

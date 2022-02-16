@@ -29,7 +29,7 @@
               <td>{$refund.buyer_name}</td>
               <td>{$refund.total_fee}</td>
               <td>{$refund.refund_total_fee}</td>
-              <td>{$refund.created|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+              <td>{$refund.created|date_format:"%Y-%m-%d %H:%M:%S"}</td>
               <td> <span style="color:{if $refund.status eq 'CLOSED'}gray{elseif $refund.status eq 'SUCCESS'}#000{else}#FF4F01{/if}">{$refund.status_label}</span>
                 <!--{if !in_array($refund.status,['CLOSED','SUCCESS']) && $refund.intervene}-->
                 <div style="color:#62B44B">{$lang.intervene}</div>

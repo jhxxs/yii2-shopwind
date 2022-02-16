@@ -15,6 +15,7 @@ use yii;
 use yii\helpers\Url;
 
 use common\models\OrderModel;
+use common\models\RefundModel;
 use common\models\CodModel;
 use common\models\PluginModel;
 use common\models\DepositTradeModel;
@@ -39,29 +40,35 @@ class BasePayment extends BasePlugin
 	 */
 	protected $instance = 'payment';
 	
-	/* 获取支付表单 */
-    public function getPayform()
+	/**
+	 * 提交支付请求
+	 */
+    public function pay($orderInfo = array())
     {
         return $this->createPayform();
     }
 
+	/**
+	 * 退款原路返回
+	 */
+	public function refund($orderInfo) 
+	{
+		return false;
+	}
+
     /**
 	 * 获取规范的支付表单数据
 	 * @param array $params
-	 * @param string $gateway
 	 * @param string $method post|get
 	 */
-    public function createPayform($params = array(), $gateway = '', $method = 'post')
+    public function createPayform($params = array(), $method = 'get')
     {
-		$payment = Plugin::getInstance('payment')->build($this->code)->getInfo();
-        return array(
-			'payment_code' 	=> $this->code,
-            'online'    	=> $payment['is_online'],
-            //'desc'      	=> $payment['desc'],
-            'method'    	=> $method,
-            'gateway'   	=> $gateway,
-            'params'    	=> $params,
-        );
+		return [
+			'gateway' => $this->gateway,
+			'params' => $params,
+			'method' => $method,
+			'payment_code' 	=> $this->code
+		];
     }
 	
 	/**
@@ -70,7 +77,7 @@ class BasePayment extends BasePlugin
 	 */
     public function createNotifyUrl($payTradeNo = '')
     {
-        return Url::toRoute(['paynotify/notify', 'payTradeNo' => $payTradeNo], true);
+        return Url::toRoute(['paynotify/notify'], true);
     }
 
     /**
@@ -88,7 +95,7 @@ class BasePayment extends BasePlugin
 	}
 	
 	/**
-	 * 获取外部交易号 
+	 * 获取支付交易号 
 	 * @param array $orderInfo 订单信息
 	 * @param string 要获取的支付交易号的长度
 	 */
@@ -105,19 +112,21 @@ class BasePayment extends BasePlugin
 	 */
 	public function getNotify()
 	{
-		if($post = Yii::$app->request->post()) {
-			return $post;
+		if(($notify = Yii::$app->request->post())) {
+			return $notify;
+		}
+		
+        $notify = file_get_contents("php://input");
+		if(!$notify) {
+			$notify = Yii::$app->request->get();
 		}
 
-		// 存储微信的回调
-		$notify = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : file_get_contents("php://input");
-		libxml_disable_entity_loader(true);	 //禁止引用外部xml实体
-		$array = json_decode(json_encode(simplexml_load_string($notify, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-		if($array) {
-			return $array;
+		// 针对支付宝通知，如果发现签名失败，可考虑此转化
+		if(isset($notify['fund_bill_list'])) {
+			$notify['fund_bill_list'] = stripslashes($notify['fund_bill_list']);
 		}
-
-		return $notify ? $notify : Yii::$app->request->get();
+		
+		return $notify;
 	}
 	
 	/**
@@ -156,54 +165,16 @@ class BasePayment extends BasePlugin
 		// 只取合适的支付方式
 		if($removeImproper === true)
 		{
-			$suitable = array();// 合适的
-			
-			// 如果是H5端
-			if(Basewind::getCurrentApp() == 'wap') {
-				
-				// 微信公众号内访问
+			$suitable = ['deposit', 'alipay', 'wxpay', 'unionpay', 'cod'];// PC
+			$terminal = $this->getTerminal();
+			// 公众号/H5浏览器
+			if($terminal == 'WAP') {
 				if(Basewind::isWeixin()) {
-					$suitable = ['deposit', 'cod', 'tenpay_wap', 'unionpay', 'wxpay'];
+					$suitable = ['deposit', 'wxpay'];
+				} else {
+					$suitable = ['deposit', 'alipay', 'unionpay'];
 				}
-				// 支付宝内嵌浏览器
-				elseif(Basewind::isAlipay()) {
-					$suitable = ['deposit', 'cod', 'alipay_wap', 'unionpay'];
-				}
-				else {
-					$suitable = ['deposit', 'cod', 'alipay_wap', 'tenpay_wap', 'unionpay', 'wxh5pay']; 
-				}
-			}
-
-			// 如果是接口调用
-			elseif(Basewind::getCurrentApp() == 'api') {
-
-				// 如果是微信端(即：微信小程序, 微信公众号)
-				if(Basewind::isWeixin()) {
-					$suitable = ['deposit', 'wxmppay', 'wxpay'];
-				}
-				// 如果是头条端（即：头条小程序）
-				elseif(Basewind::isToutiao()) {
-					$suitable = ['deposit', 'alipay_app'];
-				}
-				// 如果是移动设备
-				elseif(Basewind::isMobileDevice()) 
-				{
-					// 如果是在支付宝内嵌浏览器或支付宝小程序
-					if(Basewind::isAlipay()) {
-						$suitable = ['deposit', 'alipay_wap'];
-					}
-					// 其他浏览器或APP
-					else {
-						$suitable = ['deposit', 'alipay_wap', 'alipay_app', 'wxh5pay', 'wxapppay'];
-					}
-				}
-				// 其他（可能是PC）
-			}
-			else {
-				
-				// 如果是PC端
-				$suitable = ['deposit', 'cod', 'alipay', 'tenpay', 'unionpay', 'wxnativepay'];
-			}
+			} 
 			
 			foreach($payments as $key => $payment) {
 				if(!in_array($payment['code'], $suitable)) {
@@ -237,8 +208,8 @@ class BasePayment extends BasePlugin
 	public function getKeysOfPayments($payments = array())
 	{
 		$keys = array();
-		foreach($payments as $key => $payment) {
-			$keys[] = $payment['code'];
+		foreach($payments as $key => $value) {
+			$keys[] = $value['code'];
 		}
 		
 		return $keys;
@@ -383,7 +354,7 @@ class BasePayment extends BasePlugin
 	 * @param array $orderInfo
 	 * @param array $notify_result
 	 */
-	public function handleRechargeAfterNotify($orderInfo, $notify_result, $outTradeNo)
+	public function handleRechargeAfterNotify($orderInfo, $notify_result)
 	{
 		if(!in_array($notify_result['target'], array(Def::ORDER_ACCEPTED, Def::ORDER_FINISHED))) {
 			$this->errors = Language::get('trade_status_fail');
@@ -392,16 +363,13 @@ class BasePayment extends BasePlugin
 			
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
 		$depopay_type = Business::getInstance('depopay')->build('recharge');
-		if(!$depopay_type->respond_notify($orderInfo, $notify_result, $outTradeNo)) {
+		if(!$depopay_type->respond_notify($orderInfo)) {
 			return false;
 		}
 		
-		// 如果有充值返金额功能
-		if(in_array($orderInfo['bizIdentity'], array(Def::TRADE_RECHARGE))) {
-			
-			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
-			$depopay_type = Business::getInstance('depopay')->build('rechargegive');
-			$depopay_type->rechargegive($orderInfo);
+		// 充值返金额处理
+		if(!$depopay_type->rebate($orderInfo)) {
+			return false;
 		}
 		
 		return true;
@@ -487,5 +455,32 @@ class BasePayment extends BasePlugin
 			}
 		}
 		return $this->errors ? false : true;
+	}
+
+	/**
+	 * 更新交易数据
+	 * 主要是处理：将第三方支付平台（如支付宝/微信）的交易参数记录至系统，以便做后续操作（如退款、查询交易等）
+	 * @var string $payTradeNo 支付交易号
+	 */
+	public function updateTradeInfo($payTradeNo)
+	{
+		list($notifyMoney, $outTradeNo) = $this->getNotifySpecificData();
+		DepositTradeModel::updateAll(['outTradeNo' => $outTradeNo], ['payTradeNo' => $payTradeNo]);
+	}
+
+	/**
+	 * 支付终端判断
+	 * 包含APP支付，小程序支付，手机WAP支付，电脑PC支付
+	 */
+	protected function getTerminal()
+	{
+		if($this->params->terminal) {
+			$terminal = strtoupper($this->params->terminal);
+			if(in_array($terminal, ['APP', 'MP', 'WAP', 'PC'])) {
+				return $terminal;
+			}
+		}
+
+		return Basewind::isMobileDevice() ? 'WAP' : 'PC';
 	}
 }

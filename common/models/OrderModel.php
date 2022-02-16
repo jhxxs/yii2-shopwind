@@ -121,7 +121,7 @@ class OrderModel extends ActiveRecord
 	{
 		$query = OrderGoodsModel::find()->select('goods_name')->where(['order_id' => $order_id])->orderBy(['rec_id' => SORT_ASC]);
 		
-		$subject = Language::get('defray') . ' - ' . $query->one()->goods_name;
+		$subject = $query->one()->goods_name;
 		if($query->count() > 1) {
 			$subject .= Language::get('and_more');
 		}

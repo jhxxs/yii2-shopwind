@@ -6,7 +6,7 @@ namespace common\plugins\payment\alipay\lib\request;
  * ALIPAY API: alipay.trade.refund request
  *
  * @author auto create
- * @since 1.0, 2017-04-19 20:31:51
+ * @since 1.0, 2021-11-22 18:10:35
  */
 class AlipayTradeRefundRequest
 {

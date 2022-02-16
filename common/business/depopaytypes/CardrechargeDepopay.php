@@ -45,7 +45,7 @@ class CardrechargeDepopay extends IncomeDepopay
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info);
+        $base_info = parent::_handle_trade_info($trade_info, $extra_info);
 		if (!$base_info) {
             return false;
         }
@@ -86,7 +86,6 @@ class CardrechargeDepopay extends IncomeDepopay
 				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
 				'flow'     		=> $this->_flow,
-				'fundchannel'   => Language::get('rechargecard'),
 				'title'			=> Language::get('recharge') . ' - ' . Language::get('rechargecard'),
 				'buyer_remark'	=> $extra_info['bizOrderId'],
 				'add_time'		=> Timezone::gmtime()
@@ -128,7 +127,6 @@ class CardrechargeDepopay extends IncomeDepopay
 		$model->amount = $tradeInfo->amount;
 		$model->balance = parent::_update_deposit_money($tradeInfo->buyer_id, $tradeInfo->amount);
 		$model->tradeType = $this->_tradeType;
-		$model->tradeTypeName = Language::get(strtoupper($this->_tradeType));
 		$model->flow = $this->_flow;
 		
 		if(!$model->save()) {

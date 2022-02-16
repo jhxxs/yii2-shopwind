@@ -25,7 +25,6 @@ return array(
     'name'      => Language::get('unionpay'),
     'subname'   => Language::get('unionpay'),
     'desc'      => Language::get('unionpay_desc'),
-    'is_online' => '1',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',

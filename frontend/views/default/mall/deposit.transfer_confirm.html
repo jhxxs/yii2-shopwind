@@ -1,56 +1,47 @@
-{include file="user.header.html"}
-<div id="main" class="clearfix"> {include file="user.menu.html"}
-  <div id="right"> {include file="user.curlocal.html"}
-    <div class="wrapful">{include file="user.submenu.html"}
-      <div class="wrap">
-        <div class="public table deposit">
-          <div class="deposit-withdraw-confirm">
-            <div class="notice-word mb20">
-              <p>转入成功后，对方会立即收到账款</p>
-            </div>
-            <form method="post">
-              <div class="title"> 确认转账信息 </div>
-              <div class="form">
-                <div class="confirm-info">
-                  <dl class="clearfix">
-                    <dt>收款人信息：</dt>
-                    <dd><input type="hidden" name="account" value="{$party.account}" /> <strong>{$party.real_name}</strong> {$party.account} </dd>
-                  </dl>
-                  <dl class="clearfix">
-                    <dt>转账金额：</dt>
-                    <dd><input type="hidden" name="money" value="{$transfer.money}" /> <span class="money">{$transfer.money}</span> 元 </dd>
-                  </dl>
-                  <!--{if $transfer.fee gt 0}-->
-                  <dl class="clearfix">
-                    <dt>手续费：</dt>
-                    <dd> <span>{$transfer.fee}</span> 元 </dd>
-                  </dl>
-                  <!--{/if}--> 
-                </div>
-                <div class="confirm-form">
-                  <dl class="clearfix">
-                    <dt>支付密码：</dt>
-                    <dd>
-                      <input type="password" name="password" class="text" value="" />
-                    </dd>
-                  </dl>
-                  <dl class="clearfix">
-                    <dt>验证码：</dt>
-                    <dd class="captcha">
-                      <input type="text" name="captcha" class="text" id="captcha1" />
-                      <a href="javascript:;" class="float-left"><img onclick="change_captcha($(this))" id="captcha" src="{url route='default/captcha' v=uniqid('', true)}" class="float-left" height="38" /></a> </dd>
-                  </dl>
-                  <dl class="clearfix">
-                    <dt>&nbsp;</dt>
-                    <dd class="submit"><input class="btn-alipay" type="submit" value="确认转账" /></dd>
-                  </dl>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+<style>
+  .eject_con {
+    font-size: 13px;
+  }
+
+  .eject_con dt {
+    margin: 8px 0 0 80px;
+  }
+</style>
+<div class="eject_con">
+  <div class="add">
+    <div id="warning"></div>
+    <form method="post" action="{$action}" target="iframe">
+      <dl class="clearfix">
+        <dt class="float-left">转账金额：</dt>
+        <dd class="float-left"><span class="block price red" style="margin-top: 10px;">{$transfer.money|price_format}</span></dd>
+      </dl>
+      <!--{if $transfer.fee gt 0}-->
+      <dl class="clearfix">
+        <dt class="float-left">手<s style="margin:0 6px;">续</s>费：</dt>
+        <dd class="float-left"><span class="block price red" style="margin-top: 10px;">{$transfer.fee|price_format}</span></dd>
+      </dl>
+      <!--{/if}--> 
+      <dl class="clearfix mb20 mt20">
+        <dt class="float-left">支付密码：</dt>
+        <dd class="float-left">
+          <input type="password" name="password" class="text" value="" />
+        </dd>
+      </dl>
+      <dl class="clearfix mb20">
+        <dt class="float-left">验<s style="margin: 0 7px;">证</s>码：</dt>
+        <dd class="float-left captcha">
+          <input type="text" name="captcha" class="text" id="captcha1" />
+          <a href="javascript:;"><img onclick="change_captcha($(this))" id="captcha"
+              src="{url route='default/captcha' v=uniqid('', true)}" height="38" /></a>
+        </dd>
+      </dl>
+      <div class="submit mt20">
+        <input type="hidden" name="redirect" value="{$redirect}" />
+        <!--{foreach from=$params item=item key=key}-->
+        <input type="hidden" name="{$key}" value="{$item}" />
+        <!--{/foreach}-->
+        <input type="submit" class="btn" value="{$lang.submit}" />
       </div>
-    </div>
+    </form>
   </div>
 </div>
-{include file="user.footer.html"} 

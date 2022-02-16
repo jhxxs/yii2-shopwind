@@ -26,7 +26,7 @@
                     <div class="txt"> <a href="{url route='goods/index' id=$report.goods_id}" target="_blank">{$report.goods_name|truncate:46}</a></div>
                   </div></td>
                 <td class="align2"><a href="{url route='store/index' id=$report.store_id}" target="_blank">{$report.store_name}</a></td>
-                <td class="align2">{$report.add_time|date_format:"%Y.%m.%d %H:%M:%S"}</td>
+                <td class="align2">{$report.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</td>
                 <td class="align2">{$report.content|escape}{if $report.verify}<p class="green">{$lang.reply}{$lang.colon}{$report.verify}</p>{/if}</td>
                 <td class="align2">{if $report.status eq 1}{$lang.done}{else}{$lang.wait_verify}{/if}<a href="javascript:;" class="J_AjaxRequest" style="margin-left:15px;" uri="{url route='my_report/delete' id=$report.id}" confirm="{$lang.drop_confirm}">{$lang.drop}</a></td>
               </tr>

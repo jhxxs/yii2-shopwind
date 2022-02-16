@@ -49,9 +49,14 @@
 </div>
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-		<button class="layui-btn layui-bg-blue" lay-event="verify"><i class="layui-icon layui-icon-edit"></i>审核提现</button>
+		<button class="layui-btn layui-bg-blue" lay-event="refuse"><i class="layui-icon layui-icon-edit"></i>提现拒绝</button>
 		<button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
 	</div>
+</script>
+
+<script type="text/html" id="colBar">
+	<a class="ml5 mr5 blue pointer" lay-event="manual">人工转账</a>
+	<a class="ml5 mr5 blue pointer" lay-event="online">在线转账</a>
 </script>
 
 <script>
@@ -70,16 +75,38 @@
 				{ type: 'checkbox', fixed: 'left' }
 				, { field: 'draw_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
 				, { field: 'tradeNo', title: '交易号', width: 200, sort: true, }
-				, { field: 'orderId', title: '商户订单号', width: 200, sort: true }
-				, { field: 'amount', title: '提现金额（元）', width: 160, sort: true }
-				, { field: 'username', title: '提现者', width: 110, sort: true }
-				, { field: 'card_info', title: '提现到', width: 410, sort: true }
+				, { field: 'orderId', title: '商户订单号', width: 130, sort: true }
+				, { field: 'amount', title: '提现金额（元）', width: 150, sort: true }
+				, { field: 'username', title: '提现账号', width: 110, sort: true }
+				, {
+					field: 'drawtype', title: '提现到', width: 100, sort: true, templet: function (res) {
+						return res.drawtype == 'alipay' ? '支付宝' : (res.drawtype == 'wxpay' ? '微信' : '银行卡');
+					}
+				}
+				, {
+					field: 'account', title: '账户', width: 180, sort: true, templet: function (res) {
+						return res.drawtype == 'bank' ? res.bank + '(' + res.account + ')' : res.account;
+					}
+				}
+				, { field: 'name', title: '真实姓名', width: 100, align: 'center' }
+				, {
+					field: 'status', title: '状态', width: 160, sort: true, templet: function (res) {
+						return lang[res.status.toLowerCase()];
+					}
+				}
 				, { field: 'add_time', title: '创建时间', width: 180, sort: true, align: 'center' }
 				, { field: 'end_time', title: '完成时间', width: 180, sort: true, align: 'center' }
-				, { fixed: 'right', field: 'status', title: '状态', width: 160, sort: true }
+				, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 180, align: 'center' }
 			]]
 			, page: {
 				theme: 'blue'
+			},
+			done: function (res, curr, count) {
+				$.each(res.data, function (i, item) {
+					if (item.status != 'WAIT_ADMIN_VERIFY') {
+						$('.layui-table-fixed-r .layui-table').find('tr[data-index=' + i + ']').find('a').removeClass('pointer').attr('lay-event', '').css('color', '#999');
+					}
+				})
 			}
 		});
 
@@ -93,27 +120,47 @@
 			$.each(checkStatus.data, function (i, item) {
 				items.push(item.draw_id);
 			});
-			if (obj.event === 'verify') {
+			if (obj.event === 'refuse') {
 				if (items.length > 1) {
-					return layer.msg('仅支持选择一条记录进行操作！')
+					layer.msg('每次仅能处理一条提现记录！');
+					return false;
 				}
-				drawverify(items[0], checkStatus.data[0].card_info, table);
+				drawrefuse(checkStatus.data[0], table);
 			}
 			else if (obj.event === 'export') {
 				window.location.href = url(['deposit/export', $.extend($("#formSearch").serializeJson(), { id: items.join(','), model: 'draw' })]);
 			}
+		});
+
+		//监听行工具事件
+		table.on('tool(tablegrid)', function (obj) {
+			var data = obj.data;
+
+			var message = '';
+			if (obj.event === 'manual') {
+				var accountInfo = data.drawtype == 'alipay' ? '支付宝('+data.account+')' : (data.drawtype == 'wxpay' ? '微信号('+data.account+')' : data.bank+'('+data.account+')');
+				message = '务必认真核对提现信息，点击“确定”前，请确保款项已<p>手动转账至账户：' + accountInfo + '</p>';
+				transfer(data, table, obj.event, message);
+			}
+			if (obj.event === 'online') {
+				if (data.drawtype != 'alipay') {
+					return layer.open({ content: lang.drawtype_disallow, title: lang.notice });
+				}
+				message = '务必认真核对提现信息，点击“确定”后，款项将从平台支付宝<p>自动划款至提现支付宝账户：' + data.account + '，请谨慎操作！</p>';
+				transfer(data, table, obj.event, message);
+			}
+			
 		});
 	});
 
 	$(function () {
 		$('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
 		$('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
-
 	});
-	function drawverify(id, content, table) {
-		layer.confirm('请认真核对提现信息，在点击“同意”前，请确保已将实际款项转账至提现者账户：' + content, { btn: [lang.agree, lang.refuse] }, function (index) {
+	function transfer(obj, table, method, message) {
+		layer.confirm(message, { btn: [lang.confirm, lang.close], title: lang.notice }, function (index) {
 			$.ajaxSettings.async = false;
-			$.getJSON(url(['deposit/drawverify']), { id: id }, function (data) {
+			$.getJSON(url(['deposit/drawverify']), { id: obj.draw_id, method: method }, function (data) {
 				if (data.done) {
 					layer.close(index);
 					layer.msg(data.msg);
@@ -121,27 +168,28 @@
 				} else {
 					layer.close(index);
 					layer.msg(data.msg);
-					table.reload('tablegrid');
+					//table.reload('tablegrid');
 				}
 			});
-		}, function (index) {
-			layer.prompt({
-				formType: 2,
-				value: '',
-				title: lang.refuse_reason
-			}, function (value, index, elem) {
-				$.ajaxSettings.async = false;
-				$.getJSON(url(['deposit/drawrefuse']), { id: id, remark: value }, function (data) {
-					if (data.done) {
-						layer.close(index);
-						layer.msg(data.msg);
-						table.reload('tablegrid');
-					} else {
-						layer.close(index);
-						layer.msg(data.msg);
-						table.reload('tablegrid');
-					}
-				});
+		});
+	}
+	function drawrefuse(obj, table) {
+		layer.prompt({
+			formType: 2,
+			value: '提现账户信息填写不完整',
+			title: '拒绝原因',
+		}, function (value, index, elem) {
+			$.ajaxSettings.async = false;
+			$.getJSON(url(['deposit/drawrefuse']), { id: obj.draw_id, remark: value }, function (data) {
+				if (data.done) {
+					layer.close(index);
+					layer.msg(data.msg);
+					table.reload('tablegrid');
+				} else {
+					layer.close(index);
+					layer.msg(data.msg);
+					//table.reload('tablegrid');
+				}
 			});
 		});
 	}

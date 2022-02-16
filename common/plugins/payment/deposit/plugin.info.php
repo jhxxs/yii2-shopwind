@@ -25,7 +25,6 @@ return array(
     'name'      => Language::get('deposit'),
     'subname'   => Language::get('deposit'),
     'desc'      => Language::get('deposit_desc'),
-    'is_online' => '1',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',

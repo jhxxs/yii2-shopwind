@@ -32,7 +32,7 @@ class DepositRechargelistForm extends Model
 	
 	public function formData($post = null, $pageper = 4) 
 	{
-		$query = DepositTradeModel::find()->select('tradeNo,bizOrderId,amount,status,title,flow,fundchannel,buyer_remark,add_time')->where(['tradeCat' => 'RECHARGE', 'buyer_id' => Yii::$app->user->id])->orderBy(['trade_id' => SORT_DESC]);
+		$query = DepositTradeModel::find()->select('tradeNo,bizOrderId,amount,status,title,flow,buyer_remark,add_time')->where(['tradeCat' => 'RECHARGE', 'buyer_id' => Yii::$app->user->id])->orderBy(['trade_id' => SORT_DESC]);
 		$query = $this->getConditions($post, $query);
 	
 		$page = Page::getPage($query->count(), $pageper);

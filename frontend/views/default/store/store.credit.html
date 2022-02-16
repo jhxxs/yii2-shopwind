@@ -86,7 +86,7 @@
               <td><a href="{url route='goods/index' id=$goods.goods_id}"> {$goods.goods_name|escape} </a></td>
               <td class="price"> {$goods.price|price_format} </td>
               <td> {$goods.buyer_name|escape} </td>
-              <td> {$goods.evaluation_time|date_format:"%Y.%m.%d %H:%M:%S"} </td>
+              <td> {$goods.evaluation_time|date_format:"%Y-%m-%d %H:%M:%S"} </td>
             </tr>
             <!--{foreachelse}-->
             <tr><td colspan="6">{$lang.no_records}</td></tr>

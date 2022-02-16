@@ -29,11 +29,11 @@ class BankModel extends ActiveRecord
         return '{{%bank}}';
     }
 	
-	public static function checkBankOfUser($bid = 0, $userid = 0)
+	public static function checkBankOfUser($id = 0, $userid = 0)
 	{
-		if(!$userid || !$bid) return false;
+		if(!$userid || !$id) return false;
 		
-		if(parent::find()->select('bid')->where(['bid' => $bid, 'userid' => $userid])->one()) {
+		if(parent::find()->where(['id' => $id, 'userid' => $userid])->exists()) {
 			return true;
 		}
 		return false;

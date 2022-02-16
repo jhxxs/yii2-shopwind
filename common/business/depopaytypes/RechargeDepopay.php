@@ -14,6 +14,7 @@ namespace common\business\depopaytypes;
 use yii;
 
 use common\models\DepositTradeModel;
+use common\models\DepositSettingModel;
 use common\models\DepositRecordModel;
 use common\models\DepositRechargeModel;
 
@@ -43,7 +44,7 @@ class RechargeDepopay extends IncomeDepopay
         extract($data);
 		
         // 处理交易基本信息
-        $base_info = parent::_handle_trade_info($trade_info);
+        $base_info = parent::_handle_trade_info($trade_info, $extra_info);
 		if (!$base_info) {
             return false;
         }
@@ -81,7 +82,6 @@ class RechargeDepopay extends IncomeDepopay
 				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
 				'flow'     		=> $this->_flow,
-				'fundchannel'   => Language::get($this->post->payment_code),
 				'title'			=> Language::get('recharge'),
 				'buyer_remark'	=> $this->post->remark ? $this->post->remark : '',
 				'add_time'		=> Timezone::gmtime()
@@ -105,37 +105,17 @@ class RechargeDepopay extends IncomeDepopay
 		return $result;
 	}
 	
-	/* 线上充值（支付充值，资金退回）响应通知 */
-	public function respond_notify($orderInfo = array(), $notify_result, $outTradeNo = '')
+	/**
+	 * 线上充值响应通知 
+	 */
+	public function respond_notify($orderInfo = array())
 	{
 		$time = Timezone::gmtime();
 				
-		/** 
-		 * 如果是支付订单的预充值通知（有正常的交易记录，需要创建新的充值记录） 
-		 * 数据来源有两种，一种是：从正常的交易记录中读取，二种是：从交易日志中读取（支付变更的情况）
-		 */
-		if(in_array($orderInfo['bizIdentity'], array(Def::TRADE_ORDER, Def::TRADE_BUYAPP)))
-		{
-			$tradeNo = $orderInfo['payTradeNo'];
-				
-			$trade_info = array('userid' => $orderInfo['buyer_id'], 'party_id' => 0, 'amount' => $orderInfo['amount']);
-			$extra_info = array('tradeNo' => $tradeNo, 'payment_code' => $orderInfo['payment_code']);
-			
-			if($this->_insert_recharge_info($trade_info, $extra_info)) {
-				$orderInfo['tradeList'] = DepositTradeModel::find()->where(['tradeNo' => $tradeNo])->indexBy('trade_id')->asArray()->all();
-			}
-		}
-		// 如果是单纯充值的订单通知（有正常的交易记录，无需创建新的充值记录，只需改变交易状态）
-		if(in_array($orderInfo['bizIdentity'], array(Def::TRADE_RECHARGE))) {
-			
-			// 数据兼容处理，不要加到判断中
-			!isset($orderInfo['tradeList']) && $orderInfo['tradeList'] = array();
-		}
-	
 		foreach($orderInfo['tradeList'] as $tradeInfo)
 		{
 			// 修改交易状态
-			DepositTradeModel::updateAll(['status' => 'SUCCESS', 'pay_time' => $time, 'end_time' => $time, 'outTradeNo' => $outTradeNo], ['tradeNo' => $tradeInfo['tradeNo']]);
+			DepositTradeModel::updateAll(['status' => 'SUCCESS', 'pay_time' => $time, 'end_time' => $time], ['tradeNo' => $tradeInfo['tradeNo']]);
 			
 			// 插入充值者收入记录，并更新账户余额表
 			$model = new DepositRecordModel();
@@ -144,17 +124,72 @@ class RechargeDepopay extends IncomeDepopay
 			$model->amount =  $tradeInfo['amount'];
 			$model->balance = parent::_update_deposit_money($tradeInfo['buyer_id'], $tradeInfo['amount']);
 			$model->tradeType = $this->_tradeType;
-			$model->tradeTypeName = Language::get(strtoupper($this->_tradeType));
 			$model->flow = $this->_flow;
+			$model->name = Language::get($this->_tradeType);
 			
-			if($model->save() === false) {
+			if(!$model->save()) {
+				$this->errors = Language::get('trade_fail');
 				return false;
 			}
 		}
 		
-		// 如果是从交易日志中取交易数据，删掉交易日志文件
-		if(isset($orderInfo['tradelogfile'])) @unlink($orderInfo['tradelogfile']);
-		
 		return true;
+	}
+
+	/**
+	 * 充值返利（返钱）
+	 */
+	public function rebate($orderInfo = array())
+	{
+		// 如果充值返金额比例为零，则不处理
+		$rate = floatval(DepositSettingModel::getDepositSetting($orderInfo['buyer_id'], 'regive_rate'));
+		if(!$rate || (round($orderInfo['amount'] * $rate, 2) <= 0)) {
+			return true;
+		}
+		
+		// 实际上，只存在一次循环
+		foreach($orderInfo['tradeList'] as $tradeInfo)
+		{
+			// 如果已返过，则不处理
+			if(DepositTradeModel::find()->where(['bizOrderId' => $tradeInfo['tradeNo'], 'bizIdentity' => Def::TRADE_REGIVE])->exists()) {
+				return true;
+			}
+				
+			// 增加交易记录
+			$trade_info = array(
+				'tradeNo'		=> DepositTradeModel::genTradeNo(),
+				'payTradeNo'	=> DepositTradeModel::genPayTradeNo(),
+				'bizOrderId'	=> $tradeInfo['tradeNo'],
+				'bizIdentity'	=> Def::TRADE_REGIVE,
+				'buyer_id'		=> $tradeInfo['buyer_id'],
+				'seller_id'		=> 0,
+				'amount'		=> round($tradeInfo['amount'] * $rate, 2),
+				'status'		=> 'SUCCESS',
+				'payment_code'	=> 'deposit',
+				'tradeCat'		=> 'TRANSFER',
+				'payType'		=> $this->_payType,
+				'flow'     		=> $this->_flow,
+				'title'			=> Language::get('recharge_give'),
+				'buyer_remark'	=> '',
+				'add_time'		=> Timezone::gmtime(),
+				'pay_time'		=> Timezone::gmtime(),
+				'end_time'		=> Timezone::gmtime()
+			);
+				
+			$model = new DepositTradeModel();
+			foreach($trade_info as $key => $val) {
+				$model->$key = $val;
+			}
+			
+			if($model->save(false) == true)
+			{
+				$trade_info['userid'] = $trade_info['buyer_id'];
+				$extra_info['tradeNo'] = $trade_info['tradeNo'];
+				$trade_info['name'] = $trade_info['title'];
+				return parent::_insert_record_info($trade_info, $extra_info);
+			}
+		}
+		
+		return false;
 	}
 }

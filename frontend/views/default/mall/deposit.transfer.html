@@ -9,10 +9,7 @@
             <div class="notice-word mb20">
               <p class="yellow">将您的账户余额转出到另外的预存款账户上，请慎重填写</p>
             </div>
-            <form method="get" action="{url route='deposit/transferconfirm'}">
-              <!--{if !$app->urlManager->enablePrettyUrl}-->
-              <input type="hidden" name="r" value="deposit/transferconfirm" />
-              <!--{/if}-->
+            <form method="post">
               <div class="title clearfix">
                 <h2 class="float-left">您的账户（{$deposit_account.account}）</h2>
                 <p class="float-left">余额：<strong>{$deposit_account.money}</strong> 元</p>
@@ -49,4 +46,21 @@
     </div>
   </div>
 </div>
+<script>
+  $(function(){
+    $('form').submit(function () {
+      if ($(this).find('input[name="account"]').val() == '') {
+        layer.msg(lang.select_account_not_exist);
+        return false;
+      }
+      if ($(this).find('input[name="money"]').val() == '' || $(this).find('input[name="money"]').val() <= 0) {
+        layer.msg(lang.money_error);
+        return false;
+      }
+      ajax_form('deposit_transferconfirm', '转账确认', url(['deposit/transferconfirm', $.extend($('form').serializeJson(), { title: '转账确认' })]), '500', '', '0.45');
+      return false;
+    });
+  });
+</script>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
 {include file="user.footer.html"} 

@@ -955,7 +955,7 @@ a:hover {color: #108ee9;}
 .icon-cashier-chinapay,.icon-cashier-unionpay{ background-position: 0px -938px;}
 .icon-cashier-cod{background-position: 0px -1102px;}
 .icon-cashier-tenpay, .icon-cashier-tenpay_wap{ background-position:0px -1147px}
-.icon-cashier-wxnativepay{ background-position:0px -1062px;}
+.icon-cashier-wxpay{ background-position:0px -1062px;}
 
 .bank-add .captcha input {float: left;margin-right: 3px;width: 80px;}
 .bank-add .captcha a {display: inline-block;}
@@ -972,30 +972,19 @@ a:hover {color: #108ee9;}
 .tradelist .list-more {text-align: right;}
 .tradelist a {color: #0077FF;text-decoration: none}
 .tradelist a:hover {text-decoration: underline;color: #f60;}
-.deposit-withdraw dt {width: 100px;text-align: right;padding-right: 40px;}
+.deposit-withdraw dt {width: 100px;text-align: right;padding-right: 10px; line-height: 26px; }
 .deposit-withdraw a {color: #0088CC;text-decoration: none}
 .deposit-withdraw a:hover {color: #f60;text-decoration: underline}
-.deposit-withdraw .title {border: 1px #BCCCF0 solid;background: url(../images/member/3HOF6ZFCET.png) repeat-x 0 0;padding: 15px 30px;height: 25px;line-height: 25px;}
+.deposit-withdraw .title {border: 1px #BCCCF0 solid;background: #F2FAFF;padding: 15px 30px;height: 25px;line-height: 25px;}
 .deposit-withdraw .title p {margin-left: 40px;}
-.deposit-withdraw .title strong {font-size: 16px;font-family: Tahoma, Geneva, sans-serif;color: #FC491E;font-weight:normal}
+.deposit-withdraw .title strong {font-size: 16px;color: #FC491E;font-weight:normal}
 .deposit-withdraw .title .link a {margin: 0 10px;}
 .deposit-withdraw .title .link a.add-bank {display: inline-block;background: url(../images/member/3HOF6ZFCET.png) -184px -65px no-repeat;padding-left: 24px;}
 .deposit-withdraw .form {border: 1px #BCCCF0 solid;border-top: 0;padding: 30px 10px 10px 10px}
-.deposit-withdraw .form dl {padding-bottom: 35px;width: 100%;}
+.deposit-withdraw .form dl {padding-bottom: 20px;width: 100%;}
 .deposit-withdraw .bank-each {border: 1px #ddd solid;border-radius: 3px 3px 3px 3px;width: 560px;background: #f1f1f1;padding: 10px;margin-bottom: 10px;}
 .deposit-withdraw .bank-each.selected {border: 1px #90C1DC solid;background: #ECF3F8;}
 .deposit-withdraw .bank-each div {margin-right: 10px;color: #030303}
-.deposit-withdraw-confirm .title {font-size: 18px;font-weight:normal;font-family: "Microsoft yahei";color: #333;line-height: 30px;margin-bottom: 5px;}
-.deposit-withdraw-confirm .form {border: 1px #D2E8EC solid;border-radius: 5px 5px 5px 5px;line-height: 20px;}
-.deposit-withdraw-confirm .confirm-info {background: #EBF2F9;padding-top: 45px;margin-bottom: 20px;}
-.deposit-withdraw-confirm .confirm-form {padding-top: 5px;}
-.deposit-withdraw-confirm .confirm-form .captcha input {float: left;width: 70px;}
-.deposit-withdraw-confirm .confirm-form .captcha a {float: left;display: inline-block;margin-left: 3px;}
-.deposit-withdraw-confirm dl {padding-bottom: 20px;width: 760px;}
-.deposit-withdraw-confirm dt {color: #4D4D4D;width: 160px;text-align: right;margin-right: 40px;}
-.deposit-withdraw-confirm span.money {color: #f60;font-size: 16px}
-.deposit-withdraw-confirm .draw-notice-word {width: 600px;margin: 0 auto;margin-bottom: 10px;}
-.deposit-withdraw-confirm .goback {text-decoration: none;color: #444; background:#EBF2F9; display:block; text-align:center;vertical-align: middle;padding:3px 0;width:80px;margin-top:20px;}
 .deposit-recharge .method-each {width: 90px;padding: 10px;float: left;margin-right: 20px;cursor: pointer;border: 1px #ddd solid;}
 .deposit-recharge .method-each .name {margin-left: 10px;*line-height:22px;}
 .drawlist .title {border-bottom: 2px #C0C0C0 solid;height: 22px;line-height: 22px;padding-bottom: 15px;}
@@ -1004,9 +993,9 @@ a:hover {color: #108ee9;}
 .drawlist .title strong {font-family: Tahoma, Geneva, sans-serif;color: #f60;}
 .drawlist .subtit {padding: 5px 0 5px 0;border-bottom: 1px #ddd solid;}
 .drawlist li div {float: left;width: 95px;text-align: left;line-height: 18px;}
-.drawlist li .tradeNo {word-wrap: break-word;word-break: break-all;width: 145px;padding-right:15px;font-family: Tahoma, Geneva, sans-serif}
+.drawlist li .tradeNo {word-wrap: break-word;word-break: break-all;width: 260px;padding-right:15px;font-family: Tahoma, Geneva, sans-serif}
 .drawlist li .info{width:130px; padding-right:5px;}
-.drawlist li .money, .drawlist li .method, .drawlist li .status, .drawlist li .fundchannel{width: 95px;position: relative;}
+.drawlist li .money, .drawlist li .method, .drawlist li .status{width: 95px;position: relative;}
 .drawlist .content li .money {font-weight:normal;font-family: Tahoma, Geneva, sans-serif}
 .drawlist .content li .remark {position: absolute;left: 40%;top: 70%;background: url(../images/member/new_msg.gif) left top;display: block;margin: 0 auto;width: 15px;height: 13px;}
 .drawlist .content li {border-bottom: 1px #ddd solid;width: 100%;}
@@ -1037,7 +1026,7 @@ a:hover {color: #108ee9;}
 
 .record .trade-list ul {border-bottom: 1px #EDEDED solid;padding: 5px 0 5px 0;width: 100%;}
 .record .trade-list .ul-head {border-bottom: 1px #ddd solid;background: #EBEBEB;color: #4D4D4D;padding: 0;}
-.record .trade-list .name {width: 400px;}
+.record .trade-list .name {width: 470px;}
 .record .trade-slips {border-top: 1px #ddd solid;margin-top: 30px;line-height: 25px;}
 .record .trade-slips dl {border: 1px #ddd solid;border-top: 0;}
 .record .trade-slips dt {border-right: 1px #ddd solid;width: 83px;}
@@ -1045,9 +1034,8 @@ a:hover {color: #108ee9;}
 .record .trade-slips .time dt {height: 50px;}
 .record .trade-slips .time dd {padding: 0;}
 .record .trade-slips .time .time-head {background: #F0F0F0;border-bottom: 1px #ddd solid}
-.record .trade-slips .time dd div {float: left;width: 285px;color: #4D4D4D;font-family: Tahoma, Geneva, sans-serif;text-align: left;padding-left: 10px;}
+.record .trade-slips .time dd div {float: left;width: 285.2px;color: #4D4D4D;font-family: Tahoma, Geneva, sans-serif;text-align: left;padding-left: 10px;}
 .record .trade-slips .time dd div.add-time {width: 185px;}
-.record .trade-goods ul {}
 .record .trade-goods .ul-head {border: 1px #ddd solid;height: 36px;line-height: 36px;background: #E8F2FF;}
 .record .trade-goods li {float: left;width: 100px;text-align: center;}
 .record .trade-goods .ul-head li {border-left: 1px #E8F2FF solid;}
@@ -1059,7 +1047,6 @@ a:hover {color: #108ee9;}
 .record .trade-goods li.info .pic {float: left;width: 40px;height: 40px;}
 .record .trade-goods li.info .desc {float: left;width: 215px;background: none;padding-left: 0; border:0; overflow:hidden}
 .record .trade-goods .ul-list li {border-left: 1px #ddd solid;border-bottom: 1px #ddd solid;height: 50px;line-height: 50px;}
-/*.record .trade-goods .ul-list li.amount, */.record .trade-goods .ul-list li.props {/*line-height: 25px;*/}
 .record .trade-goods .ul-list li.props p {margin-top: 5px;}
 .record .trade-goods li.status a {text-decoration: none;color: #0066CC}
 .record .trade-goods li.price {color: #000;}
@@ -1072,10 +1059,10 @@ a:hover {color: #108ee9;}
 .recordlist .title a:hover {text-decoration:none; opacity:0.9}
 .recordlist .subtit {padding: 5px 0 5px 0;border-bottom: 1px #ddd solid;}
 .recordlist li div {float: left;width: 95px;text-align: left;line-height: 18px;}
-.recordlist li .tradeNo {word-wrap: break-word;word-break: break-all;width: 145px;padding-right:7px;font-family: Tahoma, Geneva, sans-serif}
+.recordlist li .tradeNo {word-wrap: break-word;word-break: break-all;width: 160px;padding-right:20px;font-family: Tahoma, Geneva, sans-serif}
 .recordlist li .party{width:140px; text-align:center}
-.recordlist li .info {width: 200px;padding-right: 20px;}
-.recordlist li .fundchannel, .recordlist li .defray, .recordlist li .income {width: 85px;}
+.recordlist li .info {width: 150px;padding-right: 20px;}
+.recordlist li .defray, .recordlist li .income {width: 110px;}
 .recordlist li .detail {width: 35px;text-align: center}
 .recordlist .text {width: 100px;height: 12px;line-height: 12px;}
 .recordlist .btn-record {border: 1px #E47000 solid;background: #FF9100;color: #fff;cursor: pointer;line-height: 26px;padding-left: 10px;padding-right: 10px;}

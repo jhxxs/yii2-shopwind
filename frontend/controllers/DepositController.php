@@ -53,7 +53,7 @@ class DepositController extends \common\controllers\BaseUserController
 		}
 		$this->params['deposit_account'] = $account;
 		
-		$query = BankModel::find()->where(['userid' => Yii::$app->user->id]);
+		$query = BankModel::find()->select('id,bank,account')->where(['userid' => Yii::$app->user->id]);
 		$this->params['myBank'] = ['list' => $query->asArray()->all(), 'count' => $query->count()];
 
 		$model = new \frontend\models\DepositForm();
@@ -237,7 +237,7 @@ class DepositController extends \common\controllers\BaseUserController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			
 			$model = new \frontend\models\DepositRechargeForm();
-			list($tradeNo, $payment_code) = $model->formData($post);
+			list($tradeNo, $extra) = $model->formData($post);
 			if($model->errors) {
 				return Message::warning($model->errors);
 			}
@@ -249,11 +249,13 @@ class DepositController extends \common\controllers\BaseUserController
 			}
 
 			// 生成支付URL或表单
-			list($payTradeNo, $payform) = Plugin::getInstance('payment')->build($payment_code, $post)->getPayform($orderInfo);
-			if($payform['payResult'] === false) {
-				return Message::warning($payform['errMsg']);
+			$payment = Plugin::getInstance('payment')->build($post->payment_code, $post);
+			$payform = $payment->pay($orderInfo);
+			if($payform === false) {
+				return Message::warning($payment->errors);
 			}
-			$this->params['payform'] = array_merge($payform, ['payTradeNo' => $payTradeNo]);
+
+			$this->params['payform'] = $payform;
 				
 			// 跳转到真实收银台
 			$this->params['page'] = Page::seo(['title' => Language::get('cashier')]);
@@ -321,18 +323,23 @@ class DepositController extends \common\controllers\BaseUserController
 	/* 提现申请 */
 	public function actionWithdraw()
 	{
+
 		$this->params['deposit_account'] = DepositAccountModel::find()->select('money,nodrawal')->where(['userid' => Yii::$app->user->id])->asArray()->one();
-		$bankList = BankModel::find()->where(['userid' => Yii::$app->user->id])->asArray()->all();
-		$this->params['myBank'] = ['list' => $bankList, 'count' => count($bankList)];
-		
+		$this->params['banks'] = BankModel::find()->select('id,account,bank')->where(['userid' => Yii::$app->user->id])->asArray()->all();
+
+		$this->params['_foot_tags'] = Resource::import([
+			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js',
+			'style' => 'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+		]);
+			
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('deposit_withdraw'));
-		
+			
 		// 当前用户中心菜单
 		$this->params['_usermenu'] = Page::setMenu('deposit', 'deposit_withdraw');
 
 		$this->params['page'] = Page::seo(['title' => Language::get('deposit_withdraw')]);
-        return $this->render('../deposit.withdraw.html', $this->params);
+		return $this->render('../deposit.withdraw.html', $this->params);
 	}
 	
 	/* 提现确认 */
@@ -340,34 +347,25 @@ class DepositController extends \common\controllers\BaseUserController
 	{
 		if(!Yii::$app->request->isPost)
 		{
-			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['bid']);
-			$model = new \frontend\models\DepositWithdrawconfirmForm();
-			if(!$model->valid($post, false)) {
-				return Message::warning($model->errors);
-			}
-
-			$this->params['deposit_account'] = DepositAccountModel::find()->select('money,nodrawal')->where(['userid' => Yii::$app->user->id])->asArray()->one();
-			$this->params['bank'] = BankModel::find()->where(['bid' => $post->bid])->asArray()->one();
-			$this->params['withdraw'] = ['money' => $post->money];
-
-			// 当前位置
-			$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('deposit_withdraw'));
-		
-			// 当前用户中心菜单
-			$this->params['_usermenu'] = Page::setMenu('deposit', 'deposit_withdraw');
-
+			$this->params['params'] = Yii::$app->request->get();
+			$this->params['action'] = Url::toRoute(['deposit/withdrawconfirm']);
 			$this->params['page'] = Page::seo(['title' => Language::get('deposit_withdraw')]);
         	return $this->render('../deposit.withdraw_confirm.html', $this->params);
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['bid']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['id']);
+			if(($bank = BankModel::find()->select('name,account,bank')->where(['id' => $post->id, 'userid' => Yii::$app->user->id])->one())) {
+				foreach($bank as $key => $value) {
+					$post->$key = $value;
+				}
+			}
 			
 			$model = new \frontend\models\DepositWithdrawconfirmForm();
 			if(!$model->save($post, true)) {
-				return Message::warning($model->errors);
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('withdraw_ok_wait_verify'), ['deposit/tradelist']);
+			return Message::popSuccess(Language::get('withdraw_ok_wait_verify'), ['deposit/tradelist']);
 		}
 	}
 	
@@ -405,6 +403,11 @@ class DepositController extends \common\controllers\BaseUserController
 	{
 		$depositAccount = DepositAccountModel::find()->select('money,account')->where(['userid' => Yii::$app->user->id])->asArray()->one();
 		$this->params['deposit_account'] = $depositAccount;
+
+		$this->params['_foot_tags'] = Resource::import([
+			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,dialog/dialog.js',
+			'style' => 'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+		]);
 		
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('deposit_transfer'));
@@ -419,37 +422,30 @@ class DepositController extends \common\controllers\BaseUserController
 	/* 转账确认 */
 	public function actionTransferconfirm()
 	{
-		$get = Basewind::trimAll(Yii::$app->request->get(), true);
-		//$get->money = floatval($get->money);
-		
-		$model = new \frontend\models\DepositTransferconfirmForm();
-		if(!$model->valid($get)) {
-			return Message::warning($model->errors);
-		}
-		
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['transfer'] = ['money' => $get->money, 'fee' => $model->getTransferFee($get)];
-			$this->params['party'] = $model->getPartyInfo($get);
-		
-			// 当前位置
-			$this->params['_curlocal'] = Page::setLocal(Language::get('deposit'), Url::toRoute('deposit/index'), Language::get('deposit_transfer'));
-		
-			// 当前用户中心菜单
-			$this->params['_usermenu'] = Page::setMenu('deposit', 'deposit_transfer');
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
 
+			$model = new \frontend\models\DepositTransferconfirmForm();
+			if(!$model->valid($post)) {
+				return Message::warning($model->errors);
+			}
+
+			$this->params['transfer'] = ['money' => $post->money, 'fee' => $model->getTransferFee($post->money)];
+			$this->params['params'] = Yii::$app->request->get();
+			$this->params['action'] = Url::toRoute(['deposit/transferconfirm']);
 			$this->params['page'] = Page::seo(['title' => Language::get('deposit_transfer')]);
         	return $this->render('../deposit.transfer_confirm.html', $this->params);
 		}
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-			
-			$post->account = $get->account;
-			if(!$model->save($post, false)) {
-				return Message::warning($model->errors);
+
+			$model = new \frontend\models\DepositTransferconfirmForm();
+			if(!$model->save($post)) {
+				return Message::popWarning($model->errors);
 			}
-			return Message::display(Language::get('transfer_ok'), ['deposit/tradelist']);
+			return Message::popSuccess(Language::get('transfer_ok'), ['deposit/tradelist']);
 		}	
 	}
 	

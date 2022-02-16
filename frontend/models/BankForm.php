@@ -24,12 +24,11 @@ use common\library\Language;
  */
 class BankForm extends Model
 {
-	public $bank_name;
-	public $short_name;
-	public $account_name;
-	public $open_bank;
-	public $type;
-	public $num;
+	public $bank;
+	public $code;
+	public $name;
+	public $area;
+	public $account;
 	public $captcha;
 	
     /**
@@ -38,13 +37,12 @@ class BankForm extends Model
     public function rules()
     {
         return [
-			['short_name', 'required', 'message' => Language::get('short_name_empty')],
-			['short_name', 'checkShortName'],
-			['num', 'required', 'message' => Language::get('num_empty')],
-			['account_name', 'required', 'message' => Language::get('account_name_error')],
-			['account_name', 'string', 'length' => [2, 120]],
-			['type', 'in', 'range' => ['debit','credit'], 'message' => Language::get('type_error')],
-			['open_bank', 'string'],
+			['code', 'required', 'message' => Language::get('code_empty')],
+			['code', 'checkCode'],
+			['account', 'required', 'message' => Language::get('account_empty')],
+			['name', 'required', 'message' => Language::get('name_error')],
+			['name', 'string', 'length' => [2, 120]],
+			['area', 'string'],
 			['captcha', 'captcha', 'captchaAction' => 'default/captcha', 'message' => Language::get('captcha_failed')],
         ];
     }
@@ -56,28 +54,28 @@ class BankForm extends Model
     public function scenarios()
     {
         return [
-            'default' => ['short_name', 'account_name', 'open_bank', 'type', 'num', 'captcha'],
+            'default' => ['code', 'name', 'area', 'account', 'captcha'],
 			//'add' => [], 
 			//'update' = [],
         ];
     }
 	
-	public function checkShortName($attribute, $params)
+	public function checkCode($attribute, $params)
 	{
 		if (!$this->hasErrors()) {
 			
-			$bankList = self::getBankList();
-			if(!$bankList) $bankList = array();
+			$list = self::getBankList();
+			if(!$list) $list = array();
 			
 			$check = false;
-			foreach($bankList as $key => $bank) {
-				if(strtoupper($key) == strtoupper($this->short_name))  {
+			foreach($list as $key => $bank) {
+				if(strtoupper($key) == strtoupper($this->code))  {
 					$check = true;
 					break;
 				}
 			}
             if ($check == false) {
-                $this->addError($attribute, Language::get('short_name_error'));
+                $this->addError($attribute, Language::get('code_error'));
             }
         }
 	}
@@ -88,28 +86,27 @@ class BankForm extends Model
             return false;
         }
 		
-		$bankList = self::getBankList();
-		foreach($bankList as $key => $bank) {
-			if(strtoupper($key) == strtoupper($this->short_name))  {
-				$this->bank_name = $bank;
+		$list = self::getBankList();
+		foreach($list as $key => $bank) {
+			if(strtoupper($key) == strtoupper($this->code))  {
+				$this->bank = $bank;
 				break;
 			}
 		}
 		// add or edit
-		$bid = intval(Yii::$app->request->get('bid'));
-		if(!$bid || !($bank = BankModel::find()->where(['bid' => $bid, 'userid' => Yii::$app->user->id])->one())) {
-			$bank = new BankModel();
+		$id = intval(Yii::$app->request->get('id'));
+		if(!$id || !($model = BankModel::find()->where(['id' => $id, 'userid' => Yii::$app->user->id])->one())) {
+			$model = new BankModel();
 		}
 		
-		$bank->userid = Yii::$app->user->id;
-		$bank->bank_name = $this->bank_name;
-		$bank->short_name = strtoupper($this->short_name);
-		$bank->account_name = $this->account_name;
-		$bank->open_bank = $this->open_bank;
-		$bank->type = $this->type;
-		$bank->num = $this->num;
+		$model->userid = Yii::$app->user->id;
+		$model->bank = $this->bank;
+		$model->code = strtoupper($this->code);
+		$model->name = $this->name;
+		$model->area = $this->area;
+		$model->account = $this->account;
 		
-		return $bank->save(false) ? $bank : null;
+		return $model->save(false) ? $model : null;
 	}
 	
 	public static function getBankList()

@@ -6,7 +6,7 @@
             <p class="flex1"></p>
             <input type="hidden" name="theme" value="{$options.theme|default:'square'}" />
             <div class="pointer dropdown1">
-                <span>{if $options.theme eq 'list'}列表模式{else if $options.theme eq 'banner'}大图模式{else}橱窗模式{/if}</span>
+                <span>{if $options.theme eq 'list'}列表模式{else if $options.theme eq 'banner'}大图模式{elseif $options.theme eq 'waterfall'}瀑布流模式{else}橱窗模式{/if}</span>
                 <i class="layui-icon layui-icon-right layui-font-14"></i>
             </div>
         </div>
@@ -145,6 +145,9 @@
                 }, {
                     title: '大图模式',
                     id: 'banner'
+                }, {
+                    title: '瀑布流模式',
+                    id: 'waterfall'
                 }],
                 click: function (data, othis) {
                     this.elem.parents('.item').find('input').val(data.id);

@@ -25,7 +25,6 @@ return array(
     'name'      => Language::get('cod'),
     'subname'   => Language::get('cod'),
     'desc'      => Language::get('cod_desc'),
-    'is_online' => '0',
     'author'    => 'SHOPWIND',
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',

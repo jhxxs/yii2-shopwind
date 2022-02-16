@@ -18,7 +18,7 @@
             <p>您正在使用{$lang.{$orderInfo.payType}}付款</p>
           </div>
           <div class="goods-message clearfix">
-            <h3 class="float-left">{$orderInfo.title|escape|truncate:200}</h3>
+            <h3 class="float-left">{$lang.defray} - {$orderInfo.title|escape|truncate:200}</h3>
           </div>
           <div class="payAmount clearfix"> <strong class="float-left mr5">{$orderInfo.amount|price_format}</strong> 元 <a href="javascript:window.location.reload();" class="f60">刷新</a> </div>
         </div>

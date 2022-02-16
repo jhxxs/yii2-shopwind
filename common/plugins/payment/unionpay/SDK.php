@@ -31,19 +31,13 @@ class SDK
 	 * 网关地址
 	 * @var string $gateway
 	 */
-	public $gateway = null;
-
-	/**
-     * 支付插件实例
-	 * @var string $code
-	 */
-	public $code = null;
+	public $gateway = 'https://gateway.95516.com/gateway/api/frontTransReq.do';
 
 	/**
 	 * 商户ID
 	 * @var string $merId
 	 */
-	public $merId = null;
+	public $merId;
 
 	/**
 	 * 支付交易号

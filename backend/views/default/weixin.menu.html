@@ -16,10 +16,12 @@
         <div class="layui-btn-container">
           <a href="{url route='weixin/add'}" class="layui-btn layui-bg-blue"><i
               class="layui-icon layui-icon-addition"></i>添加菜单</a>
-
+          
+          <!--{if $menus}-->
           <a class="layui-btn layui-btn-primary J_BatchDel" confirm="{$lang.drop_confirm}"
             uri="{url route='weixin/delete'}" name="id"><i class="fa fa-trash"></i>批量删除</a>
             <a class="layui-btn layui-btn-primary J_AjaxRequest" uri="{url route='weixin/createmenu'}"><i class="fa fa-list-ul"></i>生成菜单</a>
+          <!--{/if}-->
         </div>
         <table class="distinction">
           <!--{if $menus}-->

@@ -78,7 +78,7 @@ class DepositTransferconfirmForm extends Model
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
 		$depopay_type = Business::getInstance('depopay')->build('transfer', $post);
 		$result = $depopay_type->submit(array(
-			'trade_info' => array('userid' => Yii::$app->user->id, 'party_id' => $party['userid'], 'amount' => $post->money, 'fee' => $this->getTransferFee($post)),
+			'trade_info' => array('userid' => Yii::$app->user->id, 'party_id' => $party['userid'], 'amount' => $post->money, 'fee' => $this->getTransferFee($post->money)),
 			'extra_info' => array('tradeNo' => DepositTradeModel::genTradeNo())
 		));
 			
@@ -98,9 +98,9 @@ class DepositTransferconfirmForm extends Model
 		return $party;
 	}
 	/* 转账手续费 */
-	public function getTransferFee($post = null)
+	public function getTransferFee($money = 0)
 	{
-		$fee = round($post->money * DepositSettingModel::getDepositSetting(Yii::$app->user->id, 'transfer_rate'), 2);
+		$fee = round($money * DepositSettingModel::getDepositSetting(Yii::$app->user->id, 'transfer_rate'), 2);
 		return $fee;
 	}
 }
