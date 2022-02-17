@@ -50,7 +50,7 @@ class Deposit extends BasePayment
 
 		// 因为是余额支付，所以直接处理业务
 		if ($this->payNotify($payTradeNo) === false) {
-			if($this->errors) $this->errors = Language::get('pay_fail');
+			if(!$this->errors) $this->errors = Language::get('pay_fail');
 			return false;
 		}
 
@@ -67,7 +67,7 @@ class Deposit extends BasePayment
 			$params = $this->createPayform($params, $this->gateway, 'get');
 		}
 		
-		return array_merge($params, ['payTradeNo' => $payTradeNo, 'status' => 'SUCCESS']);
+		return array_merge($params, ['status' => 'SUCCESS']);
 	}
 
 	public function payNotify($payTradeNo = '')

@@ -218,10 +218,10 @@ class BaseDepopay
 
 	public function setErrors($errorCode = '', $errorMsg = '')
 	{
-		if(!$errorCode) {
+		if($errorCode) {
 			$ex = new DepopayException();
 			if(isset($ex->errorMsg[$errorCode])) {
-				$this->errors = $ex->errorMsg[$errorCode];
+				$errorMsg = $ex->errorMsg[$errorCode];
 			}
 		}
 		
