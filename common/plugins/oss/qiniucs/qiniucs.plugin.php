@@ -50,7 +50,7 @@ class Qiniucs extends BaseOss
      */
     public function upload($fileName, $filePath)
     {
-        $result = $this->getClient()->upload($fileName, $filePath);
+        $result = $this->getClient()->put($fileName, file_get_contents($filePath));
         if(!$result) {
             return false;
         }

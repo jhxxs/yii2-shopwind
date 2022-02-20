@@ -28,8 +28,8 @@ use common\library\Plugin;
 
 class UploadedFileModel extends ActiveRecord
 {
-	public $file = null;
-	public $errors = null;
+	public $file;
+	public $errors;
 	
     /**
      * @inheritdoc
@@ -57,17 +57,18 @@ class UploadedFileModel extends ActiveRecord
 	public function upload($fileVal = '', $store_id = 0, $belong = '', $unionid = 0, $filename = false, $archived = 0)
 	{
 		$model = new \frontend\models\UploadForm();
-		
-		$model->file = UploadedFile::getInstanceByName($fileVal);
+		$this->file = UploadedFile::getInstanceByName($fileVal);
+
+		$model->file = $this->file;
 		$model->allowed_type = $archived ? Def::IMAGE_FILE_TYPE. ','.Def::ARCHIVE_FILE_TYPE : Def::IMAGE_FILE_TYPE;
 		$model->allowed_size = $archived ? Def::ARCHIVE_FILE_SIZE : Def::IMAGE_FILE_SIZE;
-		
+
 		if(!$model->file) {
 			$this->errors = Language::get('no_uploaded_file');
 			return false;
 		}
         if (!$model->validate()) {
-			$this->errors = $model->errors;
+			$this->errors = is_array($model->errors) ? $model->errors['file'][0] : $model->errors;
 			return false;
 		}
 		if(!$this->validImageType($model->file)) {
@@ -81,8 +82,7 @@ class UploadedFileModel extends ActiveRecord
 			$this->errors = $model->errors ? $model->errors : Language::get('file_save_error');
 			return false;
 		}
-		$this->file = $model->file;
-
+		
 		return $filePath;
 	}
 
