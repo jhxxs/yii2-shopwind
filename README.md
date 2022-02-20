@@ -40,9 +40,12 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 #### 运行环境
 * Nginx/Apache/IIS
-* PHP7.0+
-* MySQL5.1+
-* 建议环境 Linux + Nginx + PHP7.0 + Mysql5.6 及以上
+* PHP7.2+
+* MySQL5.6+
+
+#### 服务器
+* 推荐阿里云服务器：<a href="https://www.aliyun.com/activity/new?userCode=7k24wqpv" target="_blank">新用户免费试用30日专享链接</a>
+* 宝塔服务器部署：<a href="https://www.bt.cn/?invite_code=MV9iaXV6a3U=" target="_blank">送你3188元礼包，点我领取</a>
 
 #### 安装教程
 * <a href="https://forum.shopwind.net" target="_blank"> 查看常见问题/安装教程 </a>
