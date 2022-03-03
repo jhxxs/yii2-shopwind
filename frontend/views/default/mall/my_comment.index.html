@@ -10,7 +10,7 @@
               <td class="align2"></td>
               <td><a class="pl10" href="{url route='goods/index' id=$item.goods_id}" target="_blank" class="link3">{$item.goods_name}</a></td>
               <td width="150"><span class="table_user">{$item.buyer_name|escape}</span></td>
-              <td><!--{if $item.reply_comment eq ''}--> 
+              <td width="50"><!--{if $item.reply_comment eq ''}--> 
                 <a href="javascript:void(0);" class="add1_ico reply" ectype="dialog" dialog_id="my_comment_reply" dialog_title="{$lang.reply_comment_form}" dialog_width="400" uri="{url route='my_comment/reply' rec_id=$item.rec_id}">{$lang.reply}</a> 
                 <!--{/if}--></td>
             </tr>
@@ -18,7 +18,7 @@
               <td height="20"></td>
               <td><span class="pl10">{$lang.comment_content}{$lang.colon}</span> <span>{$item.comment|default:$lang.empty_comment}</span></td>
               <td><span class="time">{$item.evaluation_time|date_format:"%Y-%m-%d %H:%M:%S"}</span></td>
-              <td></td>
+              <td ></td>
             </tr>
             <!--{if $item.reply_comment neq ''}-->
             <tr class="{if $smarty.foreach.fe_item.last}line_bold{/if}">

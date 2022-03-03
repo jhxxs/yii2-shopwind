@@ -105,11 +105,16 @@ function goodsspec(specs, specQty, defSpec)
             {
 				var aclass ,liclass,canclick,bhidden,spec_img;
 				aclass = liclass = canclick = bhidden = spec_img = "";
-				if(specImage[i].image){
-					spec_img = "<img src='" + url_format(specImage[i].image) + "'/>";
-				}else{
+				for(var j = 0; j < specImage.length; j++) {
+					if(specImage[j].spec1 == spec1Values[i] && specImage[j].image) {
+						spec_img = "<img src='" + url_format(specImage[j].image) + "'/>";
+						break;
+					}
+				}
+				if(!spec_img){
 					spec_img = "<span>" + spec1Values[i] + "</span>";
 				}
+	
 				if(this.specQty == 1 && stock[i] == 0 ){
 					aclass = "class='none'";
 					bhidden = "style='display:none'"

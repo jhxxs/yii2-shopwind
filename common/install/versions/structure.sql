@@ -695,6 +695,7 @@ CREATE TABLE IF NOT EXISTS `swd_goods` (
   `last_update` int(10) unsigned DEFAULT NULL,
   `default_spec` int(11) unsigned DEFAULT '0',
   `default_image` varchar(255) DEFAULT NULL,
+  `long_image` varchar(255) DEFAULT NULL,
   `video` varchar(255) DEFAULT NULL,
   `isnew` tinyint(4) unsigned DEFAULT '0',
   `recommended` tinyint(4) unsigned DEFAULT '0',

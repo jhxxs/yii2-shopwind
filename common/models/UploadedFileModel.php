@@ -52,7 +52,7 @@ class UploadedFileModel extends ActiveRecord
 	
 	/**
 	 * 只上传文件，不保存到表
-	 * @param int $archived  允许上传图片和文档（doc|docx|pdf）
+	 * @param int $archived  0=仅允许上传图片;1=允许上传图片和文档;2=仅允许上传视频(mp4)
 	 */
 	public function upload($fileVal = '', $store_id = 0, $belong = '', $unionid = 0, $filename = false, $archived = 0)
 	{
@@ -60,8 +60,15 @@ class UploadedFileModel extends ActiveRecord
 		$this->file = UploadedFile::getInstanceByName($fileVal);
 
 		$model->file = $this->file;
-		$model->allowed_type = $archived ? Def::IMAGE_FILE_TYPE. ','.Def::ARCHIVE_FILE_TYPE : Def::IMAGE_FILE_TYPE;
-		$model->allowed_size = $archived ? Def::ARCHIVE_FILE_SIZE : Def::IMAGE_FILE_SIZE;
+		$model->allowed_size = Def::IMAGE_FILE_SIZE;
+		$model->allowed_type = Def::IMAGE_FILE_TYPE;
+		if($archived == 1) {
+			$model->allowed_size = Def::ARCHIVE_FILE_SIZE;
+			$model->allowed_type .= ',' . Def::ARCHIVE_FILE_TYPE;
+		} else if($archived == 2) {
+			$model->allowed_size = Def::ARCHIVE_FILE_SIZE;
+			$model->allowed_type = Def::VIDEO_FILE_TYPE;
+		}
 
 		if(!$model->file) {
 			$this->errors = Language::get('no_uploaded_file');
@@ -214,60 +221,74 @@ class UploadedFileModel extends ActiveRecord
 	 */
 	public static function getSavePath($store_id = 0, $belong = '', $unionid = 0)
 	{
-		$savePath = false;
-		
-		switch ($belong)
-        {
-			case Def::BELONG_ARTICLE 	:	$savePath = 'data/files/mall/article';
-			break;
-			case Def::BELONG_STORE 		: 	$savePath = 'data/files/store_' . $store_id . '/other';
-			break;
-			case Def::BELONG_GOODS 		:  	$savePath = 'data/files/store_' . $store_id . '/goods';
-			break;
-			case Def::BELONG_MEAL  		: 	$savePath = 'data/files/store_' . $store_id . '/meal';
-			break;
-			case Def::BELONG_GOODS_SPEC	:  	$savePath = 'data/files/store_' . $store_id . '/spec';
-			break;
-			case Def::BELONG_STORE_SWIPER : $savePath = 'data/files/store_' . $store_id . '/swiper';
-			break;
-			case Def::BELONG_LIMITBUY   :	$savePath = 'data/files/store_' . $store_id . '/limitbuy';
-			break;
-			case Def::BELONG_IDENTITY	:	$savePath = 'data/files/store_' . ($store_id ? $store_id : $unionid) . '/identity';
-			break;
-			case Def::BELONG_PORTRAIT	:	$savePath = 'data/files/mall/profile/'.$unionid;
-			break;
-			case Def::BELONG_GCATEGORY_ICON	:	$savePath = 'data/files/mall/gcategory/icon/'.$unionid;
-			break;
-			case Def::BELONG_GCATEGORY_AD	:	$savePath = 'data/files/mall/gcategory/ad/'.$unionid;
-			break;
-			case Def::BELONG_BRAND_LOGO		:	$savePath = 'data/files/mall/brand/'.$unionid;
-			break;
-			case Def::BELONG_BRAND_IMAGE	:	$savePath = 'data/files/mall/brand/'.$unionid;
-			break;
-			case Def::BELONG_APPMARKET		:	$savePath = 'data/files/mall/appmarket/'.$unionid;
-			break;
-			case Def::BELONG_REFUND_MESSAGE : 	$savePath = 'data/files/mall/refund/'.$unionid.'/message';
-			break;
-			case Def::BELONG_WEIXIN			:	$savePath = 'data/files/mall/weixin';
-			break;
-			case Def::BELONG_SETTING		:	$savePath = 'data/files/mall/setting';
-			break;
-			case Def::BELONG_TEMPLATE		:	$savePath = 'data/files/mall/template';
-			break;
-			case Def::BELONG_WEBIM			:	$savePath = 'data/files/mall/webim';
-			break;
-			case Def::BELONG_GUIDESHOP		:	$savePath = 'data/files/mall/guideshop/'.$unionid;
-			break;
-			case Def::BELONG_POSTER			:	$savePath = 'data/files/mall/qrcode/poster';
-			break;
-			case Def::BELONG_EVALUATE		:	$savePath = 'data/files/mall/evaluate';
-			break;
+		// 如果是目录
+		if(is_string($belong))
+		{
+			if($store_id) {
+				$savePath = 'data/files/store_' . $store_id . '/' . $belong;
+			} else {
+				$savePath = 'data/files/mall/' . $belong;
+			}
+		} 
+		else 
+		{
+			switch ($belong)
+			{
+				case Def::BELONG_ARTICLE 	:	$savePath = 'data/files/mall/article/';
+				break;
+				case Def::BELONG_STORE 		: 	$savePath = 'data/files/store_' . $store_id . '/other/';
+				break;
+				case Def::BELONG_GOODS 		:  	$savePath = 'data/files/store_' . $store_id . '/goods/';
+				break;
+				case Def::BELONG_MEAL  		: 	$savePath = 'data/files/store_' . $store_id . '/meal/';
+				break;
+				case Def::BELONG_GOODS_SPEC	:  	$savePath = 'data/files/store_' . $store_id . '/spec/';
+				break;
+				case Def::BELONG_STORE_SWIPER : $savePath = 'data/files/store_' . $store_id . '/swiper/';
+				break;
+				case Def::BELONG_LIMITBUY   :	$savePath = 'data/files/store_' . $store_id . '/limitbuy/';
+				break;
+				case Def::BELONG_IDENTITY	:	$savePath = 'data/files/store_' . ($store_id ? $store_id : $unionid) . '/identity/';
+				break;
+				case Def::BELONG_PORTRAIT	:	$savePath = 'data/files/mall/profile/'.$unionid.'/';
+				break;
+				case Def::BELONG_GCATEGORY_ICON	:	$savePath = 'data/files/mall/gcategory/icon/'.$unionid.'/';
+				break;
+				case Def::BELONG_GCATEGORY_AD	:	$savePath = 'data/files/mall/gcategory/ad/'.$unionid.'/';
+				break;
+				case Def::BELONG_BRAND_LOGO		:	$savePath = 'data/files/mall/brand/'.$unionid.'/';
+				break;
+				case Def::BELONG_BRAND_IMAGE	:	$savePath = 'data/files/mall/brand/'.$unionid.'/';
+				break;
+				case Def::BELONG_APPMARKET		:	$savePath = 'data/files/mall/appmarket/'.$unionid.'/';
+				break;
+				case Def::BELONG_REFUND_MESSAGE : 	$savePath = 'data/files/mall/refund/'.$unionid.'/message/';
+				break;
+				case Def::BELONG_WEIXIN			:	$savePath = 'data/files/mall/weixin/';
+				break;
+				case Def::BELONG_SETTING		:	$savePath = 'data/files/mall/setting/';
+				break;
+				case Def::BELONG_TEMPLATE		:	$savePath = 'data/files/mall/template/';
+				break;
+				case Def::BELONG_WEBIM			:	$savePath = 'data/files/mall/webim/';
+				break;
+				case Def::BELONG_GUIDESHOP		:	$savePath = 'data/files/mall/guideshop/'.$unionid.'/';
+				break;
+				case Def::BELONG_POSTER			:	$savePath = 'data/files/mall/qrcode/poster/';
+				break;
+				case Def::BELONG_EVALUATE		:	$savePath = 'data/files/mall/evaluate/';
+				break;
+			}
 		}
-		$savePath = Def::fileSavePath() . '/' . $savePath;
-		if(!is_dir($savePath)) {
-			\yii\helpers\FileHelper::createDirectory($savePath);
+
+		if($savePath) {
+			$savePath = Def::fileSavePath() . '/' . $savePath;
+			if(!is_dir($savePath)) {
+				\yii\helpers\FileHelper::createDirectory($savePath);
+			}
+			return $savePath;
 		}
-		return $savePath;
+		return false;
 	}
 
 	/**

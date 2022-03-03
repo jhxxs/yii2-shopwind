@@ -62,6 +62,7 @@ class Setting extends Arrayfile
             'default_store_logo' 	=> 'data/system/default_store_logo.gif',
             'default_user_portrait' => 'data/system/default_user_portrait.gif',
             'site_logo'				=> 'data/system/site_logo.gif',
+            'default_image'         => 'data/system/default_image.png',
             'template_name' 		=> 'default',
 			'wap_template_name'		=> 'default',
         );

@@ -267,7 +267,7 @@ function url(arguments) {
 	for (var i in params) {
 		query += '&' + i + '=' + params[i];
 	}
-	query = query.substr(1);
+	query = query.substring(1);
 
 	// 是否开启路由美化
 	if (ENABLE_PRETTY) {
@@ -287,16 +287,19 @@ function url(arguments) {
 	return queryUrl;
 }
 
-// 将相对地址转换成完整地址
-// 不管当前是什么应用，都使用前台地址（frontendUrl）
-// 这个主要是针对上传图片在不同应用中能正确展示
+/**
+ * 将相对地址转换成完整地址
+ * 不管当前是什么应用，都使用前台地址（frontendUrl）
+ * 这个主要是针对上传图片在不同应用中能正确展示
+ */
 function url_format(url, def) {
 	url = (url == '' || url == undefined) ? def : url;
 
 	if (url == '' || url == undefined) {
 		return '';
 	}
-	if (url.indexOf("http") > -1) {
+
+	if (url.indexOf("http") > -1 || url.substring(0, 2) == '//') {
 		return url;
 	}
 	return HOME_URL + '/' + url;

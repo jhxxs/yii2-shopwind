@@ -27,7 +27,7 @@
             <!--{foreach from=$plugins item=plugin key=key}-->
             <tr>
               <td style="padding-left:15px;">{$plugin.name|escape}</td>
-              <td align="left">{$plugin.desc|escape}</td>
+              <td align="left">{$plugin.desc|escape:editor}</td>
               <td align="center"><a href="{$plugin.website}" target="_blank"
                   title="{$lang.author_website}">{$plugin.author|escape}</a></td>
               <td align="center">{$plugin.version|escape}</td>

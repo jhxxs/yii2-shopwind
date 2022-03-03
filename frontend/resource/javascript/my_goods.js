@@ -139,7 +139,7 @@ function spec_editor(){
         tpl.attr('ectype', 'data'); // 赋值一个ectype与规格项模板区别
         item.spec_1 && tpl.find('*[item="spec_1"]').val(item.spec_1);
         item.spec_2 && tpl.find('*[item="spec_2"]').val(item.spec_2);
-		item.spec_image && tpl.find('.spec_image').find('i').html('<img src="'+url_format(item.spec_image)+'" height="30" width="30"/><b title="删除"></b>');
+		item.spec_image && tpl.find('.spec_image').find('i').html('<img src="'+url_format(item.spec_image)+'" height="30" width="30"/><b title="删除">x</b>');
         //tpl.find('.filePicker').attr('id', 'filePicker'+i);
 		
 		tpl.find('*[item="price"]').val(item.price);

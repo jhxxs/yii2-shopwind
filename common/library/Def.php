@@ -87,10 +87,7 @@ class Def
 	/* 文件类型 */
 	const IMAGE_FILE_TYPE		=	'gif,jpg,jpeg,png,bmp'; // 图片类型
 	const ARCHIVE_FILE_TYPE 	= 	'doc,docx,pdf,xls,xlsx'; // 文档类型
-
-	/* 媒体类型 */
-	//const IMAGE_MIME_TYPE		=	'image/jpg,image/jpeg,image/png';
-	//const ARCHIVE_MIME_TYPE	=	'application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf';
+	const VIDEO_FILE_TYPE		=	'mp4'; // 视频类型
 
 	const GOODS_COLLECT			= 	50;	// 商品最大收藏量（浏览历史）
 	

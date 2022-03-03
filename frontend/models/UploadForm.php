@@ -51,7 +51,7 @@ class UploadForm extends Model
 		}
 
 		// 上传路径
-		$file = $path . '/' .  $baseName . '.' . $this->file->extension;
+		$file = $path . $baseName . '.' . $this->file->extension;
 		$object = str_replace(Def::fileSavePath() . '/', '', $file);
 		
 		// 先上传到本地

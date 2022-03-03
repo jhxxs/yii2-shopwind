@@ -1,7 +1,7 @@
 <div class="imagead" id="imagead-{$widget_data.uniqueid}">
   <div class="content {$widget_data.radius}">
     <!--{if $widget_data.images}-->
-    <div class="hd webkit-box {if !$widget_data.title}hidden{/if}">{$widget_data.title} {if $widget_data.label}<span class="box-align-center">{$widget_data.label}</span>{/if}</div>
+    <div class="hd webkit-box" {if !$widget_data.title}style="display:none;"{/if}>{$widget_data.title} {if $widget_data.label}<span class="box-align-center">{$widget_data.label}</span>{/if}</div>
     <div class="bd webkit-box">
       <!--{foreach from=$widget_data.images item=item}-->
       <div class="item"><img class="block" src="{$item.url|url_format}"></div>
@@ -71,7 +71,7 @@
     /* {/if} */
 
     /* {if $widget_data.radius eq 'round'} */
-    $('#imagead-{$widget_data.uniqueid} .content').css('padding-left', '5px').css('padding-right', '5px');
+    $('#imagead-{$widget_data.uniqueid} .content').css('padding-left', '5px').css('padding-right', '5px').css('padding-top', '10px');
     $('#imagead-{$widget_data.uniqueid} .content .item').css('padding', '0 5px');
     $('#imagead-{$widget_data.uniqueid} .content .item img').css('border-radius', '8px');
     $('#imagead-{$widget_data.uniqueid} .empty').css('margin', '5px').css('border-radius', '8px');
