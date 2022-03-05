@@ -106,7 +106,7 @@ class RefundDepopay extends OutlayDepopay
 	{
 		RefundModel::updateAll([
 			'status' => 'SUCCESS', 
-			'end_time' => Timezone::gmtime()
+			'finished' => Timezone::gmtime()
 		], ['refund_id' => $extra_info['refund_id']]);
 		
 		// 判断是平台客服处理退款，还是卖家同意退款
