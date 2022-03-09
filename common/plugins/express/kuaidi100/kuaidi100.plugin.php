@@ -42,13 +42,6 @@ class Kuaidi100 extends BaseExpress
      */
 	private $client = null;
 
-	/**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
 	
 	/**
 	 * 对数据进行验证

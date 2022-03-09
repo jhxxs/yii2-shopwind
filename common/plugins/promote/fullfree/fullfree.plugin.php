@@ -28,13 +28,5 @@ class Fullfree extends BasePromote
 	 * @var string $code
 	 */
     protected $code = 'fullfree';
-
-    /**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-        parent::__construct();
-    }
 }
 

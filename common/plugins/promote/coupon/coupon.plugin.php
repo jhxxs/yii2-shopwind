@@ -28,13 +28,5 @@ class Coupon extends BasePromote
 	 * @var string $code
 	 */
     protected $code = 'coupon';
-
-    /**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-        parent::__construct();
-    }
 }
 

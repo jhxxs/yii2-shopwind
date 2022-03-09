@@ -36,14 +36,6 @@ class Webuploader extends BaseUploader
 	private $client = null;
 
 	/**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/**
      * 创建上传组件组件
 	 * @param array $params 上传组件参数集
 	 */

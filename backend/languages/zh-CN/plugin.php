@@ -69,7 +69,7 @@ return array(
     'wxpemPath_desc'    => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/wxpay/cacert<br>微信证书获取方法：<a target="_blank" href="https://forum.shopwind.net/thread/347">获取证书</a>',    
 
     'wxapppay'  		=> '微信APP支付',
-    'wxapppay_desc'     => '微信APP支付是客户端（iOS、Android）唤起的支付功能，拥有更好的体验',
+    'wxapppay_desc'     => '微信APP支付是客户端（iOS、Android）唤起的支付功能，拥有更好的体验，填写开放平台移动应用秘钥',
     'wxmppay'  		    => '微信小程序支付',
     'wxmppay_desc'      => '微信小程序支付是集成在微信客户端内的支付功能，用户可以通过小程序完成快速的支付流程。',
 );

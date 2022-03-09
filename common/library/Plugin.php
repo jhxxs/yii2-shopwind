@@ -89,13 +89,13 @@ class Plugin
 	 * @desc 通过此方法让系统来自动获取。这样，我们在后台就可以随意切换OSS上传插件
 	 * @param bool $force 当后台没有配置插件时，也强制创建实例，这个只能是针对无须配置的插件
 	 */
-	public function autoBuild($force = false)
+	public function autoBuild($force = false, $params = null)
 	{
 		// 优先选启用的，如果没有启用的，也选择默认一个，避免空对象报错
 		$query = PluginModel::find()->select('code,enabled')->where(['instance' => $this->instance])->orderBy(['enabled' => SORT_DESC])->one();
 		if($query) {
 			if($query->enabled || (!$query->enabled && $force)) {
-				return self::getInstance($this->instance)->build($query->code);
+				return self::getInstance($this->instance)->build($query->code, $params);
 			}
 			return false;
 		}
@@ -106,7 +106,7 @@ class Plugin
 			$dir = Yii::getAlias('@common') . '/plugins/' . $this->instance;
 			if(($list = FileHelper::findDirectories($dir, ['recursive' => false]))) {
 				$code = substr($list[0], strripos($list[0], DIRECTORY_SEPARATOR) + 1);
-				return self::getInstance($this->instance)->build($code);
+				return self::getInstance($this->instance)->build($code, $params);
 			}
 		}
 

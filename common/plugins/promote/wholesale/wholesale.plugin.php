@@ -28,13 +28,5 @@ class Wholesale extends BasePromote
 	 * @var string $code
 	 */
     protected $code = 'wholesale';
-
-    /**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-        parent::__construct();
-    }
 }
 

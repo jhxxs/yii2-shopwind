@@ -36,14 +36,6 @@ class Qiniucs extends BaseOss
     private $client = null;
 
     /**
-	 * 构造函数
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-    /**
      * 上传文件
      * @param string $fileName
      * @param string $filePath
