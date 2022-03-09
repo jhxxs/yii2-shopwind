@@ -21,11 +21,11 @@ input[type="file"]{background: none;}
 .w-full{width:100%;}
 .w-mall,.w,.w-shop,.w-user{margin:0 auto;}
 .col-sub,.col-main{float:left;}
-.col-bottom{ clear:both}
+.col-bottom{ clear:both;}
 .clearfix:after{ content:'\20'; display:block; overflow:hidden; height:0; clear:both;}
 .clear,.clr{clear:both; overflow:hidden;width:0;margin:0;padding:0; height:0; line-height:0; font-size:0;}
 .clearboth{ clear:both;}
-.hidden{ display:none}
+.hidden{ display:none;}
 .overflowHidden{ overflow:hidden;}
 .float-left{float:left;}
 .float-right{float:right;}

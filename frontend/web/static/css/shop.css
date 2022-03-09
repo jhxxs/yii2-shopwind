@@ -216,17 +216,17 @@
 .goods-attr .attribute .attr-detail .handle ul li{float:left;}
 
 .goods-attr .attribute .attr-detail .handle .sale-attr li{margin-bottom:6px;}
-.goods-attr .attribute .attr-detail .handle .sale-attr li a{position:relative; min-width: 100px; height: 40px; line-height: 40px; text-align: center; display:inline-block;margin: 2px 8px 2px 0;border: 1px solid #ccc; white-space:nowrap;}
+.goods-attr .attribute .attr-detail .handle .sale-attr li a{position:relative; min-width: 40px; height: 40px; line-height: 40px; text-align: center; display:block;margin: 2px 8px 2px 0;border: 1px solid #ccc; white-space:nowrap;}
 .goods-attr .attribute .attr-detail .handle .sale-attr .handle_title { height: 44px;  line-height: 44px;  overflow: hidden;}
 
-.goods-attr .attribute .attr-detail .handle .sale-attr li a img{width: 34px; height: 34px; display:inline-block; vertical-align:middle;}
-.goods-attr .attribute .attr-detail .handle .sale-attr li a span{display:inline-block;background:#fff;}
+.goods-attr .attribute .attr-detail .handle .sale-attr li a img{width: 34px; height: 34px; display:inline-block; margin-top:3px;}
+.goods-attr .attribute .attr-detail .handle .sale-attr li a span{display:inline-block;background:#fff; padding: 0 10px;}
 .goods-attr .attribute .attr-detail .handle .sale-attr li a i{ position: absolute;    top: 0px;    right: 3px;    color: #ee2346;    font-weight: bold;font-size: 8px; display: block;}
 .goods-attr .attribute .attr-detail .handle .sale-attr li.solid a,
 .goods-attr .attribute .attr-detail .handle .sale-attr a:hover{border: 1px solid #E4393C;}
 .goods-attr .attribute .attr-detail .handle .sale-attr li.solid a b{display:block;position: absolute;bottom: 0;right: 0;width: 13px;height: 13px;overflow: hidden;background:url(../images/newicon20140417_03.png) no-repeat;}
 
-.goods-attr .attribute .attr-detail .handle .sale-attr li a.none,.goods-attr .attribute .attr-detail .handle .sale-attr li .none:hover{ border:1px dotted #ccc; color: #ccc; padding: 1px; cursor: default;}
+.goods-attr .attribute .attr-detail .handle .sale-attr li a.none,.goods-attr .attribute .attr-detail .handle .sale-attr li .none:hover{ border:1px dotted #ccc; color: #ccc;cursor: default;}
 
 .goods-attr .attribute .attr-detail .handle .quantity-select .buy-quantity{float:left;}
 .goods-attr .attribute .attr-detail .handle .quantity-select .text{width: 60px;height: 30px;border: 1px solid #ccc;text-align: center;}

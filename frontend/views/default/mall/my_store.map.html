@@ -5,7 +5,7 @@
       <div class="wrap">
         <div class="public">
           <div class="information">
-            <div class="notice-word">
+            <div class="notice-word mb20">
               <p>将标注拖放到您店铺所在的位置（点击标注可拖动）</p>
             </div>
             <div class="info">
@@ -29,12 +29,8 @@
 $(function(){
 	// 百度地图API功能
 	var map = new BMap.Map("allmap");
-	var zoom = {$store.zoom} || 15;
-	<!--{if $store.latitude && $store.longitude}-->
-	var point = new BMap.Point({$store.longitude},{$store.latitude});
-	<!--{else}-->
-	var point = new BMap.Point(108.399747,22.815288);
-	<!--{/if}-->
+	var zoom = {$store.zoom|default:15};
+	var point = new BMap.Point({$store.longitude|default:'108.399747'},{$store.latitude|default:'22.815288'});
 	map.centerAndZoom(point, zoom);
 	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 	map.addControl(new BMap.NavigationControl());// 左上角，添加比例尺   

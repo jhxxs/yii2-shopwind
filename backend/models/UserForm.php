@@ -103,6 +103,7 @@ class UserForm extends Model
 		}
 		$model->gender = $post->gender;
 		$model->im_qq = $post->im_qq ? $post->im_qq : '';
+		$model->nickname = $post->nickname ? $post->nickname : '';
 		$model->real_name = $post->real_name ? $post->real_name : '';
 		$model->locked = $post->locked;
 		$model->generateAuthKey();
