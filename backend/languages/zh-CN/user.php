@@ -5,6 +5,7 @@ return array(
     'email' => '电子邮箱',
     'currect_email'=>'请您填写有效的电子邮箱',
     'real_name' => '真实姓名',
+    'nickname'  => '昵称',
     'phone_tel' => '固定电话',
     'phone_mob' => '手机号码',
     'im' => '即时通讯',

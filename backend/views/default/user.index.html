@@ -9,8 +9,8 @@
 						<input type="hidden" name="r" value="user/index" />
 						{$lang.username}
 						<input class="queryInput" type="text" name="username" value="{$smarty.get.username|escape}" />
-						{$lang.real_name}
-						<input class="queryInput" type="text" name="real_name" value="{$smarty.get.real_name|escape}" />
+						{$lang.nickname}
+						<input class="queryInput" type="text" name="nickname" value="{$smarty.get.nickname|escape}" />
 						{$lang.email}
 						<input class="queryInput" type="text" name="email" value="{$smarty.get.email|escape}" />
 						{$lang.phone_mob}
@@ -62,7 +62,7 @@
 				{ type: 'checkbox', fixed: 'left' }
 				, { field: 'userid', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
 				, { field: 'username', title: '用户名', width: 120 }
-				, { field: 'real_name', title: '真实姓名', width: 120 }
+				, { field: 'nickname', title: '昵称', width: 120 }
 				, { field: 'email', title: '邮箱', width: 150 }
 				, { field: 'phone_mob', title: '手机号码', width: 125, sort: true, align: 'center' }
 				, {

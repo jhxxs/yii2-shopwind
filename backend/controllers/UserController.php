@@ -61,7 +61,7 @@ class UserController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = UserModel::find()->select('userid,username,real_name,email,phone_mob,create_time,last_login,logins,last_ip');
+			$query = UserModel::find()->select('userid,username,nickname,email,phone_mob,create_time,last_login,logins,last_ip');
 			$query = $this->getConditions($post, $query)->orderBy(['userid' => SORT_ASC]);
 			
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
@@ -104,7 +104,9 @@ class UserController extends \common\controllers\BaseAdminController
 		
 		if(!Yii::$app->request->isPost)
 		{
-			$this->params['user'] = UserModel::get($id);
+			$this->params['user'] = UserModel::find()
+				->select('userid,username,nickname,real_name,email,phone_mob,gender,im_qq,locked,portrait')
+				->where(['userid' => $id])->asArray()->one();
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('user_edit')]);
 			return $this->render('../user.form.html', $this->params);
