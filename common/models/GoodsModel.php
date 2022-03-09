@@ -52,7 +52,7 @@ class GoodsModel extends ActiveRecord
 	// 关联表
 	public function getGoodsSpec()
 	{
-		return parent::hasMany(GoodsSpecModel::className(), ['goods_id' => 'goods_id']);
+		return parent::hasMany(GoodsSpecModel::className(), ['goods_id' => 'goods_id'])->orderBy(['sort_order' => SORT_ASC, 'spec_id' => SORT_ASC]);
 	}
 	// 关联表
 	public function getGoodsImage()
@@ -158,12 +158,13 @@ class GoodsModel extends ActiveRecord
 					$result[] = $list[$allId[$i]];
 				}
 			}
-
-			if($supple && count($result) < $num) {
-				$list = parent::find()->select('goods_id,goods_name,default_image, price')->where(['if_show' => 1, 'closed' => 0])->limit($num - count($result))->asArray()->all();
-				$result = array_merge($result, $list);
-			}
 		}
+
+		if($supple && count($result) < $num) {
+			$list = parent::find()->select('goods_id,goods_name,default_image, price')->where(['if_show' => 1, 'closed' => 0])->limit($num - count($result))->asArray()->all();
+			$result = array_merge($result, $list);
+		}
+
 		if ($id) $allId[] = $id;
 		$allId = array_values(array_unique($allId));
 		if (count($allId) > Def::GOODS_COLLECT) {
