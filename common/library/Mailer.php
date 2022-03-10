@@ -32,6 +32,11 @@ class Mailer
 	
 	public function send($async = true)
 	{
+		// 邮件发送状态关闭了
+		if(!Yii::$app->params['mailer']['status']) {
+			return false;
+		}
+
 		// 异步发送
 		if($async && Yii::$app->params['mailer']['async']) {
 			return Yii::$app->queue->push(new SendEmail(['compose' => $this->compose]));
