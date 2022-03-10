@@ -105,6 +105,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 		$this->params['page'] = Page::seo(['title' => Language::get('goods_list')]);
         return $this->render('../my_goods.index.html', $this->params);
 	}
+
 	/* 商品发布 */
 	public function actionAdd()
 	{
@@ -526,7 +527,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 	}
 	
 	/* 获取提交的数据 */
-	private function getPostData($post = null, $id = 0)
+	private function getPostData($post = [], $id = 0)
 	{
 		$goods = array(
 			'store_id'				=> $this->visitor['store_id'],
@@ -628,7 +629,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 				if(empty($post['props'][$key])) unset($post['props'][$key]);
 			}
 		}
-		
+
 		$data = array(
 			'goods' 		=> $goods, 
 			'specs' 		=> $specs, 
@@ -662,6 +663,12 @@ class My_goodsController extends \common\controllers\BaseSellerController
 	/* 检查提交的数据 */
     private function checkPostData($data, $id = 0)
     {
+		// 类目判断
+		if(!isset($data['goods']['cate_id']) || !GcategoryModel::find()->where(['cate_id' => $data['goods']['cate_id'], 'if_show' => 1, 'store_id' => 0])->exists()) {
+			$this->errors = Language::get('select_leaf_category');
+			return false;
+		}
+
 		$data['max_exchange'] = intval($data['max_exchange']);
 
 		// 最低抵扣不能超过商品的最大价格
