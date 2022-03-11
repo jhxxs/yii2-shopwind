@@ -99,11 +99,14 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 ![钱包/积分/充值卡](https://images.gitee.com/uploads/images/2021/0615/153012_e2bf25f6_7967349.jpeg "app3-6.jpg")
 
-
 ##### 平台后台管理
 
 ![后台首页](https://www.shopwind.net/static/images/ht1.png)
+
+##### 丰富的功能插件
 ![营销插件](https://www.shopwind.net/static/images/ht2.png)
+
+##### 可视化模板编辑/DIY页面布局
 ![模板编辑](https://www.shopwind.net/static/images/ht3.png)
 
 
