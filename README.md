@@ -102,9 +102,9 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 ##### 平台后台管理
 
-![输入图片说明](ht1.png)
-![输入图片说明](ht2.png)
-![输入图片说明](ht3.png)
+![后台首页](https://www.shopwind.net/static/images/ht1.png)
+![营销插件](https://www.shopwind.net/static/images/ht2.png)
+![模板编辑](https://www.shopwind.net/static/images/ht3.png)
 
 
 #### 关于版权
