@@ -651,7 +651,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
             'price'  		=> ($key === false) ? abs(floatval($post['price'])) : abs(floatval($post['price'][$key])),
           	'stock'  		=> ($key === false) ? intval($post['stock']) : intval($post['stock'][$key]),
        		'sku'       	=> ($key === false) ? $post['sku'] : $post['sku'][$key],
-			'spec_image'	=> ($key === false) || empty($post['spec_image'][$key]) ? '' : $post['spec_image'][$key],
+			'image'	=> ($key === false) || empty($post['image'][$key]) ? '' : $post['image'][$key],
 			'sort_order'	=> ($key === false) ? 1 : intval($post['sort_order'][$key]),
 		);
 		if($spec_id) $spec['spec_id'] = $spec_id;
