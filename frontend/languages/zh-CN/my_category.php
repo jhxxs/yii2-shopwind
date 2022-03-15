@@ -19,7 +19,7 @@ return array(
     'drop_ok' => '删除分类成功',
     'drop_confirm' => '删除该分类将会同时删除该分类的所有下级分类，您确定要删除吗',
     'edit_category' => '编辑分类',
-    'batch_edit' => '批量编辑',
+    'batchedit' => '批量编辑',
     'edit_ok' => '编辑分类成功',
     'file_format_desc' =>
         '<table border="1">'.

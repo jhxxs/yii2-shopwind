@@ -8,7 +8,7 @@ return array(
 	'disable'						=> '关闭',
 	'enable'						=> '开启',
 	'disable_confirm'				=> '关闭后，该商品将不参与分销。您确定要关闭吗？',
-	'batch_edit'					=> '批量编辑',
+	'batchedit'					=> '批量编辑',
 	'note_for_create'				=> '温馨提示: 可开启商品的单品分销，设置某个商品的三级分销比率。',
 	'set_ratio'						=> '设置单品分销',
 	'no_such_goods'					=> '没有该商品信息',

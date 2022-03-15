@@ -329,9 +329,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			} else $gcategories[$key]['hasChild'] = 0;
 		}
 		$this->params['categories'] = $gcategories;
-		
-		$this->params['action'] = $post->id ? 'edit' : 'add';
-		$this->params['idParam'] = $post->id ? '&id='.$post->id : '';
+		$this->params['action'] = $post->action ? $post->action : ($post->id ? 'edit' : 'add');
 		
 		// 发布商品协议文章，可以修改文章id
 		$this->params['article'] = \common\models\ArticleModel::find()->select('description')->where(['article_id' => 1])->asArray()->one();
@@ -351,7 +349,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
         return Message::warning(Language::get('no_image_droped'));
 	}
 	
-	public function actionBatch_edit()
+	public function actionBatchedit()
     {
 		$ids = Basewind::trimAll(Yii::$app->request->get('id', 0));
 		
@@ -364,12 +362,12 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			$this->params['_foot_tags'] = Resource::import('my_goods.js,mlselection.js,jquery.plugins/jquery.validate.js');
 			
 			// 当前位置
-			$this->params['_curlocal'] = Page::setLocal(Language::get('my_goods'), Url::toRoute(['my_goods/index']), Language::get('batch_edit'));
+			$this->params['_curlocal'] = Page::setLocal(Language::get('my_goods'), Url::toRoute(['my_goods/index']), Language::get('batchedit'));
 			
 			// 当前用户中心菜单
-			$this->params['_usermenu'] = Page::setMenu('my_goods', 'batch_edit');	
+			$this->params['_usermenu'] = Page::setMenu('my_goods', 'batchedit');	
 
-			$this->params['page'] = Page::seo(['title' => Language::get('batch_edit')]);
+			$this->params['page'] = Page::seo(['title' => Language::get('batchedit')]);
 			return $this->render('../my_goods.batch.html', $this->params);	
         }
         else
@@ -539,6 +537,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
             'if_show'             	=> intval($post['if_show']),
             'last_update'      		=> Timezone::gmtime(),
 			'isnew'					=> intval($post['isnew']),
+			'video'					=> $post['video'],
             'recommended'      		=> intval($post['recommended']),
 	    	'dt_id' 				=> intval($post['dt_id']),
             'tags'             		=> $post['tags']
@@ -827,7 +826,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			GoodsImageModel::updateAll(['sort_order' => 255], ['goods_id' => $goods_id]);
 			GoodsImageModel::updateAll(['sort_order' => 1], ['goods_id' => $goods_id, 'file_id' => $data['goods_file_id'][0]]); 
         }
-		
+
 		// 保存商品属性
 		if(isset($data['props']) && !empty($data['props']) && is_array($data['props']))
 		{
@@ -863,6 +862,15 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			!isset($data['exclusive']['status']) && $data['exclusive']['status'] = 0;
 			$exclusiveTool->savePromotoolItem(['goods_id' => $goods_id, 'config' => $config, 'status' => intval($data['exclusive']['status'])]);
 		}
+
+		// 保存主图视频 && 商品长图
+		if(!($video = UploadedFileModel::getInstance()->upload('filevideo', $data['goods']['store_id'], "video/", 0, "goods-{$goods_id}", 2))) {
+			$video = Yii::$app->request->post('video', '');
+		}
+		if(!($image = UploadedFileModel::getInstance()->upload('longimage', $data['goods']['store_id'], "goods/", 0, "long-{$goods_id}"))) {
+			$image = Yii::$app->request->post('long_image', '');
+		}
+		GoodsModel::updateAll(['long_image' => $image, 'video' => $video], ['goods_id' => $goods_id]);
 	
         return true;
 	}
@@ -978,7 +986,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 		foreach($gcategories as $key => $val) {
 			$goods['cate_name'] .= (($key == 0) ? "" : "\t") . $val['cate_name'];
 		}
-		$goods['publish_gcategory'] = $gcategories;
+		$goods['catalogs'] = $gcategories;
         return $goods;
     }
 	
@@ -1036,10 +1044,10 @@ class My_goodsController extends \common\controllers\BaseSellerController
 				'url'	=>	''
 			);
 		}
-		if(in_array($this->action->id, ['batch_edit']))
+		if(in_array($this->action->id, ['batchedit']))
 		{
 			$submenus[] = array(
-				'name'	=>	'batch_edit',
+				'name'	=>	'batchedit',
 				'url'	=>	''
 			);
 		}

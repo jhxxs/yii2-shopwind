@@ -54,10 +54,10 @@
 <script>
 $(function(){
 	$('#J_Publish').click(function(){
+		var id = '{$smarty.get.id|default:0}';
 		var params = { cate_id: $('.J_GetPublishId').val()};
-		<!--{if $smarty.get.id}-->
-		params = $.extend(params, { id: '{$smarty.get.id}'});
-		<!--{/if}-->
+		if(id > 0) Object.assign(params, { id: id});
+
 		window.location.href = url(['my_goods/{$action}', params]); 
 	});
 	
@@ -114,7 +114,7 @@ function ajax_gcategory(id, multilevel)
 {
 	$('.J_GetPublishId').val(id);
 	
-	$.getJSON("{url route='my_goods/ajaxgcategory'}", { 'cate_id':id, 'multilevel' : multilevel}, function(data){
+	$.getJSON("{url route='my_goods/ajaxgcategory'}", { cate_id:id, multilevel : multilevel}, function(data){
 		if(data.done)
 		{
 			li = '';
