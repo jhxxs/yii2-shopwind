@@ -97,11 +97,8 @@ class ApplyForm extends Model
 			// 编辑后，清空之前审核记录
 			$model->apply_remark = '';
 		}
+
 		$model->state = SgradeModel::find()->select('need_confirm')->where(['grade_id' => $post->sgrade])->scalar() ? Def::STORE_APPLYING : Def::STORE_OPEN;
-		if($model->state != Def::STORE_OPEN) {
-			$model->apply_remark = Language::get('apply_remark'); // 编辑后再次进入审核模式
-		}
-		
 		if($post->region_id) {
 			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
 		}
@@ -127,7 +124,7 @@ class ApplyForm extends Model
 			$this->errors = $model->errors ? $model->errors : Language::get('apply_fail');
 			return false;
 		}
-			
+		
        	if($post->cate_id > 0)
   		{
 			CategoryStoreModel::deleteAll(['store_id' => $model->store_id]);
@@ -138,11 +135,14 @@ class ApplyForm extends Model
 			$query->save();          
         }
 
-		// 添加店铺所有权
-		$this->insertStorePrivs($model->store_id);
+		if(!$this->store_id) {
+
+			// 添加店铺所有权
+			$this->insertStorePrivs($model->store_id);
 		
-		// 添加一条默认的运费模板（不用等开通后才添加，因为提交后，没有审核通过，也是可以编辑信息的）
-		DeliveryTemplateModel::addFirstTemplate($model->store_id);
+			// 添加一条默认的运费模板（不用等开通后才添加，因为提交后，没有审核通过，也是可以编辑信息的）
+			DeliveryTemplateModel::addFirstTemplate($model->store_id);
+		}
 		
 		// 不需要审核，店铺直接开通
 		if($model->state)

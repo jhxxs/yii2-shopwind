@@ -19,5 +19,6 @@ return array(
 	'phone_mob' => '手机',
     'admin_add' => '添加管理员',
     'add_ok' => '添加管理员成功',
-    'priv_edit' => '编辑权限'
+    'priv_edit' => '编辑权限',
+    'deposit' => '资产',
 );

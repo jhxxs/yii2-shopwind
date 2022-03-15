@@ -39,7 +39,8 @@ class StoreForm extends Model
 			$this->errors = Language::get('the_store_is_closed');
 			return false;
     	}
-		if ($store['state'] == Def::STORE_APPLYING) {
+
+		if ($store['state'] != Def::STORE_OPEN) {
 			$this->errors = Language::get('the_store_is_applying');
 			return false;
 		}

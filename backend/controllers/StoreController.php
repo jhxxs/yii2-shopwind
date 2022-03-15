@@ -135,6 +135,7 @@ class StoreController extends \common\controllers\BaseAdminController
 			$this->params['regions'] = RegionModel::getOptions(0);
 			$this->params['scategories'] = ScategoryModel::getOptions();
 			$this->params['sgrades'] = SgradeModel::getOptions();
+			$this->params['joinways'] = [Language::get('settled'), Language::get('selfsupport')];
 			
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,mlselection.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
@@ -171,7 +172,7 @@ class StoreController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id', 'sort_order', 'region_id', 'sgrade', 'recommended']);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id', 'sort_order', 'region_id', 'sgrade', 'joinway','recommended']);
 			
 			foreach(explode(',', Yii::$app->request->get('id', 0)) as $id) {
 				$model = new \backend\models\StoreForm(['store_id' => $id]);

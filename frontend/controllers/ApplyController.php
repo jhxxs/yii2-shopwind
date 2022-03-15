@@ -132,7 +132,6 @@ class ApplyController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'sgrade', 'cate_id']);
-			
 			$model = new \frontend\models\ApplyForm(['store_id' => Yii::$app->user->id]);
 			if(!($store = $model->save($post, true))) {
 				return Message::warning($model->errors);

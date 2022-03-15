@@ -79,4 +79,7 @@ return array(
     'company' => '企业',
     'personal' => '个人',
     'store_view' => '查看店铺',
+    'joinway' => '入驻类型',
+    'settled' => '加盟',
+    'selfsupport' => '自营'
 );

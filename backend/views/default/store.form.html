@@ -71,9 +71,13 @@
             <tr>
               <th class="paddingT15"><label>{$lang.sgrade}</label> </th>
               <td class="paddingT15 wordSpacing5"><select name="sgrade" id="sgrade">
-
                   {html_options options=$sgrades selected=$store.sgrade}
-
+                </select></td>
+            </tr>
+            <tr>
+              <th class="paddingT15"><label>{$lang.joinway}</label> </th>
+              <td class="paddingT15 wordSpacing5"><select name="joinway" id="joinway">
+                  {html_options options=$joinways selected=$store.joinway}
                 </select></td>
             </tr>
             <tr>
