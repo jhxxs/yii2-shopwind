@@ -106,7 +106,7 @@ class CartItem
 		$spec_2 = $params['spec_name_2'] ? $params['spec_name_2'] . ':' . $params['spec_2'] : $params['spec_2'];
 	
 		$specification = trim($spec_1 . ' ' . $spec_2);
-		$goods_image = $params['spec_image'] ? $params['spec_image'] : $params['default_image'];
+		$goods_image = $params['image'] ? $params['image'] : $params['default_image'];
 	
 		$product = array(
 			'userid'		=> intval(Yii::$app->user->id),

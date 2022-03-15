@@ -1,6 +1,5 @@
 <?php
 return array(
-    'spec_image' => '规格图片',
 	'give_integral_note'=>'买家购买该商品后可获得的积分，默认为0，设置后，卖家的这部分积分将被冻结，该积分将从您的账号中扣除，请慎重填写',
 	'rechange_price'=>'抵扣价款',
 	'rechange_price_note'=>'设置允许买家最多可使用多少积分抵扣价款',
@@ -50,7 +49,6 @@ return array(
     'no_goods_to_drop' => '请选择您要删除的商品',
     'drop_ok' => '删除商品成功',
     'image' => '图片',
-    'note_for_image' => '（可上传图片或直接输入完整的远程图片地址）',
     'character' => '状态',
     'character_array' => array(
         'show' => '上架的',

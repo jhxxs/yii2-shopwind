@@ -1467,7 +1467,7 @@ INSERT INTO `swd_goods_image` (`image_id`, `goods_id`, `image_url`, `thumbnail`,
 -- 转存表中的数据 `swd_goods_spec`
 --
 delete from `swd_goods_spec`;
-INSERT INTO `swd_goods_spec` (`spec_id`, `goods_id`, `spec_1`, `spec_2`, `price`, `mkprice`, `stock`, `sku`, `spec_image`, `sort_order`) VALUES
+INSERT INTO `swd_goods_spec` (`spec_id`, `goods_id`, `spec_1`, `spec_2`, `price`, `mkprice`, `stock`, `sku`, `image`, `sort_order`) VALUES
 (1, 1, '', '', '2999.00', '', 10000, '1000000000001', '', 1),
 (2, 2, '', '', '12999.00', '', 10000, '1000000000002', '', 1),
 (3, 3, '', '', '2499.00', '', 10000, '1000000000003', '', 1),

@@ -72,10 +72,10 @@ function spec_update(){
         tpl.find('*[item="price"]').append('<input type="hidden" name="price['+ item.spec_id +']" value="' + item.price + '" />' + item.price);
         tpl.find('*[item="stock"]').append('<input type="hidden" name="stock['+ item.spec_id +']" value="' + item.stock + '" />' + item.stock);
         tpl.find('*[item="sku"]').append('<input type="hidden" name="sku['+ item.spec_id +']" value="' + item.sku + '" /><input type="hidden" name="spec_id['+ item.spec_id +']" value="' + item.spec_id + '" />' + item.sku);
-		if(item.spec_image){
-			tpl.find('*[item="spec_image"]').append('<input type="hidden" name="spec_image['+ item.spec_id +']" value="' + item.spec_image + '" /><img height="20" width="20" src="' + url_format(item.spec_image) + '"/>');
+		if(item.image){
+			tpl.find('*[item="image"]').append('<input type="hidden" name="image['+ item.spec_id +']" value="' + item.image + '" /><img height="20" width="20" src="' + url_format(item.image) + '"/>');
 		}else{
-			tpl.find('*[item="spec_image"]').append('<input type="hidden" name="spec_image['+ item.spec_id +']" value=" " />');
+			tpl.find('*[item="image"]').append('<input type="hidden" name="image['+ item.spec_id +']" value=" " />');
 		}
         tpl.show();
         d_spec_item.before(tpl);
@@ -139,7 +139,7 @@ function spec_editor(){
         tpl.attr('ectype', 'data'); // 赋值一个ectype与规格项模板区别
         item.spec_1 && tpl.find('*[item="spec_1"]').val(item.spec_1);
         item.spec_2 && tpl.find('*[item="spec_2"]').val(item.spec_2);
-		item.spec_image && tpl.find('.spec_image').find('i').html('<img src="'+url_format(item.spec_image)+'" height="30" width="30"/><b title="删除">x</b>');
+		item.image && tpl.find('.spec_image').find('i').html('<img src="'+url_format(item.image)+'" height="30" width="30"/><b title="删除">x</b>');
         //tpl.find('.filePicker').attr('id', 'filePicker'+i);
 		
 		tpl.find('*[item="price"]').val(item.price);
@@ -242,7 +242,7 @@ function spec_editor(){
             var stock = $.trim($(this).find('*[item="stock"]').val());
             var sku = $.trim($(this).find('*[item="sku"]').val());
             var spec_id = $.trim($(this).find('*[item="spec_id"]').val());
-			var spec_image = $.trim($(this).find('.spec_image').find('i').find('img').attr('src'));
+			var image = $.trim($(this).find('.spec_image').find('i').find('img').attr('src'));
 
             var valid = (spec_1 || spec_2) ? true : false; // 该行数据是否有效
 
@@ -275,7 +275,7 @@ function spec_editor(){
                 'price': Number(price).toFixed(2),
                 'stock': Number(stock),
                 'sku':sku,
-				'spec_image':spec_image,
+				'image':image,
                 'spec_id':spec_id
             });
         });

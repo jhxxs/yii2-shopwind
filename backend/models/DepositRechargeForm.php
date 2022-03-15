@@ -57,14 +57,12 @@ class DepositRechargeForm extends Model
 			return false;
 		}
 		
-		$account = DepositAccountModel::find()->where(['userid' => $this->userid])->one();
-		
 		// 先创建交易记录
 		$model = new DepositTradeModel();
 		$model->tradeNo = DepositTradeModel::genTradeNo();
 		$model->bizOrderId = DepositTradeModel::genTradeNo(12, 'bizOrderId');
 		$model->bizIdentity = Def::TRADE_RECHARGE;
-		$model->buyer_id = $account->userid;
+		$model->buyer_id = $this->userid;
 		$model->seller_id = 0;
 		$model->amount = floatval($post->money);
 		$model->status = 'SUCCESS';

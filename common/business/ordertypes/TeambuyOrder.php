@@ -60,7 +60,7 @@ class TeambuyOrder extends NormalOrder
 			return false;
 		}
 
-		if(($goods = GoodsSpecModel::find()->alias('gs')->select('gs.spec_id,gs.price,gs.spec_1,gs.spec_2,gs.stock,gs.spec_image,g.goods_id,g.store_id,g.goods_name,g.default_image as goods_image,g.spec_name_1,g.spec_name_2')->where(['spec_id' => $spec_id, 'if_show' => 1, 'closed' => 0])->joinWith('goods g', false)->asArray()->one())) 
+		if(($goods = GoodsSpecModel::find()->alias('gs')->select('gs.spec_id,gs.price,gs.spec_1,gs.spec_2,gs.stock,gs.image,g.goods_id,g.store_id,g.goods_name,g.default_image as goods_image,g.spec_name_1,g.spec_name_2')->where(['spec_id' => $spec_id, 'if_show' => 1, 'closed' => 0])->joinWith('goods g', false)->asArray()->one())) 
 		{
 			$teambuy = TeambuyModel::find()->select('id,specs')->where(['goods_id' => $goods['goods_id'], 'status' => 1])->one();
 			if (!$teambuy || !($specs = unserialize($teambuy->specs)) || !isset($specs[$spec_id])) {
@@ -73,9 +73,9 @@ class TeambuyOrder extends NormalOrder
 			!empty($goods['spec_2']) && $goods['specification'] .= ' ' . $goods['spec_name_2'] . ':' . $goods['spec_2']; 
 				
 			// 兼容规格图片功能
-			if(isset($goods['spec_image']) && $goods['spec_image']) {
-				$goods['goods_image'] = $goods['spec_image'];
-				unset($goods['spec_image']);
+			if(isset($goods['image']) && $goods['image']) {
+				$goods['goods_image'] = $goods['image'];
+				unset($goods['image']);
 			}
 			$goods['goods_image'] = Page::urlFormat($goods['goods_image'], Yii::$app->params['default_goods_image']);
 				

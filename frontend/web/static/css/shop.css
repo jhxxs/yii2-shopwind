@@ -220,7 +220,7 @@
 .goods-attr .attribute .attr-detail .handle .sale-attr .handle_title { height: 44px;  line-height: 44px;  overflow: hidden;}
 
 .goods-attr .attribute .attr-detail .handle .sale-attr li a img{width: 34px; height: 34px; display:inline-block; margin-top:3px;}
-.goods-attr .attribute .attr-detail .handle .sale-attr li a span{display:inline-block;background:#fff; padding: 0 10px;}
+.goods-attr .attribute .attr-detail .handle .sale-attr li a span{display:inline-block;background:#fff; padding: 0 10px; min-width: 100px;}
 .goods-attr .attribute .attr-detail .handle .sale-attr li a i{ position: absolute;    top: 0px;    right: 3px;    color: #ee2346;    font-weight: bold;font-size: 8px; display: block;}
 .goods-attr .attribute .attr-detail .handle .sale-attr li.solid a,
 .goods-attr .attribute .attr-detail .handle .sale-attr a:hover{border: 1px solid #E4393C;}

@@ -117,7 +117,7 @@ class CartForm extends Model
 		}
 		
         // 是否有商品
-		if(!($specInfo = GoodsSpecModel::find()->alias('gs')->select('g.store_id, g.goods_id, g.goods_name, g.spec_name_1, g.spec_name_2, g.default_image, gs.spec_id, gs.spec_1, gs.spec_2, gs.stock, gs.price,gs.spec_image')->joinWith('goods g', false)->where(['spec_id' => $post->spec_id])->asArray()->one())) {
+		if(!($specInfo = GoodsSpecModel::find()->alias('gs')->select('g.store_id, g.goods_id, g.goods_name, g.spec_name_1, g.spec_name_2, g.default_image, gs.spec_id, gs.spec_1, gs.spec_2, gs.stock, gs.price,gs.image')->joinWith('goods g', false)->where(['spec_id' => $post->spec_id])->asArray()->one())) {
 			$this->errors = Language::get('no_such_goods');
 			return false;
 		}

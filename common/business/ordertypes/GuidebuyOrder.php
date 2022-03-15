@@ -70,7 +70,7 @@ class GuidebuyOrder extends NormalOrder
 		// 记录选中的商品规格
 		foreach($this->post->specs as $key => $value)
 		{
-			if(($goods = GoodsSpecModel::find()->alias('gs')->select('gs.spec_id,gs.price,gs.spec_1,gs.spec_2,gs.stock,gs.spec_image,g.goods_id,g.store_id,g.goods_name,g.default_image as goods_image,g.spec_name_1,g.spec_name_2')->where(['spec_id' => $value->spec_id])->joinWith('goods g', false)->asArray()->one())) 
+			if(($goods = GoodsSpecModel::find()->alias('gs')->select('gs.spec_id,gs.price,gs.spec_1,gs.spec_2,gs.stock,gs.image,g.goods_id,g.store_id,g.goods_name,g.default_image as goods_image,g.spec_name_1,g.spec_name_2')->where(['spec_id' => $value->spec_id])->joinWith('goods g', false)->asArray()->one())) 
 			{
 				// 读取商品促销价格
 				if(($promotion = $promotool->getItemProInfo($goods['goods_id'], $goods['spec_id']))) {
@@ -81,9 +81,9 @@ class GuidebuyOrder extends NormalOrder
 				!empty($goods['spec_2']) && $goods['specification'] .= ' ' . $goods['spec_name_2'] . ':' . $goods['spec_2']; 
 				
 				// 兼容规格图片功能
-				if(isset($goods['spec_image']) && $goods['spec_image']) {
-					$goods['goods_image'] = $goods['spec_image'];
-					unset($goods['spec_image']);
+				if(isset($goods['image']) && $goods['image']) {
+					$goods['goods_image'] = $goods['image'];
+					unset($goods['image']);
 				}
 				$goods['goods_image'] = Page::urlFormat($goods['goods_image'], Yii::$app->params['default_goods_image']);
 				$result[$key] = $goods;

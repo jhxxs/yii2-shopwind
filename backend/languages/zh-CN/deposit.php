@@ -81,6 +81,7 @@ return array(
 	'orderId' => '商户订单号',
 	'deposit_drawlist' => '提现记录',
 	'deposit_rechargelist' => '充值记录',
+	'deposit_recharge' => '账户充值',
 	
 	'month' => '月份',
 	'income_count' => '收入笔数',

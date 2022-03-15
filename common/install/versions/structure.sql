@@ -820,7 +820,7 @@ CREATE TABLE IF NOT EXISTS `swd_goods_spec` (
   `mkprice` decimal(10,2) DEFAULT '0.00',
   `stock` int(11) DEFAULT '0',
   `sku` varchar(60) DEFAULT '',
-  `spec_image` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `sort_order` tinyint(3) unsigned DEFAULT '255',
   PRIMARY KEY (`spec_id`),
   KEY `goods_id` (`goods_id`)

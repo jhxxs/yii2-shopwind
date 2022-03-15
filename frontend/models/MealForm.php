@@ -85,7 +85,7 @@ class MealForm extends Model
 				foreach($items as $k => $v) {
 					$allPrice += $v['price'];
 					$items[$k]['goods_image'] = Page::urlFormat($v['goods_image'], Yii::$app->params['default_goods_image']);
-					if(($specs = GoodsSpecModel::find()->select('goods_id,price,spec_1,spec_2,spec_id,spec_image as image')->where(['goods_id' => $v['goods_id']])->asArray()->all())) {
+					if(($specs = GoodsSpecModel::find()->select('goods_id,price,spec_1,spec_2,spec_id,image')->where(['goods_id' => $v['goods_id']])->asArray()->all())) {
 						foreach($specs as $k1 => $v1) {
 							$specs[$k1]['image'] = Page::urlFormat($v1['image']);
 						}
