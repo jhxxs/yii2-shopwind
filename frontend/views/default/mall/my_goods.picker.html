@@ -1,0 +1,55 @@
+{include file="user.header.html"}
+<div id="main" class="clearfix"> {include file="user.menu.html"}
+  <div id="right"> {include file="user.curlocal.html"}
+    <div class="wrapful"> {include file="user.submenu.html"}
+      <div class="wrap publish">
+        <div class="public">
+          <form method="post" id="goods_form">
+            <h5 class="box-title"></h5>
+            <ul class="box-body">
+              <li class="subbox clearfix">
+                <label class="subbox-title">商品类目：</label>
+                <div class="subbox-body">
+                  <!--{if $goods.catalogs}-->
+                  <!--{foreach from=$goods.catalogs item=item name=fe_item}-->
+                  <!--{if !$smarty.foreach.fe_item.first}--> >
+                  <!--{/if}-->
+                  <span class="border-field">{$item.cate_name}</span>
+                  <!--{/foreach}-->
+                  <!--{else}-->
+                  <span class="red">请先选择分类</span>
+                  <!--{/if}-->
+                  <a class="btn-gedit" href="{url route='my_goods/publish' action='picker'}">选择类目</a>
+                  <input type="hidden" id="cate_id" name="cate_id" value="{$smarty.get.cate_id}" />
+                </div>
+              </li>
+              <li class="subbox clearfix">
+                <label class="subbox-title">商品链接：</label>
+                <div class="subbox-body">
+                  <textarea name="urls" class="text width_normal" style="width: 500px; height:200px;"></textarea>
+                  <p class="gray mt5">每个链接放一行</p>
+                </div>
+              </li>
+              <!--{if $platforms}-->
+              <li class="subbox clearfix">
+                <label class="subbox-title">商品来源：</label>
+                <div class="subbox-body">
+                  <select name="platform">
+                    <!--{foreach from=$platforms item=item key=key}-->
+                    <option value="{$key}">{$item}</option>
+                    <!--{/foreach}-->
+                  </select>
+                </div>
+              </li>
+              <!--{/if}-->
+            </ul>
+            <div class="issuance">
+              <input type="submit" class="btn" value="{$lang.submit}" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{include file="user.footer.html"}

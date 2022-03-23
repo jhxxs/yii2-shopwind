@@ -145,5 +145,9 @@ return array(
     'spec_not_complate' => '规格填写不完整',
     'spec_name_required' => '规格名称请至少填写一个',
 	'follow_spec_price_invalid' => '以下规格价格未填写或格式有误:',
-    
+    'goods_picker' => '采集商品',
+    'import_ok' => '导入完成',
+    'pickering' => '开始采集商品...',
+    'platform_empty'   => '请选择商品来源渠道',
+    'no_plugin' => '请选配置插件'
 );

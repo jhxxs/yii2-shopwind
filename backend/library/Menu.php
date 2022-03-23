@@ -291,7 +291,11 @@ class Menu
 						'url'   => Url::toRoute(['plugin/index', 'instance' => 'express']),
 						'priv'  => ['key' => 'plugin|express|all', 'label' => Language::get('plugin_express')]
 					),
-					
+					'datapicker' => array(
+						'text' => Language::get('plugin_datapicker'),
+						'url'  => Url::toRoute(['plugin/index', 'instance' => 'datapicker']),
+						'priv' => ['key' => 'plugin|datapicker|all', 'label' => Language::get('plugin_datapicker')]
+					),
 					'uploader' => array(
 						'text'  => Language::get('plugin_uploader'),
 						'url'   => Url::toRoute(['plugin/index', 'instance' => 'uploader']),

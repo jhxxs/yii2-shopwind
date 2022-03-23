@@ -337,6 +337,88 @@ class My_goodsController extends \common\controllers\BaseSellerController
 		$this->params['page'] = Page::seo(['title' => Language::get('goods_add')]);
 		return $this->render('../my_goods.publish.html', $this->params);		
 	}
+
+	/**
+	 * 商品采集
+	 */
+	public function actionPicker()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['cate_id']);
+
+			$gcategories = GcategoryModel::getAncestor($post->cate_id);
+			$goods['catalogs'] = $gcategories;
+			$this->params['goods'] = $goods;
+			if(($client = Plugin::getInstance('datapicker')->autoBuild(false))) {
+				$this->params['platforms'] = $client->platforms();
+			}
+
+			// 当前位置
+			$this->params['_curlocal'] = Page::setLocal(Language::get('my_goods'), Url::toRoute('my_goods/index'), Language::get('goods_picker'));
+			
+			// 当前用户中心菜单
+			$this->params['_usermenu'] = Page::setMenu('my_goods', 'goods_picker');
+
+			$this->params['page'] = Page::seo(['title' => Language::get('goods_picker')]);
+			return $this->render('../my_goods.picker.html', $this->params);
+		}
+		else 
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id']);
+			$client = Plugin::getInstance('datapicker')->autoBuild(false, ['platform' => $post->platform]);
+			if(!$client) {
+				return Message::warning(Language::get('no_plugin'));
+			}
+
+			if(empty($post->urls) || !($post->urls = explode(PHP_EOL, $post->urls))) {
+				return Message::warning(Language::get('no_data'));
+			}
+
+			$items = [];
+			foreach($post->urls as $url) {
+				if(($id = $client->getItemId($url))) {
+					$items[] = $id;
+				}
+			}
+
+			return Message::display(Language::get('pickering'), Url::toRoute(['my_goods/dopicker', 'platform' => $post->platform, 'cate_id' => $post->cate_id, 'items' => implode('-', $items)]));
+		}
+	}
+
+	/**
+	 * 采集到商品数据后
+	 * 执行单个商品循环导入本地数据库
+	 */
+	public function actionDopicker()
+	{
+		if($this->addible() !== true) {
+			return Message::warning($this->errors);
+		}
+		
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['cate_id']);
+
+		if($post->items)
+		{
+			if(!isset($post->platform) || empty($post->platform)) {
+				return Message::warning(Language::get('platform_empty'));
+			}
+
+			$items = explode('-',  $post->items);
+			$itemid = $items[0];
+
+			$model = new \frontend\models\GoodsForm(['store_id' => $this->params['visitor']['store_id']]);
+			if(!$model->import($post, $itemid)) {
+				return Message::warning($model->errors);
+			}
+			unset($items[0]);
+			array_values($items);
+
+			return Message::display(sprintf("成功导入【%s】%s", $itemid, $items ? '，开始导入下一个商品' : ''), Url::toRoute(['my_goods/dopicker', 'cate_id' => $post->cate_id, 'items' => implode('-', $items)]));
+		} 
+		
+		return Message::display(Language::get('import_ok'), Url::toRoute('my_goods/index'));
+	}
 	
 	public function actionDeleteimage()
 	{
@@ -1035,7 +1117,11 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			array(
                 'name'  => 'goods_add',
                 'url'   => Url::toRoute('my_goods/add'),
-            )
+            ),
+			array(
+				'name' 	=> 'goods_picker',
+				'url' 	=> Url::toRoute('my_goods/picker')
+			)
         );
 		if(in_array($this->action->id, ['edit']))
 		{

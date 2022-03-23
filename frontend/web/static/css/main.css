@@ -4256,6 +4256,10 @@
     font-size: 14px;
 }
 
+#page-article .article-detail {
+    max-width: 100%;
+}
+
 #page-article .col-sub {
     float: left;
     width: 231px;

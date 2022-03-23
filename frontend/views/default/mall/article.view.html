@@ -33,7 +33,7 @@
       <div class="content">
 	     <div class="article-info">
 	        <h1>{$article.title|escape}</h1>
-            <h2>{$article.add_time|date_format:"%Y.%m.%d %H:%M"}</h2>
+            <h2>{$article.add_time|date_format:"%Y-%m-%d %H:%M"}</h2>
          </div>
 		 <div class="article-detail">
             {$article.description|escape:editor}

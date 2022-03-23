@@ -316,6 +316,7 @@ return array(
     'plugin_editor'  => '文本编辑',
     'plugin_uploader'  => '上传组件',
     'plugin_sms'    => '手机短信',
+	'plugin_datapicker' => '数据采集',
 	'website' => '网站',
     'acategory' => '分类管理',
     'article' => '文章',
