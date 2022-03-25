@@ -43,6 +43,11 @@ class CashcardForm extends Model
 			$this->errors = Language::get('password_len_error');
 			return false;
 		}
+
+		if(($expire = $this->getExpireTime($post->expire_time, false)) > 0 && $expire < Timezone::gmtime()) {
+			$this->errors = Language::get('expire_time_invalid');
+			return false;
+		}
 		
 		return true;
 	}
@@ -68,7 +73,7 @@ class CashcardForm extends Model
 
 			if(isset($post->$value)) {
 				if($value == 'expire_time') {
-					$post->$value = $post->$value ? Timezone::gmstr2time_end($post->expire_time) : 0;
+					$post->$value = $this->getExpireTime($post->$value);
 				}
 				$model->$value = $post->$value;
 			}
@@ -95,19 +100,37 @@ class CashcardForm extends Model
 			$this->errors = Language::get('quantity_limit');
 			return false;
 		}
-		
+
 		for($i = 1; $i <= $post->quantity; $i++) {
 			$model = new CashcardModel();
 			$model->name = $post->name;
 			$model->cardNo = CashcardModel::genCardNo();
 			$model->money = $post->money;
 			$model->password = $post->password ? $post->password : mt_rand(100000,999999);
-			$model->expire_time = $post->expire_time ? Timezone::gmstr2time_end($post->expire_time) : 0;
+			$model->expire_time = $this->getExpireTime($post->expire_time);
 			$model->active_time = 0;
 			$model->useId = 0;
 			$model->add_time = Timezone::gmtime();
 			$model->save();
 		}	
 		return true;
+	}
+	
+	/**
+	 * 将时间字符串转成时间戳
+	 * @var string $value 过期时间字符串
+	 * @var boolean $force 过期时间不合适是，强制调整时间
+	 */
+	private function getExpireTime($value, $force = true) {
+		if(!$value) {
+			return 0;
+		}
+
+		$expire = Timezone::gmstr2time_end($value);
+		if($force && $expire < Timezone::gmtime()) {
+			$expire = Timezone::gmstr2time_end(Timezone::localDate('Y-m-d', true));
+		}
+
+		return $expire;
 	}
 }

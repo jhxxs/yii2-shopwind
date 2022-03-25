@@ -70,7 +70,7 @@ class CashcardController extends \common\controllers\BaseAdminController
 				$list[$key]['active_time'] = Timezone::localDate('Y-m-d H:i:s', $value['active_time']);
 				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['useId']])->scalar();
 			}
-			
+
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
@@ -114,6 +114,7 @@ class CashcardController extends \common\controllers\BaseAdminController
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
             	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
 			]);
+
 			$this->params['page'] = Page::seo(['title' => Language::get('cashcard_edit')]);
 			return $this->render('../cashcard.form.html', $this->params);
 		}

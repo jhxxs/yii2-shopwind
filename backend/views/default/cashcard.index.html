@@ -95,8 +95,10 @@
 					}
 				}
 				, { field: 'add_time', title: '生成时间', width: 180, sort: true, align: 'center' }
-				, { field: 'expire_time', title: '过期时间', width: 180, sort: true, align: 'center' }
-				, { field: 'active_time', title: '激活时间', width: 180, sort: true, align: 'center', }
+				, { field: 'expire_time', title: '过期时间', width: 180, sort: true, align: 'center', templet: function (res) {
+					return res.expire_time ? res.expire_time : '无限制';
+				} }
+				, { field: 'active_time', title: '激活时间', width: 180, sort: true, align: 'center' }
 				, {
 					field: 'username', title: '使用者', width: 180, align: 'center', templet: function (res) {
 						return res.username ? res.username : '';

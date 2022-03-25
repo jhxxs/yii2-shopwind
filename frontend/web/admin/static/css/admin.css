@@ -967,7 +967,7 @@ form label.right {
 .flexigrid {
     margin:10px;
     position: relative;
-    z-index: 1;
+    z-index: 900;
     overflow: hidden;
     background-color: #fff;
     padding:20px;

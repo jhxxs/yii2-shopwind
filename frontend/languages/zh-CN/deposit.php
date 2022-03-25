@@ -96,6 +96,8 @@ return array(
 	'refund_to_buyer'			=> '退款给买家',
 	'hasrefund'					=> '有退款',
 	
+	'cardNo_empty'				=> '充值卡号不能为空',
+	'card_password_empty'		=> '充值卡密码不能为空',
 	'cashcard_verify_fail'		=> '充值卡验证失败',
 	'cashcard_already_used'		=> '该充值卡已充值',
 	'cashcard_already_expired'  => '该充值卡已过期',

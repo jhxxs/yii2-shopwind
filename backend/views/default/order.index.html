@@ -19,16 +19,15 @@
           {$lang.order_amount_from}
           <input class="queryInput2" type="text" value="{$smarty.get.order_amount_from}" name="order_amount_from" />
           {$lang.order_amount_to}
-          <input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.order_amount_to}"
-            name="order_amount_to" class="pick_date" />
+          <input class="queryInput2 pick_date" type="text" style="width:60px;" value="{$smarty.get.order_amount_to}"
+            name="order_amount_to" />
           </div>
           <div class="webkit-box box-align-center mt20">
           {$lang.add_time_from}
-          <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
-            name="add_time_from" class="pick_date" />
+          <input class="queryInput pick_date" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
+            name="add_time_from" />
           {$lang.add_time_to}
-          <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
-            class="pick_date" />
+          <input class="queryInput pick_date" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to" />
           <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7" value="{$lang.query}" />
           <!--{if $filtered}-->
           <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='order/index'}">{$lang.cancel_query}</a>

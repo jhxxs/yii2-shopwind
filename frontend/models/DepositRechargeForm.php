@@ -33,8 +33,13 @@ class DepositRechargeForm extends Model
 	 */
 	public function formData(&$post = null)
 	{
+		if(empty($post->payment_code && empty($post->tradeNo))) {
+			$this->errors = Language::get('payment_not_available');
+			return false;
+		}
+
 		// 创建新的充值交易
-		if(empty($post->tradeNo)) 
+		if(empty($post->tradeNo))
 		{
 			$tradeNo = DepositTradeModel::genTradeNo();
 			//$payment_code = $post->payment_code;

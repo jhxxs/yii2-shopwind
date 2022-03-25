@@ -17,6 +17,7 @@
                 <dl class="bank-list clearfix" ectype="online">
                   <dt style="line-height:35px;">充值渠道：</dt>
                   <dd>
+                    <!--{if $payments}-->
                     <ul class="ui-list-icons clearfix">
                       <!--{foreach from=$payments item=payment name=fe_payment}-->
                       <li class="clearfix" >
@@ -25,12 +26,15 @@
                       </li>
                       <!--{/foreach}-->
                     </ul>
+                    <!--{else}-->
+                    <p class="red mt10">平台未配置充值通道</p>
+                    <!--{/if}-->
                   </dd>
                 </dl>
                 <dl class="clearfix">
                   <dt>充值金额：</dt>
                   <dd>
-                    <input type="text" name="money" class="text" value="" />
+                    <input type="text" name="money" class="width_short text" value="" />
                     元</dd>
                 </dl>
                 <dl class="clearfix">

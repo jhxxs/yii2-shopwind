@@ -34,9 +34,8 @@
             <!--{/if}-->
             <tr>
               <th class="paddingT15"><label>{$lang.expire_time}</label></th>
-              <td class="paddingT15 wordSpacing5"><input type="text"
-                  value="{$cashcard.expire_time|date_format:'%Y-%m-%d %H:%M:%S'}" name="expire_time"
-                  class="pick_date" id="expire_time" />
+              <td class="paddingT15 wordSpacing5">
+                <input type="text" value="{$cashcard.expire_time|date_format:'%Y-%m-%d %H:%M:%S'}" id="expire_time" name="expire_time" class="pick_date" />
                 <label class="field_notice">{$lang.expire_time_desc}</label>
               </td>
             </tr>

@@ -14,6 +14,7 @@ return array(
     'cashcard_list' => '充值卡列表',
     'expire_time' => '过期时间',
     'expire_time_desc' => '过期时间，留空则表明永不过期',
+    'expire_time_invalid' => '过期时间非法',
     'password_desc' => '卡密码，留空则为随机密码',
     'name' => '卡名称',
     'set_ok' => '设置成功',
@@ -28,5 +29,5 @@ return array(
     'no_data' => '没有数据',
     'actived_disallow' => '卡已激活，不允许修改',
     'cashcard_add' => '新增充值卡',
-     'cashcard_edit' => '编辑充值卡' 
+    'cashcard_edit' => '编辑充值卡',
 );

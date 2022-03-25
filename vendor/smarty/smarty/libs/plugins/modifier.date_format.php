@@ -29,8 +29,8 @@
  */
 function smarty_modifier_date_format($string, $format = null, $default_date = '', $formatter = 'auto')
 {
-	// @shopwind for empty don't format and set timezone, use '&nbsp;' in order to occupy the space.
-	if(!$string) return '&nbsp;';
+	// @shopwind for empty don't format and set timezone, use '' in order to occupy the space.
+	if(!$string) return '';
 	if($timezone = \Yii::$app->params['time_zone']) {
 		$string += ($timezone * 3600);
 	}

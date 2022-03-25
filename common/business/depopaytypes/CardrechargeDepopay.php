@@ -52,13 +52,14 @@ class CardrechargeDepopay extends IncomeDepopay
 		
 		//$tradeNo = $extra_info['tradeNo'];
 		
-		/* 插入充值记录 */
+		// 插入充值记录
 		if(!$tradeInfo = $this->_insert_recharge_info($trade_info, $extra_info)) {
 			$this->setErrors('50005');
 			return false;
 		}
-		/* 插入收支记录 */
-		if(!$this->_insert_record_info($tradeInfo)) {
+
+		// 插入收支记录
+		if(!$this->_insert_cashcard_info($tradeInfo)) {
 			$this->setErrors('50020');
 			return false;
 		}
@@ -113,7 +114,7 @@ class CardrechargeDepopay extends IncomeDepopay
 	}
 	
 	/* 充值卡充值 */
-	private function _insert_record_info($tradeInfo = null)
+	private function _insert_cashcard_info($tradeInfo = null)
 	{
 		$time = Timezone::gmtime();
 		
