@@ -189,7 +189,8 @@ class DepositController extends \common\controllers\BaseAdminController
 		}
 		else
 		{
-			$query = DepositTradeModel::find()->select('trade_id,tradeNo,payTradeNo,bizOrderId,title,amount,status,flow,buyer_id,add_time,pay_time,end_time');
+			$query = DepositTradeModel::find()->alias('dt')
+				->select('trade_id,tradeNo,payTradeNo,bizOrderId,title,amount,status,flow,buyer_id,add_time,pay_time,end_time');
 
 			$query = $this->getTradeConditions($post, $query)->orderBy(['trade_id' => SORT_DESC]);
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
