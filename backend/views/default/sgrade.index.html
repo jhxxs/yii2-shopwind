@@ -54,22 +54,21 @@
 			, cols: [[
 				{ type: 'checkbox', fixed: 'left' }
 				, { field: 'grade_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
-				, { field: 'grade_name', title: '等级名称', width: 100 }
+				, { field: 'grade_name', title: '等级名称', width: 200 }
 				, {
 					field: 'goods_limit', title: '允许发布商品数', width: 160, templet: function (res) {
 						return res.goods_limit > 0 ? res.goods_limit : lang.no_limit;
 					}
 				}
 				, {
-					field: 'space_limit', title: '上传空间大小(MB)', width: 160, sort: true, templet: function (res) {
+					field: 'space_limit', title: '上传空间大小(MB)', width: 260, sort: true, templet: function (res) {
 						return res.space_limit > 0 ? res.space_limit : lang.no_limit;
 					}
 				}
 				, { field: 'charge', title: '收费标准', width: 160, sort: true, align: 'center' }
-				, { field: 'sgrade', title: '店铺等级', width: 210, sort: true }
 				, {
 					field: 'need_confirm', title: '需要审核', width: 120, sort: true, align: 'center', templet: function (res) {
-						return res.need_confirm == 1 ? '<em class="no" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="' + res.grade_id + '" fieldvalue="0" title="' + lang.editable + '"><i class="fa fa-ban"></i>' + lang.no + '</em>' : '<em class="yes" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="' + res.grade_id + '" fieldvalue="1" title="' + lang.editable + '"><i class="fa fa-check-circle"></i>' + lang.yes + '</em>';
+						return res.need_confirm == 1 ? '<em class="yes" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="' + res.grade_id + '" fieldvalue="1" title="' + lang.editable + '"><i class="fa fa-check-circle"></i>' + lang.yes + '</em>' : '<em class="no" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="' + res.grade_id + '" fieldvalue="0" title="' + lang.editable + '"><i class="fa fa-ban"></i>' + lang.no + '</em>';
 					}
 				}
 				, { field: 'sort_order', title: '排序', width: 90, edit: 'text', sort: true, align: 'center' }
