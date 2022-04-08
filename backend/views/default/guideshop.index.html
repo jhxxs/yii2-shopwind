@@ -78,7 +78,13 @@
 			$.each(checkStatus.data, function (i, item) {
 				items.push(item.id);
 			});
-			if (obj.event === 'export') {
+			if (obj.event === 'batdel') {
+				var btnObj = $('[lay-event="' + obj.event + '"]');
+				btnObj.attr('confirm', '删除后将不能恢复，确认删除这 ' + items.length + ' 项吗？');
+				ajaxRequest(btnObj, url(['guideshop/delete', { id: items.join(',') }]), function () {
+					table.reload('tablegrid');
+				});
+			} else if (obj.event === 'export') {
 				window.location.href = url(['guideshop/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
 			}
 		});
