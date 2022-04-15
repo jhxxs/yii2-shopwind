@@ -10,37 +10,34 @@ $(function(){
 	});
 });
 </script>
-<div class="content1">
+<div class="content1" style="padding: 15px;">
   <div id="warning"></div>
   <form method="post" action="{url route='seller_order/printed' order_id=$order_id}" target="iframe">
     <div class="print-area J_PrintArea">
-      <style type="text/css" media="all">
-			.print-area { max-height:500px; overflow-y:scroll; color:#000}
-			.print-area .item { margin-right:20px;  page-break-after:always;}
+    <style type="text/css" media="all">
+			.print-area { width: 100%; height: 500px;  overflow-y:scroll; color:#000}
+			.print-area .item { margin-right: 10px; page-break-after:always;}
 			.print-area .item .hd { font-size:18px; text-align:center;line-height:38px;height:38px;}
-			.print-area table{ border-spacing:0px; line-height:18px;border-collapse:separate}
-			.print-area table th,.print-area table td{ background:#fff; width:20%; font-weight:normal;padding:10px 0; font-size:14px;border:1px #000000 solid;}
-			.print-area table td{ width:30%}
+			.print-area table{ border-spacing:0px; line-height:18px;border-collapse:separate; border:0; width: 100%;}
+			.print-area table th,.print-area table td{ background:#fff; width:15%; font-weight:normal;padding:10px 0; font-size:12px;border:1px #000000 solid;}
+			.print-area table td{ width:35%}
 			.print-area table tr td span,.print-area table tr th span{ padding:0 5px; display:block}
-			.print-area table tr span i{ font-size:14px; font-style:normal}
+			.print-area table tr span i{ font-size:12px; font-style:normal}
 			.print-area table td.noborder,.print-area table th.noborder{ border:0;width:50%;}
-	</style>
-      <style type="text/css" media="print">
-			.print-area { max-height:2000px;}
-			.print-area .item .hd { font-size:38px;line-height:38px;height:38px;margin:60px 0 50px 0;}
-			.print-area table{ line-height:28px;}
-			.print-area table th,.print-area table td{ font-size:22px; width:9%; text-align:left}
-			.print-area table td{ width:41%}
-			.print-area table tr span i{ font-size:22px}
+	  </style>
+    <style type="text/css" media="print">
+			.print-area { height:auto; overflow-y:visible;}
+      .print-area table{ width: calc(100% - 120px);/* for chrome */}
+      .print-area table th,.print-area table td,print-area table tr span i{ font-size:14px;}
 		</style>
       
       <!--{foreach from=$orders item=order name=fe_order}-->
       <div class="item mb20">
         <div class="hd">销售清单</div>
-        <table border="0" width="100%" height="500">
+        <table>
           <tr>
             <td class="noborder" colspan="2"><span>卖家：{$order.seller_name}</span></td>
-            <td class="noborder" colspan="2" align="right"><span style="text-align:right">制单时间：{$now|date_format:"%Y.%m.%d"}</span></td>
+            <td class="noborder" colspan="2" style="text-align: right;"><span>制单时间：{$now|date_format:"%Y.%m.%d"}</span></td>
           </tr>
           <tr>
             <th><span>订单编号</span></th>
@@ -105,8 +102,8 @@ $(function(){
       <!--{/foreach}--> 
     </div>
     <div class="center mt20 submit">
+      <input type="button" id="cancel_button" class="btn2 mr10" value="取消打印" />
       <input type="button" id="confirm_button" class="btn" value="开始打印" />
-      <input type="button" id="cancel_button" class="btn2" value="取消打印" />
     </div>
   </form>
 </div>
