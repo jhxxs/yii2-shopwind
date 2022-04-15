@@ -62,7 +62,6 @@ class SDK
 		}
 
 		$result = json_decode($response);
-		\common\library\Page::writeLog('fsfsd', $result);
 		if($result->retcode != '0000') {
 			$this->errors = $result->data;
 			return false;
@@ -85,6 +84,8 @@ class SDK
 			$result['specs'][$key]['spec_2'] = $value['spec_1'];
 			$result['specs'][$key]['spec_1'] = $tmp;
 		}
+
+		return $result;
 	}
 
 	/**
@@ -115,12 +116,11 @@ class SDK
 				$html .= '<img src="'+$value+'">';
 			}
 		}
-
 		elseif(isset($item->descUrl) && !empty($item->descUrl)) {
-			$html = '<iframe frameborder="0" width="100%" height="100%" scrolling="no" src="'+$item->descUrl+'"></iframe>';
+			$html = '<iframe frameborder="0" width="100%" height="100%" scrolling="no" src="'.$item->descUrl.'"></iframe>';
 		}
 
-		return $html;
+		return str_replace('data-lazyload=', 'src=', $html);
 	}
 
 	public function getSdk($config, $instance, $code)
@@ -201,7 +201,7 @@ class Taobao extends SDK
 		if(empty($result['specs'])) {
 			$result['specs'][] = $defaultSpec;
 		}
-
+		
 		return $hasImg > 1 ? $this->translate($result) : $result;
 	}
 
