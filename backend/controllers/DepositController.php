@@ -202,7 +202,7 @@ class DepositController extends \common\controllers\BaseAdminController
 				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
 				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
 				$list[$key]['buyer'] = UserModel::find()->select('username')->where(['userid' => $value['buyer_id']])->scalar();
-				$list[$key]['status'] 	= Language::get(strtolower($value['status']));
+				$list[$key]['status'] = Language::get(strtolower($value['status']));
 
 				$partyInfo = DepositTradeModel::getPartyInfoByRecord($value['buyer_id'], $value);
 				$list[$key]['party'] = $partyInfo['name'];
