@@ -39,15 +39,17 @@ class GoodsForm extends Model
 	 */
 	public function import($post, $itemid)
 	{
-		$session = Yii::$app->session;
+		$cache = Yii::$app->cache;
+		$cachekey = md5((__METHOD__) . var_export(func_get_args(), true));
+		$result = $cache->get($cachekey);
 
-		if(empty(($result = $session->get($itemid)))) {
+		if ($result === false) {
 			$client = Plugin::getInstance('datapicker')->autoBuild(false, ['platform' => $post->platform]);
 			if(!$client || !($result = $client->detail($itemid))) {
 				$this->errors = $client->errors;
 				return false;
 			}
-			$session->set($itemid, $result);
+			$cache->set($cachekey, $result, 3600 * 24 * 2);
 		}
 
 		$model = new GoodsModel();
