@@ -159,6 +159,9 @@ function ajax_gcategory(id, multilevel)
 				$('.J_CategoryPath').html(category_path.substr(1) + '...');
 				$('#J_Publish').attr('class','').attr('disabled', true);
 			}
+
+			var cols = $('.cc-list-each').length;
+			$('.cc-list').css('width', cols > 4 ? cols * 238 : '100%');
 		}
 	});
 }

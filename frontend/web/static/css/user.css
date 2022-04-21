@@ -1351,7 +1351,7 @@ a:hover {color: #108ee9;}
 .cate-cascading .cc-nav{width:24px; display:block; position:absolute;top:50%; height:80px; background:url(../images/member/T13PGlXfdfXXXXXXXX-261-188.png) no-repeat;margin-top:-41px;}
 .cate-cascading .cc-prev{left:0; background-position:0px -60px;}
 .cate-cascading .cc-next{right:0; background-position:-24px -60px}
-.cc-listwrap{border-left:#d5e4fa 1px solid; border-right:#d5e4fa 1px solid; position:relative; height:100%;width:948px;}
+.cc-listwrap{border-left:#d5e4fa 1px solid; border-right:#d5e4fa 1px solid; position:relative; height:100%;width:948px;overflow-y:hidden; overflow-x:scroll}
 .cc-list{ position:absolute;top:0;left:0;height:100%; background:#fff;}
 .cc-list-each{float:left; color:#404040; width:236px; overflow-y:auto;overflow-x:auto;border-right:#d5e4fa 1px solid;}
 .cc-tree-group{ height:292px;padding:3px;}
