@@ -45,16 +45,10 @@ class UserForm extends Model
 	 */
 	public function getBuyerStat()
 	{
-		$array = array(
-			'pending'  => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_PENDING])->count(),
-			'accepted' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_ACCEPTED])->count(),
-            'shipped'  => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_SHIPPED])->count(),
-            'finished' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED])->count(),
-            'evaluation' => OrderModel::find()->where(['buyer_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED, 'evaluation_status' => 0])->count(),
-			'my_question' => GoodsQaModel::find()->where(['userid' => Yii::$app->user->id, 'if_new' => 1])->andWhere(['!=', 'reply_content', ''])->count(), // for mobile
-			'refund'  => RefundModel::find()->where(['and', ['buyer_id' => Yii::$app->user->id], ['not in', 'status', ['SUCCESS', 'CLOSED']]])->count() // for mobile
-        );
-		return $array;
+		return array_merge(
+			$this->getStatistics('buyer_id'),
+			['my_question' => GoodsQaModel::find()->where(['userid' => Yii::$app->user->id, 'if_new' => 1])->andWhere(['!=', 'reply_content', ''])->count()]
+		);
 	}
 	
 	/**
@@ -63,19 +57,36 @@ class UserForm extends Model
 	 */
 	public function getSellerStat()
 	{
+		return array_merge(
+			$this->getStatistics('seller_id'),
+			['replied' => GoodsQaModel::find()->where(['store_id' => Yii::$app->user->id])->andWhere(['=', 'reply_content', ''])->count()]
+		);
+	}
+	
+	/**
+	 * 获取各状态订单数据
+	 */
+	public function getStatistics($field = 'buyer_id') {
+
 		$array = array(
-			'pending'  => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_PENDING])->count(),
-      		'submitted' => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_SUBMITTED])->count(),
-      		'accepted'  => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_ACCEPTED])->count(),
-    		'shipped'  => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_SHIPPED])->count(),
-			'finished' => OrderModel::find()->where(['seller_id' => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED, 'evaluation_status' => 0])->count(),
-			'replied'   => GoodsQaModel::find()->where(['store_id' => Yii::$app->user->id])->andWhere(['=', 'reply_content', ''])->count(),
-			'refund'  => RefundModel::find()->where(['and', ['seller_id' => Yii::$app->user->id], ['not in', 'status', ['SUCCESS', 'CLOSED']]])->count() // for mobile
+			'all' => OrderModel::find()->where([$field => Yii::$app->user->id])->count(),
+			'canceled'  => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_CANCELED])->count(),
+			'pending'  => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_PENDING])->count(),
+			'teaming'  => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_TEAMING])->count(),
+      		'submitted' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_SUBMITTED])->count(),
+			'picking' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_PICKING])->count(),
+			'delivered' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_DELIVERED])->count(),
+      		'accepted'  => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_ACCEPTED])->count(),
+    		'shipped'  => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_SHIPPED])->count(),
+			'finished' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED])->count(),
+			'refund'  => RefundModel::find()->where(['and', [$field => Yii::$app->user->id], ['not in', 'status', ['SUCCESS', 'CLOSED']]])->count(),
  		);
 		 return $array;
 	}
 	
-	/* 店铺等级、有效期、商品数、空间 */
+	/**
+	 * 店铺等级、有效期、商品数、空间 
+	 */
 	public function getSgrade($store = array())
 	{
 		$grade = SgradeModel::find()->where(['grade_id' => $store['sgrade']])->asArray()->one();
@@ -97,7 +108,9 @@ class UserForm extends Model
 		return $sgrade;
 	}
 	
-	/* 目前仅移动端用户中心首页用到 */
+	/**
+	 * 目前仅移动端用户中心首页用到 
+	 */
 	public function getCollect()
 	{
 		$result = array(

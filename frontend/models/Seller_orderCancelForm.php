@@ -69,7 +69,7 @@ class Seller_orderCancelForm extends Model
 			$model->operator = addslashes(Yii::$app->user->identity->username);
 			$model->order_status = Def::getOrderStatus($orderInfo['status']);
 			$model->changed_status = Def::getOrderStatus(Def::ORDER_CANCELED);
-			$model->remark = $post->remark ? $post->remark : $post->cancel_reason;
+			$model->remark = $post->remark ? $post->remark : $post->reason;
 			$model->log_time = Timezone::gmtime();
 			$model->save(false);
 			
