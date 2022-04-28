@@ -69,7 +69,7 @@ return array(
 	'intervene_apply_fail' 		=> '申请介入失败',
 	'intervene_apply_ok'		=> '您已经成功申请平台介入退款争议，请保持电话畅通，平台客服人员会在3个工作人联系您，感谢您的支持！',
 	'intervene_content_change'  => '%s要求客服介入处理',
-	'order_not_apply_refund'	=> '只有已付款或者已发货的订单才能申请退款',
+	'order_not_apply_refund'	=> '只有已付款且未交易完成的订单才能申请退款',
 	'cancel_disallow'			=> '该退款已完结/已取消，或已提请平台介入处理，无法再取消退款',
 	'refund_cancel_ok'			=> '您的退款申请已取消',
 	'refund_cancel_fail'		=> '取消退款失败',
