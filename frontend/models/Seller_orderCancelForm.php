@@ -52,7 +52,7 @@ class Seller_orderCancelForm extends Model
 		foreach ($orders as $order_id => $orderInfo)
  		{
 			// 修改订单状态
-			OrderModel::updateAll(['status' => Def::ORDER_CANCELED], ['order_id' => $order_id]);
+			OrderModel::updateAll(['status' => Def::ORDER_CANCELED, 'finished_time' => Timezone::gmtime()], ['order_id' => $order_id]);
 				
 			// 修改交易状态
 			DepositTradeModel::updateAll(['status' => 'CLOSED', 'end_time' => Timezone::gmtime()], ['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn'], 'seller_id' => $orderInfo['seller_id']]);
