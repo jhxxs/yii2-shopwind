@@ -38,7 +38,7 @@ class BaseConnect extends BasePlugin
 	 */
 	public function isBind($unionid = null)
 	{
-		// 不要限制CODE，因为对于微信来说，CODE会有多个(weixin,weiximp)
+		// 不要限制CODE，因为对于微信来说，CODE会有多个(weixin,weixinmp)
 		$bind = BindModel::find()->select('userid,enabled')->where(['unionid' => $unionid/*, 'code' => $this->code*/])->one();
 		
 		// 考虑登录状态下绑定的情况，如果当前登录用户与原有绑定用户不一致，则修改为新绑定
