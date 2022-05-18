@@ -83,7 +83,7 @@ class WithdrawDepopay extends OutlayDepopay
 			'buyer_id'		=>	$trade_info['userid'],
 			'seller_id'		=>	0,
 			'amount'		=>	$trade_info['amount'],
-			'status'		=>	'WAIT_ADMIN_VERIFY',
+			'status'		=>	'VERIFY',
 			'payment_code'  =>  'deposit',
 			'tradeCat'		=>	$this->_tradeCat,
 			'payType'		=>  $this->_payType,

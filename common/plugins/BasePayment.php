@@ -167,6 +167,7 @@ class BasePayment extends BasePlugin
 		{
 			$suitable = ['deposit', 'alipay', 'wxpay', 'unionpay', 'cod'];// PC
 			$terminal = $this->getTerminal();
+			
 			// 公众号/H5浏览器
 			if($terminal == 'WAP') {
 				if(Basewind::isWeixin()) {

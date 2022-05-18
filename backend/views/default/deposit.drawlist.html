@@ -103,7 +103,7 @@
 			},
 			done: function (res, curr, count) {
 				$.each(res.data, function (i, item) {
-					if (item.status != 'WAIT_ADMIN_VERIFY') {
+					if (item.status != 'VERIFY') {
 						$('.layui-table-fixed-r .layui-table').find('tr[data-index=' + i + ']').find('a').removeClass('pointer').attr('lay-event', '').css('color', '#999');
 					}
 				})

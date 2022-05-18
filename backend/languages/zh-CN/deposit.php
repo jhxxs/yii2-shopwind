@@ -28,7 +28,6 @@ return array(
 	'trade_status'	=>	'交易状态',
 	'shipped'		=>	'卖家已发货',
 	'accepted'	=>	'等待卖家发货',
-	'wait_admin_verify'	=>	'等待平台审核',
 	'success'			=>	'交易完成',
 	'closed'		=>	'交易关闭',
 	'money_from'    =>  '金额从',

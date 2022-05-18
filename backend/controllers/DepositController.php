@@ -175,7 +175,7 @@ class DepositController extends \common\controllers\BaseAdminController
 				'SHIPPED' => Language::get('TRADE_SHIPPED'),
 				'SUCCESS' => Language::get('TRADE_SUCCESS'),
 				'CLOSED'  => Language::get('TRADE_CLOSED'),
-				'WAIT_ADMIN_VERIFY' => Language::get('TRADE_WAIT_ADMIN_VERIFY')
+				'VERIFY' => Language::get('TRADE_VERIFY')
 			);
 			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'bizOrderId' => Language::get('orderId'));
 		
@@ -221,7 +221,7 @@ class DepositController extends \common\controllers\BaseAdminController
 			$this->params['filtered'] = $this->getTradeConditions($post);
 			$this->params['status_list'] = array(
 				'SUCCESS' => Language::get('TRADE_SUCCESS'),
-				'WAIT_ADMIN_VERIFY' => Language::get('TRADE_WAIT_ADMIN_VERIFY')
+				'VERIFY' => Language::get('TRADE_VERIFY')
 			);
 			$this->params['search_options'] = array('tradeNo' => Language::get('tradeNo'), 'orderId' => Language::get('orderId'));
 		
@@ -260,7 +260,7 @@ class DepositController extends \common\controllers\BaseAdminController
 		if(!$post->id || !($record = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_draw'));
 		}
-		if($record['status'] != 'WAIT_ADMIN_VERIFY') {
+		if($record['status'] != 'VERIFY') {
 			return Message::warning(Language::get('drawal_status_error'));
 		}
 		if($post->method == 'online' && $record['drawtype'] != 'alipay') {
@@ -283,7 +283,7 @@ class DepositController extends \common\controllers\BaseAdminController
 		if(!$post->id || !($record = DepositWithdrawModel::find()->alias('dw')->select('dw.*,dt.tradeNo,dt.status,dt.amount')->joinWith('depositTrade dt', false)->where(['draw_id' => $post->id])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_draw'));
 		}
-		if($record['status'] != 'WAIT_ADMIN_VERIFY') {
+		if($record['status'] != 'VERIFY') {
 			return Message::warning(Language::get('drawal_status_error'));
 		}
 		if(!$post->remark) {

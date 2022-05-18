@@ -57,7 +57,7 @@ class BaseConnect extends BasePlugin
 	}
 
 	/**
-	 * 跳转至绑定页面（绑定手机）
+	 * PC端跳转至绑定页面（绑定手机）
 	 * @param object $response
 	 */
 	public function goBind($response = null)
@@ -110,10 +110,10 @@ class BaseConnect extends BasePlugin
 	}
 
 	/**
-	 * 第三方账户登录绑定
+	 * 第三方账户绑定【未登录/登录后】
 	 * @desc 微信/支付宝/QQ等
 	 */
-	private function createBind($bind, $userid)
+	public function createBind($bind, $userid)
 	{
 		// 将绑定信息插入数据库
 		if (BindModel::bindUser($bind, $userid) == false) {
