@@ -93,6 +93,9 @@ class TeambuyOrder extends NormalOrder
 	{
 		$checkTeamid = $this->checkTeamid();
 
+		// 默认24小时未成团的设为过期（过期后由后续逻辑来处理是自动成团还是关闭）
+		$groupday = Yii::$app->params['autogroupday'] >= 0 ? Yii::$app->params['autogroupday'] : 1;
+
 		// 实际上拼团订单只有一个商品
 		foreach($list['items'] as $value) 
 		{
@@ -105,7 +108,7 @@ class TeambuyOrder extends NormalOrder
 				$model->status = 0; // 未成团
 				$model->people = $teambuy->people; // 保留该值，即便拼团活动关闭了也不受影响
 				$model->created = Timezone::gmtime();
-				$model->expired = $model->created + 24 * 3600; // 24小时未成团的设为过期
+				$model->expired = $model->created + $groupday * 24 * 3600;
 				$model->leader = $checkTeamid ? 0 : 1; // 0 = 参团; 1=开团
 				$model->teamid = $checkTeamid ? $this->post->extraParams->teamid : $this->getTeamid();
 				$model->save();

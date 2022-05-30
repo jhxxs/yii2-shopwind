@@ -41,7 +41,7 @@ class BaseConnect extends BasePlugin
 		// 不要限制CODE，因为对于微信来说，CODE会有多个(weixin,weixinmp)
 		$bind = BindModel::find()->select('userid,enabled')->where(['unionid' => $unionid/*, 'code' => $this->code*/])->one();
 		
-		// 考虑登录状态下绑定的情况，如果当前登录用户与原有绑定用户不一致，则修改为新绑定
+		// 考虑已登录状态下绑定的情况，如果当前登录用户与原有绑定用户不一致，则修改为新绑定（同时删除旧绑定）
 		if($bind && $bind->userid && $bind->enabled && (Yii::$app->user->isGuest || ($bind->userid == Yii::$app->user->id))) 
 		{
 			// 如果该unionid已经绑定， 则检查该用户是否存在
@@ -51,6 +51,7 @@ class BaseConnect extends BasePlugin
 				$this->setErrors(Language::get('bind_data_error'));
 				return false;
 			}
+
 			return $bind->userid;
 		}
 		return false;

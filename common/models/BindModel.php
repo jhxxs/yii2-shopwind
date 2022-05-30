@@ -46,6 +46,10 @@ class BindModel extends ActiveRecord
 		if(!$model->save()) {
 			return false;
 		}
+
+		// 删除与用户不一致的旧绑定（考虑新用户登录和老用户绑定两种情形）
+		parent::deleteAll(['and', ['or', ['unionid' => $bind->unionid], ['openid' => $bind->unionid]], ['!=', 'userid', $userid]]);
+
 		return true;
 	}
 }
