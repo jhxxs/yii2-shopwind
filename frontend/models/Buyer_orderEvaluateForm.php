@@ -58,6 +58,37 @@ class Buyer_orderEvaluateForm extends Model
 	}
 
 	/**
+	 * 获取我的已评价订单
+	 */
+	public function getEvaluateList($post = null) 
+	{
+		$query = OrderModel::find()->select('order_id,order_sn,evaluation_time')->where(['buyer_id' => Yii::$app->user->id, 'evaluation_status' => 1])->orderBy(['order_id' => SORT_DESC]);
+		if($post->order_id) {
+			$query->andWhere(['order_id' => explode(',', $post->order_id)]);
+		}
+		if($post->order_sn) {
+			$query->andWhere(['order_sn' => explode(',', $post->order_sn)]);
+		}
+		
+		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
+		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+		foreach($list as $key => $value)
+		{
+			$value['evaluation_time'] = Timezone::localDate('Y-m-d H:i:s', $value['evaluation_time']);
+			$value['reply_time'] = Timezone::localDate('Y-m-d H:i:s', $value['reply_time']);
+			if($record = OrderGoodsModel::find()
+				->select('goods_id,goods_name,specification,price,quantity,goods_image,evaluation,comment,reply_comment,reply_time,images')
+				->where(['order_id' => $value['order_id']])->asArray()->one()) {
+
+				$record['images'] = json_decode($record['images']);
+			}
+			$list[$key] = array_merge($value, $record ? $record : []);
+		}
+
+		return array($list, $page);
+	}
+
+	/**
 	 * @api API接口使用该数据
 	 */
 	public function submit($post = array(), $orderInfo = array())

@@ -38,7 +38,7 @@ return array(
     'payment_name'  => '支付方式',
     'pay_message'  => '支付留言 ',
     'finished_time'  => '完成时间',
-    'consignee_info'  => '配送信息',
+    'consignee_info'  => '收货人信息',
     'region'  => '收货地址',
     'goods_info'  => '商品信息',
     'price'  => '单价',
