@@ -86,17 +86,19 @@ class DepositWithdrawconfirmForm extends Model
 			return false;
 		}
 
+		$tradeNo = DepositTradeModel::genTradeNo();
+
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入
 		$depopay_type = Business::getInstance('depopay')->build('withdraw', $post);
 		$result = $depopay_type->submit(array(
 			'trade_info' => array('userid' => Yii::$app->user->id, 'party_id' => 0, 'amount' => $post->money),
-			'extra_info' => array('tradeNo' => DepositTradeModel::genTradeNo())
+			'extra_info' => array('tradeNo' => $tradeNo)
 		));
 
 		if (!$result) {
 			$this->errors = $depopay_type->errors;
 			return false;
 		}
-		return true;
+		return $tradeNo;
 	}
 }

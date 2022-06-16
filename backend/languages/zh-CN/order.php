@@ -3,7 +3,7 @@
 return array(
     'no_such_order'  => '没有指定的订单',
     'seller_name'  => '卖家名称',
-    'buyer_name'  => '买家名称',
+    'buyer_name'  => '买家账号',
     'payment_name'  => '支付方式',
     'order_sn'  => '订单编号',
     'add_time'  => '下单时间',

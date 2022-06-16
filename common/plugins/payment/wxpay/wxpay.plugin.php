@@ -13,12 +13,14 @@ namespace common\plugins\payment\wxpay;
 
 use yii;
 use yii\helpers\Url;
+use Da\QrCode\QrCode;
 
 use common\library\Basewind;
 use common\library\Language;
 
 use common\plugins\BasePayment;
 use common\plugins\payment\wxpay\SDK;
+
 
 /**
  * @Id wxpay.plugin.php 2018.6.3 $
@@ -78,6 +80,10 @@ class Wxpay extends BasePayment
 			}
 			if(isset($params['h5_url'])) {
 				$params = ['redirect' => $params['h5_url']];
+			}
+			if(isset($params['code_url'])) {
+				$qrCode = (new QrCode($params['code_url']));
+				$params['qrcode'] = $qrCode->writeDataUri();
 			}
 		}
 
