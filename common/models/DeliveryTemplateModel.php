@@ -40,7 +40,7 @@ class DeliveryTemplateModel extends ActiveRecord
 		$model = new DeliveryTemplateModel();
 		$model->name 			= '默认运费';
 		$model->store_id 		= intval($store_id);
-		$model->types 			= 'express;ems;post';
+		$model->types 			= implode(';', self::getTypes());
 		$model->dests 			= '0;0;0';
 		$model->start_standards = '1;1;1';
 		$model->start_fees 		= '10;10;10';
@@ -135,7 +135,7 @@ class DeliveryTemplateModel extends ActiveRecord
 	
 	public static function getPlusType($area_fee = array())
 	{
-		$types = array('express','ems','post');
+		$types = self::getTypes();
 		if(count($area_fee)>0){
 			if(isset($area_fee['express'])){
 				unset($types[0]);
@@ -160,7 +160,7 @@ class DeliveryTemplateModel extends ActiveRecord
 			$logistic = array();
 			
 			if($types == null){
-				$types = array('express','ems','post');
+				$types = self::getTypes();
 			}
 			if($delivery) {
 				$logistic = self::getTypeLogistic(self::formatTemplateForEdit($delivery), $city_id, $types);
@@ -247,5 +247,13 @@ class DeliveryTemplateModel extends ActiveRecord
 			}
 		}
 		return $result;
+	}
+
+	/**
+	 * 支持的配送方式
+	 */
+	private static function getTypes() {
+		//return ['express','ems','post'];
+		return ['express'];
 	}
 }

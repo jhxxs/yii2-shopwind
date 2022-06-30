@@ -21,6 +21,7 @@ use common\models\DepositTradeModel;
 use common\models\GuideshopModel;
 use common\models\DepositSettingModel;
 use common\models\GcategoryModel;
+use common\models\UserModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -68,6 +69,9 @@ class GuideshopController extends \common\controllers\BaseAdminController
 			
 			foreach ($list as $key => $value)
 			{
+				if($username = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar()){
+			        $list[$key]['username'] = $username;
+			    }
 				$list[$key]['guider_rate'] = DepositSettingModel::getDepositSetting($value['userid'], 'guider_rate');
 				$list[$key]['address'] 	= $value['region_name'].$value['address'];
 				$list[$key]['status'] 	= $this->getStatus($value['status']);
