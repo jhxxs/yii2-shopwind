@@ -415,7 +415,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			array_values($items);
 			
 			if($items) {
-				return Message::display(sprintf("成功导入【%s】%s", $itemid, $items ? '，开始导入下一个商品' : ''), Url::toRoute(['my_goods/dopicker', 'cate_id' => $post->cate_id, 'items' => implode('-', $items)]));
+				return Message::display(sprintf("成功导入【%s】%s", $itemid, $items ? '，开始导入下一个商品' : ''), Url::toRoute(['my_goods/dopicker', 'cate_id' => $post->cate_id, 'platform' => $post->platform, 'items' => implode('-', $items)]));
 			}
 		} 
 		return Message::display(Language::get('import_ok'), Url::toRoute('my_goods/index'));

@@ -62,27 +62,26 @@ class Buyer_orderEvaluateForm extends Model
 	 */
 	public function getEvaluateList($post = null) 
 	{
-		$query = OrderModel::find()->select('order_id,order_sn,evaluation_time')->where(['buyer_id' => Yii::$app->user->id, 'evaluation_status' => 1])->orderBy(['order_id' => SORT_DESC]);
+		$query = OrderGoodsModel::find()->alias('og')
+			->select('og.spec_id,og.order_id,og.goods_id,og.goods_name,og.specification,og.price,og.quantity,og.goods_image,og.evaluation,og.comment,og.reply_comment,og.reply_time,og.images,o.order_sn,o.evaluation_time')
+			->where(['buyer_id' => Yii::$app->user->id, 'evaluation_status' => 1])
+			->joinWith('order o', false)
+			->orderBy(['evaluation_time' => SORT_DESC, 'order_id' => SORT_DESC]);
+
 		if($post->order_id) {
-			$query->andWhere(['order_id' => explode(',', $post->order_id)]);
+			$query->andWhere(['o.order_id' => explode(',', $post->order_id)]);
 		}
 		if($post->order_sn) {
-			$query->andWhere(['order_sn' => explode(',', $post->order_sn)]);
+			$query->andWhere(['o.order_sn' => explode(',', $post->order_sn)]);
 		}
 		
 		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach($list as $key => $value)
 		{
-			$value['evaluation_time'] = Timezone::localDate('Y-m-d H:i:s', $value['evaluation_time']);
-			$value['reply_time'] = Timezone::localDate('Y-m-d H:i:s', $value['reply_time']);
-			if($record = OrderGoodsModel::find()
-				->select('goods_id,goods_name,specification,price,quantity,goods_image,evaluation,comment,reply_comment,reply_time,images')
-				->where(['order_id' => $value['order_id']])->asArray()->one()) {
-
-				$record['images'] = json_decode($record['images']);
-			}
-			$list[$key] = array_merge($value, $record ? $record : []);
+			$list[$key]['evaluation_time'] = Timezone::localDate('Y-m-d H:i:s', $value['evaluation_time']);
+			$list[$key]['reply_time'] = Timezone::localDate('Y-m-d H:i:s', $value['reply_time']);
+			$list[$key]['images'] = json_decode($value['images']);
 		}
 
 		return array($list, $page);
