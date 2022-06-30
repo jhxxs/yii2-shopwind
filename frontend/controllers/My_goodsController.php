@@ -478,19 +478,23 @@ class My_goodsController extends \common\controllers\BaseSellerController
 				GoodsModel::updateAll($params, ['in', 'goods_id', $goodsIds]);
 			}
 			
-			if($post->sgcate_id)
+			if($array = ArrayHelper::toArray($post->sgcate_id))
 			{
-				$scateIds = array_unique(ArrayHelper::toArray($post->sgcate_id));
-				CategoryGoodsModel::deleteAll(['in', 'goods_id', $goodsIds]);
+				$scateIds = array_unique($array);
+				foreach($scateIds as $key => $value) {
+					if(!$value) unset($scateIds[$key]);
+				}
 				
-				$model = new CategoryGoodsModel();
-				foreach($goodsIds as $goods_id)
-				{
-					foreach($scateIds as $cate_id) {
-						$model->isNewRecord = true;
-						$model->goods_id = $goods_id;
-						$model->cate_id = $cate_id;
-						$model->save();
+				if($scateIds) {
+					CategoryGoodsModel::deleteAll(['in', 'goods_id', $goodsIds]);
+					
+					foreach($goodsIds as $goods_id) {
+						foreach($scateIds as $cate_id) {
+							$model = new CategoryGoodsModel();
+							$model->goods_id = $goods_id;
+							$model->cate_id = $cate_id;
+							$model->save();
+						}
 					}
 				}
 			}
