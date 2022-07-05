@@ -133,18 +133,14 @@ class DeliveryTemplateModel extends ActiveRecord
 		return $delivery;
 	}
 	
-	public static function getPlusType($area_fee = array())
+	public static function getPlusType($area_fee = [])
 	{
 		$types = self::getTypes();
-		if(count($area_fee)>0){
-			if(isset($area_fee['express'])){
-				unset($types[0]);
-			}
-			if(isset($area_fee['ems'])){
-				unset($types[1]);
-			}
-			if(isset($area_fee['post'])){
-				unset($types[2]);
+		if(count($area_fee) > 0) {
+			foreach($types as $key => $value) {
+				if(isset($area_fee[$value])) {
+					unset($types[$key]);
+				}
 			}
 		}
 		return $types;
