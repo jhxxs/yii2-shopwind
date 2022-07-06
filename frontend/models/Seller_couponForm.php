@@ -71,7 +71,7 @@ class Seller_couponForm extends Model
 		$model->surplus = $post->total;
 		$model->store_id = $this->store_id;
 		$model->start_time = Timezone::gmstr2time($post->start_time);
-		$model->end_time = Timezone::gmstr2time_end($post->end_time);
+		$model->end_time = stripos($post->end_time, ':') == false ? Timezone::gmstr2time_end($post->end_time) : Timezone::gmstr2time($post->end_time);
 		$model->min_amount = $post->min_amount;
 		$model->available = 1;
 		$model->clickreceive = $post->clickreceive ? 1 : 0;
