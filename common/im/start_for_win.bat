@@ -1,2 +1,0 @@
-php E:\phpStudy\WWW\shopwind\common\im\Applications\YourApp\start_register.php E:\phpStudy\WWW\shopwind\common\im\Applications\YourApp\start_gateway.php E:\phpStudy\WWW\shopwind\common\im\Applications\YourApp\start_businessworker.php
-pause

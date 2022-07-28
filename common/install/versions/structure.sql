@@ -1605,35 +1605,20 @@ CREATE TABLE IF NOT EXISTS `swd_user_token` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_webim_log`
+-- 表的结构 `swd_webim`
 --
-DROP TABLE IF EXISTS `swd_webim_log`;
-CREATE TABLE IF NOT EXISTS `swd_webim_log` (
-  `logid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fromid` int(10) unsigned NOT NULL DEFAULT '0',
-  `fromName` varchar(100) NOT NULL DEFAULT '',
-  `toid` int(10) unsigned NOT NULL DEFAULT '0',
-  `toName` varchar(100) NOT NULL DEFAULT '',
-  `type` varchar(20) DEFAULT '',
-  `content` varchar(255) DEFAULT '',
-  `formatContent` varchar(255) DEFAULT '',
-  `unread` int(10) unsigned DEFAULT '0',
-  `add_time` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`logid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `swd_webim_online`
---
-DROP TABLE IF EXISTS `swd_webim_online`;
-CREATE TABLE IF NOT EXISTS `swd_webim_online` (
-  `onid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `client_id` varchar(100) DEFAULT '',
-  `lasttime` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`onid`)
+DROP TABLE IF EXISTS `swd_webim`;
+CREATE TABLE IF NOT EXISTS `swd_webim` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `toid` int(11) NOT NULL,
+  `fromid` int(11) NOT NULL,
+  `groupid` varchar(255) NOT NULL,
+  `store_id` int(10) DEFAULT NULL,
+  `store_name` varchar(100) DEFAULT NULL,
+  `content` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+  `unread` int(11) NOT NULL DEFAULT '0',
+  `created` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

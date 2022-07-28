@@ -219,9 +219,6 @@ return array(
 	'captcha_failed' => '验证码错误',
 	'batch_del_for_selected'	=> '将选定行数据批量删除',
 
-	'webim' => '客服管理',
-	'imforbid' => '禁用IM',
-	
 	'weixin' 	=> '微信',
 	'weixin_setting' 	=> '公众号设置',
 	'weixin_applet'	=> '小程序设置',

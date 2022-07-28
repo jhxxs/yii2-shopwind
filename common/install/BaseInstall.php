@@ -124,7 +124,7 @@ class BaseInstall
 				'dsn' 			=> $dsn,
 				'username' 		=> $this->db_user,
 				'password' 		=> $this->db_password,
-				'charset'  		=> strtolower(str_replace('-', '', Yii::$app->charset)),
+				'charset'  		=> strtolower(str_replace('-', '', Yii::$app->charset)), // utf8mb4
 				'tablePrefix' 	=> $this->db_prefix,
 				
 				// 该处可以避免从数据库读取的部分数值型字段转化为字符串的情况

@@ -270,8 +270,6 @@ class UploadedFileModel extends ActiveRecord
 				break;
 				case Def::BELONG_TEMPLATE		:	$savePath = 'data/files/mall/template/';
 				break;
-				case Def::BELONG_WEBIM			:	$savePath = 'data/files/mall/webim/';
-				break;
 				case Def::BELONG_GUIDESHOP		:	$savePath = 'data/files/mall/guideshop/'.$unionid.'/';
 				break;
 				case Def::BELONG_POSTER			:	$savePath = 'data/files/mall/qrcode/poster/';

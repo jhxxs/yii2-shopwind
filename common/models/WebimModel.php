@@ -15,17 +15,17 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * @Id WebimOnlineModel.php 2018.8.26 $
+ * @Id WebimModel.php 2022.5.20 $
  * @author mosir
  */
 
-class WebimOnlineModel extends ActiveRecord
+class WebimModel extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%webim_online}}';
+        return '{{%webim}}';
     }
 }

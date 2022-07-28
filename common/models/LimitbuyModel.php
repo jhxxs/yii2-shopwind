@@ -210,6 +210,6 @@ class LimitbuyModel extends ActiveRecord
 			$progress = 1;
 		}
 
-		return $percentage ? $progress * 100 . '%' : $progress;
+		return ['sales' => $sells, 'stocks' => $stocks,  'progress' => $percentage ? $progress * 100 . '%' : $progress];
 	}
 }
