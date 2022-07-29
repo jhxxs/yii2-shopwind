@@ -627,7 +627,8 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			'video'					=> $post['video'],
             'recommended'      		=> intval($post['recommended']),
 	    	'dt_id' 				=> intval($post['dt_id']),
-            'tags'             		=> $post['tags']
+            'tags'             		=> $post['tags'],
+			'mkprice'				=> abs(floatval($post['mkprice']))
         );
 		if ($id <= 0) {
             $goods['type'] 		= 'material';
