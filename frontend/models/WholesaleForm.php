@@ -76,7 +76,7 @@ class WholesaleForm extends Model
 			$model->goods_id = $post['goods_id'];
 			$model->quantity = $value;
 			$model->price = $post['price'][$key];
-			$model->closed = 0;
+			$model->status = 1;
 			if(!$model->save()) {
 				$this->errors = $model->errors ? $model->errors : Language::get('handle_fail');
 				break;

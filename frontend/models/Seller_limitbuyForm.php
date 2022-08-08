@@ -73,7 +73,8 @@ class Seller_limitbuyForm extends Model
 		if(AppmarketModel::find()->where(['appid' => 'limitbuy'])->exists())
 		{
 			// 如果结束的时间大于该应用的购买时限，则不允许
-			$apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => 'limitbuy', 'userid' => Yii::$app->user->id])->orderBy(['rid' => SORT_DESC])->one();
+			$apprenewal = ApprenewalModel::find()->select('expired')->where(['appid' => 'limitbuy', 'userid' => Yii::$app->user->id])
+				->orderBy(['rid' => SORT_DESC])->one();
 				
 			if(!$apprenewal || ($apprenewal->expired <= $post->end_time)) {
 				$this->errors = sprintf(Language::get('limitbuy_end_time_gt_app_expired'), Timezone::localDate('Y-m-d', $apprenewal->expired));
@@ -164,7 +165,8 @@ class Seller_limitbuyForm extends Model
 			$id = $limitbuy['goods_id'];
 		}
 		
-		$goods = GoodsModel::find()->select('goods_id,goods_name,spec_name_1,spec_name_2,spec_qty,default_spec,default_image')->with('goodsSpec')->where(['goods_id' => $id, 'store_id' => $this->store_id])->asArray()->one();
+		$goods = GoodsModel::find()->select('goods_id,goods_name,spec_name_1,spec_name_2,spec_qty,default_spec,default_image')
+			->with('goodsSpec')->where(['goods_id' => $id, 'store_id' => $this->store_id])->asArray()->one();
 		if(!$goods) {
 			return false;
 		}

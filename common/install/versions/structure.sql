@@ -1690,7 +1690,7 @@ CREATE TABLE IF NOT EXISTS `swd_wholesale` (
   `store_id` int(10) unsigned DEFAULT '0',
   `price` decimal(10,2) unsigned DEFAULT '0.00',
   `quantity` int(10) unsigned DEFAULT '1',
-  `closed` int(1) DEFAULT '0',
+  `status` int(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

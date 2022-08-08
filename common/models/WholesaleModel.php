@@ -39,7 +39,7 @@ class WholesaleModel extends ActiveRecord
 
     public static function getList($appid, $store_id = 0, $params = array(), &$pagination = false)
 	{
-		$query = parent::find()->alias('ws')->select('ws.id,ws.goods_id,ws.closed,g.goods_name,g.default_image,g.price')->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0])->orderBy(['id' => SORT_DESC])->groupBy('goods_id');
+		$query = parent::find()->alias('ws')->select('ws.id,ws.goods_id,ws.status,g.goods_name,g.default_image as goods_image,g.price')->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0])->orderBy(['id' => SORT_DESC])->groupBy('goods_id');
 		if($store_id > 0) $query->andWhere(['g.store_id' => $store_id]);
 		if($params) $query->andWhere($params);
 		
@@ -57,9 +57,8 @@ class WholesaleModel extends ActiveRecord
 		}
 		$list = $query->asArray()->all();
 		
-		foreach ($list as $key => $value)
-        {
-			$value['default_image'] || $list[$key]['default_image'] = Yii::$app->params['default_goods_image'];
+		foreach ($list as $key => $value) {
+			$value['goods_image'] || $list[$key]['goods_image'] = Yii::$app->params['default_goods_image'];
         }
 		return $list;
 	}
@@ -70,7 +69,7 @@ class WholesaleModel extends ActiveRecord
 	public static function getPrices($id = 0)
 	{
 		$result = [];
-		$list =  parent::find()->where(['goods_id' => $id, 'closed' => 0])->orderBy(['quantity' => SORT_ASC])->asArray()->all();
+		$list =  parent::find()->where(['goods_id' => $id, 'status' => 1])->orderBy(['quantity' => SORT_ASC])->asArray()->all();
 		foreach($list as $key => $value) {
 			$result[] = array('price' => $value['price'], 'min' => $value['quantity'], 'max' => (isset($list[$key+1]) && $list[$key+1]['quantity'] > 1) ? $list[$key+1]['quantity']-1 : 0);
 		}
@@ -106,7 +105,7 @@ class WholesaleModel extends ActiveRecord
 		// 重置价格
 		foreach($result as $key => $value) 
 		{
-			$query = parent::find()->where(['and', ['goods_id' => $key, 'closed' => 0], ['<=', 'quantity', $value['quantity']]])
+			$query = parent::find()->where(['and', ['goods_id' => $key, 'status' => 1], ['<=', 'quantity', $value['quantity']]])
 				->orderBy(['quantity' => SORT_DESC])->one();
 			if($query) {
 
