@@ -39,7 +39,10 @@ class WholesaleModel extends ActiveRecord
 
     public static function getList($appid, $store_id = 0, $params = array(), &$pagination = false)
 	{
-		$query = parent::find()->alias('ws')->select('ws.id,ws.goods_id,ws.status,g.goods_name,g.default_image as goods_image,g.price')->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0])->orderBy(['id' => SORT_DESC])->groupBy('goods_id');
+		$query = parent::find()->alias('ws')->select('ws.id,ws.goods_id,ws.status,g.goods_name,g.default_image as goods_image,g.price')
+			->joinWith('goods g', false)->where(['g.if_show' => 1, 'g.closed' => 0])
+			->orderBy(['id' => SORT_DESC])
+			->groupBy('goods_id');
 		if($store_id > 0) $query->andWhere(['g.store_id' => $store_id]);
 		if($params) $query->andWhere($params);
 		
@@ -59,6 +62,9 @@ class WholesaleModel extends ActiveRecord
 		
 		foreach ($list as $key => $value) {
 			$value['goods_image'] || $list[$key]['goods_image'] = Yii::$app->params['default_goods_image'];
+
+			$rules = parent::find()->select('price,quantity')->where(['goods_id' => $value['goods_id']])->orderBy(['quantity' => SORT_ASC])->asArray()->all();
+			$list[$key]['rules'] = $rules ? $rules : [];
         }
 		return $list;
 	}

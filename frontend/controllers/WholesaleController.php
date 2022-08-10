@@ -139,10 +139,16 @@ class WholesaleController extends \common\controllers\BaseSellerController
 		}
 		else
 		{
-			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-	
+			$post = Basewind::trimAll(Yii::$app->request->post());
+
+			$rules = [];
+			foreach($post['rules']['quantity'] as  $key => $value) {
+				$rules[$key] = ['quantity' => $value, 'price' => $post['rules']['price'][$key]];
+			}
+			$post['rules'] = $rules;
+
 			$model = new \frontend\models\WholesaleForm(['store_id' => $this->visitor['store_id']]);
-			if(!$model->save($post, true)) {
+			if(!$model->save(Basewind::trimAll($post, true), true)) {
 				return Message::warning($model->errors);
 			}
 
