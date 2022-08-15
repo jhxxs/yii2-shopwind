@@ -34,7 +34,7 @@
 								<ul class="clearfix">
 									<li class="handle_title">{$goods.spec_name_1|escape}{$lang.colon} </li>
 									<!--{foreach from=$goods.unispecs.spec_1 item=spec key=id}-->
-                                	<li onclick="selectSpec(1, this,{$goods.spec_qty},{$goods.goods_id},{$meal.mealPrice})" class="dotted"><a href="javascript:;">
+                                	<li onclick="selectSpec(1, this,{$goods.spec_qty},{$goods.goods_id})" class="dotted"><a href="javascript:;">
                                     <!--{if $spec.image}-->
                                     <img src="{$spec.image|url_format}" width="25" height="25" style="vertical-align:middle" />
                                    	<!--{/if}-->
@@ -46,7 +46,7 @@
                             	<ul class="clearfix">
                             		<li class="handle_title">{$goods.spec_name_2|escape}{$lang.colon}</li>
                                 	<!--{foreach from=$goods.unispecs.spec_2 item=spec key=id}-->
-                                	<li onclick="selectSpec(2, this,{$goods.spec_qty},{$goods.goods_id},{$meal.mealPrice})" class="{if $id eq $goods.spec_id}solid{else}dotted{/if}"><a href="javascript:;"><span>{$spec.name}</span></a></li>
+                                	<li onclick="selectSpec(2, this,{$goods.spec_qty},{$goods.goods_id})" class="{if $id eq $goods.spec_id}solid{else}dotted{/if}"><a href="javascript:;"><span>{$spec.name}</span></a></li>
                                 	<!--{/foreach}-->
                             	</ul>
                             	<!--{/if}-->
@@ -82,10 +82,12 @@
 $(function(){
 	{if $meal.total[0]}
 	$(".J_TotalSave").html(price_format(parseFloat("{$meal.total[0]}")-parseFloat("{$meal.price}")) + ' ~ ' + price_format(parseFloat("{$meal.total[1]}")-parseFloat("{$meal.price}")));
+	{else}
+	$(".J_TotalSave").html(price_format(parseFloat("{$meal.total}")-parseFloat("{$meal.price}")));
 	{/if}
 
 
-	var  holder = $(".J_FixedButtonBottom"),
+	var holder = $(".J_FixedButtonBottom"),
 		oTop = holder.offset().top;
 
     $(window).unbind('scroll').bind('scroll', function(){
