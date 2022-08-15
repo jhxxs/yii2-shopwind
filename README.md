@@ -59,10 +59,10 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * H5端体验：<a href="https://h5.shopwind.net" target="_blank"> https://h5.shopwind.net </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
 
 #### 小程序/APP体验（商业版）
-* 微信小程序（手机浏览器点击链接）：<a href="https://wxaurl.cn/hrB5RKGSgSb" target="_blank"> https://wxaurl.cn/hrB5RKGSgSb </a> 
+* 微信小程序（手机浏览器点击链接）：<a href="https://wxaurl.cn/0IE84rDc7qc" target="_blank"> https://wxaurl.cn/0IE84rDc7qc </a> 
 * Android（安卓版）体验：<a href="https://appgallery.huawei.com/#/app/C103448437" target="_blank"> https://appgallery.huawei.com/#/app/C103448437 </a>
 * iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
-* 商家端体验（小程序）：<a href="https://wxaurl.cn/4TQJIjRHJ6b" target="_blank"> https://wxaurl.cn/4TQJIjRHJ6b </a>
+* 商家端体验（小程序）：<a href="https://wxaurl.cn/xYPKBJ2fxsb" target="_blank"> https://wxaurl.cn/xYPKBJ2fxsb </a>
 * 通用体验账号：买家（账号：18978189192   密码：111111  支付密码：111111）、商家（账号：18978189171  密码：111111）
 
 #### 页面展示
