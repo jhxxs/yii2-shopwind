@@ -4,10 +4,20 @@
     	<div class="mealinfo">
         	<div class="title title_top clearfix">
 				<div class="price clearfix">
-					<p><span class="txt">{$lang.yh_meal}{$lang.colon}</span><span>{$lang.old_price}{$lang.colon}<del>{$meal.price|price_format}</del></span></p>
-                	<p><strong>{$meal.mealPrice|price_format}</strong></p>
+					<p><span class="txt">{$lang.yh_meal}{$lang.colon}</span>
+						<span>{$lang.old_price}{$lang.colon}
+							<del>
+								<!--{if $meal.total[0]}-->
+								{$meal.total[0]|price_format} ~ {$meal.total[1]|price_format}
+								<!--{else}-->
+								{$meal.total|price_format}
+								<!--{/if}-->
+							</del>
+						</span>
+					</p>
+                	<p><strong>{$meal.price|price_format}</strong></p>
                 </div>
-                <div class="sale"><b class="J_TotalSave"></b></div>
+                <div class="sale"><b class="J_TotalSave" style="font-size:14px;"></b></div>
                 <div class="desc">{$lang.select_meal_note}</div>
             </div>
             <div class="content clearfix">
@@ -48,8 +58,18 @@
                 </div>
 				<div class="title btitle J_FixedButtonBottom clearfix">
 					<div class="price clearfix">
-                		<p><span class="txt">{$lang.yh_meal}{$lang.colon}</span><span>{$lang.old_price}{$lang.colon}<del>{$meal.price|price_format}</del></span></p>
-                		<p><strong>{$meal.mealPrice|price_format}</strong></p>
+                		<p><span class="txt">{$lang.yh_meal}{$lang.colon}</span>
+							<span>{$lang.old_price}{$lang.colon}
+								<del>
+									<!--{if $meal.total[0]}-->
+									{$meal.total[0]|price_format} ~ {$meal.total[1]|price_format}
+									<!--{else}-->
+									{$meal.total|price_format}
+									<!--{/if}-->
+								</del>
+							</span>
+						</p>
+                		<p><strong>{$meal.price|price_format}</strong></p>
 					</div>
                 	<div class="buy"><input type="button" class="btn_c1 J_SubmitMealOrder" meal_id="{$meal.meal_id}" /></div>
             	</div>
@@ -60,7 +80,11 @@
 </div>
 <script type="text/javascript">
 $(function(){
-	$(".J_TotalSave").html(price_format(parseFloat("{$meal.price}")-parseFloat("{$meal.mealPrice}")));
+	{if $meal.total[0]}
+	$(".J_TotalSave").html(price_format(parseFloat("{$meal.total[0]}")-parseFloat("{$meal.price}")) + ' ~ ' + price_format(parseFloat("{$meal.total[1]}")-parseFloat("{$meal.price}")));
+	{/if}
+
+
 	var  holder = $(".J_FixedButtonBottom"),
 		oTop = holder.offset().top;
 
