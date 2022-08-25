@@ -193,7 +193,7 @@ class Promotool
 		
 		if($this->checkAvailable(false))
 		{
-			if(($item_info = $this->getItemInfo(['goods_id' => $goods_id])))
+			if(($item_info = $this->getItemInfo(['goods_id' => $goods_id, 'status' => 1])))
 			{
 				// 如果某个商品的配置信息为空，则说明每个商品的配置信息都是一致的，那么就从卖家营销工具综合配置表读取配置（规则）
 				if(!$item_info['config']) {
