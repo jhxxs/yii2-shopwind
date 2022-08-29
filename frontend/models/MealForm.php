@@ -19,6 +19,7 @@ use common\models\MealGoodsModel;
 use common\models\GoodsModel;
 use common\models\GoodsSpecModel;
 use common\models\GoodsStatisticsModel;
+use common\models\StoreModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -40,7 +41,7 @@ class MealForm extends Model
 	public function formData($post = null, $queryitem = true, $orderBy = [], $ifpage = false, $pageper = 10, $isAJax = false, $curPage = false)
 	{
 		// 缺省条件时，查询所有搭配购
-		$query = MealModel::find()->alias('m')->select('m.meal_id,m.created,m.title,m.price,m.status,s.store_id,s.store_name')->joinWith('store s', false);
+		$query = MealModel::find()->select('meal_id,created,title,price,status,store_id')->orderBy(['meal_id' => SORT_DESC]);
 
 		// 查询的是某个具体的搭配购
 		if($this->id) {
@@ -63,7 +64,7 @@ class MealForm extends Model
 			$query->andWhere(['or', ['like', 'title', $post->keyword], ['like', 'keyword', $post->keyword]]);
 		}
 		if($post->store_id) {
-			$query->andWhere(['s.store_id' => $post->store_id]);
+			$query->andWhere(['store_id' => $post->store_id]);
 		}
 		if(isset($post->status) && $post->status != '' && $post->status != null) {
 			$query->andWhere(['status' => intval($post->status)]);
@@ -78,6 +79,10 @@ class MealForm extends Model
 
 		foreach($list as $key => $value)
 		{
+			if($array = StoreModel::find()->select('store_name')->where(['store_id' => $value['store_id']])->asArray()->one()) {
+				$list[$key] = array_merge($value, $array);
+			}
+
 			$items = $value['mealGoods'];
 			unset($list[$key]['mealGoods']);
 			if($queryitem && empty($items)) {
@@ -89,10 +94,12 @@ class MealForm extends Model
 				foreach($items as $k => $v) {
 					$prices = [$v['price'], $v['price']];
 					$items[$k]['goods_image'] = Page::urlFormat($v['goods_image'], Yii::$app->params['default_goods_image']);
-					if(($specs = GoodsSpecModel::find()->select('goods_id,price,spec_1,spec_2,spec_id,image')->where(['goods_id' => $v['goods_id']])->asArray()->all())) {
+					$items[$k]['stocks'] = 0;
+					if(($specs = GoodsSpecModel::find()->select('goods_id,price,stock,spec_1,spec_2,spec_id,image')->where(['goods_id' => $v['goods_id']])->asArray()->all())) {
 						
 						foreach($specs as $k1 => $v1) {
 							$specs[$k1]['image'] = Page::urlFormat($v1['image']);
+							$items[$k]['stocks'] += $v1['stock'];
 
 							if($prices[0] > $v1['price']) $prices[0] = $v1['price'];
 							if($prices[1] < $v1['price']) $prices[1] = $v1['price'];

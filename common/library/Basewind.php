@@ -18,6 +18,7 @@ use yii\helpers\FileHelper;
 use common\models\UserModel;
 use common\models\StoreModel;
 use common\models\DistributeSettingModel;
+use common\models\WebimModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -123,6 +124,9 @@ class Basewind
 			$visitor = ArrayHelper::merge(ArrayHelper::toArray($identity), [
 				'store_id' => StoreModel::find()->select('store_id')->where(['and', ['store_id' => Yii::$app->user->id], ['!=', 'state', Def::STORE_APPLYING]])->scalar()
 			]);
+
+			$visitor['unread'] = intval(WebimModel::find()->where(['toid' => Yii::$app->user->id, 'unread' => 1])->sum('unread'));
+			
 		}
 
 		// 分销功能，此处抓取访客的邀请并保存

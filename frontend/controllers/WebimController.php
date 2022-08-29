@@ -13,6 +13,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 use common\models\UserModel;
 use common\models\WebimModel;
@@ -50,8 +51,15 @@ class WebimController extends \common\controllers\BaseUserController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['toid','store_id']);
 		if(!$post->toid){
+			// 跟平台回话
 			$admin = UserPrivModel::find()->where(['store_id' => 0, 'privs' => 'all'])->one();
 			$post->toid = $admin->userid;
+			// 如果是平台客服点击，有未读的消息才可以进入回话
+			if($this->visitor['userid'] == $post->toid){
+				$unread = WebimModel::find()->where(['toid' => $post->toid, 'unread' => 1])->one();
+				Yii::$app->getResponse()->redirect(Url::toRoute(['webim/index', 'toid' => $unread->fromid]));
+		 		 return false;
+			}
 		}else{
 			if(!UserModel::find()->where(['userid' => $post->toid])->exists()){
 				return Message::warning(Language::get('talk_empty'));
@@ -76,9 +84,6 @@ class WebimController extends \common\controllers\BaseUserController
 			return Message::warning(Language::get('no_such_user'));
 		}
 		$user['portrait'] = empty($user['portrait']) ? Yii::$app->params['default_user_portrait'] : $user['portrait'];
-		if(UserPrivModel::isAdmin($userid)){
-			$user['nickname'] = Language::get('adminplat');
-		}
 		if($store_id){
 			$store = StoreModel::find()->select('store_name')->where(['store_id' => $store_id])->one();
 			$user['nickname'] = $store['store_name'];
@@ -153,6 +158,10 @@ class WebimController extends \common\controllers\BaseUserController
 
 		if (empty($post->content)) {
 			return Message::warning(Language::get('content_empty'));
+		}
+		if(!$post->toid){
+			$admin = UserPrivModel::find()->select('userid')->where(['store_id' => 0, 'privs' => 'all'])->one();
+			$post->toid = $admin->userid;
 		}
 		if ($post->toid == $this->visitor['userid']) {
 			return Message::warning(Language::get('talk_yourself'));

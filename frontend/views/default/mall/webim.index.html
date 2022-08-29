@@ -314,9 +314,9 @@
         </div>
         <div class="send-box clearfix">
           <div class="ui-editor clearfix">
-            <textarea rows="1" placeholder="您好！请详细描述您的问题" id="sendContent"></textarea>
+            <textarea rows="1" placeholder="您好！请详细描述您的问题" id="sendContent" onkeydown="keySend(event)" autofocus="true"></textarea>
             <div class="btn-alipay" id="btnSend">
-              <span>发送</span>
+              <span>发送(Enter)</span>
             </div>
           </div>
         </div>
@@ -327,13 +327,13 @@
           <!--{foreach from=$lists item=list}-->
           <li class="clearfix">
             <a
-              href="{if $visitor.userid == $list.store_id}{url route='webim/index' toid=$list.to.userid}{else}{url route='webim/index' store_id=$list.store_id toid=$list.to.userid}{/if}">
+              href="{if $list.store_id && $visitor.userid != $list.store_id}{url route='webim/index' store_id=$list.store_id toid=$list.to.userid}{else}{url route='webim/index' toid=$list.to.userid}{/if}">
               <div class="portrait">
                 <img src="{$list.to.portrait|url_format}" width="40" height="40" />
               </div>
               <div class="txt">
-                <p class="name"><span>{if $visitor.userid == $list.store_id}{if
-                    $list.to.nickname}{$list.to.nickname}{else}{$list.to.username}{/if}{else}{$list.store_name}{/if}</span>
+                <p class="name"><span>{if $list.store_id && $visitor.userid != $list.store_id}{$list.store_name}{else}{if
+                    $list.to.nickname}{$list.to.nickname}{else}{$list.to.username}{/if}{/if}</span>
                 </p>
                 <p class="log">{$list.content}</p>
               </div>
@@ -347,6 +347,7 @@
       </div>
     </div>
     <div id="copy-right"><span style="color: #C7C6C6;">Copyright © 2015-2022 SHOPWIND.NET 版权所有</span></div>
+    <audio id='audio' src='{res file='music/im.mp3'}'></audio>
   </div>
 </body>
 <script type="text/javascript">
@@ -356,7 +357,22 @@
   $(function () {
     $("#messages")[0].scrollTop = $("#messages")[0].scrollHeight;
     $('#btnSend').click(function () {
+      send();
+    });
+  });
+
+  function keySend(event){
+    if(event.keyCode == 13 && event.ctrlKey){
       var content = $('#sendContent').val();
+      $('#sendContent').val(content + "\n");
+    }else if(event.keyCode == 13){
+        send();
+        event.preventDefault();
+    }
+  }
+    
+  function send(){
+    var content = $('#sendContent').val();
       if (content == '') {
         layer.msg('不能发送空消息！');
         return false;
@@ -370,13 +386,8 @@
           layer.msg(data.msg);
         }
       });
-    });
-    $(this).keydown(function (e) {
-      if (e.which == "13") {
-        $('#btnSend').click();
-      }
-    });
-  });
+  }
+
   function refresh() {
     var logs_counts = $('#logs_counts').val();
     var lists_counts = $('#lists_counts').val();
@@ -391,6 +402,8 @@
           var sender = '';
           if (userid == log.fromid) {
             sender = 'msg-send';
+          }else{
+            audio.play();
           }
           var html = '<div class="bot clearfix">' +
             '<div class="msg ' + sender + ' clearfix">' +
@@ -425,6 +438,7 @@
           var unreads = '';
           if(list.unreads){
             unreads = '<div class="unread"><span>'+ list.unreads +'</span></div>';
+            audio.play();
           }
           var html = '<li class="clearfix">' +
             '<a href="' + route + '">' +
