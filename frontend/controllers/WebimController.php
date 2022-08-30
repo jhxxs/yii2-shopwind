@@ -53,11 +53,14 @@ class WebimController extends \common\controllers\BaseUserController
 		if(!$post->toid){
 			// 跟平台回话
 			$admin = UserPrivModel::find()->where(['store_id' => 0, 'privs' => 'all'])->one();
-			$post->toid = $admin->userid;
-			// 如果是平台客服点击，有未读的消息才可以进入回话
+			// 如果是平台客服点击，有对话才可以进入回话
 			if($this->visitor['userid'] == $post->toid){
-				$unread = WebimModel::find()->where(['toid' => $post->toid, 'unread' => 1])->one();
-				$post->toid = $unread->fromid;
+				$unread = WebimModel::find()->where(['toid' => $post->toid])->orderBy(['unread' => SORT_DESC, 'id' => SORT_DESC])->one();
+				if(!empty($unread)){
+				    $post->toid = $unread->fromid;
+				}else{
+				    return Message::warning(Language::get('talk_empty'));
+				}
 			}
 			Yii::$app->getResponse()->redirect(Url::toRoute(['webim/index', 'toid' => $post->toid]));
 		 	return false;
