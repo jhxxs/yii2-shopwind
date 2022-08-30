@@ -425,12 +425,14 @@
         var lists = data.retval.lists;
 
         $.each(lists, function (index, list) {
-          var route = url(['webim/index', { store_id: list.store_id, toid: list.to.userid }]);
-          var name = list.store_name;
-          if (userid == list.store_id) {
-            route = url(['webim/index', { toid: list.to.userid }]);
-            if(list.store_name){
-              name = list.to.store_name;
+           var route = url(['webim/index', { toid: list.to.userid }]);
+          var name = '';
+          if (list.store_id > 0 && userid != list.store_id) {
+            route = url(['webim/index', { store_id: list.store_id, toid: list.to.userid }]);
+            name = list.store_name;
+          }else{
+            if(list.to.nickname){
+              name = list.to.nickname;
             }else{
               name = list.to.username;
             }
