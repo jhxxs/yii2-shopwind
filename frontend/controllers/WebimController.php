@@ -57,9 +57,10 @@ class WebimController extends \common\controllers\BaseUserController
 			// 如果是平台客服点击，有未读的消息才可以进入回话
 			if($this->visitor['userid'] == $post->toid){
 				$unread = WebimModel::find()->where(['toid' => $post->toid, 'unread' => 1])->one();
-				Yii::$app->getResponse()->redirect(Url::toRoute(['webim/index', 'toid' => $unread->fromid]));
-		 		 return false;
+				$post->toid = $unread->fromid;
 			}
+			Yii::$app->getResponse()->redirect(Url::toRoute(['webim/index', 'toid' => $post->toid]));
+		 	return false;
 		}else{
 			if(!UserModel::find()->where(['userid' => $post->toid])->exists()){
 				return Message::warning(Language::get('talk_empty'));
