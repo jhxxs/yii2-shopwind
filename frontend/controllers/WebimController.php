@@ -46,7 +46,6 @@ class WebimController extends \common\controllers\BaseUserController
 		$this->params = ArrayHelper::merge($this->params, Page::getAssign('mall'));
 	}
 	
-
 	public function actionIndex()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['toid','store_id']);
@@ -98,7 +97,6 @@ class WebimController extends \common\controllers\BaseUserController
 	/**
 	 * 获取会话列表
 	 */
-
 	public function getList()
 	{
 		$list = WebimModel::find()->select('fromid,toid,store_id,store_name')->where(['or', ['fromid' => $this->visitor['userid']], ['toid' => $this->visitor['userid']]])->groupBy('groupid')->limit(100)->asArray()->all();

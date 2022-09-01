@@ -29,7 +29,7 @@ return array(
     'appCertPath' => '应用公钥证书',
     'alipayCertPath' => '支付宝公钥证书',
     'rootCertPath' => '支付宝根证书',
-    'certPath_desc' => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/alpay/cacert',
+    'certPath_desc' => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/alipay/cacert',
 	'signType' => '签名类型',
 	'signType_RSA2' => 'RSA2',
 	'signType_RSA'  => 'RSA',
