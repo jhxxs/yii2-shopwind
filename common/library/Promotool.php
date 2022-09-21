@@ -276,7 +276,7 @@ class Promotool
 		    $config = serialize(ArrayHelper::toArray($post->config));
 		    
             if($this->instance == 'exclusive'){
-                if(isset($post->config->discount) && $post->config->discount) $post->config->discount = floor(abs($post->config->discount) * 10)/10;
+                if(isset($post->config->discount) && $post->config->discount) $post->config->discount = floor(abs($post->config->discount) * 100)/100;
                 if(isset($post->config->decrease) && $post->config->decrease) $post->config->decrease = floor(abs($post->config->decrease) * 100)/100;
 		    
                 if(!$post->config->discount) unset($post->config->discount);

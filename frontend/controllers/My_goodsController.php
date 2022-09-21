@@ -129,7 +129,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			$this->params['goods'] = $this->getGoodsInfo($cateId, 0);
 			
 			// 取得当前商品分类的属性
-			$this->params['propList'] = CatePvsModel::getCatePvs($cateId, 0);
+			$this->params['propList'] = CatePvsModel::getList($cateId, 0);
 			
 			// 取得品牌列表
 			$this->params['brandList'] = BrandModel::find()->where(['in', 'store_id', [0, $this->visitor['store_id']]])->andWhere(['if_show' => 1])->asArray()->all();
@@ -223,7 +223,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			$this->params['goods'] = $goods;
 			
 			// 取得当前商品分类的属性
-			$this->params['propList'] = CatePvsModel::getCatePvs($cateId, $id);
+			$this->params['propList'] = CatePvsModel::getList($cateId, $id);
 			
 			// 取得品牌列表
 			$this->params['brandList'] = BrandModel::find()->where(['in', 'store_id', [0, $this->visitor['store_id']]])->andWhere(['if_show' => 1])->asArray()->all();

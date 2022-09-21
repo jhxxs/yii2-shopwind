@@ -104,7 +104,7 @@ return array(
 	'my_delivery'=>'运费模板管理',
 	'express'=>'快递',
 	'ems'	 =>'EMS',
-	'post'   =>'平邮',
+	'post'   =>'邮政',
 	'delivery_add'=>'添加运费模板',
 	'delivery_edit'=>'编辑运费模板',
 	'delivery_list'=>'运费模板列表', 

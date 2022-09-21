@@ -141,7 +141,7 @@ return array(
 	'drop_fail'		=> '删除失败',
 	'express'		=> '快递',
 	'ems'	 		=> 'EMS',
-	'post'   		=> '平邮',
+	'post'   		=> '邮政',
 
 	'access_limit' => '您没有被授予相应的权限，无权访问',
 	'select_handle'		=> '选择操作',

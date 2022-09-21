@@ -108,21 +108,19 @@ class DeliveryTemplateModel extends ActiveRecord
 		$delivery = self::formatTemplate([$delivery], true);
 		$delivery = current($delivery);
 		
-		$area_fee_list = array();
-		foreach($delivery['area_fee'] as $key=>$val)
-		{
-			$type = $val['type'];
-			$area_fee_list[$type][] = $val;
+		$area_fee = [];
+		foreach($delivery['area_fee'] as $key => $value) {
+			$type = $value['type'];
+			$area_fee[$type][] = $value;
 		}
-		$delivery['area_fee'] = $area_fee_list;
+		$delivery['area_fee'] = $area_fee;
 		
-		foreach($delivery['area_fee'] as $key => $val)
+		foreach($delivery['area_fee'] as $key => $value)
 		{
-			$default_fee = true;
-			foreach($val as $k => $v){
-				if($default_fee){
+			$delivery['area_fee'][$key]['name'] = Language::get($key);
+			foreach($value as $k => $v){
+				if($k == 0){
 					$delivery['area_fee'][$key]['default_fee'] = $v;
-					$default_fee = false;
 				} else {
 					$delivery['area_fee'][$key]['other_fee'][] = $v;
 				}
