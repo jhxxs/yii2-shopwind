@@ -1496,9 +1496,9 @@ CREATE TABLE IF NOT EXISTS `swd_teambuy_log` (
   `leader` tinyint(3) unsigned DEFAULT '0',
   `people` int(10) unsigned NOT NULL DEFAULT '2',
   `status` tinyint(3) unsigned DEFAULT '0',
-  `created` int(11) unsigned NOT NULL,
-  `expired` int(11) unsigned NOT NULL,
-  `pay_time` int(11) unsigned NOT NULL,
+  `created` int(11) unsigned NOT NULL DEFAULT '0',
+  `expired` int(11) unsigned NOT NULL DEFAULT '0',
+  `pay_time` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`logid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

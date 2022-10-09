@@ -67,7 +67,7 @@ class TeambuyOrder extends NormalOrder
 				return false;
 			}
 
-			$goods['quantity'] = $quantity > 0 ? $quantity : 1;
+			$goods['quantity'] = $this->post->extraParams->quantity > 0 ? $this->post->extraParams->quantity : 1;
 			$goods['price'] = round($goods['price'] * $specs[$spec_id]['price'] / 1000, 4) * 100;
 			!empty($goods['spec_1']) && $goods['specification'] = $goods['spec_name_1'] . ':' . $goods['spec_1'];	
 			!empty($goods['spec_2']) && $goods['specification'] .= ' ' . $goods['spec_name_2'] . ':' . $goods['spec_2']; 
