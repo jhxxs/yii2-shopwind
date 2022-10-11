@@ -18,7 +18,6 @@ use common\library\Language;
 
 use common\plugins\BaseConnect;
 use common\plugins\connect\xwb\SDK;
-use common\plugins\connect\xwb\lib\SaeTOAuthV2;
 
 /**
  * @Id xwb.plugin.php 2018.6.5 $

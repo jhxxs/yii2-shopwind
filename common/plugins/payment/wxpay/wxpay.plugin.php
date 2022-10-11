@@ -211,7 +211,8 @@ class Wxpay extends BasePayment
 		if(!$this->params) {
 			return $this->getClient()->getNotify();
 		}
-		return json_decode($this->params, true);
+		//return json_decode($this->params, true);
+		return $this->params;
 	}
 	
 	public function getNotifySpecificData() 

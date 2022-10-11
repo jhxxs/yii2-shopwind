@@ -13,6 +13,7 @@ namespace common\plugins\payment\alitranpay;
 
 use yii;
 
+use common\library\Language;
 use common\plugins\payment\alipay\lib\AopCertClient;
 use common\plugins\payment\alipay\lib\request\AlipayFundTransUniTransferRequest;
 

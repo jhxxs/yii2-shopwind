@@ -14,8 +14,6 @@ namespace common\plugins\payment\alitranpay;
 use yii;
 use yii\helpers\Url;
 
-use common\models\DepositTradeModel;
-
 use common\library\Basewind;
 use common\library\Language;
 

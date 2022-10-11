@@ -275,7 +275,7 @@ class SDK
 	/**
 	 * 应答微信通知
 	 */
-	public function verifyResult($result = false) 
+	public function verifyResult($target = false) 
 	{
 		if($target) {
 			$result = ['code' => 'SUCCESS', 'message' => ''];
