@@ -148,7 +148,7 @@ class Seller_limitbuyForm extends Model
 		if(Basewind::getCurrentApp() == 'pc') {
 			$post->image = UploadedFileModel::getInstance()->upload($post->fileVal, $this->store_id, Def::BELONG_LIMITBUY, Yii::$app->user->id);
 		}
-		// 注意：PC提交后上传图片，WAP先上传图片后提交，所以WAP端有$post->image，但PC没有
+		// 注意：PC(非vue)提交后上传图片，WAP先上传图片后提交，所以WAP端有$post->image，但PC没有
 		if($post->image) {
 			$model->image = $post->image;
 		}	

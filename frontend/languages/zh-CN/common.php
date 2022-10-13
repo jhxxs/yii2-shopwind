@@ -70,7 +70,7 @@ return array(
 	'transfer_fee'	=>	'转账服务费',
 	'brokerage_fee'	=>	'佣金费',
 	'rebate_fee'	=>	'赚取佣金',
-	'chargeback'=>	'收费',
+	'chargeback'=>	'扣减服务费',
 	'charge' 	=> '收费',
 	'defray'		=>	'支付',
 	'system_recharge'		=>	'系统充值',
