@@ -19,13 +19,13 @@ use common\models\GoodsSpecModel;
 use common\library\Page;
 
 /**
- * @Id MealOrder.php 2018.7.12 $
+ * @Id MealbuyOrder.php 2018.7.12 $
  * @author mosir
  */
  
-class MealOrder extends NormalOrder
+class MealbuyOrder extends NormalOrder
 {
-	protected $otype = 'meal';
+	protected $otype = 'mealbuy';
 	
 	/**
 	 * 获取搭配套餐中的商品数据

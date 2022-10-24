@@ -287,6 +287,15 @@ class BaseOrder
 	}
 
 	/**
+	 * 通过收货人或地区ID获取地址信息
+	 * @param int $addr_id 针对发货订单
+	 * @param int $region_id 针对社区团购，买家自提模式
+	 */
+	public function getAddressInfo($addr_id = 0, $region_id = 0) {
+		return [];
+	}
+
+	/**
 	 * 验证配送方式是否合法
 	 */
 	public function validDeliveryInfo()

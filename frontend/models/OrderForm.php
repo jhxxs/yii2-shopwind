@@ -13,7 +13,6 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\ArrayHelper;
 
 use common\models\StoreModel;
 use common\models\IntegralModel;
@@ -28,7 +27,7 @@ use common\library\Business;
  */
 class OrderForm extends Model
 {
-	// order type, item data from where, eg: normal|meal|teambuy|guidebuy ...
+	// order type, item data from where, eg: normal|mealbuy|teambuy|guidebuy ...
 	public $otype 	= 'normal';
 	
 	// goods type, eg: material|virtual 
@@ -49,7 +48,7 @@ class OrderForm extends Model
 		if($this->otype == 'normal') {
 			$post->store_id = isset($post->store_id) ? intval($post->store_id) : 0; // 如果传值只结算一个店铺
 		}
-		if($this->otype == 'meal') {
+		if($this->otype == 'mealbuy') {
 			if(isset($post->id)) {
 				$post->extraParams = (Object) array('meal_id' => $post->id); // for PC
 			}
@@ -85,7 +84,7 @@ class OrderForm extends Model
 	
 	private function formatData(array $storeGoodsList, $extra = array())
 	{
-		if($this->otype == 'meal') {
+		if($this->otype == 'mealbuy') {
 			return $this->formatDataOfMeal($storeGoodsList, $extra);
 		}
 		return $this->formatDataOfNormal($storeGoodsList);

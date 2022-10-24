@@ -474,9 +474,9 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_setting` (
 DROP TABLE IF EXISTS `swd_deposit_trade`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_trade` (
   `trade_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `tradeNo` varchar(32) NOT NULL COMMENT '支付交易号',
-  `outTradeNo` varchar(32) DEFAULT '' COMMENT '第三方支付接口的交易号',
-  `payTradeNo` varchar(32) DEFAULT '' COMMENT '第三方支付接口的商户订单号',
+  `tradeNo` varchar(32) NOT NULL COMMENT '交易号',
+  `outTradeNo` varchar(255) DEFAULT '' COMMENT '第三方支付接口的交易号',
+  `payTradeNo` varchar(32) DEFAULT '' COMMENT '支付订单号',
   `bizOrderId` varchar(32) DEFAULT '' COMMENT '商户订单号',
   `bizIdentity` varchar(20) DEFAULT '' COMMENT '商户交易类型识别号',
   `buyer_id` int(11) NOT NULL COMMENT '交易买家',
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_withdraw` (
   `orderId` varchar(30) NOT NULL,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `drawtype` varchar(20) NOT NULL DEFAULT 'bank',
-  `account` varchar(50) DEFAULT NULL,
+  `account` varchar(255) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `bank` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`draw_id`),

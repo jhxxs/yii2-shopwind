@@ -9,24 +9,23 @@
  * @license https://www.shopwind.net/license/
  */
 
-namespace common\plugins\promote\meal;
+namespace common\plugins\promote\mealbuy;
 
 use yii;
 
-use common\library\Language;
 use common\plugins\BasePromote;
 
 /**
- * @Id meal.plugin.php 2018.6.5 $
+ * @Id mealbuy.plugin.php 2018.6.5 $
  * @author mosir
  */
 
-class Meal extends BasePromote
+class Mealbuy extends BasePromote
 {
 	/**
      * 插件实例
 	 * @var string $code
 	 */
-    protected $code = 'meal';
+    protected $code = 'mealbuy';
 }
 

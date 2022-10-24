@@ -112,9 +112,9 @@ class LimitbuyModel extends ActiveRecord
 		
 		$query = parent::find()->select('id,rules')->where(['goods_id' => $goods_id])->orderBy(['id' => SORT_DESC]);
 		
-		if($showInvalidPrice == false) {
-			$query->andWhere(['<=', 'start_time', Timezone::gmtime()])->andWhere(['>=', 'end_time', Timezone::gmtime()]);
-		}
+		//if($showInvalidPrice == false) {// for seller modify
+			//$query->andWhere(['<=', 'start_time', Timezone::gmtime()])->andWhere(['>=', 'end_time', Timezone::gmtime()]);
+		//}
 		
 		if(($limitbuy = $query->one()))
 		{	

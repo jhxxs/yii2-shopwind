@@ -16,7 +16,6 @@ use Yii;
 use yii\base\Model;
 use yii\captcha\CaptchaValidator;
 
-use common\models\BankModel;
 use common\models\DepositTradeModel;
 use common\models\DepositAccountModel;
 
@@ -33,18 +32,18 @@ class DepositWithdrawconfirmForm extends Model
 
 	public function valid($post, $strict = true)
 	{
-		if(empty($post->account)) {
+		if (empty($post->account)) {
 			$this->errors = Language::get('withdraw_account_empty');
 			return false;
 		}
-	
+
 		// 提现到银行卡，验证银行卡信息
-		if($post->drawtype == 'bank' && empty($post->bank)) {
+		if ($post->drawtype == 'bank' && empty($post->bank)) {
 			$this->errors = Language::get('bank_error');
 			return false;
 		}
 
-		if(empty($post->name)) {
+		if (empty($post->name)) {
 			$this->errors = Language::get('withdraw_name_error');
 			return false;
 		}
@@ -57,12 +56,12 @@ class DepositWithdrawconfirmForm extends Model
 
 		// 提现金额要减掉不可提现的部分
 		$query = DepositAccountModel::find()->select('money,nodrawal')->where(['userid' => Yii::$app->user->id])->one();
-		if(!$query || ($query->money - $query->nodrawal < $post->money)) {
+		if (!$query || ($query->money - $query->nodrawal < $post->money)) {
 			$this->errors = Language::get('money_not_enough');
 			return false;
 		}
 
-		if($strict) {
+		if ($strict) {
 			if (Basewind::getCurrentApp() != 'api') {
 				$captchaValidator = new CaptchaValidator(['captchaAction' => 'default/captcha']);
 				if (!$captchaValidator->validate($post->captcha)) {

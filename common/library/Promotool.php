@@ -68,7 +68,7 @@ class Promotool
 		if(in_array($this->instance, ['limitbuy'])) {
 			return new Limitbuy($this->instance, $params);
 		}
-		if(in_array($this->instance, ['meal'])) {
+		if(in_array($this->instance, ['mealbuy'])) {
 			return new Meal($this->instance, $params);
 		}
 		if(in_array($this->instance, ['exclusive'])) {
@@ -325,7 +325,7 @@ class Promotool
 		$order_info = $goods_info['orderList'][$this->params['store_id']];
 		
 		// 获取搭配套餐优惠 
-		if($goods_info['otype'] == 'meal') {
+		if($goods_info['otype'] == 'mealbuy') {
 			$goods_info['orderList'][$this->params['store_id']]['mealprefer'] = $this->getOrderMealPreferInfo($order_info);
 		}
 		

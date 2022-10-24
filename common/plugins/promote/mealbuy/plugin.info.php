@@ -9,7 +9,7 @@
  * @license https://www.shopwind.net/license/
  */
 
-namespace common\plugins\promote\meal;
+namespace common\plugins\promote\mealbuy;
 
 use yii;
 use yii\helpers\Url;
@@ -22,7 +22,7 @@ use common\library\Language;
  * @author mosir
  */
 return array(
-    'code' => 'meal',
+    'code' => 'mealbuy',
     'name' => '搭配购',
     'desc' => '设置一次购买多个商品执行组合优惠策略',
     'author' => 'SHOPWIND',

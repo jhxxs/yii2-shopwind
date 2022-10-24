@@ -9,7 +9,7 @@
  * @license https://www.shopwind.net/license/
  */
 
-namespace common\plugins\connect\qq;
+namespace common\plugins\connect\weixinapp;
 
 /**
  * @Id plugin.info.php 2018.6.3 $
@@ -17,20 +17,20 @@ namespace common\plugins\connect\qq;
  */
 
 return array(
-    'code' => 'qq',
-    'name' => '腾讯QQ登录',
-    'desc' => '适用于PC端或H5端登录，只需要填写QQ互联开放平台的网站应用秘钥。APP端登录也需要开启该插件，在移动端源码打包时填写QQ互联移动应用秘钥',
+    'code' => 'weixinapp',
+    'name' => '微信APP登录',
+    'desc' => '适用于APP客户端(Android && iOS)/PC端微信扫码登录，请填写微信开放平台秘钥',
     'author' => 'SHOPWIND',
-	'website' => 'https://www.shopwind.net',
+    'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
         'appId' => array(
             'type' => 'text',
-            'text' => 'appId'
+            'text' => 'AppId'
         ),
         'appKey' => array(
             'type' => 'text',
-            'text' => 'appKey'
-        ),
+            'text' => 'AppSecret'
+        )
     )
 );

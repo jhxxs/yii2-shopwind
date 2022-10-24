@@ -21,29 +21,29 @@ use yii\db\ActiveRecord;
 
 class BindModel extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%bind}}';
-    }
-	
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return '{{%bind}}';
+	}
+
 	public static function bindUser($bind = null, $userid = 0)
 	{
 		// APP中微信登录兼容处理(for conditions : openid => $bind->unionid)
-		if(!($model = parent::find()->where(['code' => $bind->code])->andWhere(['or', ['unionid' => $bind->unionid], ['openid' => $bind->unionid]])->one())) {
+		if (!($model = parent::find()->where(['code' => $bind->code])->andWhere(['or', ['unionid' => $bind->unionid], ['openid' => $bind->unionid]])->one())) {
 			$model = new BindModel();
 		}
 		$model->unionid 	= $bind->unionid;
 		$model->openid  	= $bind->openid ? $bind->openid : ''; // 只有微信才有openid
-		$model->token   	= $bind->access_token;
+		$model->token   	= isset($bind->access_token) ? $bind->access_token : '';
 		$model->userid		= $userid;
-		$model->nickname	= $bind->nickname ? $bind->nickname : '';
+		$model->nickname	= isset($bind->nickname) ? $bind->nickname : '';
 		$model->code     	= $bind->code;
-		$model->enabled 	= 1;
-				
-		if(!$model->save()) {
+		$model->enabled 	= isset($bind->enabled) ? intval($bind->enabled) : 1;
+
+		if (!$model->save()) {
 			return false;
 		}
 

@@ -39,7 +39,7 @@ class Seller_mealForm extends Model
 	{
 		$result = array();
 		
-		if(($message = Promotool::getInstance('meal')->build(['store_id' => $this->store_id])->checkAvailable()) !== true) {
+		if(($message = Promotool::getInstance('mealbuy')->build(['store_id' => $this->store_id])->checkAvailable()) !== true) {
 			$this->errors = $message;
 			return false;
 		}
