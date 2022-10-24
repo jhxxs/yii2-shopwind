@@ -147,7 +147,7 @@
 				transfer(data, table, obj.event, message);
 			}
 			if (obj.event === 'online') {
-				if (!$.inArray(data.drawtype, ['alipay', 'wxpay'])) {
+				if ($.inArray(data.drawtype, ['alipay', 'wxpay']) == -1) {
 					return layer.open({ content: lang.drawtype_disallow, title: lang.notice });
 				}
 				message = '务必认真核对提现信息，点击“确定”后，款项将从平台的' + platform + '账户<p>自动划款至' + platform + '账户(' + data.account + ')，请谨慎操作！</p>';
