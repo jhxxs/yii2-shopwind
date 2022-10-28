@@ -151,6 +151,7 @@ class Wxpay extends BasePayment
 
 	/**
 	 * 查询支付信息
+	 * [调试用]
 	 */
 	public function detail($id)
 	{

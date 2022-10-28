@@ -514,6 +514,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_withdraw` (
   `orderId` varchar(30) NOT NULL,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `drawtype` varchar(20) NOT NULL DEFAULT 'bank',
+  `terminal` varchar(20) NOT NULL DEFAULT '',
   `account` varchar(255) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `bank` varchar(100) DEFAULT NULL,

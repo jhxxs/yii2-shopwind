@@ -453,7 +453,7 @@ class Basewind
 	 * @param string $postJSON 是否为JSON提交
 	 * @param string $cacert_url 证书地址
 	 */
-	public static function curl($url, $method = 'GET', $post = array(), $postJSON = false, $cacert_url = '')
+	public static function curl($url, $method = 'GET', $post = '', $postJSON = false, $cacert_url = '')
 	{
 		//初始化curl
 		$ch = curl_init();

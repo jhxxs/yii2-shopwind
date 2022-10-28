@@ -119,6 +119,7 @@ class WithdrawDepopay extends OutlayDepopay
 		$model->orderId = DepositTradeModel::find()->select('bizOrderId')->where(['tradeNo' => $extra_info['tradeNo']])->scalar();
 		$model->userid = $trade_info['userid'];
 		$model->drawtype = $this->post->drawtype;
+		$model->terminal = isset($this->post->terminal) ? $this->post->terminal : '';
 		$model->account = $this->post->account;
 		$model->name = $this->post->name;
 		
