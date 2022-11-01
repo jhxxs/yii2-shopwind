@@ -14,7 +14,6 @@ namespace common\business\depopaytypes;
 use yii;
 
 use common\models\DepositTradeModel;
-use common\models\TeambuyModel;
 use common\models\TeambuyLogModel;
 
 use common\library\Timezone;
@@ -85,7 +84,7 @@ class BuygoodsDepopay extends OutlayDepopay
         if (!$base_info) {
             return false;
         }
-		
+
 		$tradeNo = $extra_info['tradeNo'];
 		
 		// 修改交易状态为已付款

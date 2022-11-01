@@ -222,6 +222,11 @@ class SDK
 	 */
 	public function getTransform($orderInfo = array())
 	{
+		// 微信商户平台提现金额限制
+		if ($orderInfo['amount'] < 0.3 || $orderInfo['amount'] > 200) {
+			$this->errors = Language::get('money limit 0.3 ~ 200');
+			return false;
+		}
 		try {
 
 			$platformCertificateFilePath = file_get_contents($this->wechatKey);
@@ -252,7 +257,7 @@ class SDK
 				$this->errors = $body;
 				return false;
 			}
-			return json_decode($body->getContents());
+			return json_decode($body);
 		} catch (\Exception $e) {
 			if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
 				$this->errors = json_decode($e->getResponse()->getBody())->message;
@@ -285,7 +290,7 @@ class SDK
 				$this->errors = $body;
 				return false;
 			}
-			return json_decode($body->getContents());
+			return json_decode($body);
 		} catch (\Exception $e) {
 			if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
 				$this->errors = json_decode($e->getResponse()->getBody())->message;
