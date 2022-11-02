@@ -93,9 +93,9 @@ class BasePayment extends BasePlugin
 	}
 
 	/**
-	 * 获取支付交易号 
+	 * 获取支付订单号
 	 * @param array $orderInfo 订单信息
-	 * @param string 要获取的支付交易号的长度
+	 * @param string $length 支付订单号的长度
 	 */
 	public function getPayTradeNo($orderInfo, $length = 0)
 	{
@@ -142,16 +142,16 @@ class BasePayment extends BasePlugin
 	 * @param bool $removeImproper 是否移除不合理的支付方式
 	 * @param array $extraParams 其他搜索条件
 	 */
-    public function getEnabled($store_id = 0, $removeImproper = true, $extraParams = array())
-    {
+	public function getEnabled($store_id = 0, $removeImproper = true, $extraParams = array())
+	{
 		$query = PluginModel::find()->where(['instance' => $this->instance, 'enabled' => 1])->indexBy('code');
-		if($extraParams) {
+		if ($extraParams) {
 			$query->andWhere($extraParams);
 		}
 		$payments = $query->asArray()->all();
 
 		// 如果卖家没有配置货到付款，则去除该支付方式
-		if(isset($payments['cod']) && (!($cod = CodModel::checkAndGetInfo($store_id)) || empty($cod->regions))) {
+		if (isset($payments['cod']) && (!($cod = CodModel::checkAndGetInfo($store_id)) || empty($cod->regions))) {
 			unset($payments['cod']);
 		}
 
@@ -168,22 +168,20 @@ class BasePayment extends BasePlugin
 				} else {
 					$suitable = ['deposit', 'alipay', 'unionpay'];
 				}
-			} 
-			
-			foreach($payments as $key => $payment) {
-				if(!in_array($payment['code'], $suitable)) {
+			}
+
+			foreach ($payments as $key => $payment) {
+				if (!in_array($payment['code'], $suitable)) {
 					unset($payments[$key]);
 				}
-			} 
+			}
 		}
-		
-		if($payments)
-		{
+
+		if ($payments) {
 			// 排序，使得在收银台界面余额支付排在第一位
 			$tmp = array();
-			foreach($payments as $key => $payment)
-			{
-				if(in_array($payment['code'], array('deposit'))) {
+			foreach ($payments as $key => $payment) {
+				if (in_array($payment['code'], array('deposit'))) {
 					$tmp[$key] = $payment;
 					unset($payments[$key]);
 					break;
@@ -191,10 +189,10 @@ class BasePayment extends BasePlugin
 			}
 			$payments = $tmp + $payments;
 		}
-		
+
 		return $payments;
 	}
-	
+
 	/**
 	 * 获取支付方式的键值
 	 * @param array $payments
@@ -277,9 +275,9 @@ class BasePayment extends BasePlugin
 
 	/**
 	 * 获取支付成功后返回的页面需要显示的信息 
-	 * @param array $orderInfo
+	 * @param array $tradeInfo
 	 */
-	public function getLinksOfPage($tradeInfo = array())
+	public function getLinksOfPage($tradeInfo = [])
 	{
 		$bizIdentity 	= $tradeInfo['bizIdentity'];
 		$status 		= $tradeInfo['status'];
@@ -375,10 +373,10 @@ class BasePayment extends BasePlugin
 		$depopay_type = Business::getInstance('depopay')->build('buygoods');
 
 		foreach ($orderInfo['tradeList'] as $tradeInfo) {
-			$orderInfo = $tradeInfo['order_info'];
+			$order_info = $tradeInfo['order_info'];
 			$result = $depopay_type->respond_notify(array(
 				'trade_info' => array('userid' => $tradeInfo['buyer_id'], 'party_id' => $tradeInfo['seller_id'], 'amount' => $tradeInfo['amount']),
-				'extra_info' => $orderInfo + array('tradeNo' => $tradeInfo['tradeNo'], 'status' => $tradeInfo['status']),
+				'extra_info' => $order_info + array('tradeNo' => $tradeInfo['tradeNo'], 'status' => $tradeInfo['status']),
 			));
 
 			if (!$result) {
@@ -388,7 +386,7 @@ class BasePayment extends BasePlugin
 
 			// 短信和邮件提醒： 买家已付款通知卖家
 			Basewind::sendMailMsgNotify(
-				$orderInfo,
+				$order_info,
 				array(
 					'key' => 'toseller_online_pay_success_notify'
 				),

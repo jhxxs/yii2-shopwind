@@ -105,11 +105,6 @@ class Buyer_orderConfirmForm extends Model
 		// 买家确认收货后，即交易完成，将订单积分表中的积分进行派发 
 		IntegralModel::distributeIntegral($orderInfo);
 
-		// 更新累计销售件数 
-		foreach ($ordergoods as $key => $goods) {
-			GoodsStatisticsModel::updateStatistics($goods['goods_id'], 'sales', $goods['quantity']);
-		}
-
 		// 将确认的商品状态设置为 交易完成 
 		OrderGoodsModel::updateAll(['status' => 'SUCCESS'], ['order_id' => $orderInfo['order_id']]);
 
