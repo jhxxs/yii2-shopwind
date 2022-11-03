@@ -313,7 +313,9 @@ class SDK
 			$this->errors = Language::get('order_inconsistent');
 			return false;
 		}
-		if ($orderInfo['amount'] * 100 != $notify['amount']['total']) {
+
+		// 必须加round避免字符类型不一致导致比对有误
+		if (round($orderInfo['amount'] * 100) != round($notify['amount']['total'])) {
 			// 支付的金额与实际金额不一致
 			$this->errors = Language::get('price_inconsistent');
 			return false;
