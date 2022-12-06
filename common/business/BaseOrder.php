@@ -65,7 +65,7 @@ class BaseOrder
 	 */
 	public $errors = null;
 
-	public function __construct($otype, $post = null, $params = array())
+	public function __construct($otype, $post = null, $params = [])
 	{
 		$this->otype 	= $otype;
 		$this->post 	= $post;
@@ -75,7 +75,7 @@ class BaseOrder
 	/**
 	 * 提交订单信息 
 	 */
-	public function submit($data = array())
+	public function submit($data = [])
 	{
 		return 0;
 	}
@@ -83,7 +83,7 @@ class BaseOrder
 	/**
 	 * 插入订单表数据 
 	 */
-	public function insertOrder($order_info = array())
+	public function insertOrder($order_info = [])
 	{
 		$model = new OrderModel();
 		foreach ($order_info as $key => $value) {
@@ -95,7 +95,7 @@ class BaseOrder
 	/**
 	 * 插入商品信息 
 	 */
-	public function insertOrderGoods($order_id = 0, $list = array())
+	public function insertOrderGoods($order_id = 0, $list = [])
 	{
 		// 是否有邀请成交的商品
 		$list = DistributeSettingModel::orderInvite($list);
@@ -124,7 +124,7 @@ class BaseOrder
 	/**
 	 * 插入收货人信息 
 	 */
-	public function insertOrderExtm($order_id = 0, $consignee_info  = array())
+	public function insertOrderExtm($order_id = 0, $consignee_info  = [])
 	{
 		$model = new OrderExtmModel();
 
@@ -140,10 +140,10 @@ class BaseOrder
 	 * @return int $insertFail 插入失败数
 	 * @return array $result 包含店铺和订单号的数组
 	 */
-	public function insertOrderData($base_info = array(), $goods_info = array(), $consignee_info = array())
+	public function insertOrderData($base_info = [], $goods_info = [], $consignee_info = [])
 	{
 		$insertFail = 0;
-		$result = array();
+		$result = [];
 		foreach ($base_info as $store_id => $store) {
 			if (!($order_id = $this->insertOrder($base_info[$store_id]))) {
 				$insertFail++;
@@ -175,7 +175,7 @@ class BaseOrder
 	/**
 	 * 插入合并付款提交订单过程中，如有插入失败的订单，则删除批次所有订单
 	 */
-	public function deleteOrderData($result = array())
+	public function deleteOrderData($result = [])
 	{
 		foreach ($result as $order_id) {
 			if (!$order_id) continue;
@@ -188,10 +188,10 @@ class BaseOrder
 	/**
 	 * 处理订单基本信息，返回有效的订单信息数组 
 	 */
-	public function handleOrderInfo($goods_info = array())
+	public function handleOrderInfo($goods_info = [])
 	{
 		// 返回基本信息
-		$result = array();
+		$result = [];
 
 		$post = ArrayHelper::toArray($this->post);
 		foreach ($goods_info['orderList'] as $store_id => $order) {
@@ -221,9 +221,9 @@ class BaseOrder
 	/**
 	 * 处理收货人信息，返回有效的收货人信息 
 	 */
-	public function handleConsigneeInfo($goods_info = array())
+	public function handleConsigneeInfo($goods_info = [])
 	{
-		$result = array();
+		$result = [];
 
 		// 验证收货人信息填写是否完整
 		if (!($consignee_info = $this->validConsigneeInfo())) {
@@ -327,7 +327,7 @@ class BaseOrder
 	/**
 	 * 获取本次订单的各个店铺的可用优惠券 
 	 */
-	public function getStoreCouponList($goods_info = array())
+	public function getStoreCouponList($goods_info = [])
 	{
 		foreach ($goods_info['orderList'] as $store_id => $order) {
 			if ($order['allow_coupon']) {
@@ -340,9 +340,9 @@ class BaseOrder
 	/**
 	 * 取得有效的订单折扣信息，如积分抵扣，店铺优惠券的合理性，返回各个优惠减少的金额 
 	 */
-	public function getAllDiscountByPost($goods_info = array())
+	public function getAllDiscountByPost($goods_info = [])
 	{
-		$result = $discount_info = array();
+		$result = $discount_info = [];
 
 		// 验证买家使用多少积分抵扣货款的有效性
 		if (isset($goods_info['allow_integral']) && $goods_info['allow_integral']) {
@@ -471,12 +471,12 @@ class BaseOrder
 	/** 
 	 * 获取本次订单的运费资费（多个店铺）
 	 */
-	public function getOrderShippings($goods_info = array())
+	public function getOrderShippings($goods_info = [])
 	{
-		$shipping_methods = array();
+		$shipping_methods = [];
 
 		// 根据goods_info找出所有店铺每个商品的运费模板id
-		$base_deliverys = array();
+		$base_deliverys = [];
 		foreach ($goods_info['orderList'] as $store_id => $order) {
 			foreach ($order['items'] as $goods) {
 				$template_id = GoodsModel::find()->select('dt_id')->where(['goods_id' => $goods['goods_id']])->scalar();
@@ -527,14 +527,14 @@ class BaseOrder
 
 				// 2. 计算每个订单（店铺）的商品的总件数（包括不同规格）和每个商品的总件数（包括不同规格），以下会用到总件数来计算运费
 				$total_quantity = 0;
-				$quantity = array();
+				$quantity = [];
 				foreach ($goods_info['orderList'][$store_id]['items'] as $goods) {
 					!isset($quantity[$goods['goods_id']]) && $quantity[$goods['goods_id']] = 0;
 					$quantity[$goods['goods_id']] += $goods['quantity'];
 					$total_quantity += $goods['quantity'];
 				}
 				// 3. 计算总运费
-				$logistic = array();
+				$logistic = [];
 				foreach ($deliverys as $goods_id => $delivery) {
 					foreach ($delivery as $template_types) {
 						$goods_fees = 0;
@@ -581,7 +581,7 @@ class BaseOrder
 	/**
 	 * 更新优惠券的使用次数 
 	 */
-	public function updateCouponRemainTimes($result = array(), $coupon = array())
+	public function updateCouponRemainTimes($result = [], $coupon = [])
 	{
 		foreach ($result as $store_id => $order_id) {
 			if (isset($coupon[$store_id]['coupon_sn'])) {
@@ -596,7 +596,7 @@ class BaseOrder
 	/**
 	 * 保存订单使用的积分数额 
 	 */
-	public function saveIntegralInfoByOrder($result = array(), $integral = array())
+	public function saveIntegralInfoByOrder($result = [], $integral = [])
 	{
 		if (!empty($result) && isset($integral['points']) && ($integral['points'] > 0)) {
 			foreach ($result as $store_id => $order_id) {
