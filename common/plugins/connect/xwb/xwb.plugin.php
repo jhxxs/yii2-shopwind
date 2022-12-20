@@ -128,7 +128,7 @@ class Xwb extends BaseConnect
 	
 	public function getReturnUrl()
 	{
-		return urlencode(Url::toRoute(['connect/xwbcallback'], true));
+		return Url::toRoute(['connect/xwbcallback'], true);
 	}
 
 	/**
