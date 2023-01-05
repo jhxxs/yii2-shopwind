@@ -26,11 +26,11 @@
             <p class="flex1 ml10 value">{if $options.fontsize eq 12}12px{else if $options.fontsize eq
                 16}16px{else}14px{/if}</p>
             <input type="hidden" name="fontsize" value="{$options.fontsize|default:14}" />
-            <span class="switch first {if $options.fontsize eq 12} selected {/if} J_Switch" title="12px" data-value="12"><i
+            <span class="switch first {if $options.fontsize eq 12} selected {/if} J_Switch" title="小" data-value="12"><i
                     class="iconfont icon-A fs12"></i></span>
-            <span class="switch {if !in_array($options.fontsize, [12, 16])} selected {/if} J_Switch" title="14px"
+            <span class="switch {if !in_array($options.fontsize, [12, 16])} selected {/if} J_Switch" title="中"
                 data-value="14"><i class="iconfont icon-A fs14"></i></span>
-            <span class="switch {if $options.fontsize eq 16} selected {/if} J_Switch" title="16px" data-value="16"><i
+            <span class="switch {if $options.fontsize eq 16} selected {/if} J_Switch" title="大" data-value="16"><i
                     class="iconfont icon-A fs16"></i></span>
         </div>
     

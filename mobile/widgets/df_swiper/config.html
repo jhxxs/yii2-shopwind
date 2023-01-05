@@ -30,7 +30,7 @@
             <!-- {foreach from=$options.images item=item} -->
             <div class="item">
                 <div class="relative">
-                    <img class="image" src="{$item.ad_image_url|url_format}" width="312" height="100" />
+                    <img class="image" src="{$item.ad_image_url|url_format}" />
                     <input onchange="fileRender(this)" class="file absolute pointer" type="file" name="ad_image_file[]" />
                     <i class="layui-icon layui-icon-close-fill absolute del pointer J_Del" style="font-size: 20px;"></i>
                 </div>
@@ -57,33 +57,32 @@
 
 <style>
     .widget-box .list .item {
-        width: 360px;
+        width: 100%;
         background: #fff;
         box-shadow: 0 0 20px 0 rgba(0, 0, 0, .05);
         border-radius: 8px;
         box-sizing: border-box;
-        padding: 24px;
+        padding: 14px;
     }
 
     .widget-box .list .image {
         border-radius: 8px;
-        width: 312px;
-        height: 100px;
+        width: 100%;
         background-color: #f9f9f9;
         line-height: 100px;
     }
 
     .widget-box .list .file {
-        width: 312px;
-        height: 100px;
+        width: 100%;
+        height: 100%;
         left: 0;
         top: 0;
         opacity: 0;
     }
 
     .widget-box .list .del {
-        right: -26px;
-        top: -32px;
+        right: -16px;
+        top: -22px;
     }
 </style>
 <script>

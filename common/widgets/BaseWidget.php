@@ -13,7 +13,6 @@ namespace common\widgets;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\web\UploadedFile;
 
 use common\models\AcategoryModel;
 use common\models\GcategoryModel;
@@ -24,7 +23,6 @@ use common\models\RecommendGoodsModel;
 use common\library\Basewind;
 use common\library\Def;
 use common\library\Language;
-use common\library\Widget;
 
 /**
  * @Id BaseWidget.php 2018.9.6 $

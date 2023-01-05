@@ -91,10 +91,10 @@ class GcategoryModel extends ActiveRecord
 		$data = $cache->get($cachekey);
 		if($data === false || !$cached)
 		{
-			$gcategories = self::getList(-1, $store_id, $shown);
+			$categories = self::getList(-1, $store_id, $shown);
 		
 			$tree = new Tree();
-			$tree->setTree($gcategories, 'cate_id', 'parent_id', 'cate_name');
+			$tree->setTree($categories, 'cate_id', 'parent_id', 'cate_name');
 			$data = $tree->getArrayList(0, $layer);
 		
     		//第二个参数即是我们要缓存的数据 

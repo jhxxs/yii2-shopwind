@@ -40,8 +40,6 @@ class Df_imageadWidget extends BaseWidget
 
     public function parseConfig($input)
     {
-        $result = array();
-
         $index = intval($input['index']);
         unset($input['index'], $input['ad_image_file']);
 
