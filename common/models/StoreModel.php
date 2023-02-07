@@ -95,7 +95,7 @@ class StoreModel extends ActiveRecord
 			if (!empty($store)) {
 				$store['credit_image'] = Resource::getThemeAssetsUrl('images/credit/' . StoreModel::computeCredit($store['credit_value']));
 				$store = array_merge($store, RegionModel::getArrayRegion($store['region_name'], $store['region_name']));
-				
+
 				// 店铺动态评分
 				$store['dynamicEvaluation'] = self::dynamicEvaluation($store_id);
 
@@ -228,21 +228,25 @@ class StoreModel extends ActiveRecord
 			'goods' => [
 				'value' => sprintf("%.4f", $goodsEvaluation),
 				'industry_value' => sprintf("%.4f", $industryGoodsEvaluation),
-				'compare' => self::compareIndustry($goodsEvaluation - $industryGoodsEvaluation)
+				'compare' => self::compareIndustry($goodsEvaluation - $industryGoodsEvaluation),
+				'label' => '商品体验'
 			],
 			'service' => [
 				'value' => sprintf("%.4f", $serviceEvaluation),
 				'industry_value' => sprintf("%.4f", $industryServiceEvaluation),
-				'compare' => self::compareIndustry($serviceEvaluation - $industryServiceEvaluation)
+				'compare' => self::compareIndustry($serviceEvaluation - $industryServiceEvaluation),
+				'label' => '服务体验'
 			],
 			'shipped' => [
 				'value' => sprintf("%.4f", $shippedEvaluation),
 				'industry_value' => sprintf("%.4f", $industryShippedEvaluation),
-				'compare' => self::compareIndustry($shippedEvaluation - $industryShippedEvaluation)
+				'compare' => self::compareIndustry($shippedEvaluation - $industryShippedEvaluation),
+				'label' => '物流体验'
 			],
 			'comprehensive' => [
 				'value' => sprintf("%.4f", $comprehensiveEvaluation),
-				'percentage'  => round($comprehensiveEvaluation / 5, 4) * 100 . '%'
+				'percentage'  => round($comprehensiveEvaluation / 5, 4) * 100 . '%',
+				'lable' => '综合体验'
 			]
 		);
 
@@ -255,7 +259,7 @@ class StoreModel extends ActiveRecord
 	public static function compareIndustry($value = 0)
 	{
 		$name = $value > 0 ? 'high' : ($value < 0 ? 'low' : 'equal');
-		return array('value' => abs($value) * 100 . '%', 'name' => $name);
+		return ['value' => abs($value), 'name' => $name];
 	}
 
 	/**

@@ -36,6 +36,7 @@ class GcategoryModel extends ActiveRecord
      * @param int $parent_id 大于等于0表示取某分类的下级分类，小于0表示取所有分类
      * @param int $store_id  店铺编号
      * @param bool $shown    只取显示的分类
+	 * @param string $fields 需要的字段
      */
     public static function getList($parent_id = -1, $store_id = 0, $shown = true, $limit = 0, $fields = null)
     {

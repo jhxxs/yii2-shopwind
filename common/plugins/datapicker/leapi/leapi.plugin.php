@@ -69,7 +69,8 @@ class Leapi extends BaseDatapicker
 			'taobao'	=> '淘宝天猫',
 			'jd'		=> '京东平台',
 			'alibaba' 	=> '阿里巴巴（1688）',
-			'pdd'		=> '拼多多'
+			'pdd'		=> '拼多多',
+			'local' 	=> '本站'
 		];
 	}
 

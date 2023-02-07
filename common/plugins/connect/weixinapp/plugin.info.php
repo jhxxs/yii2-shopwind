@@ -18,8 +18,8 @@ namespace common\plugins\connect\weixinapp;
 
 return array(
     'code' => 'weixinapp',
-    'name' => '微信APP登录',
-    'desc' => '适用于APP客户端(Android && iOS)/PC端微信扫码登录，请填写微信开放平台秘钥',
+    'name' => '微信登录',
+    'desc' => '适用于APP客户端(Android && iOS) / PC端微信扫码登录，请填写微信开放平台秘钥',
     'author' => 'SHOPWIND',
     'website' => 'https://www.shopwind.net',
     'version' => '1.0',

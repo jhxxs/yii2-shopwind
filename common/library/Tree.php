@@ -17,7 +17,7 @@ namespace common\library;
  * @desc format the array to Tree
  * @desc not recursive mode, high efficient. recommended for large data.
  */
- 
+
 class Tree
 {
     var $data   = array();
@@ -25,8 +25,8 @@ class Tree
     var $layer  = array(0 => 0);
     var $parent = array();
     var $value_field = '';
-    
-	/**
+
+    /**
      * 构造函数
      *
      * @param mix $value
@@ -47,8 +47,7 @@ class Tree
     function setTree($nodes, $id_field, $parent_field, $value_field)
     {
         $this->value_field = $value_field;
-        foreach ($nodes as $node)
-        {
+        foreach ($nodes as $node) {
             $this->setNode($node[$id_field], $node[$parent_field], $node);
         }
         $this->setLayer();
@@ -65,12 +64,10 @@ class Tree
     function getOptions($layer = 0, $root = 0, $except = NULL, $space = '&nbsp;&nbsp;')
     {
         $options = array();
-		$layer = intval($layer);
+        $layer = intval($layer);
         $childs = $this->getChilds($root, $except);
-        foreach ($childs as $id)
-        {
-            if ($id > 0 && ($layer <= 0 || $this->getLayer($id) <= $layer))
-            {
+        foreach ($childs as $id) {
+            if ($id > 0 && ($layer <= 0 || $this->getLayer($id) <= $layer)) {
                 $options[$id] = $this->getLayer($id, $space) . htmlspecialchars($this->getValue($id));
             }
         }
@@ -89,17 +86,13 @@ class Tree
         $parent = $parent ? $parent : 0;
 
         $this->data[$id] = $value;
-        if (!isset($this->child[$id]))
-        {
+        if (!isset($this->child[$id])) {
             $this->child[$id] = array();
         }
 
-        if (isset($this->child[$parent]))
-        {
+        if (isset($this->child[$parent])) {
             $this->child[$parent][] = $id;
-        }
-        else
-        {
+        } else {
             $this->child[$parent] = array($id);
         }
 
@@ -111,8 +104,7 @@ class Tree
      */
     function setLayer($root = 0)
     {
-        foreach ($this->child[$root] as $id)
-        {
+        foreach ($this->child[$root] as $id) {
             $this->layer[$id] = $this->layer[$this->parent[$id]] + 1;
             if ($this->child[$id]) $this->setLayer($id);
         }
@@ -127,10 +119,8 @@ class Tree
      */
     function getList(&$tree, $root = 0, $except = NULL)
     {
-        foreach ($this->child[$root] as $id)
-        {
-            if ($id == $except)
-            {
+        foreach ($this->child[$root] as $id) {
+            if ($id == $except) {
                 continue;
             }
 
@@ -163,8 +153,7 @@ class Tree
      */
     function getParents($id)
     {
-        while ($this->parent[$id] != -1)
-        {
+        while ($this->parent[$id] != -1) {
             $id = $parent[$this->layer[$id]] = $this->parent[$id];
         }
 
@@ -205,18 +194,16 @@ class Tree
     function getArrayList($root = 0, $layer = 0)
     {
         $data = array();
-		$layer = intval($layer);
-        foreach ($this->child[$root] as $id)
-        {
-            if($layer && $this->layer[$this->parent[$id]] > $layer-1)
-            {
+        $layer = intval($layer);
+        foreach ($this->child[$root] as $id) {
+            if ($layer && $this->layer[$this->parent[$id]] > $layer - 1) {
                 continue;
             }
-            $data[$id] = array('id' => $id, 'value' => $this->getValue($id), 'children' => $this->child[$id] ? $this->getArrayList($id , $layer) : array());
+            $data[$id] = array('id' => $id, 'value' => $this->getValue($id), 'children' => $this->child[$id] ? $this->getArrayList($id, $layer) : array());
         }
-        return $data;
+        return array_values($data);
     }
-	
+
     /**
      * 取得csv格式数据
      *
@@ -234,51 +221,41 @@ class Tree
     {
         $data = array();
         $main = $this->value_field; //用于显示树分级结果的字段
-        $extra =array(); //辅助的字段
-        if (!empty($ext_field))
-        {
-            if (is_array($ext_field))
-            {
+        $extra = array(); //辅助的字段
+        if (!empty($ext_field)) {
+            if (is_array($ext_field)) {
                 $extra = $ext_field;
-            }
-            elseif (is_string($ext_field))
-            {
+            } elseif (is_string($ext_field)) {
                 $extra = array($ext_field);
             }
         }
         $childs = $this->getChilds($root);
         array_values($extra) && $data[0] = array_values($extra);
         $main && $data[0] && array_push($data[0], $main);
-        foreach ($childs as $id)
-        {
+        foreach ($childs as $id) {
             $row = array();
             $value = $this->data[$id];
-            foreach ($extra as $field)
-            {
+            foreach ($extra as $field) {
                 $row[] = $value[$field];
             }
-            for ($i = 1; $i < $this->getLayer($id); $i++)
-            {
+            for ($i = 1; $i < $this->getLayer($id); $i++) {
                 $row[] = '';
             }
-            if ($main)
-            {
+            if ($main) {
                 $row[] = $value[$main];
-            }
-            else
-            {
+            } else {
                 $row[] = $value;
             }
             $data[] = $row;
         }
         return $data;
     }
-	
-	/* 获取递归方式的实例 */
-	function recursive($model = null, $additional = null) 
-	{
-		return new RecursiveTree($model, $additional);
-	}
+
+    /* 获取递归方式的实例 */
+    function recursive($model = null, $additional = null)
+    {
+        return new RecursiveTree($model, $additional);
+    }
 }
 
 /* 递归方式，获取无限极数组，兼容不同的模型（model） 
@@ -290,93 +267,91 @@ class Tree
 */
 class RecursiveTree extends Recursive
 {
-	public $model = null;
-	public $additional = null;
-	
-	public function __construct($model = null, $additional = null)
+    public $model = null;
+    public $additional = null;
+
+    public function __construct($model = null, $additional = null)
     {
-		$this->additional = $additional;
+        $this->additional = $additional;
         $this->model = $model;
-		if(!$this->model) {
-			$this->model = new \common\models\GcategoryModel();
-		}
+        if (!$this->model) {
+            $this->model = new \common\models\GcategoryModel();
+        }
     }
-	
-	public function getArrayList($id = 0, $id_field = 'cate_id', $parent_field = 'parent_id', $value_field = 'cate_name', $layer = 0)
-	{
-		$data = array();
-		$layer = intval($layer);
-		$list = $this->getChilds($id, $id_field, $parent_field, $value_field);
-		foreach($list as $key => $val)
-		{
-			$data[$key] = $val;
-			$children = ($this->getChilds($val[$id_field], $id_field, $parent_field, $value_field) && (($layer-1) != 0)) ? $this->getArrayList($val[$id_field], $id_field, $parent_field, $value_field, $layer-1) : array();
-			$data[$key] += array('children' => $children ? $children->data : array());
-		}
-		return new Recursive($data, $id, $id_field);
-	}
-	
-	public function getChilds($id = 0, $id_field, $parent_field, $value_field)
-	{
-		$query = $this->model->find()->where([$parent_field => $id]);
-		if($this->additional !== null) {
-			$query->andWhere($this->additional);
-		}
-		return $query->asArray()->all();		
-	}
+
+    public function getArrayList($id = 0, $id_field = 'cate_id', $parent_field = 'parent_id', $value_field = 'cate_name', $layer = 0)
+    {
+        $data = array();
+        $layer = intval($layer);
+        $list = $this->getChilds($id, $id_field, $parent_field, $value_field);
+        foreach ($list as $key => $val) {
+            $data[$key] = $val;
+            $children = ($this->getChilds($val[$id_field], $id_field, $parent_field, $value_field) && (($layer - 1) != 0)) ? $this->getArrayList($val[$id_field], $id_field, $parent_field, $value_field, $layer - 1) : array();
+            $data[$key] += array('children' => $children ? $children->data : array());
+        }
+        return new Recursive($data, $id, $id_field);
+    }
+
+    public function getChilds($id = 0, $id_field, $parent_field, $value_field)
+    {
+        $query = $this->model->find()->where([$parent_field => $id]);
+        if ($this->additional !== null) {
+            $query->andWhere($this->additional);
+        }
+        return $query->asArray()->all();
+    }
 }
 
 /* 
  *  递归数组格式化数据
  */
-class Recursive {
-	
-	public $data = array();
-	public $id   = 0;
-	public $id_field = 'cate_id';
-	
-	public function __construct($data = null, $id = 0, $id_field = 'cate_id')
+class Recursive
+{
+
+    public $data = array();
+    public $id   = 0;
+    public $id_field = 'cate_id';
+
+    public function __construct($data = null, $id = 0, $id_field = 'cate_id')
     {
-		$this->data = $data;
-		$this->id 	= $id;
-		$this->id_field = $id_field;
+        $this->data = $data;
+        $this->id     = $id;
+        $this->id_field = $id_field;
     }
-	
-	public function all()
-	{
-		return $this->data;
-	}
-	
-	/* 将无限级数组的id凑在一个数组里 
+
+    public function all()
+    {
+        return $this->data;
+    }
+
+    /* 将无限级数组的id凑在一个数组里 
 	 * @param bool selfin 包含自身
 	 * @param string $field 要取的字段（必须保证字段在data中，当selfin==true时，$field只能为$id_field）
 	 * @return array(1,2,3...)
 	 */
-	public function fields($selfin = true, $field = null)
-	{
-		$result = array();
-		if($selfin) $result = array($this->id);
-		if($field !== null) $this->id_field = $field;
-		
-		if(is_array($this->data)) 
-		{
-			$list = array();
-			foreach($this->data as $k => $v)
-			{
-				$list[0] = $v;
-						
-				while(!empty($list)) {
-					$one = array_shift($list);
-					if(isset($one[$this->id_field])) {
-						$result[] = $one[$this->id_field];
-					}
-							
-					if(isset($one['children'])) {
-						$list = array_merge($list, $one['children']);
-					}
-				}
-			}
-		}
-		return array_unique($result);
-	}
+    public function fields($selfin = true, $field = null)
+    {
+        $result = array();
+        if ($selfin) $result = array($this->id);
+        if ($field !== null) $this->id_field = $field;
+
+        if (is_array($this->data)) {
+            $list = array();
+            foreach ($this->data as $k => $v) {
+                $list[0] = $v;
+
+                while (!empty($list)) {
+                    $one = array_shift($list);
+                    if (isset($one[$this->id_field])) {
+                        $result[] = $one[$this->id_field];
+                    }
+
+                    if (isset($one['children'])) {
+                        $list = array_merge($list, $one['children']);
+                    }
+                }
+            }
+        }
+        return array_unique($result);
+    }
 }

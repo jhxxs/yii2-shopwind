@@ -57,6 +57,7 @@ class Widget
 
 			$widgets[$id] = new $class_name($this->instance, $this->clientPath, $id, $options);
 		}
+
 		return $widgets[$id];
 	}
 
@@ -65,7 +66,7 @@ class Widget
 		$widget_dir = $this->clientPath . '/widgets';
 		static $widgets = null;
 		if ($widgets === null) {
-			$widgets = array();
+			$widgets = [];
 			if (!is_dir($widget_dir)) {
 				return $widgets;
 			}
@@ -85,7 +86,7 @@ class Widget
 		if (file_exists($file)) {
 			return include($file);
 		}
-		return array();
+		return [];
 	}
 
 	/* 获取指定风格，指定页面的挂件的配置信息 */
@@ -94,7 +95,7 @@ class Widget
 		static $widgets = null;
 		$key = $template . '_' . $page;
 		if (!isset($widgets[$key])) {
-			$tmp = array('widgets' => array(), 'config' => []);
+			$tmp = array('widgets' => [], 'config' => []);
 
 			$config_file = $this->getConfigPath($template, $page);
 
@@ -147,8 +148,9 @@ class Widget
 			$name        = $widget_info['name'];
 			$options     = $widget_info['options'];
 
-			$widget = $this->build($widget_id, $name, $options);
-			$widget->display();
+			if ($name && ($widget = $this->build($widget_id, $name, $options))) {
+				$widget->display();
+			}
 		}
 	}
 }

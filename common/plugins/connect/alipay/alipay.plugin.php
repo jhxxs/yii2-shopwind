@@ -40,9 +40,9 @@ class Alipay extends BaseConnect
 	protected $code = 'alipay';
 
 	/**
-     * SDK实例
+	 * SDK实例
 	 * @var object $client
-     */
+	 */
 	private $client = null;
 
 	/**
@@ -50,7 +50,7 @@ class Alipay extends BaseConnect
 	 * @var int $userid
 	 */
 	public $userid;
-	
+
 	/**
 	 * 构造函数
 	 */
@@ -62,16 +62,14 @@ class Alipay extends BaseConnect
 
 		// 更换为移动端的秘钥（因为授权域名不同，需要用不同的秘钥）
 		$fields = ['appId', 'rsaPublicKey', 'rsaPrivateKey', 'alipayrsaPublicKey', 'signType'];
-		if(Basewind::getCurrentApp() == 'wap') 
-		{
-			foreach($fields as $key) {
-				$this->config[$key] = $this->config[$key.'_wap'];
-				unset($this->config[$key.'_wap']);
+		if (Basewind::getCurrentApp() == 'wap') {
+			foreach ($fields as $key) {
+				$this->config[$key] = $this->config[$key . '_wap'];
+				unset($this->config[$key . '_wap']);
 			}
-			
 		} else {
-			foreach($fields as $key) {
-				unset($this->config[$key.'_wap']);
+			foreach ($fields as $key) {
+				unset($this->config[$key . '_wap']);
 			}
 		}
 	}
@@ -79,29 +77,29 @@ class Alipay extends BaseConnect
 	public function login($redirect = true)
 	{
 		$authorizeUrl = $this->getAuthorizeURL();
-		if($redirect) {
+		if ($redirect) {
 			return Yii::$app->response->redirect($authorizeUrl);
 		}
 
 		return $authorizeUrl;
 	}
-	
+
 	public function callback($autobind = false)
 	{
 		$response = $this->getAccessToken();
-		if(!$response) {
+		if (!$response) {
 			return false;
 		}
 
 		// 已经绑定
-		if(($userid = parent::isBind($response->unionid))) {
+		if (($userid = parent::isBind($response->unionid))) {
 			$this->userid = $userid;
 			return true;
 		}
 
 		// 没有绑定，自动绑定
-		if($autobind) {
-			if(($identity = parent::autoBind($this->getUserInfo($response)))) {
+		if ($autobind) {
+			if (($identity = parent::autoBind($this->getUserInfo($response)))) {
 				$this->userid = $identity->userid;
 				return true;
 			}
@@ -118,38 +116,38 @@ class Alipay extends BaseConnect
 	public function getAccessToken()
 	{
 		// APP
-		if($this->params->unionid) {
+		if ($this->params->unionid) {
 			return $this->params;
 		}
 
-		if((($response = $this->getClient()->getAccessToken($this->params->auth_code)) == false) || !$response->access_token) {
+		if ((($response = $this->getClient()->getAccessToken($this->params->auth_code)) == false) || !$response->access_token) {
 			$this->errors = Language::get('get_access_token_fail');
 			return false;
 		}
-		if(!$response->unionid) {
+		if (!$response->unionid) {
 			$this->errors = Language::get('unionid_empty');
 			return false;
 		}
 
 		return $response;
 	}
-	
+
 	public function getUserInfo($response = null)
 	{
-		if(($userInfo = $this->getClient()->getUserInfo($response)) != false) {
+		if (($userInfo = $this->getClient()->getUserInfo($response)) != false) {
 			$response->portrait	= $userInfo->avatar;
 			$response->nickname = $userInfo->nick_name;
 		}
 		return $response;
 	}
-	
+
 	public function getReturnUrl()
 	{
 		// for API
-		if($this->params->callback) {
+		if ($this->params->callback) {
 			return $this->params->callback;
 		}
-		
+
 		return urlencode(Url::toRoute(['connect/alipaycallback'], true));
 	}
 
@@ -158,22 +156,22 @@ class Alipay extends BaseConnect
 	 */
 	public function getAuthorizeURL()
 	{
-		$url = $this->gateway.'?app_id='.$this->config['appId'].'&scope=auth_user&redirect_uri='.$this->config['redirect_uri'].'&state='.mt_rand();
-		if(in_array(Basewind::getCurrentApp(), ['api'])) {
-			$url = 'alipays://platformapi/startapp?appId=20000067&url='.urlencode($url);
+		$url = $this->gateway . '?app_id=' . $this->config['appId'] . '&scope=auth_user&redirect_uri=' . $this->config['redirect_uri'] . '&state=' . mt_rand();
+		if (Basewind::isMobileDevice()) {
+			$url = 'alipays://platformapi/startapp?appId=20000067&url=' . urlencode($url);
 		}
-		
+
 		return $url;
 	}
 
 	/**
-     * 获取SDK实例
-     */
-    public function getClient()
-    {
-        if($this->client === null) {
-            $this->client = new SDK($this->config);
-        }
-        return $this->client;
-    }
+	 * 获取SDK实例
+	 */
+	public function getClient()
+	{
+		if ($this->client === null) {
+			$this->client = new SDK($this->config);
+		}
+		return $this->client;
+	}
 }

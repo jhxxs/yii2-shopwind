@@ -14,6 +14,9 @@ namespace common\plugins\datapicker\leapi;
 use yii;
 use yii\helpers\ArrayHelper;
 
+use common\models\GoodsModel;
+use common\models\GoodsImageModel;
+use common\models\GoodsSpecModel;
 use common\library\Basewind;
 use common\library\Language;
 
@@ -46,21 +49,21 @@ class SDK
 	 */
 	public function __construct(array $config)
 	{
-		foreach($config as $key => $value) {
+		foreach ($config as $key => $value) {
 			$this->$key = $value;
-        }
+		}
 	}
 
 	public function detail($id)
 	{
-		$url = $this->gateway.'?apikey='.$this->apikey.'&itemid='.$id;
-		if(!($response = Basewind::curl($url))) {
+		$url = $this->gateway . '?apikey=' . $this->apikey . '&itemid=' . $id;
+		if (!($response = Basewind::curl($url))) {
 			$this->errors = Language::get('no_data');
 			return false;
 		}
 
 		$result = json_decode($response);
-		if($result->retcode != '0000') {
+		if ($result->retcode != '0000') {
 			$this->errors = $result->data;
 			return false;
 		}
@@ -77,7 +80,7 @@ class SDK
 		$result['spec_name_2'] = $result['spec_name_1'];
 		$result['spec_name_1'] = $tmp;
 
-		foreach($result['specs'] as $key => $value) {
+		foreach ($result['specs'] as $key => $value) {
 			$tmp = $value['spec_2'];
 			$result['specs'][$key]['spec_2'] = $value['spec_1'];
 			$result['specs'][$key]['spec_1'] = $tmp;
@@ -93,32 +96,44 @@ class SDK
 	 */
 	public function getItemId($url)
 	{
-		if(!empty($url) && stripos($url, '.html') !== false) {
-			list($host, $query) = explode('.html', $url);
+		if (!empty($url) && stripos($url, '.html') !== false) {
+			list($host) = explode('.html', $url);
 			$params = explode('/', $host);
 			return $params[count($params) - 1];
 		}
-		
+
 		return 0;
 	}
 
 	public function getDescInfo($item)
 	{
 		$html = '';
-		if(isset($item->desc) && !empty($item->desc)) {
+		if (isset($item->desc) && !empty($item->desc)) {
 			$html = $item->desc;
-		}
-
-		elseif(isset($item->descImgs) && is_array($item->descImgs)) {
-			foreach($item->descImgs as $key => $value) {
-				$html .= '<img src="'+$value+'">';
+		} elseif (isset($item->descImgs) && is_array($item->descImgs)) {
+			foreach ($item->descImgs as $key => $value) {
+				$html .= '<img src="' + $value + '">';
 			}
-		}
-		elseif(isset($item->descUrl) && !empty($item->descUrl)) {
-			$html = '<iframe frameborder="0" width="100%" height="100%" scrolling="no" src="'.$item->descUrl.'"></iframe>';
+		} elseif (isset($item->descUrl) && !empty($item->descUrl)) {
+			$html = '<iframe frameborder="0" width="100%" height="100%" scrolling="no" src="' . $item->descUrl . '"></iframe>';
 		}
 
 		return str_replace('data-lazyload=', 'src=', $html);
+	}
+
+	public function getGoodsImages($data)
+	{
+		$list = [];
+		foreach ($data as $value) {
+			$list[] = ['image_url' => $value, 'thumbnail' => $value];
+		}
+
+		return $list;
+	}
+
+	public function format($data)
+	{
+		return [];
 	}
 
 	public function getSdk($config, $instance, $code)
@@ -138,22 +153,21 @@ class Taobao extends SDK
 		parent::__construct($config);
 	}
 
-	public function format($data) 
+	public function format($data)
 	{
 		$item = $data->item;
 		$result = [
 			'goods_name' => $item->title,
 			'tags'		=> $item->subTitle,
-			'goods_images' => $item->images,
+			'goods_images' => $this->getGoodsImages($item->images),
 			'description' => $this->getDescInfo($item),
 			'spec_qty'	=> 0
 		];
 
 		// 由于本系统限制，最多支持两种规格
 		$defaultSpec = [];
-		foreach($item->sku as $key => $value)
-		{
-			if($value->skuId == 0) {
+		foreach ($item->sku as $key => $value) {
+			if ($value->skuId == 0) {
 				$defaultSpec = [
 					'price' => $value->price,
 					'stock' => $value->quantity
@@ -170,23 +184,23 @@ class Taobao extends SDK
 
 			$hasImg = 1;
 			$propPath = explode(';', $value->propPath);
-			foreach($propPath as $k => $v) {
-				if($k > 1) {
+			foreach ($propPath as $k => $v) {
+				if ($k > 1) {
 					break;
 				}
 				$result['spec_qty']	= $k + 1;
 
 				list($pid, $vid) = explode(':', $v);
-				foreach($item->props as $prop) {
-					if($prop->pid == $pid) {
-						$result['spec_name_'. ($k + 1)] = $prop->name;
-						foreach($prop->values as $val) {
-							if($vid == $val->vid) {
-								if($val->image) {
+				foreach ($item->props as $prop) {
+					if ($prop->pid == $pid) {
+						$result['spec_name_' . ($k + 1)] = $prop->name;
+						foreach ($prop->values as $val) {
+							if ($vid == $val->vid) {
+								if ($val->image) {
 									$spec['image'] = $val->image;
 									$hasImg = $k + 1;
 								}
-								$spec['spec_'. ($k + 1)] = $val->name;
+								$spec['spec_' . ($k + 1)] = $val->name;
 								break;
 							}
 						}
@@ -197,10 +211,10 @@ class Taobao extends SDK
 			$result['specs'][] = $spec;
 		}
 
-		if(empty($result['specs'])) {
+		if (empty($result['specs'])) {
 			$result['specs'][] = $defaultSpec;
 		}
-		
+
 		return $hasImg > 1 ? $this->translate($result) : $result;
 	}
 
@@ -210,12 +224,12 @@ class Taobao extends SDK
 	 */
 	public function getItemId($url)
 	{
-		if(!empty($url) && stripos($url, '?') !== false) {
+		if (!empty($url) && stripos($url, '?') !== false) {
 			list($host, $query) = explode('?', $url);
 			parse_str($query, $params);
 			return $params['id'];
 		}
-		
+
 		return 0;
 	}
 }
@@ -233,17 +247,17 @@ class Alibaba extends SDK
 		$item = $data;
 		$result = [
 			'goods_name' => $item->title,
-			'goods_images' => $item->images,
+			'goods_images' => $this->getGoodsImages($item->images),
 			'description' => $this->getDescInfo($item),
 			'spec_qty'	=> 0
 		];
 
 		// 由于本系统限制，最多支持两种规格
-		if(isset($item->skuProps) && count($item->skuProps) > 0) {
+		if (isset($item->skuProps) && count($item->skuProps) > 0) {
 			$result['spec_qty'] = count($item->skuProps);
 
 			$index = 0;
-			foreach($item->skuMap as $k => $v) {
+			foreach ($item->skuMap as $k => $v) {
 
 				$spec = [
 					'price' => $v->discountPrice,
@@ -253,17 +267,17 @@ class Alibaba extends SDK
 				];
 
 				$spec12 = explode('&gt;', $v->specAttrs);
-				foreach($item->skuProps as $k1 => $v1) {
+				foreach ($item->skuProps as $k1 => $v1) {
 
-					if($k > 1) {
+					if ($k > 1) {
 						break;
 					}
 
-					$result['spec_name_'.($k1 + 1)] = $v1->prop;
-					$spec['spec_'.($k1+ 1)] = $spec12[$k1];
-					foreach($v1->value as $k2 => $v2) {
-						if($v2->name == $spec12[$k1]) {
-							if($v2->imageUrl) {
+					$result['spec_name_' . ($k1 + 1)] = $v1->prop;
+					$spec['spec_' . ($k1 + 1)] = $spec12[$k1];
+					foreach ($v1->value as $k2 => $v2) {
+						if ($v2->name == $spec12[$k1]) {
+							if ($v2->imageUrl) {
 								$spec['image'] = $v2->imageUrl;
 								break;
 							}
@@ -275,7 +289,7 @@ class Alibaba extends SDK
 			}
 		}
 
-		if(empty($result['specs']) && isset($item->showPriceRanges)) {
+		if (empty($result['specs']) && isset($item->showPriceRanges)) {
 			$result['specs'][] = [
 				'price' => $item->showPriceRanges[0]->price,
 				'stock' => 200
@@ -300,13 +314,13 @@ class Jd extends SDK
 		$result = [
 			'goods_name' => $item->name,
 			'brand' => $item->brandName,
-			'goods_images' => $item->images,
+			'goods_images' => $this->getGoodsImages($item->images),
 			'description' => $this->getDescInfo($item),
 			'spec_qty'	=> 0
 		];
 
 		$saleProp = ArrayHelper::toArray($item->saleProp);
-		foreach(ArrayHelper::toArray($item->sku) as $key => $value) {
+		foreach (ArrayHelper::toArray($item->sku) as $key => $value) {
 
 			$spec = [
 				'sku' => $value['skuId'],
@@ -319,12 +333,12 @@ class Jd extends SDK
 				'sort_order' => $key
 			];
 
-			if(!isset($result['spec_name_1'])) {
+			if (!isset($result['spec_name_1'])) {
 				$result['spec_name_1'] = $value[1] ? $saleProp[1] : '';
 				$result['spec_name_2'] = $value[2] ? $saleProp[2] : '';
 				$result['spec_qty'] = ($value[2] && $value[1]) ? 2 : 1;
 			}
-			
+
 			$result['specs'][] = $spec;
 		}
 
@@ -342,11 +356,11 @@ class Jd extends SDK
 			}
 		}*/
 
-		return $sku['imagePath'] ? '//img10.360buyimg.com/imgzone/'.$sku['imagePath'] : '';
+		return $sku['imagePath'] ? '//img10.360buyimg.com/imgzone/' . $sku['imagePath'] : '';
 	}
 }
 
-class Pdd extends SDK 
+class Pdd extends SDK
 {
 	public function __construct(array $config)
 	{
@@ -359,12 +373,12 @@ class Pdd extends SDK
 		$item = $data->item;
 		$result = [
 			'goods_name' => $item->goodsName,
-			'goods_images' => $item->banner, //array_reverse($item->banner),
+			'goods_images' => $this->getGoodsImages($item->banner), //array_reverse($item->banner),
 			'description' => $this->getDescInfo($item),
 			'spec_qty'	=> 0
 		];
 
-		foreach($item->skus as $key => $value) {
+		foreach ($item->skus as $key => $value) {
 
 			$spec = [
 				'sku' => $value->skuID,
@@ -375,21 +389,21 @@ class Pdd extends SDK
 				'sort_order' => $key + 1
 			];
 
-			
-			foreach($value->specs as $k => $v) {
 
-				if($k > 1) {
+			foreach ($value->specs as $k => $v) {
+
+				if ($k > 1) {
 					break;
 				}
 
 				$result['spec_qty'] = $k + 1;
-				if(!isset($result['spec_name_'. ($k + 1)])) {
-					$result['spec_name_'. ($k + 1)] = $v->spec_key;
+				if (!isset($result['spec_name_' . ($k + 1)])) {
+					$result['spec_name_' . ($k + 1)] = $v->spec_key;
 				}
 
 				// 接口兼容处理
- 				$spec['spec_'.($k + 1)] = isset($v->spec_values) ? $v->spec_values : $v->spec_value;
-			}	
+				$spec['spec_' . ($k + 1)] = isset($v->spec_values) ? $v->spec_values : $v->spec_value;
+			}
 
 			$result['specs'][] = $spec;
 		}
@@ -403,12 +417,12 @@ class Pdd extends SDK
 	 */
 	public function getItemId($url)
 	{
-		if(!empty($url) && stripos($url, '?') !== false) {
+		if (!empty($url) && stripos($url, '?') !== false) {
 			list($host, $query) = explode('?', $url);
 			parse_str($query, $params);
 			return $params['goods_id'];
 		}
-		
+
 		return 0;
 	}
 
@@ -416,14 +430,42 @@ class Pdd extends SDK
 	{
 		$html = $item->goodsDesc;
 
-		if(!isset($item->detail) || empty($item->detail)) {
+		if (!isset($item->detail) || empty($item->detail)) {
 			return $html;
 		}
 
-		foreach($item->detail as $value) {
-			$html .= '<img src="'.$value->url.'">';
+		foreach ($item->detail as $value) {
+			$html .= '<img src="' . $value->url . '">';
 		}
 
 		return $html;
+	}
+}
+
+class Local extends SDK
+{
+	/**
+	 * 从链接提取商品ID
+	 * 本站：http://www.xxx.com/goods.html?id=xxx
+	 */
+	public function getItemId($url)
+	{
+		if (!empty($url) && stripos($url, '?') !== false) {
+			list($host, $query) = explode('?', $url);
+			parse_str($query, $params);
+			return $params['id'];
+		}
+
+		return 0;
+	}
+
+	public function detail($id)
+	{
+		$result = GoodsModel::find()->select('goods_name,brand,tags,description,spec_qty,spec_name_1,spec_name_2')->where(['goods_id' => $id])->asArray()->one();
+		if ($result) {
+			$result['goods_images'] = GoodsImageModel::find()->select('image_url,thumbnail,sort_order')->where(['goods_id' => $id])->orderBy(['sort_order' => SORT_ASC])->asArray()->all();
+			$result['specs'] = GoodsSpecModel::find()->select('spec_1,spec_2,price,mkprice,stock,sku,image,sort_order')->where(['goods_id' => $id])->orderBy(['sort_order' => SORT_ASC])->asArray()->all();
+		}
+		return $result;
 	}
 }

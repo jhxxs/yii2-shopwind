@@ -18,10 +18,10 @@ namespace common\plugins\connect\weixin;
 
 return array(
     'code' => 'weixin',
-    'name' => '微信登录',
+    'name' => '微信公众号登录',
     'desc' => '适用于微信公众号内登录，填写微信公众号秘钥',
     'author' => 'SHOPWIND',
-	'website' => 'https://www.shopwind.net',
+    'website' => 'https://www.shopwind.net',
     'version' => '1.0',
     'config' => array(
         'appId' => array(

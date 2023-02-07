@@ -88,12 +88,12 @@ class GoodsForm extends Model
 		foreach ($result['goods_images'] as $key => $value) {
 			$imageModel = new GoodsImageModel();
 			$imageModel->goods_id = $model->goods_id;
-			$imageModel->image_url = $value;
-			$imageModel->thumbnail = $value;
-			$imageModel->sort_order = $key + 1;
+			foreach ($value as $k => $v) {
+				$imageModel->$k = $v;
+			}
 			if ($imageModel->save()) {
 				if ($key == 0) {
-					$model->default_image = $value;
+					$model->default_image = $imageModel->thumbnail;
 					$model->save();
 				}
 			}
@@ -115,6 +115,10 @@ class GoodsForm extends Model
 					}
 				}
 			}
+		}
+
+		if (!$this->goods_id) {
+			$this->goods_id = $model->goods_id;
 		}
 
 		return true;
