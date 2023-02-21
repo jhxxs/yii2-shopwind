@@ -41,7 +41,7 @@ class BasePayment extends BasePlugin
 	/**
 	 * 提交支付请求
 	 */
-	public function pay($orderInfo = array())
+	public function pay($orderInfo = [])
 	{
 		return $this->createPayform();
 	}
@@ -49,7 +49,7 @@ class BasePayment extends BasePlugin
 	/**
 	 * 退款原路返回
 	 */
-	public function refund($orderInfo)
+	public function refund($orderInfo = [])
 	{
 		return false;
 	}
@@ -59,10 +59,10 @@ class BasePayment extends BasePlugin
 	 * @param array $params
 	 * @param string $method post|get
 	 */
-	public function createPayform($params = array(), $method = 'get')
+	public function createPayform($params = [], $gateway = '', $method = 'get')
 	{
 		return [
-			'gateway' => $this->gateway,
+			'gateway' => $gateway,
 			'params' => $params,
 			'method' => $method,
 			'payment_code' 	=> $this->code
@@ -75,7 +75,7 @@ class BasePayment extends BasePlugin
 	 */
 	public function createNotifyUrl($payTradeNo = '')
 	{
-		return Url::toRoute(['paynotify/notify'], true);
+		return Url::toRoute(['paynotify/notify', 'payTradeNo' => $payTradeNo], true);
 	}
 
 	/**
@@ -86,7 +86,7 @@ class BasePayment extends BasePlugin
 	{
 		// for API
 		if ($this->params->callback) {
-			return $this->params->callback . '?payTradeNo=' . $payTradeNo;
+			return $this->params->callback . (strripos($this->params->callback, '?') > -1 ? '&' : '?') . 'payTradeNo=' . $payTradeNo;
 		}
 
 		return Url::toRoute(['paynotify/index', 'payTradeNo' => $payTradeNo], true);
@@ -197,7 +197,7 @@ class BasePayment extends BasePlugin
 	 * 获取支付方式的键值
 	 * @param array $payments
 	 */
-	public function getKeysOfPayments($payments = array())
+	public function getKeysOfPayments($payments = [])
 	{
 		$keys = array();
 		foreach ($payments as $key => $value) {

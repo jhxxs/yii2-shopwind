@@ -34,7 +34,7 @@ class Deposit extends BasePayment
 	 * 网关地址
 	 * @var string $gateway
 	 */
-	protected $gateway = null;
+	public $gateway;
 
 	/**
 	 * 支付插件实例
@@ -50,7 +50,7 @@ class Deposit extends BasePayment
 
 		// 因为是余额支付，所以直接处理业务
 		if ($this->payNotify($payTradeNo) === false) {
-			if(!$this->errors) $this->errors = Language::get('pay_fail');
+			if (!$this->errors) $this->errors = Language::get('pay_fail');
 			return false;
 		}
 

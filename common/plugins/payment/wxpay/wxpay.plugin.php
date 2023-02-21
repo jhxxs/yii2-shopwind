@@ -45,7 +45,7 @@ class Wxpay extends BasePayment
 	 * 提交支付请求
 	 * 兼容公众号支付/扫码支付/H5支付
 	 */
-	public function pay($orderInfo = array())
+	public function pay($orderInfo = [])
 	{
 		// 支付网关商户订单号
 		$payTradeNo = $this->getPayTradeNo($orderInfo);
@@ -119,7 +119,7 @@ class Wxpay extends BasePayment
 	/**
 	 * 提交退款请求（原路退回）
 	 */
-	public function refund($orderInfo)
+	public function refund($orderInfo = [])
 	{
 		$sdk = $this->getClient();
 		$sdk->payTradeNo = $orderInfo['payTradeNo'];
@@ -136,7 +136,7 @@ class Wxpay extends BasePayment
 	/**
 	 * 转账到微信零钱（用于提现）
 	 */
-	public function transfer($orderInfo)
+	public function transfer($orderInfo = [])
 	{
 		$sdk = $this->getClient();
 		$sdk->payTradeNo = $orderInfo['payTradeNo'];

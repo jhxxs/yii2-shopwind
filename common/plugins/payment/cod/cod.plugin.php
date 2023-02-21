@@ -42,7 +42,7 @@ class Cod extends BasePayment
 	protected $code = 'cod';
 	
 	/* 获取支付表单 */
-    public function pay($orderInfo = array())
+    public function pay($orderInfo = [])
     {
 		// 支付网关商户订单号
 		$payTradeNo = $this->getPayTradeNo($orderInfo);

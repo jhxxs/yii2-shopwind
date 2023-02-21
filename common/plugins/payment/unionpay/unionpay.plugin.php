@@ -38,7 +38,7 @@ class Unionpay extends BasePayment
 	private $client = null;
 
 	/* 获取支付表单 */
-	public function pay($orderInfo = array())
+	public function pay($orderInfo = [])
 	{
 		// 支付网关商户订单号
 		$payTradeNo = $this->getPayTradeNo($orderInfo);
@@ -48,7 +48,7 @@ class Unionpay extends BasePayment
 		$sdk->notifyUrl = $this->createNotifyUrl($payTradeNo);
 		$sdk->returnUrl = $this->createReturnUrl($payTradeNo);
 
-		return $this->createPayform($sdk->getPayform($orderInfo), $this->gateway, 'post');
+		return $this->createPayform($sdk->getPayform($orderInfo), $sdk->gateway, 'post');
 	}
 
 	/* 返回通知结果 */

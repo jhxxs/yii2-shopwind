@@ -12,7 +12,6 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 use common\models\UserModel;
@@ -20,11 +19,10 @@ use common\models\DepositTradeModel;
 use common\models\StoreModel;
 use common\models\GuideshopModel;
 use common\models\DistributeMerchantModel;
-use common\models\GoodsModel;
+use common\models\UserEnterModel;
 use common\models\OrderModel;
 use common\models\RegionModel;
 use common\models\GcategoryModel;
-use common\models\ScategoryModel;
 use common\models\RefundModel;
 use common\models\ReportModel;
 use common\models\PluginModel;

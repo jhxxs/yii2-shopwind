@@ -140,7 +140,7 @@ class SDK
 	/**
 	 * 预下单
 	 */
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = [])
 	{
 		try {
 
@@ -181,7 +181,7 @@ class SDK
 	 * 由微信处理原路返回策略
 	 * @desc 为了更好的处理业务，调用成功即认为微信退款成功（支付宝也即同步调用），暂不考虑异步通知的情况
 	 */
-	public function getRefundform($orderInfo = array())
+	public function getRefundform($orderInfo = [])
 	{
 		try {
 
@@ -220,7 +220,7 @@ class SDK
 	 * 必须确保OPENID是在该APPID下获取的值
 	 * 返回成功仅代表业务受理成功，严格来说，需要通过查询微信查询明细单 状态来确认是否转账成功
 	 */
-	public function getTransform($orderInfo = array())
+	public function getTransform($orderInfo = [])
 	{
 		// 微信商户平台提现金额限制
 		if ($orderInfo['amount'] < 0.3 || $orderInfo['amount'] > 200) {

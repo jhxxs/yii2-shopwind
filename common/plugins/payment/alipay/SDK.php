@@ -135,7 +135,7 @@ class SDK
 	/**
 	 * 订单支付
 	 */
-	public function getPayform($orderInfo = array())
+	public function getPayform($orderInfo = [])
 	{
 		try {
 
@@ -180,7 +180,7 @@ class SDK
 	 * 订单退款
 	 * 由支付宝处理原路返回策略
 	 */
-	public function getRefundform($orderInfo = array())
+	public function getRefundform($orderInfo = [])
 	{
 		try {
 
@@ -217,7 +217,7 @@ class SDK
 	/**
 	 * 转账接口只支持证书模式
 	 */
-	public function getTransform($orderInfo = array())
+	public function getTransform($orderInfo = [])
 	{
 		if (!$this->appId || !$this->rsaPrivateKey || !$this->alipayCertPath || !$this->appCertPath || !$this->rootCertPath) {
 			$this->errors = Language::get('params fail');

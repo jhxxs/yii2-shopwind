@@ -42,8 +42,8 @@ class Alipay extends BasePayment
 	/**
 	 * 提交支付请求
 	 */
-	public function pay($orderInfo = array())
-    {
+	public function pay($orderInfo = [])
+	{
 		// 支付网关商户订单号
 		$payTradeNo = $this->getPayTradeNo($orderInfo);
 		
@@ -74,7 +74,7 @@ class Alipay extends BasePayment
 	/**
 	 * 提交退款请求（原路退回）
 	 */
-	public function refund($orderInfo)
+	public function refund($orderInfo = [])
 	{
 		$sdk = $this->getClient();
 		$sdk->payTradeNo = $orderInfo['payTradeNo'];
@@ -92,9 +92,9 @@ class Alipay extends BasePayment
 	 * 转账到支付宝钱包（提现）
 	 * 请确保服务器环境局配置了SSL(SSL certificate problem: unable to get local issuer certificate)
 	 */
-	public function transfer($orderInfo = array())
-    {
-		if($orderInfo['amount'] < 0.1) {
+	public function transfer($orderInfo = [])
+	{
+		if ($orderInfo['amount'] < 0.1) {
 			$this->errors = Language::get('money shall not be less than 0.1');
 			return false;
 		}

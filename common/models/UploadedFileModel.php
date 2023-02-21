@@ -226,18 +226,10 @@ class UploadedFileModel extends ActiveRecord
 	public static function getSavePath($store_id = 0, $belong = '', $unionid = 0)
 	{
 		// 如果是目录
-		if(is_string($belong))
-		{
-			if($store_id) {
-				$savePath = 'data/files/store_' . $store_id . '/' . $belong;
-			} else {
-				$savePath = 'data/files/mall/' . $belong;
-			}
-		} 
-		else 
-		{
-			switch ($belong)
-			{
+		if (!is_numeric($belong)) {
+			$savePath = 'data/files' . ($store_id ? '/store_' . $store_id : '/mall') . '/' . $belong;
+		} else {
+			switch ($belong) {
 				case Def::BELONG_ARTICLE 	:	$savePath = 'data/files/mall/article/';
 				break;
 				case Def::BELONG_STORE 		: 	$savePath = 'data/files/store_' . $store_id . '/other/';
