@@ -13,14 +13,14 @@
 <div align="center">
 
 [![php语言](https://img.shields.io/badge/language-php-red)](https://www.shopwind.net/)
-[![V3.4.4](https://img.shields.io/badge/release-3.4.4-blue)](https://www.shopwind.net/product/download.html)
+[![V3.4.4](https://img.shields.io/badge/release-4.0-blue)](https://www.shopwind.net/product/download.html)
 [![license](https://img.shields.io/badge/license-Apache2.0-green)](https://www.shopwind.net/license/)
 
 </div>
 <div align="center">
 
   [官网](https://www.shopwind.net/) |
-  [在线体验](http://test.shopwind.net/) |
+  [在线体验](https://www.shopwind.net/product/download.html) |
   [一键安装](https://www.shopwind.net/forum/thread-282.html) |
   [开源框架](https://www.yiichina.com/) 
 
@@ -28,7 +28,7 @@
 
 #### 介绍
 
-ShopWind是一款基于Yii2.0框架深度重构的B2B2C、O2O行业的电商系统软件，您可以轻松创建和发布属于自己品牌的专业的电商平台，进行全方位的品牌宣传和产品推广。ShopWind v3.x标准版开始走向开源，打造一款完全开源的电商系统，可以免费用于商业运营或者二次开发，免于商业版权的烦恼。v3.x商业版包含PC、手机H5、微商城、APP客户端（Andorid+iOS）、微信小程序、今日头条小程序等多端，其中PC端为开源免费项目，移动端为增值项目。ShopWind提供专业、快速、安全的底层软件设计和免费的更新升级服务，做好完善的开发文档和接口文档方便开发者在底层软件的基础上开发各种应用、模板、或者插件。 
+ShopWind是一款基于Yii2.0框架深度重构的B2B2C、O2O行业的电商系统软件，您可以轻松创建和发布属于自己品牌的专业的电商平台，进行全方位的品牌宣传和产品推广。ShopWind v3.x标准版开始走向开源，打造一款完全开源的电商系统，可以免费用于商业运营或者二次开发，免于商业版权的烦恼。v3.x商业版包含PC、手机H5、微商城、APP客户端（Andorid+iOS）、微信小程序、今日头条小程序等多端，其中PC端为开源免费项目，移动端为增值项目。ShopWind提供专业、快速、安全的底层软件设计和免费的更新升级服务，做好完善的开发文档和接口文档方便开发者在底层软件的基础上开发各种应用、模板、或者插件。ShopWind v4.x 采用全新构架，实现前后端分离，vue3/vite、Element Plus UI、axios数据请求、页面异步加载等，技术更新效果体验更优秀。
 
 #### 关于项目
 
@@ -40,7 +40,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 #### 运行环境
 * Nginx/Apache/IIS
-* PHP7.2+
+* PHP7.3+
 * MySQL5.6+
 
 #### 服务器
@@ -50,13 +50,18 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 #### 安装教程
 * <a href="https://forum.shopwind.net" target="_blank"> 查看常见问题/安装教程 </a>
 
-#### PC体验
+#### 开源版体验
 * 前台体验：<a href="http://test.shopwind.net" target="_blank"> http://test.shopwind.net </a> 买家测试账号：buyer 密码：123456  支付密码：123456
 * 后台体验：<a href="http://test.shopwind.net/admin" target="_blank">  http://test.shopwind.net/admin </a> 平台管理员账号：admin 密码：123456
 * 商家体验：<a href="http://test.shopwind.net/seller/login.html" target="_blank"> http://test.shopwind.net/seller/login.html </a> 商家测试账号：seller 密码：123456
 
+#### 多商户旗舰版体验
+* 后台体验：<a href="https://v4.shopwind.net/admin" target="_blank">  https://v4.shopwind.net/admin </a> 平台管理员账号：admin 密码：11111
+* 前台体验：<a href="https://v4.shopwind.net" target="_blank"> https://v4.shopwind.net </a> 自行微信登录、QQ、支付宝登录
+* 商家体验：<a href="https://v4.shopwind.net/seller/login/index" target="_blank"> https://v4.shopwind.net/seller/login/index </a> 商家测试账号：18978189171 密码：111111
+
 #### 移动端体验（商业版）
-* H5端体验：<a href="https://h5.shopwind.net" target="_blank"> https://h5.shopwind.net </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
+* H5端体验：<a href="https://v4.shopwind.net/h5" target="_blank"> https://v4.shopwind.net/h5 </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
 
 #### 小程序/APP体验（商业版）
 * 微信小程序：<a href="https://h5.shopwind.net/20210507181842.jpg" target="_blank"> https://h5.shopwind.net/20210507181842.jpg </a> 
@@ -108,6 +113,9 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 ##### 可视化模板编辑/DIY页面布局
 ![模板编辑](https://www.shopwind.net/static/images/ht3.png)
+
+##### 独立IM客服系统
+![IM客服系统](https://www.shopwind.net/static/images/im.png)
 
 
 #### 关于版权
