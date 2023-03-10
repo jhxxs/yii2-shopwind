@@ -208,7 +208,7 @@ class StoreController extends \common\controllers\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			
 			// 待审核的店铺才允许提交，防止重复插入
-			if($store['state'] == Def::STORE_APPLYING)
+			if(in_array($store['state'], [Def::STORE_APPLYING, Def::STORE_NOPASS]))
 			{
 				// 批准
 				if ($post->action == 'agree')
@@ -253,9 +253,8 @@ class StoreController extends \common\controllers\BaseAdminController
 					}
 					return Message::display(Language::get('reject_ok'), ['store/verify']);
 				}
-				return Message::warning(Language::get('handle_fail'));	
 			}
-			return Message::display(Language::get('agree_ok'), ['store/index']);
+			return Message::warning(Language::get('handle_fail'), ['store/index']);
 		}
 	}
 	

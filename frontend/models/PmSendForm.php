@@ -79,7 +79,7 @@ class PmSendForm extends Model
 	
 	public function sendFrom($from_id)
 	{
-		$this->from_id = $this->from_id;
+		$this->from_id = $from_id;
 		return new self($this->from_id, $this->to_id, $this->title, $this->content);
 	}
 }

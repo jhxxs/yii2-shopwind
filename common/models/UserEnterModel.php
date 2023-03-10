@@ -14,7 +14,10 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 
+use common\models\RegionModel;
+use common\library\Basewind;
 use common\library\Timezone;
+use common\library\Language;
 
 /**
  * @Id UserEnterModel.php 2018.7.30 $
@@ -23,20 +26,20 @@ use common\library\Timezone;
 
 class UserEnterModel extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%user_enter}}';
-    }
-	
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return '{{%user_enter}}';
+	}
+
 	// 关联表
 	public function getUser()
 	{
 		return parent::hasOne(UserModel::className(), ['userid' => 'userid']);
 	}
-	
+
 	public static function enter($identity = null, $scene = 'backend')
 	{
 		$model = new UserEnterModel();
@@ -45,7 +48,10 @@ class UserEnterModel extends ActiveRecord
 		$model->scene = $scene;
 		$model->ip = Yii::$app->request->userIP;
 		$model->add_time = Timezone::gmtime();
-		
+		if ($address = RegionModel::getAddressByIp($model->ip)) {
+			$model->address = $address['local'] ? Language::get('local') : $address['city'];
+		}
+
 		return $model->save();
 	}
 }
