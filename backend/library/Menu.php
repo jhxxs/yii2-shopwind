@@ -13,20 +13,22 @@ namespace backend\library;
 
 use yii;
 use yii\helpers\Url;
+use yii\helpers\FileHelper;
 
 use common\library\Language;
+use common\library\Plugin;
 
 /**
  * @Id Menu.php 2018.7.26 $
  * @author mosir
  */
- 
+
 class Menu
 {
 	/* 获取全局菜单列表 */
-    public static function getMenus()
-    {
-        $menu = array(
+	public static function getMenus()
+	{
+		$menu = array(
 			'dashboard' => array(
 				'text'      => Language::get('dashboard'),
 				'ico'		=> 'icon-home',
@@ -62,6 +64,11 @@ class Menu
 						'url'   => Url::toRoute('setting/api'),
 						'priv'  => ['key' => 'setting|api']
 					),
+					'app' => array(
+						'text' => Language::get('app_setting'),
+						'url' => Url::toRoute(['setting/app']),
+						'priv' => ['key' => 'setting|app']
+					),
 					'verifycode' => array(
 						'text'  => Language::get('captcha'),
 						'url'   => Url::toRoute('setting/verifycode'),
@@ -81,18 +88,18 @@ class Menu
 					),
 					'admin' => array(
 						'text' => Language::get('admin_list'),
-						 'url'   => Url::toRoute('manager/index'),
-						 'priv'  => ['key' => 'manager|all', 'label' => Language::get('admin_manage')]
-					 ),
-					 'integral'=> array(
+						'url'   => Url::toRoute('manager/index'),
+						'priv'  => ['key' => 'manager|all', 'label' => Language::get('admin_manage')]
+					),
+					'integral' => array(
 						'text' => Language::get('integral_manage'),
 						'url'  => Url::toRoute('integral/index'),
-						'priv' => ['key' => 'integral|all'] 
-					 ),
-					 'setting'=> array(
+						'priv' => ['key' => 'integral|all']
+					),
+					'setting' => array(
 						'text' => Language::get('integral_setting'),
 						'url'  => Url::toRoute('integral/setting')
-					 )
+					)
 				)
 			),
 			// 商品
@@ -116,10 +123,10 @@ class Menu
 						'priv'  => ['key' => 'brand|all']
 					),
 					'props' => array(
-					   'text' => Language::get('goods_props'),
-					   'url'  => Url::toRoute('goodsprop/index'),
-					   'priv' => ['key' => 'goodsprop|all'] 
-					),		
+						'text' => Language::get('goods_props'),
+						'url'  => Url::toRoute('goodsprop/index'),
+						'priv' => ['key' => 'goodsprop|all']
+					),
 					'recommended' => array(
 						'text'  => Language::get('recommend_manage'),
 						'url'   => Url::toRoute('recommend/index'),
@@ -152,7 +159,7 @@ class Menu
 						'url'   => Url::toRoute('scategory/index'),
 						'priv'  => ['key' => 'scategory|all']
 					),
-					'apply'  =>array(
+					'apply'  => array(
 						'text'  => Language::get('store_setting'),
 						'url'   => Url::toRoute('setting/store'),
 						'priv'  => ['key' => 'setting|store']
@@ -184,7 +191,7 @@ class Menu
 						'url'   => Url::toRoute('guideshop/verify'),
 						'priv'  => ['key' => 'guideshop|verify']
 					),
-					'setting'  =>array(
+					'setting'  => array(
 						'text'  => Language::get('guideshop_setting'),
 						'url'   => Url::toRoute('guideshop/setting'),
 					)
@@ -199,6 +206,10 @@ class Menu
 						'text'  => Language::get('order_list'),
 						'url'   => Url::toRoute('order/index'),
 						'priv'  => ['key' => 'order|all', 'label' => Language::get('order_manage')]
+					),
+					'timeline' => array(
+						'text'  => Language::get('order_timeline'),
+						'url'   => Url::toRoute('order/timeline'),
 					),
 					'refund' => array(
 						'text' => Language::get('refund_list'),
@@ -233,28 +244,28 @@ class Menu
 						'text' => Language::get('deposit_account'),
 						'url'  => Url::toRoute('deposit/index'),
 						'priv' => ['key' => 'deposit|account', 'depends' => 'deposit|edit,deposit|editcol,deposit|index,deposit|delete,deposit|export,deposit|monthbill,deposit|downloadbill']
-					 ),
+					),
 					'trade' => array(
 						'text' => Language::get('trade_manage'),
 						'url'  => Url::toRoute('deposit/tradelist'),
 						'priv' => ['key' => 'deposit|tradelist', 'depends' => 'deposit|export']
-					 ),
-					 'recharge' => array(
+					),
+					'recharge' => array(
 						'text' => Language::get('recharge_manage'),
 						'url'  => Url::toRoute('deposit/rechargelist'),
 						'priv' => ['key' => 'deposit|rechargelist', 'depends' => 'deposit|recharge,deposit|export']
-					 ),
-					 'drawal' => array(
+					),
+					'drawal' => array(
 						'text' => Language::get('drawal_manage'),
 						'url'  => Url::toRoute('deposit/drawlist'),
 						'priv' => ['key' => 'deposit|drawlist', 'depends' => 'deposit|drawverify,deposit|drawrefuse,deposit|export']
-					 ),
-					 'cashcard' => array(
+					),
+					'cashcard' => array(
 						'text' => Language::get('cashcard_manage'),
 						'url'  => Url::toRoute('cashcard/index'),
 						'priv' => ['key' => 'cashcard|all']
-					 ),
-					 'setting' => array(
+					),
+					'setting' => array(
 						'text' => Language::get('deposit_setting'),
 						'url'  => Url::toRoute('deposit/setting'),
 						'priv' => ['key' => 'deposit|setting']
@@ -265,58 +276,12 @@ class Menu
 			'plugin' => array(
 				'text'  => Language::get('plugin'),
 				'ico' => 'icon-app',
-				'children' => array(
-					'promote' => array(
-						'text'	=> Language::get('plugin_promote'),
-						'url'	=> Url::toRoute('promote/index'),
-						'priv'  => ['key' => 'promote|all', 'depends' => 'appmarket|all', 'label' => Language::get('plugin_promote')]
-					),
-					'connect' => array(
-						'text'  => Language::get('plugin_connect'),
-						'url'   => Url::toRoute(['plugin/index', 'instance' => 'connect']),
-						'priv'  => ['key' => 'plugin|connect|all', 'label' => Language::get('plugin_connect')]
-					),
-					'payment' => array(
-						'text'  => Language::get('plugin_payment'),
-						'url'   => Url::toRoute(['plugin/index', 'instance' => 'payment']),
-						'priv'  => ['key' => 'plugin|payment|all', 'label' => Language::get('plugin_payment')]
-					),
-					'sms' 	=> array(
-						'text' => Language::get('plugin_sms'),
-						'url'  => Url::toRoute(['plugin/index', 'instance' => 'sms']),
-						'priv' => ['key' => 'plugin|sms|all', 'depends' => 'msg|all', 'label' => Language::get('plugin_sms')]
-					),
-					'oss' 	  => array(
-						'text'  => Language::get('plugin_oss'),
-						'url'	=> Url::toRoute(['plugin/index', 'instance' => 'oss']),
-						'priv' 	=> ['key' => 'plugin|oss|all', 'label' => Language::get('plugin_oss')]
-					),
-					'express' => array(
-						'text'  => Language::get('plugin_express'),
-						'url'   => Url::toRoute(['plugin/index', 'instance' => 'express']),
-						'priv'  => ['key' => 'plugin|express|all', 'label' => Language::get('plugin_express')]
-					),
-					'datapicker' => array(
-						'text' => Language::get('plugin_datapicker'),
-						'url'  => Url::toRoute(['plugin/index', 'instance' => 'datapicker']),
-						'priv' => ['key' => 'plugin|datapicker|all', 'label' => Language::get('plugin_datapicker')]
-					),
-					'uploader' => array(
-						'text'  => Language::get('plugin_uploader'),
-						'url'   => Url::toRoute(['plugin/index', 'instance' => 'uploader']),
-						'priv'  => ['key' => 'plugin|uploader|all', 'label' => Language::get('plugin_uploader')]
-					),
-					'editor' => array(
-						'text'  => Language::get('plugin_editor'),
-						'url'   => Url::toRoute(['plugin/index', 'instance' => 'editor']),
-						'priv'  => ['key' => 'plugin|editor|all', 'label' => Language::get('plugin_editor')]
-					)
-				)
+				'children' => Plugin::getInstance('plugin')->build()->getList()
 			),
 			// 微信
 			'weixin' => array(
 				'text'      => Language::get('weixin'),
-				'ico'=> 'icon-weixinxiaochengxu',
+				'ico' => 'icon-weixinxiaochengxu',
 				'children'  => array(
 					'wxapplet' => array(
 						'text' => Language::get('weixin_applet'),
@@ -358,14 +323,14 @@ class Menu
 					'report' => array(
 						'text'  => Language::get('report_manage'),
 						'url'   => Url::toRoute('report/index'),
-						'priv'  => ['key' => 'report|all'] 
+						'priv'  => ['key' => 'report|all']
 					)
 				)
 			),
 			// 文章
 			'article' => array(
 				'text'      => Language::get('article'),
-				'ico'=> 'icon-wenzhang',
+				'ico' => 'icon-wenzhang',
 				'children'  => array(
 					'list' => array(
 						'text'  => Language::get('article_list'),
@@ -378,11 +343,11 @@ class Menu
 						'priv'  => ['key' => 'acategory|all']
 					)
 				)
-			), 
+			),
 			// 数据库
 			'db' => array(
 				'text'      => Language::get('db'),
-				'ico'=> 'icon-shujuku',
+				'ico' => 'icon-shujuku',
 				'children'  => array(
 					'backup' => array(
 						'text'  => Language::get('db_backup'),
@@ -400,11 +365,11 @@ class Menu
 						'priv'  => ['key' => 'db|index', 'depends' => 'db|slave']
 					),
 				)
-			), 
+			),
 			// 缓存
 			'cache'   => array(
 				'text'      => Language::get('cache'),
-				'ico'=> 'icon-cache',
+				'ico' => 'icon-cache',
 				'children'  => array(
 					'redis' => array(
 						'text'  => Language::get('Redis'),
@@ -424,7 +389,7 @@ class Menu
 				)
 			)
 		);
-		
-        return $menu;
-    }
+
+		return $menu;
+	}
 }

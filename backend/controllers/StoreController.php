@@ -104,7 +104,7 @@ class StoreController extends \common\controllers\BaseAdminController
 		else
 		{
 			$query = StoreModel::find()
-				->select('store_id,store_name,stype,sgrade,owner_name,region_name,state')
+				->select('store_id,store_name,stype,sgrade,owner_name,region_name,state,add_time')
 				->where(['in', 'state', [Def::STORE_APPLYING, Def::STORE_NOPASS]])
 				->orderBy(['store_id' => SORT_DESC]);
 
@@ -112,6 +112,7 @@ class StoreController extends \common\controllers\BaseAdminController
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value)
 			{
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['stype'] = Language::get($value['stype']);
 				$list[$key]['sgrade'] = $this->params['sgrades'][$value['sgrade']];
 				$list[$key]['state'] = $this->getStatus($value['state']);

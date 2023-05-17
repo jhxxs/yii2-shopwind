@@ -137,4 +137,25 @@ class SettingController extends \common\controllers\BaseAdminController
 			return Message::display(Language::get('edit_api_setting_successed'), ['setting/api']);
 		}
 	}
+
+	public function actionApp()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$this->params['setting'] = Setting::getInstance()->getAll();
+			
+			$this->params['page'] = Page::seo(['title' => Language::get('app_setting')]);
+			return $this->render('../setting.app.html', $this->params);
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+		
+			$model = new \backend\models\SettingForm();
+			if(!$model->save($post, true)) {
+				return Message::warning($model->errors);
+			}
+			return Message::display(Language::get('edit_ok'), ['setting/app']);
+		}
+	}
 }

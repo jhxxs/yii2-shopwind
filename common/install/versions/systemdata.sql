@@ -44,7 +44,7 @@ INSERT INTO `swd_article` (`article_id`, `title`, `cate_id`, `store_id`, `link`,
 --
 delete from `swd_sgrade`;
 INSERT INTO `swd_sgrade` (`grade_id`, `grade_name`, `goods_limit`, `space_limit`, `charge`, `need_confirm`, `description`, `skins`, `wap_skins`, `sort_order`) VALUES
-(1, '系统默认', 100, 20, '0', 0, '测试用户请选择“默认等级”，可以立即开通', 'default|default', 'default|default', 255);
+(1, '系统默认', 100, 100, '0', 0, '一张身份证即可开店，无需审核，提交后立即开通', 'default|default', 'default|default', 255);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

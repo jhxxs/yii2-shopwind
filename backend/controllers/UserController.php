@@ -196,7 +196,7 @@ class UserController extends \common\controllers\BaseAdminController
 			if(!$identity) {
 				return Message::warning(Language::get('username_password_error'));
 			}
-			if(!$identity->validatePassword($post->password)) {
+			if(!$post->password || !$identity->validatePassword($post->password)) {
 				return Message::warning(Language::get('username_password_error'));
 			}
 			if(!UserPrivModel::isManager($identity->userid)) {
@@ -221,7 +221,7 @@ class UserController extends \common\controllers\BaseAdminController
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'limit', 'page']);
 			
-			$query = UserEnterModel::find()->select('id,userid,username,ip,address,add_time')->where(['userid' => $post->id]);
+			$query = UserEnterModel::find()->select('id,userid,username,ip,address,add_time')->where(['userid' => $post->id])->orderBy(['id' => SORT_DESC]);
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();

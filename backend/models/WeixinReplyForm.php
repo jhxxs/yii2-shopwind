@@ -33,16 +33,12 @@ class WeixinReplyForm extends Model
 	
 	public function valid($post)
 	{
-		if(!in_array($post->action, ['beadded','autoreply','smartreply'])) {
+		if(!in_array($post->action, ['subscribe','text','keyword'])) {
 			$this->errors = Language::get('action_invalid');
 			return false;
 		}
 
-		if($post->action == 'smartreply') {
-			if(!isset($post->rule_name) || empty($post->rule_name)) {
-				$this->errors = Language::get('rule_name_empty');
-				return false;
-			}
+		if($post->action == 'keyword') {
 			if(!isset($post->keywords) || empty($post->keywords)) {
 				$this->errors = Language::get('keywords_empty');
 				return false;
@@ -66,14 +62,14 @@ class WeixinReplyForm extends Model
 		}
 
 		if(!$this->reply_id || !($model = WeixinReplyModel::findOne($this->reply_id))) {
-			if(in_array($post->action, ['beadded','autoreply']) && WeixinReplyModel::find()->where(['userid' => $this->userid, 'action' => $post->action])->exists()) {
+			if(in_array($post->action, ['subscribe','text']) && WeixinReplyModel::find()->where(['userid' => $this->userid, 'action' => $post->action])->exists()) {
 				$this->errors = Language::get($post->action.'_add_already');
 				return false;
 			}
 			$model = new WeixinReplyModel();
 		}
 		
-		$fields = ['type', 'action', 'rule_name', 'keywords', 'description'];
+		$fields = ['type', 'action', 'keywords', 'description'];
 		foreach($post as $key => $val) {
 			if(in_array($key, $fields)) $model->$key = $val;
 		}

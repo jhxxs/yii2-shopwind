@@ -1,0 +1,51 @@
+{include file="header.html"}
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+      <div class="flexigrid">
+        <h2 class="bold layui-font-16">时效设置</h2>
+        <form method="post">
+          <table class="infoTable infoTable2">
+            <tr>
+              <th class="paddingT15"><label>确认收货时间</label></th>
+              <td class="paddingT15 layui-form">
+                <input type="text" name="autoshipday" value="{$setting.autoshipday|default:8}" /> 天
+                <p class="field_notice mt10 mb10">卖家发货后，如买家没有主动确认收货，则系统多久自动确认交易</p>
+              </td>
+            </tr>
+            <tr>
+              <th class="paddingT15"><label>取货完成时间</label></th>
+              <td class="paddingT15 layui-form">
+                <input type="text" name="autodeliveryday" value="{$setting.autodeliveryday|default:2}" /> 天
+                <p class="field_notice mt10 mb10">针对社区团购自提订单，团长通知缺货后多久系统自动交易完成</p>
+              </td>
+            </tr>
+            <tr>
+              <th class="paddingT15"><label>成团订单时间</label></th>
+              <td class="paddingT15 layui-form">
+                <input type="text" name="autogroupday" value="{$setting.autogroupday|default:1}" /> 天
+                <p class="field_notice mt10 mb10">针对拼团订单，已付款的但未成团的，多久后自动成团</p>
+              </td>
+            </tr>
+            <tr>
+              <th class="paddingT15"><label>关闭订单时间</label></th>
+              <td class="paddingT15 layui-form">
+                <input type="text" name="autocloseday" value="{$setting.autocloseday|default:2}" /> 天
+                <p class="field_notice mt10 mb10">已下单未付款的，自动关闭订单时间</p>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td class="ptb20"><input class="layui-btn layui-bg-blue J_AjaxSubmit" type="submit"
+                  value="{$lang.submit}" /></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    
+      {include file="version.html"}
+    </div>
+  </div>
+</div>
+{include file="footer.html"}

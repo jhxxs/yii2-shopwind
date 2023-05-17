@@ -56,8 +56,11 @@ return [
 				'logout'							=> 'user/logout',
 				'search/goods'						=> 'search/index',
 				'goods'								=> 'goods/index',
-       			'<controller:\w+>/<action:\w+>'		=> '<controller>/<action>',
-       		],
+				'plugin/<instance:\w+>/<code:\w+>/<action:(install|uninstall|config)>' => 'plugin/<action>',
+				'plugin/<instance:\w+>/<code:\w+>/<view:\w+>' => 'plugin/reflex',
+				'plugin/<instance:\w+>/index'	=> 'plugin/index',
+				'<controller:\w+>/<action:\w+>'		=> '<controller>/<action>',
+			],
 			'suffix'         						=> '.html',
         ],
 		// view config

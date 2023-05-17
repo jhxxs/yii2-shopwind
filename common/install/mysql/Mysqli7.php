@@ -12,7 +12,6 @@
 namespace common\install\Mysql;
 
 use yii;
-use mysqli;
 
 use common\library\Timezone;
 use common\library\Language;

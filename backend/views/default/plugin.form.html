@@ -19,6 +19,12 @@
               <th class="paddingT15"> {$lang.plugin_description}：</th>
               <td class="paddingT15 wordSpacing5 gray"> <p style="max-width: 600px;">{$plugin.desc}</p> </td>
             </tr>
+            <!--{if $plugin.remark}-->
+            <tr>
+              <th class="paddingT15"> {$lang.plugin_remark}：</th>
+              <td class="paddingT15 wordSpacing5 gray"> <p style="max-width: 600px;">{$plugin.remark}</p> </td>
+            </tr>
+            <!--{/if}-->
             <tr>
               <th class="paddingT15">{$lang.version}：</th>
               <td class="paddingT15 wordSpacing5"> {$plugin.version} </td>

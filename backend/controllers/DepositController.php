@@ -176,7 +176,7 @@ class DepositController extends \common\controllers\BaseAdminController
 			return $this->render('../deposit.tradelist.html', $this->params);
 		} else {
 			$query = DepositTradeModel::find()->alias('dt')
-				->select('trade_id,tradeNo,payTradeNo,bizOrderId,title,amount,status,flow,buyer_id,add_time,pay_time,end_time');
+				->select('trade_id,tradeNo,payTradeNo,bizOrderId,title,amount,status,flow,buyer_id,seller_id,add_time,pay_time,end_time,payment_code');
 
 			$query = $this->getTradeConditions($post, $query)->orderBy(['trade_id' => SORT_DESC]);
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
@@ -188,6 +188,10 @@ class DepositController extends \common\controllers\BaseAdminController
 				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
 				$list[$key]['buyer'] = UserModel::find()->select('username')->where(['userid' => $value['buyer_id']])->scalar();
 				$list[$key]['status'] = Language::get(strtolower($value['status']));
+
+				if ($value['payment_code']) {
+					$list[$key]['payment'] = Plugin::getInstance('payment')->build($value['payment_code'])->getInfo();
+				}
 
 				$partyInfo = DepositTradeModel::getPartyInfoByRecord($value['buyer_id'], $value);
 				$list[$key]['party'] = $partyInfo['name'];
@@ -227,7 +231,9 @@ class DepositController extends \common\controllers\BaseAdminController
 			foreach ($list as $key => $value) {
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
-				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar();
+				if ($user = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one()) {
+					$list[$key] = array_merge($list[$key], $user);
+				}
 			}
 
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);

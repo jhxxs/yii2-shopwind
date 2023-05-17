@@ -6,6 +6,7 @@ return array(
     'plugin_manage'  => '插件管理',
     'plugin_name'  => '插件名称',
     'plugin_description'  => '插件描述',
+    'plugin_remark' => '申请要求',
     'no_such_plugin'  => '没有指定的插件',
     'config_plugin_failed'  => '配置插件失败',
     'config_plugin_successed'  => '配置插件成功',
@@ -18,9 +19,11 @@ return array(
     'version'           => '插件版本',
     'plugin_config' => '配置插件',
     'plugin_install' => '安装插件',
+    'plugin_disabled' => '插件未启用',
 	
 	'alipay'  => '支付宝',
-    'alipay_desc'   => '支付宝网站(www.alipay.com) 是国内先进的网上支付平台，兼容电脑网站支付、手机网站支付、APP支付',
+    'alipay_desc'   => '支付宝是国内先进的网上支付平台，兼容电脑网站支付、手机网站支付、APP支付。<a href="https://open.alipay.com/develop/manage" target="_blank">接口申请</a>',
+    'alipay_remark' => '创建应用时类型务必移动应用，产品绑定：获取会员信息、电脑网站支付、手机网站支付、APP支付、转账到支付宝账户',
     'alipay_currency'   => '人民币',
     'appId'    => 'APPID',
     'rsaPublicKey'         => '应用公钥',
@@ -43,13 +46,14 @@ return array(
     'deposit_currency' => '人民币',
 	
 	'unionpay'  		=> '中国银联',
-    'unionpay_desc'   	=> '中国银联最权威的银行卡门户网站，提供全方位的银行卡资讯与服务，最齐全的银联标准卡产品搜索比较，出境银联卡使用指南，信用卡免费跨行还款，境内外ATM查询定位',
+    'unionpay_desc'   	=> '中国银联最权威的银行卡门户网站，提供全方位的银行卡资讯与服务，最齐全的银联标准卡产品搜索比较，出境银联卡使用指南，信用卡免费跨行还款，境内外ATM查询定位。<a href="https://open.unionpay.com/tjweb/api/dictionary" target="_blank">接口申请</a>',
     'unionpay_currency' => '人民币',
     'merId'    			=> '商户号',
     'merId_desc'   		=> '输入您在中国银联的商户号',
 	
 	'wxpay'  			=> '微信支付',
-    'wxpay_desc'   		=> '微信支付是集成在微信客户端内的支付功能，用户可以通过手机唤起微信客户端快速完成支付。兼容公众号支付、扫码支付、H5支付（非微信浏览器）',
+    'wxpay_desc'   		=> '微信支付是集成在微信客户端内的支付功能，用户可以通过手机唤起微信客户端快速完成支付。兼容公众号JSAPI支付、H5支付（非微信浏览器）。<a href="https://mp.weixin.qq.com" target="_blank">接口申请</a>',
+    'wxpay_remark'      => '申请公众号平台服务号账户，账户申请下来后进入<a href="https://pay.weixin.qq.com" target="_blank">商户平台</a>开通微信支付能力，开通产品：JSAPI支付、H5支付。在商户平台/产品中心/AppID账号管理中关联服务号AppID，在商户平台/产品中心/开发配置中填写：<br/>JSAPI支付/支付授权目录：H5站点域名/h5/pages/trade/cashier/<br/>H5支付/H5支付域名：H5站点域名',
     'wxpay_currency'   	=> '人民币',
 	'appid' 			=> 'AppID',
     'appid_desc'        => '填写微信公众平台AppID',
@@ -67,7 +71,9 @@ return array(
     'wxpemPath_desc'    => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/wxpay/cacert<br>微信证书获取方法：<a target="_blank" href="https://forum.shopwind.net/thread/347">获取证书</a>',    
 
     'wxapppay'  		=> '微信APP支付',
-    'wxapppay_desc'     => '微信APP支付是客户端（iOS、Android）唤起的支付功能，拥有更好的体验，填写开放平台移动应用秘钥',
+    'wxapppay_desc'     => '微信APP支付是客户端（iOS、Android）唤起的支付功能，拥有更好的体验，兼容电脑端的微信二维码支付。<a href="https://open.weixin.qq.com" target="_blank">接口申请</a>',
+    'wxapppay_remark'   => '申请开放平台的移动应用秘钥，秘钥申请下来后进入<a href="https://pay.weixin.qq.com" target="_blank">商户平台</a>开通微信支付能力，开通产品：APP支付、Native支付。注：APP支付关联的商户平台的商户号秘钥证书等可以与【微信支付】插件通用',
     'wxmppay'  		    => '微信小程序支付',
     'wxmppay_desc'      => '微信小程序支付是集成在微信客户端内的支付功能，用户可以通过小程序完成快速的支付流程。',
+    'wxmppay_remark'    => '申请公众号平台小程序账户，账户申请下来后进入<a href="https://pay.weixin.qq.com" target="_blank">商户平台</a>开通微信支付能力，开通产品：JSAPI支付。在商户平台/产品中心/AppID账号管理中关联小程序AppID，在商户平台/产品中心/开发配置中，JSAPI支付/支付授权目录填写：H5站点域名/h5/pages/trade/cashier/<br/>注：小程序支付关联的商户平台的商户号秘钥证书等可以与【微信支付】插件通用',
 );

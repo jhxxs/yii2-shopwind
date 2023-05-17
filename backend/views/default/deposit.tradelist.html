@@ -20,8 +20,8 @@
 						{$lang.amount_from}
 						<input class="queryInput2" type="text" value="{$smarty.get.amount_from}" name="amount_from" />
 						{$lang.to}
-						<input class="queryInput2" type="text" value="{$smarty.get.amount_to}"
-							name="amount_to" class="pick_date" />
+						<input class="queryInput2" type="text" value="{$smarty.get.amount_to}" name="amount_to"
+							class="pick_date" />
 					</div>
 					<div class="webkit-box box-align-center mt20">
 						{$lang.add_time_from}
@@ -74,11 +74,18 @@
 				, { field: 'bizOrderId', title: '商户订单号', width: 200, sort: true }
 				, { field: 'payTradeNo', title: '支付订单号', width: 200, sort: true }
 				, { field: 'title', title: '标题', width: 200 }
-				, { field: 'buyer', title: '交易方', width: 110, sort: true }
-				, { field: 'party', title: '对方', width: 110, sort: true }
+				, { field: 'buyer', title: '交易方', width: 130, sort: true }
 				, {
+					field: 'party', title: '对方', width: 110, templet: function (res) {
+						return res.party || lang.platform;
+					}
+				}, {
 					field: 'amount', title: '金额', width: 110, sort: true, templet: function (res) {
 						return res.flow == 'income' ? '<span class="red">+' + res.amount + '</span>' : '<span class="green">-' + res.amount + '</span>';
+					}
+				}, {
+					field: 'payment', title: '支付方式', width: 130, templet: function (res) {
+						return res.payment_code ? res.payment.subname || res.payment.name : '';
 					}
 				}
 				, { field: 'add_time', title: '创建时间', width: 180, sort: true, align: 'center' }

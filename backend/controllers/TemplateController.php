@@ -80,9 +80,12 @@ class TemplateController extends \common\controllers\BaseAdminController
         }
 		
 		$page_config = Widget::getInstance($client)->getConfig($template, $page);
-		
-        // 写入位置配置信息
-        $page_config['config'] = $config;
+		if (!is_array($page_config)) {
+			return Message::warning(Language::get('config_page_fail'));
+		}
+
+		// 写入位置配置信息
+		$page_config['config'] = $config;
 
         // 原始挂件信息
         $old_widgets = $page_config['widgets'];
@@ -354,11 +357,11 @@ class TemplateController extends \common\controllers\BaseAdminController
 	private function getClientParams($client = null)
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		if($client) $post->client = $client;
-	
-		$client = (isset($post->client) && in_array($post->client, ['pc', 'wap'])) ? $post->client : 'pc';
+		if ($client) $post->client = $client;
+
+		$client = $post->client == 'wap' ? $post->client : 'pc';
 		$template = in_array($client, ['wap']) ? Yii::$app->params['wap_template_name'] : Yii::$app->params['template_name'];
-		if(!$template) $template = 'default';
+		if (!$template) $template = 'default';
 		$page = isset($post->page) ? $post->page : 'index';
 
 		return array($client, $template, $page);

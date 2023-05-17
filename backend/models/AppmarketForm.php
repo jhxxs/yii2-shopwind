@@ -12,7 +12,7 @@
 namespace backend\models;
 
 use Yii;
-use yii\base\Model; 
+use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 use common\models\AppmarketModel;
@@ -20,7 +20,6 @@ use common\models\UploadedFileModel;
 
 use common\library\Language;
 use common\library\Timezone;
-use common\library\Def;
 
 /**
  * @Id AppmarketForm.php 2018.8.24 $
@@ -30,10 +29,10 @@ class AppmarketForm extends Model
 {
 	public $aid = 0;
 	public $errors = null;
-	
+
 	public function valid($post)
 	{
-		if(!$post->title) {
+		if (!$post->title) {
 			$this->errors = Language::get('title_empty');
 			return false;
 		}
@@ -41,34 +40,34 @@ class AppmarketForm extends Model
 		// 	$this->errors = Language::get('select_period');
 		// 	return false;
 		// }
-		
+
 		// add
-		if(!$this->aid) {
-			if(empty($post->appid)) {
+		if (!$this->aid) {
+			if (empty($post->appid)) {
 				$this->errors = Language::get('appid_empty');
 				return false;
 			}
-			if(AppmarketModel::find()->where(['appid' => $post->appid])->exists()) {
+			if (AppmarketModel::find()->where(['appid' => $post->appid])->exists()) {
 				$this->errors = Language::get('appid_existed');
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public function save($post, $valid = true)
 	{
-		if($valid === true && !$this->valid($post)) {
+		if ($valid === true && !$this->valid($post)) {
 			return false;
 		}
-	
-		if(!$this->aid || !($model = AppmarketModel::findOne($this->aid))) {
+
+		if (!$this->aid || !($model = AppmarketModel::findOne($this->aid))) {
 			$model = new AppmarketModel();
 			$model->appid = $post->appid;
 			$model->add_time = Timezone::gmtime();
 		}
-        $model->category = $post->category;
+		$model->category = $post->category;
 		$model->title = addslashes($post->title);
 		$model->summary = addslashes($post->summary);
 		$model->price = $post->price;

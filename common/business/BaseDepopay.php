@@ -25,15 +25,20 @@ use common\library\Def;
  * @Id BaseDepopay.php 2018.4.12 $
  * @author mosir
  */
- 
+
 class BaseDepopay
 {
+	/**
+	 * 财务明细的交易类型
+	 */
+	public $_tradeType;
+
 	/**
 	 * 交易类型
 	 * @var string $otype
 	 */
 	protected $otype;
-	
+
 	/**
 	 * 页面提交参数
 	 * @var object $post
@@ -51,86 +56,88 @@ class BaseDepopay
 	 * @var object $errors
 	 */
 	public $errors;
-	
+
 	public function __construct($otype, $post = null, $params = array())
 	{
 		$this->otype 	= $otype;
 		$this->post 	= $post;
 		$this->params 	= $params;
 	}
-	
+
 	/* 验证账户余额是否足够 */
 	public function _check_enough_money($money, $userid)
 	{
 		return DepositAccountModel::checkEnoughMoney($money, $userid);
 	}
-	
+
 	/* 获取当前账户余额，或者冻结金额 */
 	public function _get_deposit_balance($userid, $fields = 'money')
 	{
 		return DepositAccountModel::getDepositBalance($userid, $fields);
 	}
-	
+
 	/* 更新账户余额，增加（如卖出商品）或者减少，并返回最新的余额 */
 	public function _update_deposit_money($userid, $amount, $change = 'add')
 	{
 		return DepositAccountModel::updateDepositMoney($userid, $amount, $change);
 	}
-	
+
 	/* 更新冻结金额，增加（如提现）或减少，并返回最新的金额 */
 	public function _update_deposit_frozen($userid, $amount, $change = 'add')
 	{
 		return DepositAccountModel::updateDepositFrozen($userid, $amount, $change);
 	}
-	
+
 	/*  更新交易状态 */
 	public function _update_trade_status($tradeNo, $params = [])
 	{
-		if(($model = DepositTradeModel::find()->where(['tradeNo' => $tradeNo])->one()) && $params) {
-			foreach($params as $key => $val) {
-				$model->$key = $val;
+		if (($model = DepositTradeModel::find()->where(['tradeNo' => $tradeNo])->one()) && $params) {
+			foreach ($params as $key => $value) {
+				$model->$key = $value;
 			}
-			return $model->save();
+			if ($model->save()) {
+				return true;
+			}
 		}
 		return false;
 	}
-	
+
 	/*  更新订单状态 */
-	public function _update_order_status($order_id, $params = [])
+	public function _update_order_status($id, $params = [])
 	{
-		if(($model = \common\models\OrderModel::find()->where(['order_id' => $order_id])->one()) && $params) {
-			foreach($params as $key => $val) {
-				$model->$key = $val;
+		if (($model = \common\models\OrderModel::find()->where(['or', ['order_sn' => $id], ['order_id' => $id]])->one()) && $params) {
+			foreach ($params as $key => $value) {
+				$model->$key = $value;
 			}
 			return $model->save();
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 获取交易标题信息
 	 */
 	public function _get_intro_by_order($order_id = 0)
 	{
 		$intro = '';
-		if(($query = \common\models\OrderGoodsModel::find()->select('goods_name')->where(['order_id' => $order_id]))) {	
-			if($query->count() > 1) {
+		if (($query = \common\models\OrderGoodsModel::find()->select('goods_name')->where(['order_id' => $order_id]))) {
+			if ($query->count() > 1) {
 				$intro = $query->one()->goods_name . Language::get('and_more');
 			} else $intro = $query->one()->goods_name;
 		}
 		return addslashes($intro);
 	}
-	
+
 	/* 插入账户收支记录，并变更账户余额 */
-	public function _insert_deposit_record($params = array(), $changeBalance = true)
+	public function _insert_deposit_record($params = [], $changeBalance = true)
 	{
 		$model = new DepositRecordModel();
-		foreach($params as $key => $val) {
+		foreach ($params as $key => $val) {
 			$model->$key = $val;
 		}
-		if($model->save()) {
-			if($changeBalance == true) {
-				if(DepositAccountModel::updateAll(['money' => $params['balance']], ['userid' => $params['userid']]) === false) {
+		if ($model->save()) {
+			if ($changeBalance == true) {
+				if (DepositAccountModel::updateAll(['money' => $params['balance']], ['userid' => $params['userid']]) === false) {
 					$model->delete();
 					return false;
 				}
@@ -140,23 +147,23 @@ class BaseDepopay
 		}
 		return false;
 	}
-	
+
 	/* 系统扣费（交易，提现，转账等） */
 	public function _sys_chargeback($tradeNo, $trade_info, $rate, $type = 'trade_fee')
 	{
 		// 费率不合理，不进行扣点
-		if(!$rate || $rate <=0 || $rate >1) return true;
-		
+		if (!$rate || $rate <= 0 || $rate > 1) return true;
+
 		$fee  = round($trade_info['amount'] * $rate, 2);
-		
-		if($fee <= 0) {
+
+		if ($fee <= 0) {
 			return true;
 		}
-		
-		if(is_array($type) || empty($type)) {
-			$remark	= Language::get('trade_fee').'['.$tradeNo.']';
-		} else $remark = Language::get($type).'['.$tradeNo.']';
-		
+
+		if (is_array($type) || empty($type)) {
+			$remark	= Language::get('trade_fee') . '[' . $tradeNo . ']';
+		} else $remark = Language::get($type) . '[' . $tradeNo . ']';
+
 		$time = Timezone::gmtime();
 		$data_trade = array(
 			'tradeNo'		=>	DepositTradeModel::genTradeNo(),
@@ -167,22 +174,21 @@ class BaseDepopay
 			'amount'		=>	$fee,
 			'status'		=>	'SUCCESS',
 			'payment_code' 	=>  'deposit',
-			'tradeCat'		=>	'SERVICE',// 服务费
-			'payType'		=>	'INSTANT', 
+			'tradeCat'		=>	'SERVICE', // 服务费
+			'payType'		=>	'INSTANT',
 			'flow'			=>	'outlay',
 			'title'			=>	Language::get('chargeback'),
 			'add_time'		=>	$time,
 			'pay_time'		=>	$time,
 			'end_time'		=>	$time,
 		);
-		
+
 		$model = new DepositTradeModel();
-		foreach($data_trade as $key => $val) {
+		foreach ($data_trade as $key => $val) {
 			$model->$key = $val;
 		}
-		
-		if($model->save())
-		{
+
+		if ($model->save()) {
 			$data_record = array(
 				'tradeNo'		=>	$data_trade['tradeNo'],
 				'userid'		=>	$trade_info['userid'],
@@ -196,7 +202,7 @@ class BaseDepopay
 			return $this->_insert_deposit_record($data_record, false);
 		}
 	}
-	
+
 	/**
 	 * 如果是使用余额支付，且账户有不可提现金额
 	 * 则解除该部分金额的提现额度限制，避免不可提现金额一直存在
@@ -204,12 +210,12 @@ class BaseDepopay
 	public function relieveUserNodrawal($tradeNo, $userid = 0, $money = 0)
 	{
 		$query = DepositTradeModel::find()->select('payment_code')->where(['tradeNo' => $tradeNo])->one();
-		if(!$query || ($query->payment_code != 'deposit')) {
+		if (!$query || ($query->payment_code != 'deposit')) {
 			return true;
 		}
 
 		$model = DepositAccountModel::find()->select('account_id,nodrawal')->where(['userid' => $userid])->one();
-		if($model && ($model->nodrawal > 0)) {
+		if ($model && ($model->nodrawal > 0)) {
 			$model->nodrawal = ($model->nodrawal - $money) > 0 ? $model->nodrawal - $money : 0;
 			return $model->save();
 		}
@@ -218,13 +224,13 @@ class BaseDepopay
 
 	public function setErrors($errorCode = '', $errorMsg = '')
 	{
-		if($errorCode) {
+		if ($errorCode) {
 			$ex = new DepopayException();
-			if(isset($ex->errorMsg[$errorCode])) {
+			if (isset($ex->errorMsg[$errorCode])) {
 				$errorMsg = $ex->errorMsg[$errorCode];
 			}
 		}
-		
+
 		$this->errors = $errorMsg;
 	}
 }
@@ -232,14 +238,15 @@ class BaseDepopay
 class DepopayException
 {
 	var $errorMsg;
-	
-	function __construct() {
-		
+
+	function __construct()
+	{
+
 		$this->errorMsg = array(
 			"10001" => "交易金额不能小于零！",
-            "50001" => "交易异常！扣除的交易服务费小于零元，或者所扣除的交易服务费大于交易金额。",
-            "50002" => "交易异常！交易金额小于零元。",
-            "50003" => "订单异常！找不到商户订单号。",
+			"50001" => "交易异常！扣除的交易服务费小于零元，或者所扣除的交易服务费大于交易金额。",
+			"50002" => "交易异常！交易金额小于零元。",
+			"50003" => "订单异常！找不到商户订单号。",
 			"50004" => "充值异常！找不到指定的银行卡信息。",
 			"50005" => "交易异常！无法正确添加充值记录。",
 			"50006" => "对不起！在退款给买家过程中，插入收支记录失败。",
@@ -266,6 +273,6 @@ class DepopayException
 			"60002" => "更新所购买应用的过期时间出现异常！",
 			"60003" => "无法正常变更购买应用记录中的状态",
 			"70001" => "提现到支付宝钱包接口异常",
-        );
-    }  
+		);
+	}
 }

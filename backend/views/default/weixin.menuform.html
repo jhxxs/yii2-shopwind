@@ -19,55 +19,49 @@
               <th class="paddingT15"><label>{$lang.menu_name}</label></th>
               <td class="paddingT15 wordSpacing5"><input class="infoTableInput" id="name" type="text" name="name"
                   value="{$menu.name|escape}" />
-                <label class="field_notice"></label>
               </td>
             </tr>
             <tr>
               <th class="paddingT15"><label>{$lang.parent}</label></th>
               <td class="paddingT15 wordSpacing5"><select id="parent_id" name="parent_id">
                   <option value="0">{$lang.select_pls}</option>
-
                   {html_options options=$parents selected=$menu.parent_id}
-
                 </select>
-                <label class="field_notice"></label>
               </td>
             </tr>
             <tr>
               <th class="paddingT15"><label>{$lang.menu_type}</label></th>
-              <td class="paddingT15 wordSpacing5">
-                <p>
-                  <label>
-                    <input type="radio" name="type" value="view" {if $menu.type neq 'click' }checked="checked" {/if} />
-                    {$lang.to_url}</label>
-                  &nbsp;&nbsp;
-                  <label>
-                    <input type="radio" name="type" value="click" {if $menu.type eq 'click' }checked="checked" {/if} />
-                    {$lang.send_msg}</label>
-                  <label class="field_notice"></label>
-                </p>
+              <td class="paddingT15 wordSpacing5 layui-form">
+                <input type="radio" name="type" value="view" title="{$lang.to_url}" checked="checked" class="mr10"
+                  lay-filter="type" />
+                <input type="radio" name="type" value="click" title="{$lang.send_msg}" {if $menu.type eq 'click'
+                  }checked="checked" {/if} lay-filter="type" />
               </td>
             </tr>
-            <tr class="view sel">
+            <tr class="view {if $menu.type eq 'click'}hidden{/if}">
               <th class="paddingT15"><label>{$lang.url}</label></th>
-              <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="link"
-                  value="{$menu.link}" />
-                <label class="field_notice"></label>
+              <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="url"
+                  value="{$menu.url}" />
               </td>
             </tr>
-            <tr class="click sel hidden">
+            <tr class="click {if $menu.type neq 'click'}hidden{/if}">
               <th class="paddingT15"><label>{$lang.title}</label></th>
               <td class="paddingT15 wordSpacing5"><input type="hidden" name="reply_id" value="{$menu.reply_id}" />
-                <input class="infoTableInput" type="text" name="reply_title" value="{$menu.reply.title|escape}" />
-                <label class="field_notice"></label>
+                <input class="infoTableInput" type="text" name="title" value="{$menu.reply.title|escape}" />
               </td>
             </tr>
-            <tr class="click sel hidden">
+            <tr class="click {if $menu.type neq 'click'}hidden{/if}">
+              <th class="paddingT15"><label>{$lang.link}</label></th>
+              <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="link"
+                  value="{$menu.reply.link|escape}" />
+              </td>
+            </tr>
+            <tr class="click {if $menu.type neq 'click'}hidden{/if}">
               <th class="paddingT15"><label>{$lang.image}</label></th>
               <td class="paddingT15 wordSpacing5 webkit-box">
                 <div class="input-file-show">
-                  <input class="type-file-file" onchange="getTempPathcallback(this)" name="image" type="file" size="30" hidefocus="true">
-                  <input type="hidden" name="fileVal" value="image" />
+                  <input class="type-file-file" onchange="getTempPathcallback(this)" name="image" type="file" size="30"
+                    hidefocus="true">
                   <div class="type-file-image">
                     <!--{if $menu.reply.image}-->
                     <img class="block" src="{$menu.reply.image|url_format}" width="100" height="100" />
@@ -79,16 +73,10 @@
                 </div>
               </td>
             </tr>
-            <tr class="click sel hidden">
-              <th class="paddingT15"><label>{$lang.reply_link}</label></th>
-              <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="reply_link"
-                  value="{$menu.reply.link|escape}" />
-                <label class="field_notice"></label>
-              </td>
-            </tr>
-            <tr class="click sel hidden">
+            
+            <tr class="click {if $menu.type neq 'click'}hidden{/if}">
               <th class="paddingT15"><label>{$lang.content}</label></th>
-              <td class="paddingT15 wordSpacing5"><textarea name="reply_content">{$menu.reply.content|escape}</textarea>
+              <td class="paddingT15 wordSpacing5"><textarea name="description">{$menu.reply.description|escape}</textarea>
               </td>
             </tr>
             <tr>
@@ -112,13 +100,18 @@
 </div>
 <script type="text/javascript">
   $(function () {
-    $('input[name="type"]').change(function () {
-      var type = $(this).val();
-      $('tr.sel').hide();
-      $('tr.' + type).show();
+    layui.use('form', function () {
+      var form = layui.form;
+      form.on('radio(type)', function (data) {
+        if (data.value == 'view') {
+          $('tr.view').show();
+          $('tr.click').hide();
+        } else {
+          $('tr.click').show();
+          $('tr.view').hide();
+        }
+      });
     });
-    $('tr.sel').hide();
-    $('tr.' + $('input[name="type"]:checked').val()).show();
   });
 </script>
 {include file="footer.html"}

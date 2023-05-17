@@ -5,6 +5,7 @@
     'no_such_page'  => '没有指定页面！',
     'no_such_widget'  => '没有指定的挂件',
     'click_to_add'   => '点击添加该挂件到页面',
+    'config_page_fail' =>  '页面配置写入失败',
     'widget_list'  => '挂件列表',
     'hidden'  => '隐藏',
     'save'  => '保存修改',

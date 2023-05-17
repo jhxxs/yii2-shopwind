@@ -51,7 +51,7 @@
               </td>
               <td class="align_center"><span>{if $menu.type eq 'view'}{$lang.to_url}{else}{$lang.send_msg}{/if}</span>
               </td>
-              <td class="align_center">{if $menu.type eq 'view'}{$menu.link|default:'-'}{else}-{/if}</td>
+              <td class="align_center">{if $menu.type eq 'view'}{$menu.url|default:'-'}{else}-{/if}</td>
               <td class="align_center"><span ectype="inline_edit" fieldname="sort_order" fieldid="{$menu.id}"
                   datatype="number" title="{$lang.editable}" controller="weixin">{$menu.sort_order}<i class="layui-icon layui-icon-edit layui-font-14 layui-font-blue"></i></span></td>
               <td class="handler bDiv" style=" background:none; width:210px; text-align:left;"><a

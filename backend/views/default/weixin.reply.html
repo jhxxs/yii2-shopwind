@@ -48,17 +48,12 @@
 				, { field: 'reply_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
 				, {
 					field: 'action', title: '回复类型', width: 200, templet: function (res) {
-						return lang[res.action];
-					}
-				}
-				, {
-					field: 'rule_name', title: '规则名称', width: 120, templet: function (res) {
-						return res.action == 'smartreply' ? res.rule_name : '-';
+						return lang[res.action + '_reply'];
 					}
 				}
 				, {
 					field: 'keywords', title: '关键字', width: 250, templet: function (res) {
-						return res.action == 'smartreply' ? res.keywords : '-';
+						return res.action == 'keyword' ? res.keywords : '-';
 					}
 				}
 				, {
@@ -66,7 +61,7 @@
 						return res.type == 1 ? lang.imgmsg : lang.textmsg;
 					}
 				}
-				, { field: 'description', title: '回复内容', width: 286, sort: true }
+				, { field: 'description', title: '回复内容' }
 				, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 160, align: 'center' }
 			]]
 			, page: {

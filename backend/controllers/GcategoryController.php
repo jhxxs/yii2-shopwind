@@ -70,7 +70,7 @@ class GcategoryController extends \common\controllers\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['sort_order', 'parent_id']);
 			
 			$model = new \backend\models\GcategoryForm();
-			if(!($gcategory = $model->save($post, true))) {
+			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('add_ok'), ['gcategory/index']);		
@@ -97,7 +97,7 @@ class GcategoryController extends \common\controllers\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['sort_order', 'parent_id']);
 			
 			$model = new \backend\models\GcategoryForm(['cate_id' => $id]);
-			if(!($gcategory = $model->save($post, true))) {
+			if(!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_ok'), ['gcategory/index']);		
@@ -184,7 +184,7 @@ class GcategoryController extends \common\controllers\BaseAdminController
 				$model = new \backend\models\GcategoryForm(['cate_id' => $post->id]);
 				$query = GcategoryModel::findOne($post->id);
 				$query->{$post->column} = $post->value;
-				if(!($gcategory = $model->save($query, true))) {
+				if(!$model->save($query, true)) {
 					return Message::warning($model->errors);
 				}
 			}

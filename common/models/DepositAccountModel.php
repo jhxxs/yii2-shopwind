@@ -60,19 +60,17 @@ class DepositAccountModel extends ActiveRecord
 	{
 		if(!$userid) return false;
 		
-		$setting = DepositSettingModel::getSystemSetting();
-		
 		if(!self::getAccountInfo($userid))
 		{
-			$userInfo = UserModel::find()->select('userid,email,phone_mob,username')->where(['userid' => $userid])->one();
+			$query = UserModel::find()->select('userid,email,phone_mob,username')->where(['userid' => $userid])->one();
 			
 			$model = new DepositAccountModel();
 			$model->userid = $userid;
-			$model->account = self::genDepositAccount($userInfo);
+			$model->account = self::genDepositAccount($query);
 			$model->money = 0;
 			$model->frozen = 0;
 			$model->password = md5('123456789');
-			$model->real_name = $userInfo->username;
+			$model->real_name = $query->username;
 			$model->pay_status = 'ON';
 			$model->add_time = Timezone::gmtime();
 			$model->last_update = Timezone::gmtime();

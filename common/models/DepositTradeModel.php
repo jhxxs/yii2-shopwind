@@ -155,7 +155,7 @@ class DepositTradeModel extends ActiveRecord
 	/* 验证合并付款中交易信息有效性，正确则返回交易数组等数据 */
 	public static function checkAndGetTradeInfo($orderId = 0, $userid = 0)
 	{
-		$result 	= array();
+		$result 	= [];
 		$errorMsg 	= false;
 			
 		if(!$orderId) {
@@ -243,7 +243,7 @@ class DepositTradeModel extends ActiveRecord
 	/* 获取交易数据给网关支付后的业务处理 */
 	public static function getTradeInfoForNotify($payTradeNo = 0)
 	{
-		$result	= array();
+		$result	= [];
 		
 		// 当支付变更后，置空受影响的商户交易号后，这里获取到的tradeList，要么就是空，要么就是全部待付款的交易记录
 		$tradeList 	= parent::find()->where(['payTradeNo' => $payTradeNo])->indexBy('trade_id')->asArray()->all();
@@ -284,6 +284,7 @@ class DepositTradeModel extends ActiveRecord
 				}
 				
 				$result['amount'] += $tradeInfo['amount'];	
+				$result['payType'] = $tradeInfo['payType'];
 			}
 			// 说明是合并付款
 			if(count($result['tradeList']) > 1)

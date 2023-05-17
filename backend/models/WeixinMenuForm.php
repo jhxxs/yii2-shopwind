@@ -53,7 +53,7 @@ class WeixinMenuForm extends Model
 			$this->errors = Language::get('select_menu_type');
 			return false;
 		}
-		if($post->type == 'view' && empty($post->link)) {
+		if($post->type == 'view' && empty($post->url)) {
 			$this->errors = Language::get('link_not_empty');
 			return false;
 		}
@@ -78,8 +78,8 @@ class WeixinMenuForm extends Model
 		$model->userid = 0;
 		$model->add_time = Timezone::gmtime();
 		if($post->type == 'view') {
-			$model->link = $post->link;
-		} else $model->link = '';
+			$model->url = $post->url;
+		} else $model->url = '';
 		
 		if($post->type == 'click') 
 		{
@@ -94,9 +94,9 @@ class WeixinMenuForm extends Model
 				$query->userid = 0;
 				$query->type = 1;
 				$query->action = 'menu';
-				$query->title = $post->reply_title;
-				$query->link = $post->reply_link;
-				$query->content = $post->reply_content;
+				$query->title = $post->title;
+				$query->link = $post->link;
+				$query->description = $post->description;
 				$query->add_time = Timezone::gmtime();
 				
 				if(isset($post->fileVal) && ($image = UploadedFileModel::getInstance()->upload($post->fileVal, 0, Def::BELONG_WEIXIN, 0, $post->fileVal)) !== false) {

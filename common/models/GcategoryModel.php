@@ -94,6 +94,7 @@ class GcategoryModel extends ActiveRecord
 		{
 			$categories = self::getList(-1, $store_id, $shown);
 		
+			if ($categories) {
 			$tree = new Tree();
 			$tree->setTree($categories, 'cate_id', 'parent_id', 'cate_name');
 			$data = $tree->getArrayList(0, $layer);
@@ -102,6 +103,7 @@ class GcategoryModel extends ActiveRecord
     		//第三个参数是缓存时间，如果是0，意味着永久缓存。默认是0 
     		$cache->set($cachekey, $data, 3600); 
 		} 
+		}
 
 		return $data;
 	}
