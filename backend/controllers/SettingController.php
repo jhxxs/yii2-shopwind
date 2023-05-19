@@ -33,44 +33,38 @@ class SettingController extends \common\controllers\BaseAdminController
 	{
 		parent::init();
 	}
-	
+
 	public function actionIndex()
 	{
-		if(!Yii::$app->request->isPost) 
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['setting'] = Setting::getInstance()->getAll();
 			$this->params['time_zone'] = Setting::getTimezone();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('base_setting')]);
 			return $this->render('../setting.index.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
+
 			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_base_setting_successed'), ['setting/index']);
 		}
 	}
-	
+
 	public function actionEmail()
 	{
-		if(!Yii::$app->request->isPost) 
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['setting'] = Setting::getInstance()->getAll();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('email_setting')]);
 			return $this->render('../setting.email.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
+
 			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_email_setting_successed'), ['setting/email']);
@@ -78,19 +72,16 @@ class SettingController extends \common\controllers\BaseAdminController
 	}
 	public function actionVerifycode()
 	{
-		if(!Yii::$app->request->isPost) 
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['setting'] = Setting::getInstance()->getAll();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('captcha_setting')]);
 			return $this->render('../setting.verifycode.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
+
 			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_captcha_setting_successed'), ['setting/verifycode']);
@@ -98,40 +89,34 @@ class SettingController extends \common\controllers\BaseAdminController
 	}
 	public function actionStore()
 	{
-		if(!Yii::$app->request->isPost)
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['setting'] = Setting::getInstance()->getAll();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('store_setting')]);
 			return $this->render('../setting.store.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
+
 			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_store_setting_successed'), ['setting/store']);
 		}
 	}
-	
+
 	public function actionApi()
 	{
-		if(!Yii::$app->request->isPost)
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['setting'] = Setting::getInstance()->getAll();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('api_setting')]);
 			return $this->render('../setting.api.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
+
 			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_api_setting_successed'), ['setting/api']);
@@ -140,22 +125,37 @@ class SettingController extends \common\controllers\BaseAdminController
 
 	public function actionApp()
 	{
-		if(!Yii::$app->request->isPost)
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['setting'] = Setting::getInstance()->getAll();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('app_setting')]);
 			return $this->render('../setting.app.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-		
+
 			$model = new \backend\models\SettingForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_ok'), ['setting/app']);
+		}
+	}
+
+	public function actionUpload()
+	{
+		if (!Yii::$app->request->isPost) {
+			$this->params['setting'] = Setting::getInstance()->getAll();
+
+			$this->params['page'] = Page::seo(['title' => Language::get('upload_setting')]);
+			return $this->render('../setting.upload.html', $this->params);
+		} else {
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+
+			$model = new \backend\models\SettingForm();
+			if (!$model->save($post, true)) {
+				return Message::warning($model->errors);
+			}
+			return Message::display(Language::get('edit_ok'), ['setting/upload']);
 		}
 	}
 }

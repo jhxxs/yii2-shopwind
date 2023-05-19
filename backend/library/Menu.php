@@ -69,6 +69,11 @@ class Menu
 						'url' => Url::toRoute(['setting/app']),
 						'priv' => ['key' => 'setting|app']
 					),
+					'upload' => array(
+						'text'  => Language::get('upload_setting'),
+						'url'   => Url::toRoute('setting/upload'),
+						'priv'  => ['key' => 'setting|upload']
+					),
 					'verifycode' => array(
 						'text'  => Language::get('captcha'),
 						'url'   => Url::toRoute('setting/verifycode'),

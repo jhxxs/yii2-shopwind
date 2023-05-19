@@ -47,23 +47,20 @@ class ArticleController extends \common\controllers\BaseAdminController
 	public function actionIndex()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'cate_id']);
-		
-		if(!Yii::$app->request->isAjax) 
-		{
+
+		if (!Yii::$app->request->isAjax) {
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['acategories'] = AcategoryModel::getOptions();
-			
+
 			$this->params['_foot_tags'] = Resource::import('inline_edit.js');
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('article_list')]);
 			return $this->render('../article.index.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$query = ArticleModel::find()->alias('a')->select('a.article_id,a.title,a.cate_id,a.store_id,a.link,a.sort_order,a.if_show,a.add_time,ac.cate_name')
 				->joinWith('acategory ac', false);
 			$query = $this->getConditions($post, $query)->orderBy(['sort_order' => SORT_ASC, 'article_id' => SORT_DESC]);
-			
+
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value) {
@@ -73,28 +70,29 @@ class ArticleController extends \common\controllers\BaseAdminController
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
-	
+
 	public function actionAdd()
 	{
-		if(!Yii::$app->request->isPost)
-		{
+		if (!Yii::$app->request->isPost) {
 			$article = ['cate_id' => 0, 'sort_order' => 255, 'link' => '', 'if_show' => 1, 'store_id' => 0];
-			
+
+			list($file_type) = UploadedFileModel::allowFile();
+
 			// 属于文章的图片
 			$article['desc_images'] = UploadedFileModel::find()->select('file_id,file_path,file_name,file_type')
 				->where(['item_id' => 0, 'belong' => Def::BELONG_ARTICLE, 'store_id' => $article['store_id']])
-				->andWhere(['in', 'file_type', explode(',', Def::IMAGE_FILE_TYPE)])
+				->andWhere(['in', 'file_type', explode(',', $file_type)])
 				->orderBy(['file_id' => SORT_ASC])->asArray()->all();
-			
+
 			// 属于文章的附件（文件）
 			$article['desc_files'] = UploadedFileModel::find()->select('file_id,file_path,file_name,file_type')
 				->where(['item_id' => 0, 'belong' => Def::BELONG_ARTICLE, 'store_id' => $article['store_id']])
-				->andWhere(['not in', 'file_type', explode(',', Def::IMAGE_FILE_TYPE)])
+				->andWhere(['not in', 'file_type', explode(',', $file_type)])
 				->orderBy(['file_id' => SORT_DESC])->asArray()->all();
-			
+
 			$this->params['article'] = $article;
 			$this->params['parents'] = AcategoryModel::getOptions();
-			
+
 			// 编辑器图片批量上传器
 			$this->params['build_upload'] = Plugin::getInstance('uploader')->autoBuild(true)->create([
                 'belong' 		=> Def::BELONG_ARTICLE,
@@ -103,50 +101,50 @@ class ArticleController extends \common\controllers\BaseAdminController
                 'multiple' 		=> true,
 				'archived' 		=> true
 			]);
-			
+
 			// 所见即所得编辑器
 			$this->params['build_editor'] = Plugin::getInstance('editor')->autoBuild(true)->create(['name' => 'description']);
-			$this->params['imageJsonArray'] = json_encode(explode(',', Def::IMAGE_FILE_TYPE));
-			
+			$this->params['imageJsonArray'] = json_encode(explode(',', $file_type));
+
 			$this->params['page'] = Page::seo(['title' => Language::get('article_add')]);
 			return $this->render('../article.form.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id', 'if_show', 'sort_order']);
-			
+
 			$model = new \backend\models\ArticleForm();
-			if(!($article = $model->save($post, true))) {
+			if (!($article = $model->save($post, true))) {
 				return Message::warning($model->errors);
 			}
-			return Message::display(Language::get('add_ok'), ['article/index']);		
+			return Message::display(Language::get('add_ok'), ['article/index']);
 		}
 	}
-	
+
 	public function actionEdit()
 	{
 		$id = intval(Yii::$app->request->get('id'));
-		if(!$id || !($article = ArticleModel::find()->where(['article_id' => $id])->asArray()->one())) {
+		if (!$id || !($article = ArticleModel::find()->where(['article_id' => $id])->asArray()->one())) {
 			return Message::warning(Language::get('no_such_article'));
 		}
-		
-		if(!Yii::$app->request->isPost)
-		{
+
+		if (!Yii::$app->request->isPost) {
+
+			list($file_type) = UploadedFileModel::allowFile();
+
 			// 属于文章的图片
 			$article['desc_images'] = UploadedFileModel::find()->select('file_id,file_path,file_name,file_type')
 				->where(['item_id' => $id, 'belong' => Def::BELONG_ARTICLE, 'store_id' => $article['store_id']])
-				->andWhere(['in', 'file_type', explode(',', Def::IMAGE_FILE_TYPE)])
+				->andWhere(['in', 'file_type', explode(',', $file_type)])
 				->orderBy(['file_id' => SORT_ASC])->asArray()->all();
-			
+
 			// 属于文章的附件（文件）
 			$article['desc_files'] = UploadedFileModel::find()->select('file_id,file_path,file_name,file_type')
 				->where(['item_id' => $id, 'belong' => Def::BELONG_ARTICLE, 'store_id' => $article['store_id']])
-				->andWhere(['not in', 'file_type', explode(',', Def::IMAGE_FILE_TYPE)])
+				->andWhere(['not in', 'file_type', explode(',', $file_type)])
 				->orderBy(['file_id' => SORT_DESC])->asArray()->all();
-			
+
 			$this->params['article'] = $article;
 			$this->params['parents'] = AcategoryModel::getOptions();
-			
+
 			// 编辑器图片批量上传器
 			$this->params['build_upload'] = Plugin::getInstance('uploader')->autoBuild(true)->create([
                 'belong' 		=> Def::BELONG_ARTICLE,
@@ -155,23 +153,21 @@ class ArticleController extends \common\controllers\BaseAdminController
 				'multiple' 		=> true,
 				'archived' 		=> true
 			]);
-			
+
 			// 所见即所得编辑器
 			$this->params['build_editor'] = Plugin::getInstance('editor')->autoBuild(true)->create(['name' => 'description']);
-			$this->params['imageJsonArray'] = json_encode(explode(',', Def::IMAGE_FILE_TYPE));
+			$this->params['imageJsonArray'] = json_encode(explode(',', $file_type));
 
 			$this->params['page'] = Page::seo(['title' => Language::get('article_edit')]);
 			return $this->render('../article.form.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id', 'if_show', 'sort_order']);
-			
+
 			$model = new \backend\models\ArticleForm(['article_id' => $id]);
-			if(!($article = $model->save($post, true))) {
+			if (!($article = $model->save($post, true))) {
 				return Message::warning($model->errors);
 			}
-			return Message::display(Language::get('edit_ok'), ['article/index']);		
+			return Message::display(Language::get('edit_ok'), ['article/index']);
 		}
 	}
 	// 允许删除店铺的文章
@@ -179,57 +175,57 @@ class ArticleController extends \common\controllers\BaseAdminController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		$post->id = explode(',', $post->id);
-		foreach($post->id as $id) {
-			if(in_array($id, [1,2,3,4]))  continue; // 不能删除系统文章
-			if(($model = ArticleModel::findOne($id)) && !$model->delete()) {
+		foreach ($post->id as $id) {
+			if (in_array($id, [1, 2, 3, 4]))  continue; // 不能删除系统文章
+			if (($model = ArticleModel::findOne($id)) && !$model->delete()) {
 				return Message::warning($model->errors);
 			}
 			UploadedFileModel::deleteFileByQuery(UploadedFileModel::find()->where(['belong' => Def::BELONG_ARTICLE, 'item_id' => $id])->asArray()->all());
 		}
 		return Message::display(Language::get('drop_ok'));
 	}
-	
+
 	/* 异步删除编辑器上传的图片 */
 	public function actionDeleteimage()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		foreach(explode(',', $post->id) as $id) {
+		foreach (explode(',', $post->id) as $id) {
 			UploadedFileModel::deleteFileByQuery(UploadedFileModel::find()->where(['belong' => Def::BELONG_ARTICLE, 'file_id' => $id])->asArray()->all());
 		}
 		return Message::display(Language::get('drop_ok'));
 	}
-	
+
 	/* 异步修改数据 */
-    public function actionEditcol()
-    {
+	public function actionEditcol()
+	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'if_show', 'sort_order']);
-		if(in_array($post->column, ['title', 'if_show', 'sort_order'])) {
+		if (in_array($post->column, ['title', 'if_show', 'sort_order'])) {
 			$model = new \backend\models\ArticleForm(['article_id' => $post->id]);
 			$query = ArticleModel::findOne($post->id);
 			$query->{$post->column} = $post->value;
-			if(!($article = $model->save($query, true))) {
+			if (!($article = $model->save($query, true))) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_ok'));
 		}
-    }
+	}
 
 	private function getConditions($post, $query = null)
 	{
-		if($query === null) {
-			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
-				if(in_array($field, ['cate_id', 'title'])) {
+		if ($query === null) {
+			foreach (array_keys(ArrayHelper::toArray($post)) as $field) {
+				if (in_array($field, ['cate_id', 'title'])) {
 					return true;
 				}
 			}
 			return false;
 		}
-		
-		if($post->title) {
+
+		if ($post->title) {
 			$query->andWhere(['like', 'title', $post->title]);
 		}
-		if($post->cate_id) {
-			if(!($allId = AcategoryModel::getDescendantIds($post->cate_id))) {
+		if ($post->cate_id) {
+			if (!($allId = AcategoryModel::getDescendantIds($post->cate_id))) {
 				$allId = array();
 			}
 			$query->andWhere(['in', 'a.cate_id', $allId]);

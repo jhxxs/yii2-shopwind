@@ -30,15 +30,15 @@ class UploadedFileModel extends ActiveRecord
 {
 	public $file;
 	public $errors;
-	
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return '{{%uploaded_file}}';
-    }
-	
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return '{{%uploaded_file}}';
+	}
+
 	// 关联表
 	public function getGoodsImage()
 	{
@@ -60,14 +60,16 @@ class UploadedFileModel extends ActiveRecord
 		$this->file = UploadedFile::getInstanceByName($fileVal);
 
 		$model->file = $this->file;
-		$model->allowed_size = Def::IMAGE_FILE_SIZE;
-		$model->allowed_type = Def::IMAGE_FILE_TYPE;
-		if($archived == 1) {
-			$model->allowed_size = Def::ARCHIVE_FILE_SIZE;
-			$model->allowed_type .= ',' . Def::ARCHIVE_FILE_TYPE;
-		} else if($archived == 2) {
-			$model->allowed_size = Def::ARCHIVE_FILE_SIZE;
-			$model->allowed_type = Def::VIDEO_FILE_TYPE;
+
+		list($image_type, $image_size, $archive_type, $archive_size, $video_type) = $this->allowFile();
+		$model->allowed_size = $image_size;
+		$model->allowed_type = $image_type;
+		if ($archived == 1) {
+			$model->allowed_size = $archive_size;
+			$model->allowed_type .= ',' . $archive_type;
+		} else if ($archived == 2) {
+			$model->allowed_size = $archive_size;
+			$model->allowed_type = $video_type;
 		}
 
 		if(!$model->file) {
@@ -109,10 +111,13 @@ class UploadedFileModel extends ActiveRecord
 		$thumbnail = substr($file, 0, strripos($file, '.')) . '.thumb.' . $extension;
 
 		\yii\imagine\Image::thumbnail(
-			Def::fileSavePath() . DIRECTORY_SEPARATOR . $file, 
-			$width, 
-			$height, 
-			\Imagine\Image\ManipulatorInterface::THUMBNAIL_OUTBOUND)->save(Def::fileSavePath() . DIRECTORY_SEPARATOR . $thumbnail, ['quality' => 100]
+			Def::fileSavePath() . DIRECTORY_SEPARATOR . $file,
+			$width,
+			$height,
+			\Imagine\Image\ManipulatorInterface::THUMBNAIL_OUTBOUND
+		)->save(
+			Def::fileSavePath() . DIRECTORY_SEPARATOR . $thumbnail,
+			['quality' => 100]
 		);
 		
 		return $thumbnail;	
@@ -291,14 +296,16 @@ class UploadedFileModel extends ActiveRecord
 	 */
 	private function validImageType($file)
 	{
+		list($file_type) = self::allowFile();
+
 		// 目前仅验证图像类型的文件
-		if(!in_array($file->extension, explode(',', Def::IMAGE_FILE_TYPE))) {
+		if (!in_array($file->extension, explode(',', $file_type))) {
 			return true;
 		}
 
 		// 允许的类型
-		$allow = [IMAGETYPE_GIF,IMAGETYPE_JPEG,IMAGETYPE_PNG,IMAGETYPE_BMP];
-	
+		$allow = [IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP];
+
 		if (!function_exists('exif_imagetype')) {
 			list($width, $height, $type, $attr) = getimagesize($file->tempName);
 			return in_array($type, $allow);
@@ -307,5 +314,23 @@ class UploadedFileModel extends ActiveRecord
 		// 返回值和 getimagesize() 返回的数组中的索引 2 的值是一样的，但本函数快得多
 		$type = exif_imagetype($file->tempName);
 		return in_array($type, $allow);
+	}
+
+	/**
+	 * 支持的文件类型和大小限制
+	 * 上传的视频格式固定为mp4，不支持修改
+	 */
+	public static function allowFile()
+	{
+		$setting = Yii::$app->params['upload'];
+
+		return [
+			$setting['image_type'] ? $setting['image_type'] : Def::IMAGE_FILE_TYPE,
+			$setting['image_size'] ? $setting['image_size'] : Def::IMAGE_FILE_SIZE,
+			$setting['archive_type'] ? $setting['archive_type'] : Def::ARCHIVE_FILE_TYPE,
+			$setting['archive_size'] ? $setting['archive_size'] : Def::ARCHIVE_FILE_SIZE,
+			Def::VIDEO_FILE_TYPE,
+			$setting['archive_size'] ? $setting['archive_size'] : Def::ARCHIVE_FILE_SIZE
+		];
 	}
 }

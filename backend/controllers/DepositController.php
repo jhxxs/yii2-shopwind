@@ -29,6 +29,7 @@ use common\library\Message;
 use common\library\Resource;
 use common\library\Page;
 use common\library\Timezone;
+use common\library\Plugin;
 
 /**
  * @Id DepositController.php 2018.8.3 $

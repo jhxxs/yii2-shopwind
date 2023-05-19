@@ -7,6 +7,7 @@
         <form method="post">
           <h2 class="bold layui-font-16">{$lang.apiserver}</h2>
           <table class="infoTable infoTable2">
+
             <tr>
               <th class="paddingT15"><label>AppID</label></th>
               <td class="paddingT15 wordSpacing5"><input type="text" name="apiserver[appid]"
@@ -16,6 +17,14 @@
               <th class="paddingT15"><label>AppSecret</label></th>
               <td class="paddingT15 wordSpacing5"><input type="text" name="apiserver[appsecret]"
                   value="{$setting.apiserver.appsecret}" class="infoTableInput" /></td>
+            </tr>
+            <tr>
+              <th class="paddingT15"></th>
+              <td class="paddingT15 wordSpacing5">
+                <div class="notice-word">
+                  <p class="layui-font-12 nobg">设置与移动端、小程序、电脑端进行数据传输的秘钥</p>
+                </div>
+              </td>
             </tr>
             <tr>
               <th></th>

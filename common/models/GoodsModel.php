@@ -167,7 +167,7 @@ class GoodsModel extends ActiveRecord
 
 		if ($id) $allId[] = $id;
 		$allId = array_values(array_unique($allId));
-		if (count($allId) > Def::GOODS_COLLECT) {
+		if (count($allId) > 20) {
 			unset($allId[0]);
 		}
 

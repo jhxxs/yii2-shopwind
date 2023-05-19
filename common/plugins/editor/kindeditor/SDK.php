@@ -13,6 +13,7 @@ namespace common\plugins\editor\kindeditor;
 
 use yii;
 
+use common\models\UploadedFileModel;
 use common\library\Resource;
 use common\library\Def;
 
@@ -25,34 +26,34 @@ class SDK
 {
 	// 表单字段名
 	public $name = 'description';
-	
+
 	// 编辑器主题
 	public $theme = 'default';
-	
+
 	// 界面语言
 	public $lang = 'zh_CN';
-	
+
 	// 是否需要引入JS文件
 	public $ext_js = true;
-	
+
 	/**
-     * @param array $config 插件密钥等配置信息
-     */
-    public function __construct(array $config)
-    {
-        foreach($config as $key => $value) {
-            $this->$key = $value;
-	   }
+	 * @param array $config 插件密钥等配置信息
+	 */
+	public function __construct(array $config)
+	{
+		foreach ($config as $key => $value) {
+			$this->$key = $value;
+		}
 	}
-	
+
 	/**
-     * 创建编辑器
+	 * 创建编辑器
 	 * @param array $params 编辑器参数集
 	 */
 	public function create(array $params)
 	{
-		foreach($params as $key => $value) {
-            $this->$key = $value;
+		foreach ($params as $key => $value) {
+			$this->$key = $value;
 		}
 
 		// 主题列表
@@ -61,30 +62,30 @@ class SDK
 			'simple' => "'fontname','fontsize','|','forecolor','hilitecolor','bold','italic','underline','removeformat','|','justifyleft','justifycenter','justifyright','insertorderedlist','insertunorderedlist','|','emoticons','image','link'",
 			'mini' => "'fontname','fontsize','|','forecolor','hilitecolor','bold','italic','underline'"
 		);
-		
-        switch ($this->theme)
-        {
+
+		switch ($this->theme) {
 			case 'mini':
 				$theme_config = $themes['mini'];
-			break;
-            case 'simple':
-                $theme_config = $themes['simple'];
-            break;
-            case 'default':
-                $theme_config = $themes['default'];
-            break;
-            default:
-                $theme_config = $themes['default'];
-            break;
-        }
+				break;
+			case 'simple':
+				$theme_config = $themes['simple'];
+				break;
+			case 'default':
+				$theme_config = $themes['default'];
+				break;
+			default:
+				$theme_config = $themes['default'];
+				break;
+		}
 
-		if($this->ext_js) {
+		if ($this->ext_js) {
 			$include_js = Resource::import("kindeditor/kindeditor-min.js,kindeditor/lang/{$this->lang}.js");
 		}
 
-		$imageJsonArray = json_encode(explode(',', Def::IMAGE_FILE_TYPE));
+		list($file_type) = UploadedFileModel::allowFile();
+		$imageJsonArray = json_encode(explode(',', $file_type));
 
-$str = <<<EOT
+		$str = <<<EOT
 $include_js
 <script>
 	KindEditor.ready(function(K) {
@@ -116,6 +117,6 @@ $include_js
 </script>
 
 EOT;
-        return $str;
-    }
+		return $str;
+	}
 }

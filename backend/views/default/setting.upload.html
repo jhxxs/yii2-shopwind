@@ -1,0 +1,63 @@
+{include file="header.html"}
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+      <div class="flexigrid">
+        <h2 class="bold layui-font-16">图片上传</h2>
+        <form method="post" enctype="multipart/form-data">
+          <table class="infoTable infoTable2">
+            <tr>
+              <th class="paddingT15"><label>支持格式</label></th>
+              <td class="paddingT15 wordSpacing5"><input type="text" placeholder="gif,jpg,jpeg,png,bmp"
+                  name="upload[image_type]" value="{$setting.upload.image_type|default:'gif,jpg,jpeg,png,bmp'}" class="infoTableInput" /></td>
+            </tr>
+            <tr>
+              <th class="paddingT15"><label>单个图片大小限制</label></th>
+              <td class="paddingT15 wordSpacing5"><input type="text" placeholder="2097152" name="upload[image_size]"
+                  value="{$setting.upload.image_size|default:2097152}" /> <span class="gray">byte</span></td>
+            </tr>
+            <tr>
+              <th></th>
+              <td class="paddingT15 wordSpacing5 gray layui-font-12">1MB = 1024*1024</td>
+            </tr>
+            <tr>
+              <th class="paddingT15"></th>
+              <td class="ptb20"><input class="layui-btn layui-bg-blue J_AjaxSubmit" type="submit"
+                  value="{$lang.submit}" /></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      <div class="flexigrid">
+        <h2 class="bold layui-font-16">文件上传</h2>
+        <form method="post" enctype="multipart/form-data">
+          <table class="infoTable infoTable2">
+            <tr>
+              <th class="paddingT15"><label>支持格式</label></th>
+              <td class="paddingT15 wordSpacing5"><input type="text" placeholder="doc,docx,pdf,xls,xlsx"
+                  name="upload[archive_type]" value="{$setting.upload.archive_type|default:'doc,docx,pdf,xls,xlsx'}" class="infoTableInput" /></td>
+            </tr>
+            <tr>
+              <th class="paddingT15"><label>单个文件大小限制</label></th>
+              <td class="paddingT15 wordSpacing5"><input type="text" placeholder="10485760" name="upload[archive_size]"
+                  value="{$setting.upload.archive_size|default:10485760}" /> <span class="gray">byte</span></td>
+            </tr>
+            <tr>
+              <th></th>
+              <td class="paddingT15 wordSpacing5 gray layui-font-12">1MB = 1024*1024</td>
+            </tr>
+            <tr>
+              <th></th>
+              <td class="ptb20"><input class="layui-btn layui-bg-blue J_AjaxSubmit" type="submit"
+                  value="{$lang.submit}" /></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+
+      {include file="version.html"}
+    </div>
+  </div>
+</div>
+{include file="footer.html"}
