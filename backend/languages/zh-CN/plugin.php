@@ -68,7 +68,7 @@ return array(
     'clientkey'         => '商户证书文件',
     'wechatkey'         => '微信证书文件',
     'pemPath_desc'      => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/wxpay/cacert<br>商户证书获取方法：<a target="_blank" href="https://kf.qq.com/faq/161222NneAJf161222U7fARv.html">获取证书</a>',    
-    'wxpemPath_desc'    => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/wxpay/cacert<br>微信证书获取方法：<a target="_blank" href="https://forum.shopwind.net/thread/347">获取证书</a>',    
+    'wxpemPath_desc'    => '填证书相对路径，证书文件请自行上传至服务器目录：common/plugins/payment/wxpay/cacert<br>微信证书获取方法：<a target="_blank" href="https://www.shopwind.net/forum/thread/347.html">获取证书</a>',    
 
     'wxapppay'  		=> '微信APP支付',
     'wxapppay_desc'     => '微信APP支付是客户端（iOS、Android）唤起的支付功能，拥有更好的体验，兼容电脑端的微信二维码支付。<a href="https://open.weixin.qq.com" target="_blank">接口申请</a>',
