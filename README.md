@@ -48,7 +48,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * 宝塔服务器部署：<a href="https://www.bt.cn/?invite_code=MV9iaXV6a3U=" target="_blank">送你3188元礼包，点我领取</a>
 
 #### 安装教程
-* <a href="https://forum.shopwind.net" target="_blank"> 查看常见问题/安装教程 </a>
+* <a href="https://www.shopwind.net/forum/portal.html" target="_blank"> 查看常见问题/安装教程 </a>
 
 #### 开源版体验
 * 前台体验：<a href="http://test.shopwind.net" target="_blank"> http://test.shopwind.net </a> 买家测试账号：buyer 密码：123456  支付密码：123456
@@ -133,9 +133,9 @@ ShopWind系统归属于广西南宁领众网络科技有限公司所有，早在
 
 * 架构介绍：[https://www.shopwind.net/product/system.html](https://www.shopwind.net/product/system.html)
 
-* 安装教程：[https://forum.shopwind.net/thread/105](https://forum.shopwind.net/thread/105)
+* 安装教程：[https://www.shopwind.net/forum/thread/105.html](https://www.shopwind.net/forum/thread/105.html)
 
-* 运营手册：[https://forum.shopwind.net/?categoryId=14528](https://forum.shopwind.net/?categoryId=14528)
+* 运营手册：[https://www.shopwind.net/product/guide.html](https://www.shopwind.net/product/guide.html)
 
 * 开发文档：[https://developer.shopwind.net](https://developer.shopwind.net)
 
