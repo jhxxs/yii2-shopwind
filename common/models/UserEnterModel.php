@@ -49,7 +49,7 @@ class UserEnterModel extends ActiveRecord
 		$model->ip = Yii::$app->request->userIP;
 		$model->add_time = Timezone::gmtime();
 		if ($address = RegionModel::getAddressByIp($model->ip)) {
-			$model->address = $address['local'] ? Language::get('local') : $address['city'];
+			$model->address = isset($address['local']) ? Language::get('local') : $address['city'];
 		}
 
 		return $model->save();

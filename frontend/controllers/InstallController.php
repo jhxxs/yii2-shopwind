@@ -188,7 +188,7 @@ class InstallController extends \common\controllers\BaseInstallController
 			else
 			{
 				// 检查表是否存在，如果存在，提示是否可以覆盖
-				if(!$install->checkTable($post->force)) {
+				if (!$install->checkTable(isset($post->force) ? $post->force : false)) {
 					
 					// 不同意强制安装，则显示错误
 					return Message::warning($install->errors);

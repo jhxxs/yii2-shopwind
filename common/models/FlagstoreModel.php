@@ -56,16 +56,15 @@ class FlagstoreModel extends ActiveRecord
 		if($data === false || !$cached)
 		{
 			$query = parent::find()->alias('fs')->select('fs.description,s.store_id,s.store_logo,s.store_name')->joinWith('store s', false)->where(['status' => 1]);
-			if($post->brand)
-			{
+			if (isset($post->brand)) {
 				if(($brand = BrandModel::find()->select('brand_name,brand_logo')->where(['brand_name' => $post->brand])->one())) {
 					$query->andWhere(['brand_id' => $brand->brand_id]);
 				}
 			}
-			if($post->keyword) {
+			if(isset($post->keyword)) {
 				$query->andWhere(['like', 'keyword', $post->keyword]);
 			}
-			if($post->cate_id) {
+			if(isset($post->cate_id)) {
 				$query->andWhere(['cate_id' => intval($post->cate_id)]);
 			}
 			$store = $query->asArray()->one();

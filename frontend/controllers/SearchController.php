@@ -211,6 +211,7 @@ class SearchController extends \common\controllers\BaseMallController
 		if($data === false || !$cached)
 		{
 			$provincesIds = array();
+			if(!isset($post->region_id)) $post->region_id = 0;
 			$provinces = RegionModel::getList(RegionModel::getProvinceParentId());
 			foreach($provinces as $key => $val) 
 			{
@@ -242,13 +243,13 @@ class SearchController extends \common\controllers\BaseMallController
 	private function getPageTitle($post = null, $sType = 'goods')
 	{
 		$title = null;
-		if($post->keyword) {
+		if(isset($post->keyword)) {
 			$title = $post->keyword;
 		}
-		elseif($post->brand) {
+		elseif(isset($post->brand)) {
 			$title = $post->brand;
 		}
-		elseif($post->cate_id) {
+		elseif(isset($post->cate_id)) {
 			if($sType == 'goods') {
 				$title = GcategoryModel::find()->select('cate_name')->where(['cate_id' => $post->cate_id])->scalar();
 			} else $title = ScategoryModel::find()->select('cate_name')->where(['cate_id' => $post->cate_id])->scalar();

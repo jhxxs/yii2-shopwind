@@ -54,7 +54,7 @@ class Resource
         FileHelper::createDirectory(Yii::getAlias('@webroot') .'/assets');
 
         // 当网站模式为调试模式时，发布资源时，强制更新
-        $forceCopy = (Yii::$app->params['site_mode'] == 'debug') ? true : false;
+        $forceCopy = (isset(Yii::$app->params['site_mode']) && Yii::$app->params['site_mode'] == 'debug') ? true : false;
 
         // 如果有指定依赖目录（比如JS需要加载CSS，CSS需要加载IMG
         if(isset($params['depends']) && !empty($params['depends'])) {
