@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<system.webServer>
+<rewrite>
+<rules>
+ <rule name="rewrite_admin_rewrite" stopProcessing="true">
+  <match url="admin/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="admin/index.php" appendQueryString="true"/>
+ </rule>
+ <rule name="rewrite_mobile_rewrite" stopProcessing="true">
+  <match url="mobile/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="mobile/index.php" appendQueryString="true"/>
+ </rule>
+ <rule name="rewrite_rewrite" stopProcessing="true">
+  <match url="." ignoreCase="false"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="index.php" appendQueryString="true"/>
+ </rule>
+</rules> 
+</rewrite>
+</system.webServer>
