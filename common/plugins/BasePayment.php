@@ -227,7 +227,9 @@ class BasePayment extends BasePlugin
 			if (in_array($payment['code'], array('deposit'))) {
 				if ($showDepositPay === true) {
 					$depositAccount = DepositAccountModel::find()->select('pay_status,money')->where(['userid' => Yii::$app->user->id])->asArray()->one();
-
+					if(!$depositAccount) {
+						$depositAccount = DepositAccountModel::createDepositAccount(Yii::$app->user->id);
+					}
 					if (in_array($depositAccount['pay_status'], array('ON'))) {
 						if ($orderInfo['amount'] > $depositAccount['money']) {
 							$payment['disabled'] = 1;
@@ -456,7 +458,7 @@ class BasePayment extends BasePlugin
 	 */
 	protected function getTerminal()
 	{
-		if ($this->params->terminal) {
+		if (isset($this->params->terminal)) {
 			$terminal = strtoupper($this->params->terminal);
 			if (in_array($terminal, ['APP', 'MP', 'WAP', 'PC'])) {
 				return $terminal;

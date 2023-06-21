@@ -300,7 +300,7 @@ class GoodsController extends \common\controllers\BaseMallController
 		
 		// 页面公共参数
 		$this->params = array_merge($this->params, Page::getAssign('store', $goods['store_id']));
-		$this->params['store'] = array_merge($store, (array)$this->params['store']);
+		$this->params['store'] = array_merge($store, isset($this->params['store']) ? $this->params['store'] : []);
 		$this->params['default_image'] = Yii::$app->params['default_goods_image'];
 	}
 	

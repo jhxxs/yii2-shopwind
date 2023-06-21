@@ -135,7 +135,7 @@ class WholesaleModel extends ActiveRecord
 
 			// 统计购物车选中的商品金额
 			if ((isset($v['selected']) && $v['selected']) || ($otype != 'normal')) {
-				$list['amount'] += $v['subtotal'];
+				$list['amount'] += (isset($v['subtotal']) ? $v['subtotal'] : 0);
 			}
 		}
 

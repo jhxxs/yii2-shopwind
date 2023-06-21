@@ -119,6 +119,7 @@ class CartItem
 			'specification' => addslashes($specification),
 			'goods_image'   => addslashes($goods_image),
 			'selected'		=> isset($params['selected']) ? intval($params['selected']) : 0,
+            'quantity'		=> isset($params['quantity']) ? intval($params['quantity']) : 1,
 		);
 		return (object)$product;
 	}

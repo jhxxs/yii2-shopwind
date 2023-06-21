@@ -260,6 +260,8 @@ class BaseOrder
 	public function validConsigneeInfo()
 	{
 		$post = ArrayHelper::toArray($this->post);
+		if (!isset($post['region_id'])) $post['region_id'] = 0;
+
 		if (($address = $this->getAddressInfo($post['addr_id'], $post['region_id']))) {
 			$post = array_merge($post, $address);
 		}

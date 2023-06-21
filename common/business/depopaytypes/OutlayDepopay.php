@@ -83,7 +83,7 @@ class OutlayDepopay extends BaseDepopay
 			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $trade_info['amount'], 'reduce'), // 同时更新余额
 			'tradeType'		=>  $this->_tradeType,
 			'flow'			=>	$this->_flow,
-			'name'			=>  $trade_info['name'] ? $trade_info['name'] : Language::get($this->_tradeType),
+			'name'			=>  isset($trade_info['name']) ? $trade_info['name'] : Language::get($this->_tradeType),
 		);
 
 		// 插入支出记录

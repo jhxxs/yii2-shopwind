@@ -78,16 +78,16 @@ class Buyer_orderForm extends Model
 		if(isset($post->type) && ($status = Def::getOrderStatusTranslator($post->type)) > -1) {
 			$query->andWhere(['o.status' => $status]);
 		}
-		if($post->seller_name) {
+		if(isset($post->seller_name)) {
 			$query->andWhere(['link', 'seller_name', $post->seller_name]);
 		}
-		if($post->add_time_from) {
+		if(isset($post->add_time_from)) {
 			$query->andWhere(['>=', 'o.add_time', Timezone::gmstr2time($post->add_time_from)]);
 		}
-		if($post->add_time_to) {
+		if(isset($post->add_time_to)) {
 			$query->andWhere(['<=', 'o.add_time', Timezone::gmstr2time_end($post->add_time_to)]);
 		}
-		if($post->order_sn) {
+		if(isset($post->order_sn)) {
 			$query->andWhere(['o.order_sn' => $post->order_sn]);
 		}
 		if(isset($post->evaluation_status)) {

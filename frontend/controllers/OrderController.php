@@ -54,6 +54,8 @@ class OrderController extends \common\controllers\BaseUserController
 	public function actionNormal()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['store_id']);
+		if(!isset($post->store_id)) $post->store_id = 0;
+
 		return $this->build('normal', Url::toRoute(['order/normal', 'store_id' => $post->store_id]));
 	}
 	

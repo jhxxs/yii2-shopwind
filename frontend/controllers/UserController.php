@@ -137,7 +137,7 @@ class UserController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['rememberMe']);
-			$rememberMe = $post->rememberMe ? 3600 * 24 * 30 : 0;// one month
+			$rememberMe = (isset($post->rememberMe) && $post->rememberMe) ? 3600 * 24 * 30 : 0;// one month
 			
 			if(isset(Yii::$app->params['captcha_status']['login']) && Yii::$app->params['captcha_status']['login']) {
 				$captchaValidator = new CaptchaValidator(['captchaAction' => 'default/captcha']);

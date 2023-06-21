@@ -262,7 +262,7 @@ class RegionModel extends ActiveRecord
 		{
 			$ip = Yii::$app->request->userIP;
 			$address = self::getAddressByIp($ip);
-			if($address && !$address['local'])
+			if($address && isset($address['local']) && !$address['local'])
 			{
 				$province 	= $address['province'];
 				$city 		= $address['city'];

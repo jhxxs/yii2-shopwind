@@ -113,7 +113,7 @@ class CartController extends \common\controllers\BaseMallController
 		Yii::$app->cart->put($product, $post->quantity);
 		
 		// 立即购买的操作（确保只购买的是当前立即购买的商品）
-		if($post->selected) {
+		if(isset($post->selected) && $post->selected) {
 			Yii::$app->cart->unchoses();
 			Yii::$app->cart->chose($product->product_id);
 			Yii::$app->cart->change($product->product_id, $post->quantity, $result['price']);
