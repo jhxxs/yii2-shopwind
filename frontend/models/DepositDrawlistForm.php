@@ -55,13 +55,13 @@ class DepositDrawlistForm extends Model
 			return false;
 		}
 		
-		if($post->add_time_from) {
+		if(isset($post->add_time_from)) {
 			$query->andWhere(['>=', 'add_time', Timezone::gmstr2time($post->add_time_from)]);
 		}
-		if($post->add_time_to) {
+		if(isset($post->add_time_to)) {
 			$query->andWhere(['<=', 'add_time', Timezone::gmstr2time($post->add_time_to)]);
 		}
-		if($post->status) {
+		if(isset($post->status)) {
 			$query->andWhere(['status' => in_array(strtoupper($post->status), ['VERIFING']) ? 'VERIFY' : 'SUCCESS']);
 		}
 		

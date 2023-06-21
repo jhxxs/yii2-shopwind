@@ -17,7 +17,6 @@ use yii\helpers\ArrayHelper;
 
 use common\models\DepositRecordModel;
 
-use common\library\Basewind;
 use common\library\Timezone;
 use common\library\Page;
 
@@ -65,10 +64,10 @@ class DepositRecordlistForm extends Model
 			}
 			return false;
 		}
-		if($post->add_time_from) {
+		if(isset($post->add_time_from)) {
 			$query->andWhere(['>=', 'add_time', Timezone::gmstr2time($post->add_time_from)]);
 		}
-		if($post->add_time_to) {
+		if(isset($post->add_time_to)) {
 			$query->andWhere(['<=', 'add_time', Timezone::gmstr2time($post->add_time_to)]);
 		}
 		

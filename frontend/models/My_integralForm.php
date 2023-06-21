@@ -61,7 +61,7 @@ class My_integralForm extends Model
 		}		
 		// 今天是否可以签到领积分（每天一次）
 		if(($signAmount = IntegralSettingModel::getSysSetting('signin')) > 0) {
-			$integral['signinabled'] = true;
+			$integral['signined'] = false;
 			$integral['signIntegral'] = $signAmount; 
 			
 			$query = IntegralLogModel::find()->select('add_time')->where(['type' => 'signin', 'userid' => Yii::$app->user->id])->orderBy(['log_id' => SORT_DESC])->one();

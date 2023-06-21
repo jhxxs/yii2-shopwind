@@ -144,7 +144,7 @@ class Alipay extends BaseConnect
 	public function getReturnUrl()
 	{
 		// for API
-		if ($this->params->callback) {
+		if (isset($this->params->callback) && $this->params->callback) {
 			return $this->params->callback;
 		}
 

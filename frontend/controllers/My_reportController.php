@@ -46,7 +46,7 @@ class My_reportController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['page']);
 
 		$query = ReportModel::find()->alias('r')->select('r.*,g.goods_name,g.default_image,s.store_name')->joinWith('goods g', false)->joinWith('store s', false)->where(['userid' => Yii::$app->user->id])->orderBy(['id' => SORT_DESC]);
-		$page = Page::getPage($query->count(), $post->pageper);
+		$page = Page::getPage($query->count(), isset($post->pageper) ? intval($post->pageper) : 0);
 		$reports = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 
 		$this->params['reports'] = $reports;

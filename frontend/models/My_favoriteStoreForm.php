@@ -88,7 +88,7 @@ class My_favoriteStoreForm extends Model
 			return false;
 		}
 		
-		if($post->store_name) {
+		if(isset($post->store_name)) {
 			$query->andWhere(['like', 'store_name', $post->store_name]);
 		}
 		

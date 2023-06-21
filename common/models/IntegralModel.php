@@ -71,7 +71,7 @@ class IntegralModel extends ActiveRecord
 		}
 		
 		$money = $amount;
-		if($flow == 'minus') {
+		if(isset($flow) && $flow == 'minus') {
 			$money = -$amount;
 		}
 			

@@ -80,10 +80,10 @@ class DepositTradelistForm extends Model
 			}
 			return false;
 		}
-		if($post->add_time_from) {
+		if(isset($post->add_time_from)) {
 			$query->andWhere(['>=', 'add_time', Timezone::gmstr2time($post->add_time_from)]);
 		}
-		if($post->add_time_to) {
+		if(isset($post->add_time_to)) {
 			$query->andWhere(['<=', 'add_time', Timezone::gmstr2time($post->add_time_to)]);
 		}
 		

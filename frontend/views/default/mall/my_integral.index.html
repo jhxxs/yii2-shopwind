@@ -7,7 +7,7 @@
           <div class="user-integral-info mb10 clearfix">
             <div class="valid user-integral"> <b class="des">可用的积分</b> <b class="piont">{$integral.amount|default:0}</b> </div>
             <div class="invalid user-integral"> <b class="des">冻结的积分</b> <b class="piont decr">{$integral.frozen_integral|default:0}</b> </div>
-            <!--{if $integral.signinabled}-->
+            <!--{if !$integral.signined}-->
             <div style="border:0px;" class="invalid user-integral"> 
             	<a class="desl J_SignIntegral">签到领积分</a>
             </div>

@@ -38,13 +38,13 @@ class IntegralLogModel extends ActiveRecord
 		
 		$model = new IntegralLogModel();
 		$model->userid = $userid;
-		$model->order_id = $order_id ? $order_id : 0;
-		$model->order_sn = $order_sn ? $order_sn : '';
-		$model->changes = ($flow == 'minus') ? -$amount : $amount;
+		$model->order_id = isset($order_id) ? intval($order_id) : 0;
+		$model->order_sn = isset($order_sn) ? $order_sn : '';
+		$model->changes = (isset($flow) && $flow == 'minus') ? -$amount : $amount;
 		$model->balance = $balance;
-		$model->type = $type;
-		$model->state = $state ? $state : 'finished';
-		$model->flag = $flag ? $flag : '';
+		$model->type = isset($type) ? $type : '';
+		$model->state = isset($state) ? $state : 'finished';
+		$model->flag = isset($flag) ? $flag : '';
 		$model->add_time = Timezone::gmtime();
 		
 		return $model->save() ? true : false;

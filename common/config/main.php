@@ -46,7 +46,7 @@ return [
 		// url route
 		'urlManager' => [
 			// Disable r= routes
-            'enablePrettyUrl' => false,
+            'enablePrettyUrl' => true,
 			// Disable index.php
             'showScriptName' => false,
 			'rules'=>[

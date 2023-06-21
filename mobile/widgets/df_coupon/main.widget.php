@@ -28,6 +28,15 @@ class Df_couponWidget extends BaseWidget
 
     public function getData()
     {
+        // 初始值
+        $this->options = array_merge(
+            [
+                'source' => '',
+                'quantity' => 3,
+            ],
+            $this->options
+        );
+
         $query = CouponModel::find()->alias('c')->select('c.coupon_id,c.coupon_name,c.coupon_value,c.min_amount')
 			->where(['clickreceive' => 1, 'available' => 1])
 			->andWhere(['>', 'c.end_time', Timezone::gmtime()])

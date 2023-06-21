@@ -41,113 +41,112 @@ class My_favoriteController extends \common\controllers\BaseUserController
 		$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'));
 	}
 
-    public function actionIndex()
-    {
+	public function actionIndex()
+	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		if(in_array($post->type, ['goods', ''])) {
-			return $this->listCollectGoods();
-		} else {
+		if (isset($post->type) && in_array($post->type, ['store'])) {
 			return $this->listCollectStore();
 		}
+		return $this->listCollectGoods();
 	}
-	
+
 	public function actionAdd()
-    {
+	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		if(in_array($post->type, ['goods', ''])) {
+		if (in_array($post->type, ['goods', ''])) {
 			return $this->addCollectGoods();
 		} else {
 			return $this->addCollectStore();
 		}
 	}
-	
+
 	public function actionDelete()
-    {
-        $post = Basewind::trimAll(Yii::$app->request->get(), 2);
-		
-        if (!$post->item_id || !in_array($post->type, ['goods', 'store'])) {
-            return Message::warning(Language::get('no_such_collect_item'));
-        }
-		if(!CollectModel::deleteAll(['and', ['in', 'item_id', explode(',', $post->item_id)], ['type' => $post->type, 'userid' => Yii::$app->user->id]])) {
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), 2);
+
+		if (!$post->item_id || !in_array($post->type, ['goods', 'store'])) {
+			return Message::warning(Language::get('no_such_collect_item'));
+		}
+		if (!CollectModel::deleteAll(['and', ['in', 'item_id', explode(',', $post->item_id)], ['type' => $post->type, 'userid' => Yii::$app->user->id]])) {
 			return Message::warning(Language::get('drop_collect_failed'));
 		}
-        return Message::display(Language::get('drop_collect_successed'));
-    }
-	
+		return Message::display(Language::get('drop_collect_successed'));
+	}
+
 	private function listCollectGoods()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		
+
 		$model = new \frontend\models\My_favoriteGoodsForm();
-		list($goodsList, $page) = $model->formData($post, $post->pageper);
+		list($goodsList, $page) = $model->formData($post, isset($post->pageper) ? intval($post->pageper) : 0);
 		$this->params['goodsList'] = $goodsList;
 		$this->params['pagination'] = Page::formatPage($page);
-		
+
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('my_favorite'), Url::toRoute('my_favorite/index'), Language::get('collect_goods'));
-		
+
 		// 当前用户中心菜单
-		$this->params['_usermenu'] = Page::setMenu('my_favorite', 'collect_goods');	
+		$this->params['_usermenu'] = Page::setMenu('my_favorite', 'collect_goods');
 
 		$this->params['page'] = Page::seo(['title' => Language::get('my_favorite')]);
 		return $this->render('../my_favorite.goods.html', $this->params);
 	}
-	
+
 	private function listCollectStore()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		
+
 		$model = new \frontend\models\My_favoriteStoreForm();
-		list($storeList, $page) = $model->formData($post, $post->pageper);
+		list($storeList, $page) = $model->formData($post, isset($post->pageper) ? intval($post->pageper) : 0);
 		$this->params['storeList'] = $storeList;
 		$this->params['pagination'] = Page::formatPage($page);
-	
+
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('my_favorite'), Url::toRoute('my_favorite/index'), Language::get('collect_store'));
-		
+
 		// 当前用户中心菜单
-		$this->params['_usermenu'] = Page::setMenu('my_favorite', 'collect_store');	
+		$this->params['_usermenu'] = Page::setMenu('my_favorite', 'collect_store');
 
 		$this->params['page'] = Page::seo(['title' => Language::get('my_favorite')]);
 		return $this->render('../my_favorite.store.html', $this->params);
 	}
-	
+
 	private function addCollectGoods()
-    {
+	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['item_id']);
-		
+
 		$model = new \frontend\models\My_favoriteGoodsForm();
-		if(!$model->addCollect($post)) {
+		if (!$model->addCollect($post)) {
 			return Message::warning($model->errors);
 		}
-        return Message::display(Language::get('collect_goods_ok'));
-    }
-	
+		return Message::display(Language::get('collect_goods_ok'));
+	}
+
 	private function addCollectStore()
-    {
+	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['item_id']);
-		
-        $model = new \frontend\models\My_favoriteStoreForm();
-		if(!$model->addCollect($post)) {
+
+		$model = new \frontend\models\My_favoriteStoreForm();
+		if (!$model->addCollect($post)) {
 			return Message::warning($model->errors);
 		}
-        return Message::display(Language::get('collect_store_ok'));
-    }
+		return Message::display(Language::get('collect_store_ok'));
+	}
 
 	/* 三级菜单 */
-    public function getUserSubmenu()
-    {
-        $submenus =  array(
-            array(
-                'name'  => 'collect_goods',
-                'url'   => Url::toRoute(['my_favorite/index']),
-            ),
+	public function getUserSubmenu()
+	{
+		$submenus =  array(
 			array(
-                'name'  => 'collect_store',
-                'url'   => Url::toRoute(['my_favorite/index', 'type' => 'store']),
-            ),
-        );
+				'name'  => 'collect_goods',
+				'url'   => Url::toRoute(['my_favorite/index']),
+			),
+			array(
+				'name'  => 'collect_store',
+				'url'   => Url::toRoute(['my_favorite/index', 'type' => 'store']),
+			),
+		);
 
-        return $submenus;
-    }
+		return $submenus;
+	}
 }

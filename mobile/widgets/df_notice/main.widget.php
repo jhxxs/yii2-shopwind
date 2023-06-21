@@ -30,12 +30,21 @@ class Df_noticeWidget extends BaseWidget
 
     public function getData()
     {
+        // 初始值
+        $this->options = array_merge(
+            [
+                'source' => '',
+                'quantity' => 2,
+            ],
+            $this->options
+        );
+
         $query = ArticleModel::find()->select('article_id,title');
-       
-        if($this->options['source'] == 'choice') {
+
+        if ($this->options['source'] == 'choice') {
             $query->andWhere(['in', 'article_id', explode(',', $this->options['items'])]);
         } else {
-            if($this->options['source'] == 'category') {
+            if ($this->options['source'] == 'category') {
                 $query->andWhere(['cate_id' => $this->options['cate_id']]);
             }
             $query->limit($this->options['quantity'] > 0 ? $this->options['quantity'] : 2);
@@ -47,5 +56,5 @@ class Df_noticeWidget extends BaseWidget
     public function parseConfig($input)
     {
         return $input;
-    }   
+    }
 }

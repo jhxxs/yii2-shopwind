@@ -28,6 +28,15 @@ class Df_teambuyWidget extends BaseWidget
 
     public function getData()
     {
+        // 初始值
+        $this->options = array_merge(
+            [
+                'source' => '',
+                'quantity' => 3,
+            ],
+            $this->options
+        );
+
         $query = TeambuyModel::find()->alias('tb')->select('tb.id,tb.specs,tb.status,tb.goods_id,tb.people,g.default_image,g.price,g.goods_name,g.default_spec as spec_id,s.store_name,gst.sales')
 			->joinWith('goods g', false, 'INNER JOIN')
             ->joinWith('store s', false)

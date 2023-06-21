@@ -74,6 +74,7 @@ class My_messageForm extends Model
 			return false;
 		}
 		
+		if(!isset($post->folder)) $post->folder = '';
 		switch ($post->folder)
         {
 			case 'privatepm':
