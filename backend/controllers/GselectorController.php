@@ -12,7 +12,6 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 use common\models\GoodsModel;
 use common\models\ArticleModel;
@@ -43,20 +42,28 @@ class GselectorController extends \common\controllers\BaseAdminController
 	{
 		parent::init();
 	}
-	
+
 	public function actionGoods()
 	{
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
+			$this->params['gcategories'] = GcategoryModel::getOptions(0, -1, null, 2);
 			$this->params['page'] = Page::seo(['title' => Language::get('gselector')]);
 			return $this->render('../gselector.goods.html', $this->params);
-		}
-		else {
+		} else {
 
-			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['cate_id']);
 
-			$query = GoodsModel::find()->alias('g')->select('goods_id,goods_name, default_image,price')
+			$query = GoodsModel::find()->alias('g')->select('goods_id,goods_name,brand, default_image,price')
 				->joinWith('store s', false)
 				->where(['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0]);
+
+			if ($post->cate_id) {
+				$childIds = GcategoryModel::getDescendantIds($post->cate_id, 0);
+				$query->andWhere(['in', 'cate_id', $childIds]);
+			}
+			if ($post->keyword) {
+				$query->andWhere(['or', ['like', 'goods_name', $post->keyword], ['like', 'brand', $post->keyword]]);
+			}
 
 			$page = Page::getPage($query->count(), 5, true, $post->page);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
@@ -64,56 +71,55 @@ class GselectorController extends \common\controllers\BaseAdminController
 			return Message::result(['list' => $list, 'pagination' => Page::formatPage($page, true, 'basic')]);
 		}
 	}
-	
+
 	public function actionCategory()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
-		if(!isset($post->id)) $post->id = 0;
+		if (!isset($post->id)) $post->id = 0;
 
 		$list = GcategoryModel::getList($post->id, 0, true, 0, 'cate_id,cate_name,parent_id');
-		foreach($list as $key => $value) {
-			if(GcategoryModel::find()->select('cate_id')->where(['parent_id' => $value['cate_id'], 'if_show' => 1])->exists()) {
+		foreach ($list as $key => $value) {
+			if (GcategoryModel::find()->select('cate_id')->where(['parent_id' => $value['cate_id'], 'if_show' => 1])->exists()) {
 				$list[$key]['switchs'] = 1;
 			}
 		}
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
 			$this->params['list'] = $list;
-		
+
 			$this->params['page'] = Page::seo(['title' => Language::get('gselector')]);
 			return $this->render('../gselector.category.html', $this->params);
 		}
-		
+
 		return Message::result(array_values($list));
 	}
 
 	public function actionAcategory()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
-		if(!isset($post->id)) $post->id = 0;
+		if (!isset($post->id)) $post->id = 0;
 
 		$list = AcategoryModel::getList($post->id, 0, true, 0, 'cate_id,cate_name,parent_id');
-		foreach($list as $key => $value) {
-			if(AcategoryModel::find()->select('cate_id')->where(['parent_id' => $value['cate_id'], 'if_show' => 1])->exists()) {
+		foreach ($list as $key => $value) {
+			if (AcategoryModel::find()->select('cate_id')->where(['parent_id' => $value['cate_id'], 'if_show' => 1])->exists()) {
 				$list[$key]['switchs'] = 1;
 			}
 		}
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
 			$this->params['list'] = $list;
-		
+
 			$this->params['page'] = Page::seo(['title' => Language::get('aselector')]);
 			return $this->render('../gselector.acategory.html', $this->params);
 		}
-		
+
 		return Message::result(array_values($list));
 	}
 
 	public function actionArticle()
 	{
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
 			$this->params['page'] = Page::seo(['title' => Language::get('aselector')]);
 			return $this->render('../gselector.article.html', $this->params);
-		}
-		else {
+		} else {
 
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
@@ -122,7 +128,7 @@ class GselectorController extends \common\controllers\BaseAdminController
 
 			$page = Page::getPage($query->count(), 6, true, $post->page);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach($list as $key => $value) {
+			foreach ($list as $key => $value) {
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 			}
 
@@ -132,11 +138,10 @@ class GselectorController extends \common\controllers\BaseAdminController
 
 	public function actionCoupon()
 	{
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
 			$this->params['page'] = Page::seo(['title' => Language::get('gselector')]);
 			return $this->render('../gselector.coupon.html', $this->params);
-		}
-		else {
+		} else {
 
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
@@ -149,7 +154,7 @@ class GselectorController extends \common\controllers\BaseAdminController
 
 			$page = Page::getPage($query->count(), 5, true, $post->page);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach($list as $key => $value) {
+			foreach ($list as $key => $value) {
 				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
 			}
 
@@ -159,24 +164,32 @@ class GselectorController extends \common\controllers\BaseAdminController
 
 	public function actionLimitbuy()
 	{
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
+			$this->params['gcategories'] = GcategoryModel::getOptions(0, -1, null, 2);
 			$this->params['page'] = Page::seo(['title' => Language::get('gselector')]);
 			return $this->render('../gselector.limitbuy.html', $this->params);
-		}
-		else {
+		} else {
 
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
-			$query = LimitbuyModel::find()->alias('lb')->select('g.goods_id,g.goods_name,g.default_image,g.price,g.default_spec as spec_id')
-            	->joinWith('goods g', false, 'INNER JOIN')
-            	->joinWith('store s', false)
-            	->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]]);
+			$query = LimitbuyModel::find()->alias('lb')
+				->select('g.goods_id,g.goods_name,g.brand,g.default_image,g.price,g.default_spec as spec_id')
+				->joinWith('goods g', false, 'INNER JOIN')
+				->joinWith('store s', false)
+				->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]]);
 
+			if ($post->cate_id) {
+				$childIds = GcategoryModel::getDescendantIds($post->cate_id, 0);
+				$query->andWhere(['in', 'g.cate_id', $childIds]);
+			}
+			if ($post->keyword) {
+				$query->andWhere(['or', ['like', 'g.goods_name', $post->keyword], ['like', 'g.brand', $post->keyword]]);
+			}
 			$page = Page::getPage($query->count(), 5, true, $post->page);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 
 			$promotool = Promotool::getInstance()->build();
-			foreach($list as $key => $value) {
+			foreach ($list as $key => $value) {
 				$list[$key]['promotion'] = $promotool->getItemProInfo($value['goods_id'], $value['spec_id']);
 			}
 
@@ -186,23 +199,21 @@ class GselectorController extends \common\controllers\BaseAdminController
 
 	public function actionTeambuy()
 	{
-		if(!Yii::$app->request->isPost) {
+		if (!Yii::$app->request->isPost) {
 			$this->params['page'] = Page::seo(['title' => Language::get('gselector')]);
 			return $this->render('../gselector.teambuy.html', $this->params);
-		}
-		else {
+		} else {
 
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
 			$query = TeambuyModel::find()->alias('tb')->select('tb.id,tb.status,tb.goods_id,tb.people,g.default_image,g.price,g.goods_name,g.default_spec as spec_id')
 				->joinWith('goods g', false, 'INNER JOIN')
-            	->joinWith('store s', false)
+				->joinWith('store s', false)
 				->where(['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0]);
 
 			$page = Page::getPage($query->count(), 5, true, $post->page);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach($list as $key => $value)
-			{
+			foreach ($list as $key => $value) {
 				list($price) = TeambuyModel::getItemProPrice($value['spec_id']);
 				$list[$key]['teamPrice'] = $price === false ? $value['price'] : $price;
 			}
