@@ -184,8 +184,8 @@
       $('.J-storeStatic').load(url(['store/trend'])).parent().show();
 
       // 访问页面和安装时域名不一致提示
-      if (SITE_URL.includes(BASE_URL + '/') === false) {
-        layer.open({ title: '提示', area: '500px', content: '检测发现您当前访问的域名与安装时使用的域名(' + BASE_URL + ')不一致，为不影响部分功能的使用，请修改配置文件frontend/web/data/setting.php里面的域名为一致，或使用原域名来访问！' });
+      if (SITE_URL.includes(HOME_URL + '/') === false) {
+        layer.open({ title: '提示', area: '500px', content: '检测发现您当前访问的域名与安装时使用的域名(' + HOME_URL + ')不一致，为不影响部分功能的使用，请修改配置文件frontend/web/data/setting.php里面的域名为一致，或使用原域名来访问！' });
       }
     });
   </script>
