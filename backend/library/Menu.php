@@ -281,7 +281,53 @@ class Menu
 			'plugin' => array(
 				'text'  => Language::get('plugin'),
 				'ico' => 'icon-app',
-				'children' => Plugin::getInstance('plugin')->build()->getList()
+				'children' => array(
+					'promote' => array(
+						'text'	=> Language::get('plugin_promote'),
+						'url'	=> Url::toRoute('promote/index'),
+						'priv'  => ['key' => 'promote|all', 'depends' => 'appmarket|all', 'label' => Language::get('plugin_promote')]
+					),
+					'connect' => array(
+						'text'  => Language::get('plugin_connect'),
+						'url'   => Url::toRoute(['plugin/index', 'instance' => 'connect']),
+						'priv'  => ['key' => 'plugin|connect|all', 'label' => Language::get('plugin_connect')]
+					),
+					'payment' => array(
+						'text'  => Language::get('plugin_payment'),
+						'url'   => Url::toRoute(['plugin/index', 'instance' => 'payment']),
+						'priv'  => ['key' => 'plugin|payment|all', 'label' => Language::get('plugin_payment')]
+					),
+					'sms' 	=> array(
+						'text' => Language::get('plugin_sms'),
+						'url'  => Url::toRoute(['plugin/index', 'instance' => 'sms']),
+						'priv' => ['key' => 'plugin|sms|all', 'depends' => 'msg|all', 'label' => Language::get('plugin_sms')]
+					),
+					'oss' 	  => array(
+						'text'  => Language::get('plugin_oss'),
+						'url'	=> Url::toRoute(['plugin/index', 'instance' => 'oss']),
+						'priv' 	=> ['key' => 'plugin|oss|all', 'label' => Language::get('plugin_oss')]
+					),
+					'express' => array(
+						'text'  => Language::get('plugin_express'),
+						'url'   => Url::toRoute(['plugin/index', 'instance' => 'express']),
+						'priv'  => ['key' => 'plugin|express|all', 'label' => Language::get('plugin_express')]
+					),
+					'datapicker' => array(
+						'text' => Language::get('plugin_datapicker'),
+						'url'  => Url::toRoute(['plugin/index', 'instance' => 'datapicker']),
+						'priv' => ['key' => 'plugin|datapicker|all', 'label' => Language::get('plugin_datapicker')]
+					),
+					'uploader' => array(
+						'text'  => Language::get('plugin_uploader'),
+						'url'   => Url::toRoute(['plugin/index', 'instance' => 'uploader']),
+						'priv'  => ['key' => 'plugin|uploader|all', 'label' => Language::get('plugin_uploader')]
+					),
+					'editor' => array(
+						'text'  => Language::get('plugin_editor'),
+						'url'   => Url::toRoute(['plugin/index', 'instance' => 'editor']),
+						'priv'  => ['key' => 'plugin|editor|all', 'label' => Language::get('plugin_editor')]
+					)
+				)
 			),
 			// 微信
 			'weixin' => array(
