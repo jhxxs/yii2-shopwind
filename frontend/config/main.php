@@ -14,14 +14,14 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
-			'enableCookieValidation' => true,
-			'cookieValidationKey' => 'abcdefg1234567890999',
+            'enableCookieValidation' => true,
+            'cookieValidationKey' => 'abcdefg1234567890999',
         ],
         'user' => file_exists(Yii::getAlias('@frontend') . '/web/data/install.lock') ? [
             'identityClass' => 'common\models\UserModel',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
-			'loginUrl' => ['user/login']
+            'loginUrl' => ['user/login']
         ] : null,
         'session' => [
             // this is the name of the session cookie used for login on the frontend
@@ -33,22 +33,22 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
-					'logFile' => '@runtime/logs/app-'.date('Y-m-d', time()).'.log',
-					'maxFileSize' => 512
+                    'logFile' => '@runtime/logs/app-' . date('Y-m-d', time()) . '.log',
+                    'maxFileSize' => 512
                 ]
             ]
         ],
         'errorHandler' => [
             'errorAction' => 'site/error'
         ],
-		'view' => [
+        'view' => [
             'theme' => [
                 'basePath' => '@app/views/default',
                 'baseUrl' => '@web/views/default',
                 'pathMap' => [
-					'@app/views' => [
-        				'@app/views/default'
-    				]
+                    '@app/views' => [
+                        '@app/views/default'
+                    ]
                 ]
             ]
         ]

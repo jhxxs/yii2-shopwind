@@ -215,6 +215,7 @@ class InstallController extends \common\controllers\BaseInstallController
 		
 		$post = Basewind::trimAll(Yii::$app->request->post(), true);
 		$this->params['hiddens'] = ArrayHelper::toArray($post);
+		$this->params['messages'] = [];
 		
 		// 必须放在此方法中，放create无效
 		Yii::$app->session->set('install_initdata', true);
@@ -341,8 +342,6 @@ class InstallController extends \common\controllers\BaseInstallController
 			
 			// 安装结束，锁定程序
 			$install->initend();
-			
-			//return Message::display(Language::get('initdata_end'), ['default/index']);
 
 			return $this->redirect(['install/success']);
 		}

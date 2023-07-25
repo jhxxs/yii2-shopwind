@@ -32,7 +32,7 @@
           </tr>
           <tr>
             <th>{$lang.db_password}:</th>
-            <td class="clearfix"><input type="password" class="input_text" name="db_password" value="{$smarty.post.db_password}" />
+            <td class="clearfix"><input type="password" class="input_text" name="db_password" value="{$smarty.post.db_password|default:''}" />
               {$lang.db_password_notice}</td>
           </tr>
           <tr>
@@ -60,12 +60,12 @@
           </tr>
           <tr>
             <th>{$lang.admin_pass}:</th>
-            <td class="clearfix"><input type="password"  class="input_text" name="admin_pass" value="{$smarty.post.admin_pass}" />
+            <td class="clearfix"><input type="password"  class="input_text" name="admin_pass" value="{$smarty.post.admin_pass|default:''}" />
               {$lang.admin_pass_notice}</td>
           </tr>
           <tr>
             <th>{$lang.confirm_pass}:</th>
-            <td class="clearfix"><input type="password"  class="input_text" name="confirm_pass" value="{$smarty.post.confirm_pass}" />
+            <td class="clearfix"><input type="password"  class="input_text" name="confirm_pass" value="{$smarty.post.confirm_pass|default:''}" />
               {$lang.confirm_pass_notice}</td>
           </tr>
         </table>

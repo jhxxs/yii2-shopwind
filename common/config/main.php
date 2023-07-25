@@ -70,7 +70,7 @@ return [
                     'class' => 'yii\smarty\ViewRenderer',
                     //'cachePath' => '@runtime/Smarty/cache',
 					'options' => [
-						'error_reporting' => 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
+						'error_reporting' => E_ALL ^ E_NOTICE
                         //'left_delimiter' => '{',
                        // 'right_delimiter' => '}',
                     ],

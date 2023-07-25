@@ -261,7 +261,7 @@ class GuideshopController extends \common\controllers\BaseAdminController
 				return Message::warning(Language::get('edit_fail'));
 			}
 			$model = new \backend\models\DepositSettingForm(['userid' => $userid]);
-			if(!$model->save((Object)[$post->column => $post->value], true)) {
+			if (!$model->save((object)[$post->column => $post->value], true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('edit_ok'));

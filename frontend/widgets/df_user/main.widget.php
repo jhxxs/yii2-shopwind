@@ -31,8 +31,8 @@ class Df_userWidget extends BaseWidget
     {
 		$visitor = array(
 			'userid' => Yii::$app->user->id, 
-			'username' => 'Hi~欢迎 ' . Yii::$app->user->identity->username,
-			'portrait' => Yii::$app->user->identity->portrait
+			'username' => 'Hi~欢迎 ' . (Yii::$app->user->isGuest ? '' : Yii::$app->user->identity->username),
+			'portrait' => Yii::$app->user->isGuest ? '' : Yii::$app->user->identity->portrait
 		);
 		!$visitor['portrait'] && $visitor['portrait'] = Yii::$app->params['default_user_portrait'];
 		!$visitor['userid'] && $visitor['username'] = '您好，欢迎光临';
