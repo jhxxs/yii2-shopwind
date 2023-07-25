@@ -3,9 +3,9 @@
  *
  * This is the JavaScript widget used by the yii\widgets\ActiveForm widget.
  *
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
@@ -218,6 +218,7 @@
                     attributes: attributes,
                     submitting: false,
                     validated: false,
+                    validate_only: false, // validate without auto submitting
                     options: getFormOptions($form)
                 });
 
@@ -329,7 +330,10 @@
                 this.$form = $form;
                 var $input = findInput($form, this);
 
-                if ($input.is(':disabled')) {
+                var disabled = $input.toArray().reduce(function(result, next) {
+                    return result && $(next).is(':disabled');
+                }, true);
+                if (disabled) {
                     return true;
                 }
                 // validate markup for select input
@@ -751,12 +755,14 @@
                 data.submitting = false;
             } else {
                 data.validated = true;
-                if (data.submitObject) {
-                    applyButtonOptions($form, data.submitObject);
-                }
-                $form.submit();
-                if (data.submitObject) {
-                    restoreButtonOptions($form);
+                if (!data.validate_only) {
+                    if (data.submitObject) {
+                        applyButtonOptions($form, data.submitObject);
+                    }
+                    $form.submit();
+                    if (data.submitObject) {
+                        restoreButtonOptions($form);
+                    }
                 }
             }
         } else {
