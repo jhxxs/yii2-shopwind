@@ -1,0 +1,525 @@
+/**
+ * @link https://www.shopwind.net/
+ * @copyright Copyright (c) 2018 ShopWind Inc. All Rights Reserved.
+ *
+ * This is not free software. Do not use it for commercial purposes. 
+ * If you need commercial operation, please contact us to purchase a license.
+ * @license https://www.shopwind.net/license/
+ *
+ * @Id global.css 2022.3.1 $
+ * @author winder
+ */
+
+body {
+  font-family: "Microsoft Yahei", "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
+  background-color: #f7f7f7;
+  font-size: 14px;
+}
+
+body,
+p,
+ul,
+dl,
+dd,
+h3,
+i {
+  padding: 0;
+  margin: 0;
+  font-style: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+.rlink {
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.rlink:hover {
+  color: #e23435;
+}
+
+.uni-flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.uni-row {
+  flex-direction: row;
+}
+
+.uni-column {
+  flex-direction: column;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bgf {
+  background-color: #FFFFFF;
+}
+
+.bgp {
+  background-color: #f7f7f7;
+}
+
+.bgr {
+  background-color: #e23435;
+}
+
+.f-8 {
+  font-size: 8px;
+}
+
+.f-9 {
+  font-size: 9px;
+}
+
+.f-10 {
+  font-size: 10px;
+}
+
+.f-12 {
+  font-size: 12px;
+}
+
+.f-13 {
+  font-size: 13px;
+}
+
+.f-14 {
+  font-size: 14px;
+}
+
+.f-15 {
+  font-size: 15px;
+}
+
+.f-16 {
+  font-size: 16px;
+}
+
+.f-17 {
+  font-size: 17px;
+}
+
+.f-18 {
+  font-size: 18px;
+}
+
+.f-19 {
+  font-size: 19px;
+}
+
+.f-20 {
+  font-size: 20px;
+}
+
+.f-25 {
+  font-size: 25px;
+}
+
+.f-white {
+  color: #ffffff;
+}
+
+.f-red {
+  color: #e23435;
+}
+
+.f-gray {
+  color: #999999;
+}
+
+.f-blue {
+  color: #0A98D5;
+}
+
+.f-green {
+  color: #1BB974;
+}
+
+.f-yellow {
+  color: #ffce59;
+}
+
+.f-c60 {
+  color: #FF6600;
+}
+
+.f-c55 {
+  color: #555555;
+}
+
+.f-yahei {
+  font-family: "microsoft yahei";
+}
+
+.f-simsun {
+  font-family: 'simsun';
+  font-weight: bold;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.f-number {
+  font-family: "arial narrow";
+}
+
+.f-price {
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+.mg5 {
+  margin: 5px;
+}
+
+.ml5 {
+  margin-left: 5px;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.ml10 {
+  margin-left: 10px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.ml20 {
+  margin-left: 20px;
+}
+
+.pl10 {
+  padding-left: 10px;
+}
+
+.pr10 {
+  padding-right: 10px;
+}
+
+.pb10 {
+  padding-bottom: 10px;
+}
+
+.pt10 {
+  padding-top: 10px;
+}
+
+.pd10 {
+  padding: 10px;
+}
+
+.pb20 {
+  padding-bottom: 20px;
+}
+
+.pl20 {
+  padding-left: 20px;
+}
+
+.pr20 {
+  padding-right: 20px;
+}
+
+.pt20 {
+  padding-top: 20px;
+}
+
+.pd15 {
+  padding: 15px;
+}
+
+.pt5 {
+  padding-top: 5px;
+}
+
+.pb5 {
+  padding-bottom: 5px;
+}
+
+.pl5 {
+  padding-left: 5px;
+}
+
+.pr5 {
+  padding-right: 5px;
+}
+
+.pd5 {
+  padding: 5px;
+}
+
+.bt {
+  border-top: 1px #F1F1F1 solid;
+}
+
+.bb {
+  border-bottom: 1px #F1F1F1 solid;
+}
+
+.l-h17 {
+  line-height: 17px;
+}
+
+.l-h20 {
+  line-height: 20px;
+}
+
+.l-h25 {
+  line-height: 25px;
+}
+
+.block {
+  display: block;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.del {
+  text-decoration: line-through;
+}
+
+.center {
+  text-align: center;
+  justify-content: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.vertical-middle {
+  display: flex;
+  align-items: center;
+}
+
+.vertical-top {
+  vertical-align: top;
+}
+
+.clearfix:after {
+  content: '\20';
+  display: block;
+  overflow: hidden;
+  height: 0;
+  clear: both;
+}
+
+/**
+ * 圆形边框
+ */
+.round-edge {
+  border-radius: 5px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+/**
+ * 上边阴影
+ */
+.box-shadow-top {
+  box-shadow: 0px 0px 10px #f7f7f7;
+}
+
+.box-shadow-bottom {
+  box-shadow: 0px 10px 0px #f7f7f7;
+}
+
+.price .radix,
+.price .symbol {
+  font-size: 10px;
+  font-weight: normal;
+}
+
+.price .digits {
+  font-size: 18px;
+}
+
+/**
+ * 垂直居中
+ */
+.flex-middle {
+  -webkit-flex: 1;
+  flex: 1;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+/**
+ * 横向居中
+ */
+.flex-center {
+  -webkit-flex: 1;
+  flex: 1;
+  display: flex;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+/**
+ * 靠右
+ */
+.flex-end {
+  justify-content: flex-end;
+}
+
+/**
+ * 换行
+ */
+.flex-wrap {
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+/**
+ * 自动占满余量
+ */
+.width-surplus {
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+/**
+ * 两端对齐
+ */
+.width-between {
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+
+/**
+ * 截取两行文字
+ */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  justify-content: space-between;
+  overflow: hidden;
+  /* 控制英文字符不换行*/
+  word-break: break-all;
+  white-space: normal;
+}
+
+/**
+ * 截取一行文字
+ */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  justify-content: space-between;
+  overflow: hidden;
+  /* 控制英文字符不换行*/
+  word-break: break-all;
+  white-space: normal;
+}
+
+.word-break-all {
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* 支付工具相关 */
+.iconfont.alipay::after {
+  content: '\e65f';
+  color: #1677ff;
+}
+
+.iconfont.wxpay::after,
+.iconfont.wxmppay::after,
+.iconfont.wxapppay::after {
+  content: '\e634';
+  color: #04BE02;
+}
+
+.iconfont.ICBC::after {
+  content: '\e697';
+  color: #ca0e18;
+}
+
+.iconfont.CCB::after {
+  content: '\e691';
+  color: #0066b3;
+}
+
+.iconfont.ABC::after {
+  content: '\e698';
+  color: #319e8d;
+}
+
+.iconfont.BOC::after {
+  content: '\e69b';
+  color: #a71e32;
+}
+
+.iconfont.CMB::after {
+  content: '\e68c';
+  color: #b1120d;
+}
+
+.iconfont.COMM::after {
+  content: '\e687';
+  color: #00377a;
+}

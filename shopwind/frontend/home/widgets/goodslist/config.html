@@ -1,0 +1,282 @@
+<div class="widget-box">
+    <h3 class="title mt20 mb20 pb20"><strong class="f-18">商品楼层</strong></h3>
+    <div class="content">
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">标题文字</label>
+            <input value="{$options.title}" name="title" type="text" class="width-surplus input ml10 J_Holder" />
+        </div>
+        <div class="item uni-flex uni-row relative vertical-middle right-icon">
+            <label class="f-gray">更多链接</label>
+            <input value="{$options.moreurl|default:''}" name="moreurl" placeholder="index/index" type="text"
+                class="width-surplus input ml10 J_Link" />
+            <i class="iconfont icon-sousuo absolute pointer" ectype="dialog" dialog_id="link" dialog_width="560"
+                dialog_title="复制链接" uri="{url route='gselector/link'}" style="top: 2px;"></i>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">数据来源</label>
+            <p class="width-surplus ml10 value">{if $options.source eq 'category'}商品分类{else if $options.source eq
+                'choice'}手动选择{else}默认{/if}</p>
+            <input type="hidden" name="source" value="{$options.source|default:'default'}" />
+            <span class="switch first {if !in_array($options.source, ['category', 'choice'])} selected {/if} J_Switch"
+                title="默认" data-value="default"><i class="iconfont icon-cache"></i></span>
+            <span class="switch {if $options.source eq 'category'} selected {/if} J_Switch" title="商品分类"
+                data-value="category"><i class="iconfont icon-leimupinleifenleileibie"></i></span>
+            <span class="switch {if $options.source eq 'choice'} selected {/if} J_Switch" title="手动选择"
+                data-value="choice"><i class="iconfont icon-select"></i></span>
+        </div>
+        <div class="item uni-flex uni-row" {if $options.source neq 'category' }style="display:none" {/if}>
+            <label class="f-gray">商品分类</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="cate_id" value="{$options.cate_id|default:0}" />
+            <input type="hidden" name="cate_name" value="{$options.cate_name|default:''}" />
+            <div class="pointer" ectype="dialog" dialog_id="category" dialog_width="1000" dialog_title="选择分类"
+                uri="{url route='gselector/category' callback='gscallback'}">
+                <span>{$options.cate_name|default:'请选择'}</span>
+                <i class="layui-icon layui-icon-right layui-font-14"></i>
+            </div>
+        </div>
+        <div class="item uni-flex uni-row" {if $options.source neq 'choice' }style="display:none" {/if}>
+            <label class="f-gray">手动选择</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="items" value="{$options.items|default:''}" />
+            <div class="pointer" ectype="dialog" dialog_id="goods" dialog_width="560" dialog_title="选择商品"
+                uri="{url route='gselector/goods' callback='gscallback'}">
+                <!--{if $options.items}-->
+                <span>已选择({count(explode(',', $options.items))})</span>
+                <!--{else}-->
+                <span>请选择</span>
+                <!--{/if}-->
+                <i class="layui-icon layui-icon-right layui-font-14"></i>
+            </div>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">排序规则</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="orderby" value="{$options.orderby|default:''}" />
+            <div class="pointer dropdown">
+                <span>{if $options.orderby eq 'sales|desc'}销量优先{else if $options.orderby eq 'add_time|desc'}新品靠前{else if
+                    $options.orderby eq 'price|asc'}价格低到高{else if $options.orderby eq 'views|desc'}点击高到低{elseif
+                    $options.orderby eq 'comments|desc'}评论多到少{else}默认排序{/if}</span>
+                <i class="layui-icon layui-icon-right layui-font-14"></i>
+            </div>
+        </div>
+        <div class="item uni-flex uni-row" {if $options.source eq 'choice' }style="display:none" {/if}>
+            <label class="f-gray">商品数量</label>
+            <input type="hidden" name="quantity" value="{$options.quantity|default:0}" />
+            <div class="width-surplus ml20 slider1" style="margin-top:15px"></div>
+        </div>
+        <div class="item uni-flex uni-row">
+            <input type="hidden" name="index" value="0" />
+            <label class="f-gray">左轮播图</label>
+            <p class="width-surplus ml10">尺寸要求：468PX * 340PX</p>
+        </div>
+        <ul class="list">
+            <!-- {foreach from=$options.images item=item} -->
+            <li class="item pd10 uni-flex uni-row relative">
+                <div class="image center relative">
+                    <input onchange="fileRender(this)" class="file absolute pointer" type="file" name="file[]" />
+                    <!--{if {$item.url}}-->
+                    <img class="block" src="{$item.url|url_format}" />
+                    <!--{else}-->
+                    <i class="layui-icon layui-icon-addition f-18"></i>
+                    <!--{/if}-->
+                </div>
+                <div class="width-surplus relative">
+                    <input type="hidden" name="url[]" value="{$item.url}" />
+                    <div class="link ml10 f-gray">
+                        <span class="pl10">链接地址</span>
+                        <input class="pd10 J_Link" type="text" name="link[]" value="{$item.link}"
+                            placeholder="index/index" />
+                        <i class="iconfont icon-sousuo absolute pointer" ectype="dialog" dialog_id="link"
+                            dialog_width="560" dialog_title="复制链接" uri="{url route='gselector/link'}"
+                            style="right:0;bottom:0"></i>
+                    </div>
+                </div>
+                <i class="layui-icon layui-icon-close-fill absolute delete pointer f-18 J_Del"></i>
+            </li>
+            <!-- {/foreach} -->
+            <li class="item btn">
+                <div class="relative">
+                    <p class="center"><i class="layui-icon layui-icon-addition layui-font-14"></i><span>添加一张轮播图</span>
+                    </p>
+                    <input onchange="fileRender(this)" class="file absolute pointer" type="file" name="file[]" />
+                    <input type="hidden" name="link[]" value="" />
+                </div>
+            </li>
+        </ul>
+        <h4 class="mt10 pb10 mt20 pt20">其他设置</h4>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">全屏显示</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="showfull" value="{$options.showfull|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.showfull}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">背景颜色</label>
+            <p class="width-surplus ml10 color">{$options.bgcolor|default:''}</p>
+            <input type="hidden" name="bgcolor" value="{$options.bgcolor|default:''}" />
+            <span class="f-c60 pointer J_Reset" data-value="">重置</span>
+            <p class="picker ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">模块间距</label>
+            <input type="hidden" name="space" value="{$options.space|default:0}" />
+            <div class="width-surplus ml20 slider2" style="margin-top:15px"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .widget-box .list .item {
+        border: 1px #ddd dashed;
+    }
+
+    .widget-box .list .item .image {
+        border: 1px #ddd solid;
+        width: 70px;
+        height: 70px;
+        line-height: 70px;
+    }
+
+    .widget-box .list .item .file,
+    .widget-box .list .item img {
+        width: 70px;
+        height: 70px;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+    }
+
+    .widget-box .list .item .file {
+        opacity: 0;
+    }
+
+    .widget-box .list .item .delete {
+        right: -10px;
+        top: -14px;
+    }
+
+    .widget-box .list .btn .file {
+        width: 100%;
+        height: 100%;
+    }
+
+    .widget-box .list .btn p {
+        color: #FF6A00;
+    }
+
+    .widget-box .item .link input,
+    .widget-box .item .link input:hover {
+        border: 0;
+        border-bottom: 1px #ddd solid;
+        box-shadow: none;
+        width: calc(100% - 20px);
+    }
+</style>
+<script>
+
+    $(function () {
+
+        $('.J_Holder').keyup(function () {
+            $('#' + $(this).parents('form').attr('widget_id')).find('.goodslist .title p').text($(this).val());
+        });
+        $('.J_Holder, .J_Link').change(function () {
+            save_widget();
+        });
+
+        $('body').on('click', '.J_Del', function () {
+            $(this).parents('.item').remove();
+            save_widget(false);
+        });
+
+        $('.J_Reset').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input[type="hidden"]').val(value);
+            save_widget();
+        });
+
+        $('.J_Switch').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input').val(value);
+            save_widget();
+        });
+
+        layui.use('dropdown', function () {
+            var dropdown = layui.dropdown
+            dropdown.render({
+                elem: '.dropdown',
+                data: [{
+                    title: '默认排序',
+                    id: ''
+                }, {
+                    title: '销量优先',
+                    id: 'sales|desc'
+                }, {
+                    title: '新品靠前',
+                    id: 'add_time|desc'
+                }, {
+                    title: '价格低到高',
+                    id: 'price|asc'
+                }, {
+                    title: '点击高到低',
+                    id: 'views|desc'
+                }, {
+                    title: '评论多到少',
+                    id: 'comments|desc'
+                }],
+                click: function (data, othis) {
+                    this.elem.parents('.item').find('input').val(data.id);
+                    this.elem.find('span').text(data.title);
+                    save_widget(false);
+                }
+            });
+        });
+
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('switch(filter)', function (data) {
+                $(this).parents('.item').find('input').val(data.elem.checked ? 1 : 0);
+                save_widget();
+            });
+
+            form.render();
+        });
+
+        slideRender('.slider1', function (dom, value) {
+            save_widget(false);
+        });
+
+        slideRender('.slider2', function (dom, value) {
+            save_widget(false);
+        })
+
+        colorRender('.picker', function (dom, value) {
+            save_widget();
+        });
+    });
+
+    function fileRender(dom) {
+        var index = $(dom).parents('.item').index();
+        $(dom).parents('form').find('input[name="index"]').val(index);
+
+        save_widget();
+    }
+
+    function gscallback(dom, value) {
+        var dialog = $('*[dialog_id="' + dom + '"]');
+        if (dom == 'category') {
+            dialog.parent('.item').find('input[name="cate_id"]').val(value.id);
+            dialog.parent('.item').find('input[name="cate_name"]').val(value.name);
+            dialog.find('span').text(value.name);
+        }
+        else if (dom == 'goods') {
+            var values = unique(value);
+            dialog.parent('.item').find('input[name="items"]').val(values.join(','));
+            dialog.find('span').text(value == '' ? '请选择' : '已选择(' + values.length + ')');
+        }
+
+        save_widget(false);
+    }
+</script>

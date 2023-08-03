@@ -1,0 +1,14 @@
+{include file="header.html"}
+<div id="main" class="w mt20">
+    <div class="pd10 bgf round-edge">
+        <div class="pd10">{$notice.msg}</div>
+    </div>
+</div>
+<!--{if $notice.redirect}-->
+<script type="text/javascript">
+    window.setTimeout(function () {
+        location.href = "{$notice.redirect}";
+    }, 500);
+</script>
+<!--{/if}-->
+{include file="footer.html"}

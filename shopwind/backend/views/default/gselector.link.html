@@ -1,0 +1,101 @@
+<style>
+    .colslist .wraper {
+        margin: 20px;
+        height: 440px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
+
+    .colslist .wraper p label {
+        width: 120px;
+        display: inline-block;
+        color: #666;
+    }
+</style>
+
+<div class="colslist">
+    <div class="wraper clearfix">
+        <!--{if $smarty.get.client eq 'wap'}-->
+        <h3 class="bold">商品</h3>
+        <p class="mt5"><label>商品详情页：</label>goods/detail?id=商品ID</p>
+        <p class="mt5"><label>拼团商品详情页：</label>goods/team?id=商品ID</p>
+        <p class="mt5"><label>搜索商品页：</label>search/goods?cate_id=分类ID&keyword=关键词</p>
+        <p class="mt5"><label>商品分类页：</label>category/goods</p>
+        <p class="mt5"><label>专题频道页：</label>channel/page?id=页面ID</p>
+        <p class="mt5"><label>社区团购页：</label>community/index/index</p>
+        <p class="mt5"><label>社团商品详情页：</label>community/goods/detail?id=商品ID</p>
+        <p class="mt5"><label>社团分类商品页：</label>community/category/list?id=分类ID</p>
+        <h3 class="bold mt20">营销</h3>
+        <p class="mt5"><label>秒杀商品页：</label>promote/limitbuy/list</p>
+        <p class="mt5"><label>搭配购商品页：</label>promote/mealbuy/list</p>
+        <p class="mt5"><label>积分购商品页：</label>promote/integral/goods</p>
+        <h3 class="bold mt20">用户</h3>
+        <p class="mt5"><label>用户登录页：</label>user/login</p>
+        <p class="mt5"><label>买家中心页：</label>user/index</p>
+        <p class="mt5"><label>我的积分页：</label>my/integral/index</p>
+        <p class="mt5"><label>我的优惠券：</label>my/coupon/list</p>
+        <p class="mt5"><label>我的收藏页：</label>my/favorite/goods</p>
+        <p class="mt5"><label>收藏店铺页：</label>my/favorite/store</p>
+        <p class="mt5"><label>商家登录页：</label>user/login</p>
+        <p class="mt5"><label>商家中心页：</label>seller/index/index</p>
+        <p class="mt5"><label>订单管理页：</label>seller/order/list</p>
+        <h3 class="bold mt20">订单</h3>
+        <p class="mt5"><label>我的订单页：</label>my/order/list</p>
+        <p class="mt5"><label>我的退款页：</label>my/refund/list</p>
+        <p class="mt5"><label>我的评价页：</label>my/evaluate/list</p>
+        <p class="mt5"><label>购物车页：</label>cart/index</p>
+        <h3 class="bold mt20">店铺</h3>
+        <p class="mt5"><label>商家入驻页：</label>store/apply</p>
+        <p class="mt5"><label>商家店铺页：</label>store/index?id=店铺ID</p>
+        <h3 class="bold mt20">客服</h3>
+        <p class="mt5"><label>与用户会话：</label>webim/chat?toid=用户ID</p>
+        <p class="mt5"><label>与商家会话：</label>webim/chat?toid=商家用户ID&store_id=商家店铺ID</p>
+        <h3 class="bold mt10">文章</h3>
+        <p class="mt5"><label>文章详情页：</label>article/detail?id=文章ID</p>
+        <!--{else}-->
+        <h3 class="bold">商品</h3>
+        <p class="mt5"><label>商品详情页：</label>goods/detail/商品ID</p>
+        <p class="mt5"><label>搜索商品页：</label>search/goods/分类ID?keyword=关键词</p>
+        <p class="mt5"><label>商品分类页：</label>category/goods</p>
+        <p class="mt5"><label>专题频道页：</label>channel/page/页面ID</p>
+        <h3 class="bold mt20">用户</h3>
+        <p class="mt5"><label>用户登录页：</label>user/login</p>
+        <p class="mt5"><label>买家中心页：</label>my/index</p>
+        <p class="mt5"><label>我的积分页：</label>my/integral/list</p>
+        <p class="mt5"><label>我的优惠券：</label>my/coupon/list</p>
+        <p class="mt5"><label>我的收藏页：</label>my/favorite/goods</p>
+        <p class="mt5"><label>收藏店铺页：</label>my/favorite/store</p>
+        <p class="mt5"><label>商家登录页：</label>seller/login</p>
+        <p class="mt5"><label>商家中心页：</label>seller/index</p>
+        <p class="mt5"><label>订单管理页：</label>seller/order/list</p>
+        <h3 class="bold mt20">订单</h3>
+        <p class="mt5"><label>我的订单页：</label>my/order/list</p>
+        <p class="mt5"><label>我的退款页：</label>my/refund/list</p>
+        <p class="mt5"><label>我的评价页：</label>my/evaluate/list</p>
+        <p class="mt5"><label>购物车页：</label>cart/index</p>
+        <h3 class="bold mt20">店铺</h3>
+        <p class="mt5"><label>商家入驻页：</label>store/apply</p>
+        <p class="mt5"><label>商家店铺页：</label>store/index/店铺ID</p>
+        <p class="mt5"><label>商家商品页：</label>store/list/分类ID</p>
+        <h3 class="bold mt20">客服</h3>
+        <p class="mt5"><label>与用户会话：</label>webim/chat/用户ID</p>
+        <p class="mt5"><label>与商家会话：</label>webim/chat/商家用户ID/商家店铺ID</p>
+        <h3 class="bold mt20">文章</h3>
+        <p class="mt5"><label>文章详情页：</label>article/detail/文章ID</p>
+        <!--{/if}-->
+        <div class="mt20 f-red mb10">
+            其他未记录的链接可以在前端进入相关页面，复制浏览器地址栏的URL
+        </div>
+    </div>
+    <div class="submit mb10">
+        <input type="button" id="cancel_button" class="layui-btn layui-btn-normal" value="{$lang.closed}" />
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#cancel_button').click(function () {
+            DialogManager.close('link');
+        });
+    })
+</script>

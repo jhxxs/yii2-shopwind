@@ -1,0 +1,97 @@
+<div class="titlebar" id="titlebar-{$widget_data.uniqueid}">
+  <div class="wraper {if !$widget_data.showfull}w{/if}">
+    <div class="content center pd10 {$widget_data.theme}">
+      <div class="relative inline-block">
+        <i class="lp absolute inline-block"></i>
+        <span class="text inline-block f-14 pl20 pr20">{$widget_data.label|default:'标题'}</span>
+        <i class="rp absolute inline-block"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .titlebar .content .text {
+    color: #FF8000;
+  }
+
+  .titlebar .content .lp,
+  .titlebar .content .rp {
+    height: 1px;
+    width: 40px;
+    overflow: hidden;
+    background: #FF8000;
+    top: 50%;
+  }
+
+  .titlebar .content .lp {
+    left: 0;
+    margin-left: -40px;
+  }
+
+  .titlebar .content .rp {
+    right: 0;
+    margin-right: -40px;
+  }
+
+  .titlebar .content.square .text {
+    padding: 4px 10px;
+    border: 1px #FF8000 solid;
+  }
+
+  .titlebar .content.square i {
+    top: 46%;
+    height: 3px;
+  }
+
+  .titlebar .content.leftline i {
+    display: none;
+  }
+
+  .titlebar .content.leftline {
+    text-align: left;
+  }
+
+  .titlebar .content.leftline .text {
+    border-left: 4px #FF8000 solid;
+  }
+
+  .titlebar .content.dotted .lp,
+  .titlebar .content.dotted .rp {
+    background: url('{res file="images/sprite.png" baseUrl=$widget_data.baseUrl}') no-repeat;
+    width: 25px;
+    height: 20px;
+    margin-top: -10px;
+  }
+</style>
+<script>
+  $(function () {
+
+    /* {if $widget_data.txtbold} */
+    $("#titlebar-{$widget_data.uniqueid} .content .text").css('font-weight', 'bold');
+    /* {/if} */
+
+    /* {if $widget_data.fontsize} */
+    $("#titlebar-{$widget_data.uniqueid} .content .text").css('font-size', '{$widget_data.fontsize}px');
+    /* {/if} */
+
+    /* {if $widget_data.txthide} */
+    $("#titlebar-{$widget_data.uniqueid} .content").css('opacity', '0');
+    /* {/if} */
+
+    /* {if $widget_data.image} */
+    $('#titlebar-{$widget_data.uniqueid} .wraper').css('background', 'url({$widget_data.image|url_format}) center center no-repeat').css('background-size', 'contain');
+    /* {/if} */
+
+    /* {if $widget_data.theme neq 'dotted'} */
+    $('#titlebar-{$widget_data.uniqueid} .content i').css('background', '{$widget_data.linecolor|default:"#ccc"}');
+    /* {/if} */
+
+    $('#titlebar-{$widget_data.uniqueid} .content .text').css('color', '{$widget_data.txtcolor|default:"#FF8000"}');
+    $('#titlebar-{$widget_data.uniqueid} .content.square .text').css('border-color', '{$widget_data.linecolor|default:"#ccc"}');
+    $('#titlebar-{$widget_data.uniqueid} .content.leftline .text').css('border-left-color', '{$widget_data.linecolor|default:"#ccc"}');
+
+    $('#titlebar-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#titlebar-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:0}px 0');
+  });
+</script>

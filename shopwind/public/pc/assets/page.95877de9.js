@@ -1,0 +1,1 @@
+import{u as e,o,g as r,j as s}from"./index.5aeb4455.js";import{_ as t}from"./blocks.bc527001.js";const m={setup(c){const a=e();return(p,u)=>(o(),r(t,{page:s(a).params.id},null,8,["page"]))}};export{m as default};

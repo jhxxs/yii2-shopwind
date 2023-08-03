@@ -1,0 +1,42 @@
+{include file="header.html"}
+<style>
+	#header,
+	#footer,
+	.main,
+	.menus {
+		background: rgba(0, 0, 0, 0.1);
+	}
+
+	#header,
+	#footer {
+		height: 60px;
+	}
+
+	.menus {
+		width: 190px;
+		height: 500px;
+	}
+
+	.adsbox {
+		width: 290px;
+		height: 500px;
+	}
+</style>
+<div id="header" class="uni-flex uni-row">
+	<p class="center f-gray flex-middle">通用头部模块（无需编辑）</p>
+</div>
+<div id="main" class="uni-flex uni-row mt10 pb10 w">
+	<div class="menus round-edge uni-flex uni-row">
+		<p class="center f-gray flex-middle">菜单栏<br/>（不可编辑区域）</p>
+	</div>
+	<div class="main width-surplus round-edge ml10 mr10 uni-flex uni-row">
+		<p class="center f-gray flex-middle">主体内容区<br/>（不可编辑区域）</p>
+	</div>
+	<div class="adsbox" area="index" widget_type="area">
+		{widgets page='sellerindex' area='index'}
+	</div>
+</div>
+<div id="footer" class="uni-flex uni-row mt10 w">
+	<p class="center f-gray flex-middle">通用底部模块（无需编辑）</p>
+</div>
+{include file="footer.html"}

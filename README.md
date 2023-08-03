@@ -13,7 +13,7 @@
 <div align="center">
 
 [![php语言](https://img.shields.io/badge/language-php-red)](https://www.shopwind.net/)
-[![V3.4.4](https://img.shields.io/badge/release-4.0-blue)](https://www.shopwind.net/product/download.html)
+[![V4.5](https://img.shields.io/badge/release-4.5-blue)](https://www.shopwind.net/product/download.html)
 [![license](https://img.shields.io/badge/license-Apache2.0-green)](https://www.shopwind.net/license/)
 
 </div>
@@ -40,7 +40,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 #### 运行环境
 * Nginx/Apache/IIS
-* PHP7.3+
+* PHP7.2.5+
 * MySQL5.6+
 
 #### 服务器
@@ -59,16 +59,16 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * H5端体验：<a href="https://v4.shopwind.net/h5" target="_blank"> https://v4.shopwind.net/h5 </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
 
 #### 小程序/APP体验（商业版）
-* 微信小程序：<a href="https://h5.shopwind.net/20210507181842.jpg" target="_blank"> https://h5.shopwind.net/20210507181842.jpg </a> 
+* 微信小程序：<a href="https://www.shopwind.net/static/images/20210507181842.jpg" target="_blank"> https://www.shopwind.net/static/images/20210507181842.jpg </a> 
 * Android（安卓版）体验：<a href="https://appgallery.huawei.com/#/app/C103448437" target="_blank"> https://appgallery.huawei.com/#/app/C103448437 </a>
 * iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
-* 商家端体验（小程序）：<a href="https://h5.shopwind.net/gh_fea54cf5a4a8_258.jpg" target="_blank"> https://h5.shopwind.net/gh_fea54cf5a4a8_258.jpg </a>
+* 商家端体验（小程序）：<a href="https://www.shopwind.net/static/images/gh_fea54cf5a4a8_258.jpg" target="_blank"> https://www.shopwind.net/static/images/gh_fea54cf5a4a8_258.jpg </a>
 * 通用体验账号：买家（账号：18978189192   密码：111111  支付密码：111111）、商家（账号：18978189171  密码：111111）
 
 #### 开源版体验
-* 前台体验：<a href="http://test.shopwind.net" target="_blank"> http://test.shopwind.net </a> 买家测试账号：buyer 密码：123456  支付密码：123456
-* 商家后台：<a href="http://test.shopwind.net/seller/login.html" target="_blank"> http://test.shopwind.net/seller/login.html </a> 商家测试账号：seller 密码：123456
-* 平台后台：<a href="http://test.shopwind.net/admin" target="_blank">  http://test.shopwind.net/admin </a> 平台管理员账号：admin 密码：123456
+* 前台体验：<a href="http://v4.shopwind.net" target="_blank"> http://v4.shopwind.net </a> 买家测试账号：buyer 密码：123456  支付密码：123456
+* 商家后台：<a href="http://v4.shopwind.net/seller/login.html" target="_blank"> http://v4.shopwind.net/seller/login.html </a> 商家测试账号：seller 密码：123456
+* 平台后台：<a href="http://v4.shopwind.net/admin" target="_blank">  http://v4.shopwind.net/admin </a> 平台管理员账号：admin 密码：123456
 
 #### 页面展示
 

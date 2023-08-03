@@ -1,0 +1,163 @@
+<div class="widget-box">
+    <h3 class="title mt20 mb20 pb20"><strong class="f-18">头部搜索框</strong></h3>
+    <div class="content">
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">默认文本</label>
+            <input value="{$options.keyword}" name="keyword" placeholder="搜索" type="text"
+                class="width-surplus input ml10 J_Holder" />
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">文字颜色</label>
+            <p class="width-surplus ml10 color">{$options.txtcolor|default:'#000000'}</p>
+            <input type="hidden" name="txtcolor" value="{$options.txtcolor|default:'#000000'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#000000">重置</span>
+            <p class="picker1 ml10"></p>
+        </div>
+        <h4 class="mt10 pb10 mt20 pt20">LOGO</h4>
+        <div class="item pd10 uni-flex uni-row dashed">
+            <div class="image center relative">
+                <input onchange="fileRender(this)" class="file absolute pointer" type="file" name="file">
+                <!--{if $options.image}-->
+                <img class="block" src="{$options.image|url_format}" />
+                <!--{else}-->
+                <i class="layui-icon layui-icon-addition" style="font-size: 20px;"></i>
+                <!--{/if}-->
+            </div>
+            <div class="link ml10 f-gray width-surplus relative">
+                <p class="pl10">链接地址</p>
+                <input type="hidden" name="image" value="{$options.image}" />
+                <input class="pd10 input" type="text" name="link" value="{$options.link}" placeholder="index/index" />
+                <i class="iconfont icon-sousuo absolute pointer" ectype="dialog" dialog_id="link" dialog_width="560"
+                    dialog_title="复制链接" uri="{url route='gselector/link'}" style="right: 0px;bottom:0px;"></i>
+            </div>
+        </div>
+        <h4 class="mt10 pb10 mt20 pt20">搜索样式</h4>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">按钮颜色</label>
+            <p class="width-surplus ml10 color">{$options.buttoncolor|default:'#e23435'}</p>
+            <input type="hidden" name="buttoncolor" value="{$options.buttoncolor|default:'#e23435'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#e23435">重置</span>
+            <p class="picker2 ml10"></p>
+        </div>
+
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">框体颜色</label>
+            <p class="width-surplus ml10 color">{$options.boxcolor|default:'#ffffff'}</p>
+            <input type="hidden" name="boxcolor" value="{$options.boxcolor|default:'#ffffff'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#ffffff">重置</span>
+            <p class="picker3 ml10"></p>
+        </div>
+        <h4 class="mt10 pb10 mt20 pt20">其他设置</h4>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">全屏显示</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="showfull" value="{$options.showfull|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.showfull}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">头部模块</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="header" value="{$options.header|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.header}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">背景颜色</label>
+            <p class="width-surplus ml10 color">{$options.bgcolor|default:'#ffffff'}</p>
+            <input type="hidden" name="bgcolor" value="{$options.bgcolor|default:'#ffffff'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#ffffff">重置</span>
+            <p class="picker4 ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">模块间距</label>
+            <input type="hidden" name="space" value="{$options.space|default:30}" />
+            <div class="width-surplus ml20 slider" style="margin-top:15px"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .widget-box .item.dashed {
+        border: 1px #ddd dashed;
+    }
+
+    .widget-box .item .image {
+        border: 1px #ddd solid;
+        width: 70px;
+        height: 70px;
+        line-height: 70px;
+        overflow: hidden;
+    }
+
+    .widget-box .item .file,
+    .widget-box .item img {
+        width: 70px;
+        height: 70px;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+    }
+
+    .widget-box .item .file {
+        opacity: 0;
+    }
+
+    .widget-box .item .link input,
+    .widget-box .item .link input:hover {
+        border: 0;
+        border-bottom: 1px #ddd solid;
+        box-shadow: none;
+        width: calc(100% - 20px);
+    }
+</style>
+<script>
+
+    $(function () {
+        $('.J_Holder').keyup(function () {
+            $('#' + $(this).parents('form').attr('widget_id')).find('.searchbox .keyword').text($(this).val());
+        });
+        $('.J_Holder').change(function () {
+            save_widget(false);
+        });
+
+        $('.J_Reset').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input[type="hidden"]').val(value);
+            save_widget();
+        });
+
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('switch(filter)', function (data) {
+                $(this).parents('.item').find('input').val(data.elem.checked ? 1 : 0);
+                save_widget();
+            });
+
+            form.render();
+        });
+
+        slideRender('.slider', function (dom, value) {
+            save_widget(false);
+        })
+
+        colorRender('.picker1', function (dom, value) {
+            save_widget();
+        });
+        colorRender('.picker2', function (dom, value) {
+            save_widget();
+        });
+        colorRender('.picker3', function (dom, value) {
+            save_widget();
+        });
+        colorRender('.picker4', function (dom, value) {
+            save_widget();
+        });
+    });
+
+    function fileRender(obj) {
+        save_widget();
+    }
+</script>

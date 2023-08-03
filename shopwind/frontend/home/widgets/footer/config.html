@@ -1,0 +1,140 @@
+<div class="widget-box">
+    <h3 class="title mt20 mb20 pb20"><strong class="f-18">底部版权</strong></h3>
+    <div class="content">
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">版权信息</label>
+            <input value="{$options.copyright}" name="copyright" type="text"
+                class="width-surplus input ml10 J_Holder" />
+        </div>
+        <ul class="list">
+            <!-- {foreach from=$options.navs item=item} -->
+            <li class="item pd10 relative">
+                <div class="width-surplus">
+                    <div class="link f-gray uni-flex uni-row">
+                        <span class="pr10">文字</span>
+                        <input class="pd10 J_Link" type="text" name="title[]" value="{$item.title}" />
+                    </div>
+                    <div class="link f-gray uni-flex uni-row">
+                        <span class="pr10">链接</span>
+                        <input class="pd10 J_Link" type="text" name="link[]" value="{$item.link}"
+                            placeholder="index/index" />
+                    </div>
+                </div>
+                <i class="layui-icon layui-icon-close-fill absolute delete pointer f-18 J_Del"></i>
+            </li>
+            <!-- {/foreach} -->
+            <li class="item pd10 relative">
+                <div class="width-surplus">
+                    <div class="link f-gray uni-flex uni-row">
+                        <span class="pr10">文字</span>
+                        <input class="pd10 J_Link" type="text" name="title[]" value="" />
+                    </div>
+                    <div class="link f-gray uni-flex uni-row">
+                        <span class="pr10">链接</span>
+                        <input class="pd10 J_Link" type="text" name="link[]" value="" placeholder="index/index" />
+                    </div>
+                </div>
+            </li>
+
+            <li class="item btn relative">
+                <p class="center pointer">
+                    <i class="layui-icon layui-icon-addition layui-font-14"></i><span>添加一个链接</span>
+                </p>
+            </li>
+        </ul>
+        <h4 class="mt10 pb10 mt20 pt20">其他设置</h4>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">全屏显示</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="showfull" value="{$options.showfull|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.showfull}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">底部模块</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="footer" value="{$options.footer|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.footer}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">背景颜色</label>
+            <p class="width-surplus ml10 color">{$options.bgcolor|default:''}</p>
+            <input type="hidden" name="bgcolor" value="{$options.bgcolor|default:''}" />
+            <span class="f-c60 pointer J_Reset" data-value="">重置</span>
+            <p class="picker ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">模块间距</label>
+            <input type="hidden" name="space" value="{$options.space|default:10}" />
+            <div class="width-surplus ml20 slider" style="margin-top:15px"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .widget-box .list .item {
+        border: 1px #ddd dashed;
+    }
+
+    .widget-box .list .item .delete {
+        right: -10px;
+        top: -14px;
+    }
+
+    .widget-box .list .btn p {
+        color: #FF6A00;
+    }
+
+    .widget-box .item .link input,
+    .widget-box .item .link input:hover {
+        border: 0;
+        border-bottom: 1px #ddd solid;
+        box-shadow: none;
+        width: calc(100% - 70px);
+    }
+</style>
+<script>
+
+    $(function () {
+
+        $('.J_Holder').keyup(function () {
+            $('#' + $(this).parents('form').attr('widget_id')).find('.footer .copyright').text($(this).val());
+        });
+        $('.J_Holder,.J_Link').change(function () {
+            save_widget();
+        });
+
+        $('body').on('click', '.J_Del', function () {
+            $(this).parents('.item').remove();
+            save_widget(false);
+        });
+
+        $('.J_Reset').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input[type="hidden"]').val(value);
+            save_widget();
+        });
+
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('switch(filter)', function (data) {
+                $(this).parents('.item').find('input').val(data.elem.checked ? 1 : 0);
+                save_widget();
+            });
+
+            form.render();
+        });
+
+        colorRender('.picker', function (dom, value) {
+            save_widget();
+        });
+
+        slideRender('.slider', function (dom, value) {
+            save_widget(false);
+        });
+    });
+
+</script>

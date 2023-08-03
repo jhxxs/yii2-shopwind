@@ -1,0 +1,14 @@
+{include file="install.header.html"}
+<div id="main" class="w mt20 initdata">
+    <div class="mt20 pd10 bgf round-edge content">
+        <div class="pd10 center note f-bold">{$notice.msg}</div>
+    </div>
+</div>
+<!--{if $notice.redirect}-->
+<script type="text/javascript">
+    window.setTimeout(function () {
+        location.href = "{$notice.redirect}";
+    }, 5000);
+</script>
+<!--{/if}-->
+{include file="install.footer.html"}

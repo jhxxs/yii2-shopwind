@@ -1,0 +1,41 @@
+<div class="navbar" id="footer-{$widget_data.uniqueid}">
+  <div class="wraper {if !$widget_data.showfull}w{/if}">
+    <div class="content uni-flex uni-row f-12 flex-middle pd10">
+      <div class="login">
+        <label>您好, </label>
+        <span class="f-red">请登录</span>
+      </div>
+      <p class="uni-flex uni-row flex-middle flex-end width-surplus">
+        <!--{foreach from=$widget_data.navs item=item name=fe_item}-->
+        <span>{$item.title}</span>
+        <!--{if !$smarty.foreach.fe_item.last}-->
+        <i class="divider inline-block ml20 mr20"></i>
+        <!--{/if}-->
+        <!--{foreachelse}-->
+        <span class="ml5 mr5">导航一</span>
+        <i class="divider inline-block ml20 mr20"></i>
+        <span>导航二</span>
+        <!--{/foreach}-->
+      </p>
+    </div>
+  </div>
+</div>
+<style>
+  .navbar .w .content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .navbar .divider {
+    width: 1px;
+    height: 10px;
+    background-color: #dddddd;
+  }
+</style>
+<script>
+  $(function () {
+
+    $('#navbar-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#navbar-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:0}px 0');
+  });
+</script>

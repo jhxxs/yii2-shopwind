@@ -1,0 +1,42 @@
+<div class="cleanup">
+    <div class="flexigrid">
+        <h2 class="bold layui-font-16">一键清除数据</h2>
+        <form method="post" class="layui-form form">
+            <input type="checkbox" name="post[]" value="user" title="保留用户数据" lay-skin="primary"
+                checked>
+            <p class="ml20 mb20 pl10 mt5 gray">勾选后将不清除用户数据，包括第三方平台联合登录账号，如QQ，微信、支付宝等<br />但会删除与用户相关的其他数据，如积分、金钱等</p>
+            <input type="checkbox" name="post[]" value="gcategory" title="保留商品分类数据" lay-skin="primary" checked>
+            <p class="ml20 mb20 pl10 mt5 gray">勾选后将不清除平台的商品分类数据，不包括店铺分类、店铺商品分类</p>
+            <input type="checkbox" name="post[]" value="region" title="保留地区数据" lay-skin="primary" checked>
+            <p class="ml20 mb20 pl10 mt5 gray">勾选后将不清除商城地区数据</p>
+            <input type="checkbox" name="post[]" value="plugin" title="保留支付登录插件配置" lay-skin="primary" checked>
+            <p class="ml20 mb20 pl10 mt5 gray">勾选后将不清除支付、登录插件配置的秘钥信息</p>
+            <div class="notice-word">
+                <p class="layui-font-12">为安全起见，需要先进入站点目录，删除：public\data\cleardata.lock 文件后才可操作</p>
+            </div>
+            <p class="pt10">
+                <input class="layui-btn layui-bg-blue J_AjaxSubmit mt20" confirm="清除操作不可逆，你确定要继续吗？" type="submit"
+                    value="{$lang.submit}" />
+            </p>
+        </form>
+    </div>
+    <div class="flexigrid">
+        <h2 class="bold layui-font-16">重置系统</h2>
+        <div class="pd10 gray form">
+            <p>如果需要重新安装系统，则进入站点目录，删除：public\data\install.lock 和 public\data\initdata.lock</p>
+            <p class="mt10">删除后，点击“开始重置”</p>
+            <p class="pt10">
+                <a href="{$baseUrl}" class="layui-btn layui-bg-blue mt10" target="_blank">开始重置</a>
+            </p>
+        </div>
+    </div>
+</div>
+<style>
+    .cleanup .form {
+        padding: 40px 60px;
+    }
+
+    .cleanup .layui-form-checkbox[lay-skin="primary"] span {
+        color: #000;
+    }
+</style>

@@ -1,0 +1,44 @@
+<div class="limitbuybox" id="limitbuybox-{$widget_data.uniqueid}">
+  <div class="wraper relative {if !$widget_data.showfull}w{/if}">
+    <div class="content uni-flex uni-row">
+      <div class="lp">
+        <!--{if $widget_data.image}-->
+        <img src="{$widget_data.image|url_format}" class="w-full block" />
+        <!--{/if}-->
+      </div>
+      <div class="rp width-surplus bgf">
+        <div class="uni-flex uni-row">
+          <!--{foreach from=$widget_data.list item=item}-->
+          <div class="bgf ml10 center item pd15">
+            <p class="pic rlink"><img src="{$item.default_image|default:Yii::$app->params['default_goods_image']|url_format}" class="w-full block" /></p>
+            <p class="desc line-clamp-2 mt10 rlink">{$item.goods_name}</p>
+            <p class="price mt10 line-clamp-1">
+              <span class="f-red">{$item.promotion.price|price_format}</span>
+              <del class="f-gray ml10">{$item.price|price_format}</del>
+            </p>
+          </div>
+          <!--{/foreach}-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .limitbuybox .lp {
+    width: 16.7%;
+  }
+
+  .limitbuybox .rp .item {
+    border-radius: 4px;
+    width: calc(20% - 40px);
+  }
+</style>
+<script>
+  $(function () {
+
+    $('#limitbuybox-{$widget_data.uniqueid} .content .lp img').css('height', $('#limitbuybox-{$widget_data.uniqueid} .content .rp .uni-row').height());
+    $('#limitbuybox-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#limitbuybox-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:10}px 0');
+
+  });
+</script>

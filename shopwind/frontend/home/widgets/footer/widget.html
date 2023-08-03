@@ -1,0 +1,38 @@
+<div class="footer" id="footer-{$widget_data.uniqueid}">
+  <div class="wraper {if !$widget_data.showfull}w{/if}">
+    <p class="uni-flex uni-row flex-middle flex-center pd10 f-c55">
+      <!--{foreach from=$widget_data.navs item=item name=fe_item}-->
+      <span>{$item.title}</span>
+      <!--{if !$smarty.foreach.fe_item.last}-->
+      <i class="divider inline-block ml10 mr10"></i>
+      <!--{/if}-->
+      <!--{foreachelse}-->
+      <span>导航一</span>
+      <i class="divider inline-block ml10 mr10"></i>
+      <span>导航二</span>
+      <!--{/foreach}-->
+    </p>
+    <div class="info f-gray center f-13 pb10">
+      <!--{if $widget_data.copyright}-->
+      <span class="copyright">{$widget_data.copyright}</span>
+      <!--{else}-->
+      <span class="copyright">Copyright © 2015-{$smarty.now|date_format:'Y'} SHOPWIND.NET 版权所有</span>
+      <!--{/if}-->
+      <span>备案号：{$widget_data.icp|default:'0000000000'}</span>
+    </div>
+  </div>
+</div>
+<style>
+  .divider {
+    width: 1px;
+    height: 10px;
+    background-color: #dddddd;
+  }
+</style>
+<script>
+  $(function () {
+
+    $('#footer-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#footer-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:10}px 0');
+  });
+</script>

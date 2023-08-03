@@ -1,0 +1,99 @@
+<div class="swiperbox" id="swiperbox-{$widget_data.uniqueid}">
+    <div class="wraper relative {if !$widget_data.showfull}w{/if}">
+        <div class="content {$widget_data.radius} {if $widget_data.leftblank}leftblank{/if}">
+            <!--{if !$widget_data.images}-->
+            <div class="empty center relative"><i class="iconfont icon-tupianlunbo1 f-gray"></i>
+            </div>
+            <!--{else}-->
+            <div class="bd">
+                <!--{foreach from=$widget_data.images item=item}-->
+                <div class="item"><p class="block w-full" style="background-image:url('{$item.url|url_format}')"></p></div>
+                <!--{/foreach}-->
+            </div>
+            <ul class="hd"></ul>
+            <!--{/if}-->
+        </div>
+    </div>
+</div>
+
+<style>
+    .swiperbox .hd {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        left: 0;
+        bottom: 10px;
+        z-index: 99;
+    }
+
+    .swiperbox .hd li {
+        display: inline-block;
+        margin: 0 2px;
+        width: 40px;
+        height: 2px;
+        border-radius: 6px;
+        background: #fff;
+        overflow: hidden;
+        color: #fff;
+        font-size: 0;
+    }
+
+    .swiperbox .hd li.active,
+    .swiperbox .hd li:hover {
+        background: #dddddd;
+        color: #dddddd;
+    }
+
+    .swiperbox .bd .item p{
+        background-size: auto 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+
+    .swiperbox .round .bd p,
+    .swiperbox .round .empty {
+        border-radius: 8px;
+    }
+
+    .swiperbox .leftblank,
+    .swiperbox .leftblank .hd {
+        margin-left: calc(16.7% + 10px);
+    }
+
+    .swiperbox .leftblank .hd {
+        width: calc(83.3% - 10px);
+    }
+
+    .swiperbox .empty {
+        background-color: #ededed;
+        height: 100px;
+        line-height: 100px;
+    }
+
+    .swiperbox .empty i {
+        font-size: 50px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+    
+        $('#swiperbox-{$widget_data.uniqueid} .bd .item p').css('height', '{$widget_data.height|default:"466px"}');
+        $('#swiperbox-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+        $('#swiperbox-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:0}px 0');
+
+        /* {if $widget_data.images} */
+        TouchSlide({
+            slideCell: "#swiperbox-{$widget_data.uniqueid}",
+            titCell: ".hd",
+            mainCell: ".bd",
+            effect: "leftLoop",
+            autoPlay: true,
+            autoPage: true,
+            titOnClassName: "active",
+            delayTime: 1000,
+            interTime: 5000
+        });
+        /* {/if} */
+    })
+</script>

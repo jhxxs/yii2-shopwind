@@ -1,0 +1,93 @@
+<div class="searchbox" id="searchbox-{$widget_data.uniqueid}">
+  <div class="wraper {if !$widget_data.showfull}w{/if}">
+    <div class="content uni-flex uni-row">
+      <div class="lp">
+        <img src="{$widget_data.image|default:$widget_data.site_logo|url_format}" class="block" />
+      </div>
+      <div class="mp width-surplus">
+        <p class="uni-flex uni-row relative box">
+          <i class="iconfont icon-sousuo pl10" style="margin-top:1px;"></i>
+          <span class="line-clamp-2 f-13 pl5 keyword">{$widget_data.keyword|default:'搜索'}</span>
+          <button class="absolute f-white block pl10 pr10"><span class="pl10 pr10">搜索</span></button>
+        </p>
+        <p class="f-12 mt10 line-clamp-1 pr10">
+          <label>热门搜索：</label>
+          <!--{foreach from=$widget_data.keywords item=item}-->
+          <span class="ml10 mr10">{$item}</span>
+          <!--{/foreach}-->
+        </p>
+      </div>
+      <div class="rp">
+        <div class="uni-flex uni-row f-12 cart pl10 pr5 flex-middle word-break-all">
+          <i class="layui-icon layui-icon-cart-simple layui-font-12"></i>
+          <span class="ml5">去购物车结算</span>
+          <i class="layui-icon layui-icon-right layui-font-12"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .searchbox .content {
+    padding: 0 10px;
+  }
+
+  .searchbox .lp {
+    width: 18%;
+  }
+
+  .searchbox .lp img {
+    max-width: 100%;
+    max-height: 60px;
+  }
+
+  .searchbox .mp {
+    overflow: hidden;
+    margin: 0 5%;
+  }
+
+  .searchbox .mp .box {
+    width: calc(100% - 2px);
+    height: 32px;
+    line-height: 32px;
+    border: 1px #e23435 solid;
+  }
+
+  .searchbox .mp button {
+    height: 32px;
+    line-height: 32px;
+    overflow: hidden;
+    border: 0;
+    background-color: #e23435;
+    right: 0;
+    top: 0;
+  }
+
+  .searchbox .rp .cart {
+    line-height: 32px;
+    border: 1px #ddd solid;
+    display: inline-block;
+  }
+</style>
+<script>
+  $(function () {
+
+    /* {if $widget_data.boxcolor} */
+    $('#searchbox-{$widget_data.uniqueid} .content .mp .box').css('background-color', '{$widget_data.boxcolor}');
+    $('#searchbox-{$widget_data.uniqueid} .content .rp .cart').css('background-color', '{$widget_data.boxcolor}');
+    /* {/if} */
+
+    /* {if $widget_data.txtcolor} */
+    $('#searchbox-{$widget_data.uniqueid} .content .mp').css('color', '{$widget_data.txtcolor}');
+    $('#searchbox-{$widget_data.uniqueid} .content .rp .cart').css('color', '{$widget_data.txtcolor}');
+    /* {/if} */
+
+    /* {if $widget_data.buttoncolor} */
+    $('#searchbox-{$widget_data.uniqueid} .content .mp .box').css('border-color', '{$widget_data.buttoncolor}');
+    $('#searchbox-{$widget_data.uniqueid} .content .mp button').css('background-color', '{$widget_data.buttoncolor}');
+    /* {/if} */
+
+    $('#searchbox-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:"#ffffff"}');
+    $('#searchbox-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:30}px 0');
+  });
+</script>

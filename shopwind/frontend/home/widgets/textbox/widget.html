@@ -1,0 +1,26 @@
+<div class="textbox" id="textbox-{$widget_data.uniqueid}">
+  <div class="wraper {if !$widget_data.showfull}w{/if}">
+    <div class="content center pd10 f-gray">
+      <span class="text inline-block f-14">{$widget_data.label|default:'文本'}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    /* {if $widget_data.txtcolor} */
+    $('#textbox-{$widget_data.uniqueid} .content .text').css('color', '{$widget_data.txtcolor}');
+    /* {/if} */
+
+    /* {if $widget_data.txtbold} */
+    $("#textbox-{$widget_data.uniqueid} .content .text").css('font-weight', 'bold');
+    /* {/if} */
+
+    /* {if $widget_data.fontsize} */
+    $("#textbox-{$widget_data.uniqueid} .content .text").css('font-size', '{$widget_data.fontsize}px');
+    /* {/if} */
+
+    $('#textbox-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#textbox-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:0}px 0');
+  });
+</script>

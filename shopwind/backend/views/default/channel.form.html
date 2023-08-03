@@ -1,0 +1,45 @@
+<div class="content1 pb10">
+  <div class="ml20 mr20 mb20 mt10" id="warning"></div>
+  <form method="post" action="{$smarty.server.REQUEST_URI}" target="iframe">
+    <table class="infoTable">
+      <tr>
+        <th class="paddingT15"><label>{$lang.title}</label></th>
+        <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="title"
+            value="{$channel.title|escape}" />
+        </td>
+      </tr>
+      <tr>
+        <th class="paddingT15"><label>{$lang.pageid}</label></th>
+        <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="page"
+            value="{$channel.id|escape}" />
+          <p class="field_notice mt5">{$lang.pageid_note}</p>
+        </td>
+      </tr>
+      <tr>
+        <th class="paddingT15"><label>{$lang.enable}</label></th>
+        <td class="paddingT15 layui-form">
+          <input type="radio" name="enabled" value="1" title="{$lang.yes}" {if !$channel || $channel.enabled }
+            checked{/if} />
+          <input type="radio" name="enabled" value="0" title="{$lang.no}" {if $channel && !$channel.enabled }
+            checked{/if} />
+        </td>
+      </tr>
+      <tr>
+        <th></th>
+        <td class="ptb20">
+          <input type="hidden" name="client" value="{$smarty.get.client}" />
+          <input class="layui-btn layui-bg-blue" type="submit" value="{$lang.submit}" />
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+<script type="text/javascript">
+  $(function () {
+    layui.use('form', function () {
+      var form = layui.form;
+      form.render();
+    });
+  });
+</script>
+{include file="footer.html"}

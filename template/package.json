@@ -1,0 +1,35 @@
+{
+  "name": "shopwind",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^1.1.4",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
+    "axios": "^0.26.1",
+    "element-plus": "^2.1.9",
+    "js-md5": "^0.7.3",
+    "moment": "^2.29.4",
+    "nprogress": "^0.2.0",
+    "swiper": "^8.4.4",
+    "vue": "^3.2.25",
+    "vue-baidu-map-3x": "^1.0.29",
+    "vue-meta": "^3.0.0-alpha.8",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.0",
+    "unplugin-auto-import": "^0.7.1",
+    "unplugin-vue-components": "^0.19.2",
+    "vite": "^2.9.15"
+  },
+  "description": "This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.",
+  "main": "vite.config.js",
+  "author": "shopwind",
+  "license": "ISC"
+}

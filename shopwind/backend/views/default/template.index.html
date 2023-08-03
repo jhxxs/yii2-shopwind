@@ -1,0 +1,63 @@
+{include file="header.html"}
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+      <!--{foreach from=$pages item=list key=$client}-->
+      <div class="flexigrid">
+        <h3 class="bold layui-font-16 mb20">{if $client eq 'pc'}电脑端{else}移动端{/if}</h3>
+        <div class="layui-btn-container box-align-center">
+          <a href="javascript:;" ectype="dialog" dialog_id="dialog" dialog_title="新增页面" dialog_width="500"
+            uri="{url route='channel/add' client=$client}" class="layui-btn layui-bg-blue"><i
+              class="layui-icon layui-icon-addition"></i>新增页面</a>
+        </div>
+        <table class="distinction">
+          <thead>
+            <tr>
+              <th width="20%" align="left" class="pl10">标题</th>
+              <th width="20%" align="left">页面ID</th>
+              <th width="30%" align="left">VUE路由</th>
+              <th width="5%" align="center">{$lang.enable}</th>
+              <th class="handler">{$lang.handler}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--{foreach from=$list item=page key=key}-->
+            <tr>
+              <td width="20%" align="left" class="pl10">{$page.title}</td>
+              <td width="20%" align="left"><span class="gray">{$key}</span></td>
+              <td width="30%" align="left"><span class="gray">{$page.route}</span></td>
+              <td width="5%" align="center">
+                <!--{if $page.enabled neq '0'}-->
+                <i class="iconfont icon-chenggong green"></i>
+                <!--{/if}-->
+              </td>
+              <td class="handler gray">
+                <a href="{url route='template/edit' client=$client page=$key}" class="ml5 mr5"
+                  target="_blank">{$lang.visual}</a> |
+                <a href="{if $client eq 'pc'}{$baseUrl}{else}{$mobileUrl}{/if}{$page.route}" class="ml5 mr5"
+                  target="_blank">{$lang.view}</a>
+
+                <!--{foreach from=$page.action item=action}-->
+                <!--{if $action eq 'delete'}-->
+                | <a href="javascript:;" uri="{url route='channel/delete' client=$client page=$key}"
+                  class="ml5 mr5 J_AjaxRequest" confirm="{$lang.drop_confirm}">{$lang.drop}</a>
+                <!--{else if $action eq 'edit'}-->
+                | <a href="javascript:;" uri="{url route='channel/edit' client=$client page=$key}" class="ml5 mr5"
+                  ectype="dialog" dialog_id="dialog" dialog_title="编辑页面" dialog_width="500">{$lang.edit}</a>
+                <!--{/if}-->
+                <!--{/foreach}-->
+              </td>
+            </tr>
+            <!--{/foreach}-->
+          </tbody>
+        </table>
+      </div>
+      <!--{/foreach}-->
+
+      {include file="version.html"}
+    </div>
+  </div>
+</div>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
+{include file="footer.html"}

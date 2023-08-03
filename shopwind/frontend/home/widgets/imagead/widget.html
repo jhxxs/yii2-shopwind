@@ -1,0 +1,42 @@
+<div class="imagead" id="imagead-{$widget_data.uniqueid}">
+  <div class="wraper {if !$widget_data.showfull}w{/if}">
+    <div class="content {$widget_data.radius}">
+      <!--{if $widget_data.url}-->
+      <img class="block w-full" src="{$widget_data.url|url_format}">
+      <!--{else}-->
+      <div class="empty center">
+        <p>图片广告</p>
+      </div>
+      <!--{/if}-->
+    </div>
+  </div>
+</div>
+
+<style>
+  .imagead .content.round img,
+  .imagead .content.round .empty {
+    border-radius: 6px;
+  }
+
+  .imagead .empty {
+    height: 100px;
+    line-height: 100px;
+    width: 100%;
+    background-color: #c6d7dd;
+    color: #666666;
+  }
+</style>
+<script>
+  $(function () {
+
+    /* {if $widget_data.height} */
+    $('#imagead-{$widget_data.uniqueid} .content img').css('height', '{$widget_data.height}px');
+    /* {/if} */
+
+    /* {if $widget_data.margin} */
+    $('#imagead-{$widget_data.uniqueid}').css('margin', '0 {$widget_data.margin|default:0}px');
+    /* {/if} */
+    $('#imagead-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#imagead-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:0}px 0');
+  });
+</script>

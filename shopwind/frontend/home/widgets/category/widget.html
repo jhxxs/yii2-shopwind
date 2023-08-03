@@ -1,0 +1,86 @@
+<div class="categorybox" id="categorybox-{$widget_data.uniqueid}">
+    <div class="wraper relative {if !$widget_data.showfull}w{/if}">
+        <ul class="content line-clamp-1">
+            <li class="item inline-block pt10 pb10 f-16 all center">
+                <span>{$widget_data.cate_name|default:'所有商品分类'}</span>
+            </li>
+            <!--{foreach from=$widget_data.navs item=item name=fe_item}-->
+            <li
+                class="item inline-block ml10 mr10 pt10 pb10 f-16 {if $smarty.foreach.fe_item.first}selected{/if}">
+                <span>{$item.title}</span>
+            </li>
+            <!--{foreachelse}-->
+            <li class="item inline-block ml20 mr10 pt10 pb10 f-16 selected"><span>导航一</span></li>
+            <li class="item inline-block ml10 mr10 pt10 pb10 f-16"><span>导航二</span></li>
+            <li class="item inline-block ml10 mr10 pt10 pb10 f-16"><span>导航三</span></li>
+            <!--{/foreach}-->
+        </ul>
+        <div class="categories absolute hidden">
+            <!--{foreach from=$widget_data.list item=item name=fe_item}-->
+            <!--{if !$widget_data.rows || ($widget_data.rows ge $smarty.foreach.fe_item.iteration)}-->
+            <div class="uni-flex uni-row flex-middle width-between item">
+                <div class="uni-flex uni-column width-surplus f-white">
+                    <a class="f-white line-clamp-1 rlink">{$item.cate_name}</a>
+                    <p class="l-h20 f-13 mr5 mt5 {if $widget_data.cate_id gt 0}line-clamp-2{else}line-clamp-1{/if}">
+                        <!--{foreach from=$item.children item=child}-->
+                        <span class="f-13 f-white mr10 mt5 inline-block">{$child.cate_name}</span>
+                        <!--{/foreach}-->
+                    </p>
+                </div>
+                <i class="layui-icon layui-icon-right f-white"></i>
+            </div>
+            <!--{/if}-->
+            <!--{/foreach}-->
+        </div>
+    </div>
+</div>
+
+<style>
+    .categorybox .content {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .categorybox .item.all,
+    .categorybox .categories {
+        width: 16.67%;
+    }
+
+    .categorybox .categories {
+        z-index: 1;
+        top: 40px;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .categories .item {
+        padding: 13px 8px 11px 15px;
+    }
+
+    .categories .item p span {
+        opacity: 0.6;
+    }
+</style>
+<script>
+    $(function () {
+
+        /* {if $widget_data.expand} */
+        $("#categorybox-{$widget_data.uniqueid} .categories").css('display', 'block');
+        /* {/if} */
+
+        /* {if $widget_data.catebodybgcolor} */
+        $("#categorybox-{$widget_data.uniqueid} .categories").css('background-color', '{$widget_data.catebodybgcolor}');
+        /* {/if} */
+
+        /* {if $widget_data.txtcolor} */
+        $("#categorybox-{$widget_data.uniqueid} .content .item").css('color', '{$widget_data.txtcolor}');
+        /* {/if} */
+
+        $("#categorybox-{$widget_data.uniqueid} .content .item.selected").css('color', '{$widget_data.selColor|default:"#e23435"}');
+        $("#categorybox-{$widget_data.uniqueid} .content .item.all").css('background-color', '{$widget_data.catebgcolor|default:"#e23435"}');
+        $("#categorybox-{$widget_data.uniqueid} .content .item.all").css('color', '{$widget_data.catetxtcolor|default:"#ffffff"}');
+
+        $("#categorybox-{$widget_data.uniqueid}").css('background', '{$widget_data.bgcolor|default:"#ffffff"}');
+        $("#categorybox-{$widget_data.uniqueid}").css('padding', '{$widget_data.space|default:0}px 0');
+    });
+</script>

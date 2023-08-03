@@ -1,0 +1,222 @@
+<div class="widget-box">
+    <h3 class="title mt20 mb20 pb20"><strong class="f-18">分类导航</strong></h3>
+    <div class="content">
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">文字颜色</label>
+            <p class="width-surplus ml10 color">{$options.txtcolor|default:'#000000'}</p>
+            <input type="hidden" name="txtcolor" value="{$options.txtcolor|default:'#000000'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#000000">重置</span>
+            <p class="picker1 ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">选中颜色</label>
+            <p class="width-surplus ml10 color">{$options.selColor|default:'#e23435'}</p>
+            <input type="hidden" name="selColor" value="{$options.selColor|default:'#e23435'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#e23435">重置</span>
+            <p class="picker2 ml10"></p>
+        </div>
+        <ul class="list">
+            <!-- {foreach from=$options.navs item=item} -->
+            <li class="item pd10 relative">
+                <div class="width-surplus">
+                    <div class="link f-gray uni-flex uni-row">
+                        <span class="pr10">文字</span>
+                        <input class="pd10 J_Link" type="text" name="title[]" value="{$item.title}" />
+                    </div>
+                    <div class="link f-gray uni-flex uni-row relative">
+                        <span class="pr10">链接</span>
+                        <input class="pd10 J_Link" type="text" name="link[]" value="{$item.link}"
+                            placeholder="index/index" />
+                        <i class="iconfont icon-sousuo absolute pointer" ectype="dialog" dialog_id="link"
+                            dialog_width="560" dialog_title="复制链接" uri="{url route='gselector/link'}"
+                            style="right: 0px;bottom:0px;"></i>
+                    </div>
+                </div>
+                <i class="layui-icon layui-icon-close-fill absolute delete pointer f-18 J_Del"></i>
+            </li>
+            <!-- {/foreach} -->
+            <li class="item pd10 relative">
+                <div class="width-surplus">
+                    <div class="link f-gray uni-flex uni-row">
+                        <span class="pr10">文字</span>
+                        <input class="pd10 J_Link" type="text" name="title[]" value="" />
+                    </div>
+                    <div class="link f-gray uni-flex uni-row relative">
+                        <span class="pr10">链接</span>
+                        <input class="pd10 J_Link" type="text" name="link[]" value="" placeholder="index/index" />
+                        <i class="iconfont icon-sousuo absolute pointer" ectype="dialog" dialog_id="link"
+                            dialog_width="560" dialog_title="复制链接" uri="{url route='gselector/link'}"
+                            style="right: 0px;bottom:0px;"></i>
+                    </div>
+                </div>
+            </li>
+
+            <li class="item btn relative">
+                <p class="center pointer">
+                    <i class="layui-icon layui-icon-addition layui-font-14"></i><span>添加一个导航</span>
+                </p>
+            </li>
+        </ul>
+        <h4 class="mt10 pb10 mt20 pt20">分类设置</h4>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">上级分类</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="cate_id" value="{$options.cate_id|default:0}" />
+            <input type="hidden" name="cate_name" value="{$options.cate_name|default:''}" />
+            <div class="pointer" ectype="dialog" dialog_id="category" dialog_width="1000" dialog_title="选择分类"
+                uri="{url route='gselector/category' callback='gscallback'}">
+                <span>{$options.cate_name|default:'请选择'}</span>
+                <i class="layui-icon layui-icon-right layui-font-14"></i>
+            </div>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">标题背景</label>
+            <p class="width-surplus ml10 color">{$options.catebgcolor|default:'#e23435'}</p>
+            <input type="hidden" name="catebgcolor" value="{$options.catebgcolor|default:'#e23435'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#e23435">重置</span>
+            <p class="picker3 ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">标题颜色</label>
+            <p class="width-surplus ml10 color">{$options.catetxtcolor|default:'#ffffff'}</p>
+            <input type="hidden" name="catetxtcolor" value="{$options.catetxtcolor|default:'#ffffff'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#ffffff">重置</span>
+            <p class="picker4 ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">内容背景</label>
+            <p class="width-surplus ml10 color">{$options.catebodybgcolor|default:'rgba(0,0,0,0.6)'}</p>
+            <input type="hidden" name="catebodybgcolor" value="{$options.catebodybgcolor|default:'rgba(0,0,0,0.6)'}" />
+            <span class="f-c60 pointer J_Reset" data-value="rgba(0,0,0,0.6)">重置</span>
+            <p class="picker5 ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">默认展开</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="expand" value="{$options.expand|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.expand}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">显示行数</label>
+            <input type="hidden" name="rows" value="{$options.rows|default:7}" />
+            <div class="width-surplus ml20 slider1" style="margin-top:15px"></div>
+        </div>
+        <h4 class="mt10 pb10 mt20 pt20">其他设置</h4>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">全屏显示</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="showfull" value="{$options.showfull|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.showfull}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">头部模块</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="header" value="{$options.header|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.header}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">背景颜色</label>
+            <p class="width-surplus ml10 color">{$options.bgcolor|default:'#ffffff'}</p>
+            <input type="hidden" name="bgcolor" value="{$options.bgcolor|default:'#ffffff'}" />
+            <span class="f-c60 pointer J_Reset" data-value="#ffffff">重置</span>
+            <p class="picker6 ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">模块间距</label>
+            <input type="hidden" name="space" value="{$options.space|default:0}" />
+            <div class="width-surplus ml20 slider2" style="margin-top:15px"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .widget-box .list .item {
+        border: 1px #ddd dashed;
+    }
+
+    .widget-box .list .item .delete {
+        right: -10px;
+        top: -14px;
+    }
+
+    .widget-box .list .btn p {
+        color: #FF6A00;
+    }
+
+    .widget-box .item .link input,
+    .widget-box .item .link input:hover {
+        border: 0;
+        border-bottom: 1px #ddd solid;
+        box-shadow: none;
+        width: calc(100% - 70px);
+    }
+</style>
+<script>
+    $(function () {
+        $('.J_Link').change(function () {
+            save_widget();
+        });
+
+        $('body').on('click', '.J_Del', function () {
+            $(this).parents('.item').remove();
+            save_widget(false);
+        });
+
+        $('.J_Reset').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input[type="hidden"]').val(value);
+            save_widget();
+        });
+
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('switch(filter)', function (data) {
+                $(this).parents('.item').find('input').val(data.elem.checked ? 1 : 0);
+                save_widget();
+            });
+
+            form.render();
+        });
+
+        slideRender('.slider1', function (dom, value) {
+            save_widget(false);
+        });
+        slideRender('.slider2', function (dom, value) {
+            save_widget(false);
+        });
+        colorRender('.picker1', function (dom, value) {
+            save_widget();
+        });
+        colorRender('.picker2', function (dom, value) {
+            save_widget();
+        });
+        colorRender('.picker3', function (dom, value) {
+            save_widget();
+        }, { alpha: true, format: 'rgb' });
+        colorRender('.picker4', function (dom, value) {
+            save_widget();
+        });
+        colorRender('.picker5', function (dom, value) {
+            save_widget();
+        }, { alpha: true, format: 'rgb' });
+        colorRender('.picker6', function (dom, value) {
+            save_widget();
+        });
+    });
+
+    function gscallback(dom, value) {
+        var dialog = $('*[dialog_id="' + dom + '"]');
+        //if (dom == 'category') {
+        dialog.parent('.item').find('input[name="cate_id"]').val(value.id);
+        dialog.parent('.item').find('input[name="cate_name"]').val(value.name);
+        dialog.find('span').text(value.name || '请选择');
+        //}
+
+        save_widget(false);
+    }
+</script>

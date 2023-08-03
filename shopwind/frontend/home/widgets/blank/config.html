@@ -1,0 +1,60 @@
+<div class="widget-box">
+    <h3 class="title mt20 mb20 pb20"><strong class="f-18">辅助空白</strong></h3>
+    <div class="content">
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">填充颜色</label>
+            <p class="width-surplus ml10 color">{$options.bgcolor|default:''}</p>
+            <input type="hidden" name="bgcolor" value="{$options.bgcolor|default:''}" />
+            <span class="f-c60 pointer J_Reset" data-value="">重置</span>
+            <p class="picker ml10"></p>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">空白高度</label>
+            <input type="hidden" name="height" value="{$options.height|default:60}" />
+            <div class="width-surplus ml20 slider" style="margin-top:15px"></div>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">头部模块</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="header" value="{$options.header|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.header}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+        <div class="item uni-flex uni-row">
+            <label class="f-gray">底部模块</label>
+            <p class="width-surplus"></p>
+            <input type="hidden" name="footer" value="{$options.footer|default:0}" />
+            <span class="layui-form">
+                <input lay-filter="filter" type="checkbox" {if $options.footer}checked{/if} lay-skin="switch">
+            </span>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.J_Reset').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input[type="hidden"]').val(value);
+            save_widget();
+        });
+
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('switch(filter)', function (data) {
+                $(this).parents('.item').find('input').val(data.elem.checked ? 1 : 0);
+                save_widget();
+            });
+
+            form.render();
+        });
+        colorRender('.picker', function (dom, value) {
+            save_widget();
+        })
+        slideRender('.slider', function (dom, value) {
+            save_widget(false);
+        });
+
+    });
+</script>
