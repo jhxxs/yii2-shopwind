@@ -1,0 +1,123 @@
+## 安装
+1. 运行环境要求 PHP 7.2.5 ～ 7.4，数据库版本为 Mysql 5.5～5.7
+2. Web服务器：Apache/Nginx/IIS
+
+## 开放端口
+1. 80（web）
+2. 443（https）
+3. 3306（mysql）
+4. 6379（redis）
+
+## PHP扩展
+> fileinfo
+
+## php.ini配置
+
+```
+extension=php_curl.dll
+extension=php_fileinfo.dll
+extension=php_openssl.dll
+```
+
+> 同时关闭防跨站攻击(open_basedir)
+
+## 一键安装
+1. 创建站点，将源码包中的shopwind文件夹里的所有文件上传到该站点根目录下，运行目录选择根目录下的/public
+2. 配置伪静态，各Web环境伪静态规则有所不同，请查看【URL重写】
+3. 在浏览器中输入 你的域名/install
+4. 安装程序会自动执行安装。期间系统会提醒你输入数据库信息以完成安装
+
+#### 安装成功后
+1. 后台访问地址：域名/admin 
+2. 公众号和H5访问地址：域名/h5
+3. API接口地址：域名/api
+
+提示：访问不了请在线检测环境：域名/install/requirements.php
+安装过程中请牢记您的账号密码！
+
+## 重新安装
+> 删除 /public/data/install.lock 文件、/public/data/initdata.lock
+
+## 清除演示数据
+1. 进入后台 > 插件 > 其他工具 > 安装【一键清除】插件
+2. 安装插件后 进入 插件管理界面，执行【一键清除数据】或【重置系统】
+
+## URL重写
+
+[APACHE]
+
+```
+<IfModule mod_rewrite.c>
+Options +FollowSymLinks
+IndexIgnore */*
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php
+</IfModule>
+```
+
+[Nginx]
+
+```
+location /admin {
+  try_files $uri $uri/ /admin/index.php$is_args$args;
+}
+location /home {
+  try_files $uri $uri/ /home/index.php$is_args$args;
+}
+location /api {
+  try_files $uri $uri/ /api/index.php$is_args$args;
+}
+location / {
+  try_files $uri $uri/ /index.php$is_args$args;
+}
+```
+
+[IIS]
+
+```
+<rules>
+ <rule name="rewrite_admin_rewrite" stopProcessing="true">
+  <match url="admin/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="admin/index.php" appendQueryString="true"/>
+ </rule>
+ <rule name="rewrite_home_rewrite" stopProcessing="true">
+  <match url="home/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="home/index.php" appendQueryString="true"/>
+ </rule>
+ <rule name="rewrite_rewrite" stopProcessing="true">
+  <match url="." ignoreCase="false"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="index.php" appendQueryString="true"/>
+ </rule>
+</rules>
+```
+
+## 重新编译
+> 使用VS Code开发工具加载源码包中的template/pc目录
+> 运行终端命令【Terminal > New Terminal】初始化项目：npm i
+> 运行终端命令：npm run build
+> 将编译后的dist文件夹里的文件上传到服务器根目录/public/pc
+
+## 常见问题
+
+1. 系统安装时报 Warning:require():open_baseDir restriction in effect....
+
+   答：进入php.ini搜索“open_baseDir”, 设置为正确的值，如：open_baseDir=/www/wwwroot/站点根目录/:/tmp/, 或者通过站点设置【如宝塔面板】的网站目录，取消勾选【防跨站攻击(open_basedir)】
+
+2. 系统安装时报404错误
+
+   答：请参照【URL重写】配置好伪静态规则，如是商业版，请使用源码包根目录下的伪静态规则文件
