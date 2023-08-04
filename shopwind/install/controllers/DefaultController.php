@@ -122,6 +122,7 @@ class DefaultController extends Controller
 		$check_file = $install->checkFile(array(
 			'../public/data',
 			'../install/runtime',
+			'../console/runtime',
 			'../backend/runtime',
 			'../frontend/home/runtime',
 			'../frontend/api/runtime',
