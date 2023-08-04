@@ -18,7 +18,6 @@ use yii\helpers\FileHelper;
 
 use common\models\UploadedFileModel;
 
-use common\library\Basewind;
 use common\library\Message;
 use common\library\Language;
 
@@ -47,7 +46,6 @@ class ClearCacheAction extends Action
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/mob/runtime/'.$folder);
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/api/runtime/'.$folder);
 			FileHelper::removeDirectory(Yii::getAlias('@install') . '/runtime/'.$folder);
-			FileHelper::removeDirectory(Yii::getAlias('@console') . '/runtime/'.$folder);
 		}
 
 		// 删除二维码/海报图片（图片很多，可以定时删除，以免占用太多服务器资源）
