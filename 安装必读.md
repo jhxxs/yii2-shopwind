@@ -29,8 +29,7 @@ extension=php_openssl.dll
 
 #### 安装成功后
 1. 后台访问地址：域名/admin 
-2. 公众号和H5访问地址：域名/h5
-3. API接口地址：域名/api
+2. API接口地址：域名/api
 
 提示：访问不了请在线检测环境：域名/install/requirements.php
 安装过程中请牢记您的账号密码！
