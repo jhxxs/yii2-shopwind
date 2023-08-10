@@ -52,8 +52,7 @@
 								</div>
 							</el-form-item>
 							<el-form-item label="商品类目" :label-width="100" v-loading="loading">
-								<div v-if="(route.params.id && goods.categorys.length > 0) || !loading"
-									class="uni-flex uni-row">
+								<div v-if="!route.params.id || !goods.loading" class="uni-flex uni-row">
 									<multiselector api="category/list" idField="cate_id" nameField="cate_name"
 										parentField="parent_id" @callback="callback" :original="goods.categorys">
 									</multiselector>
@@ -394,7 +393,7 @@
 
 <script setup>
 import { ref, reactive, onBeforeUnmount, onMounted, shallowRef } from 'vue'
-import { ElMessage, ElNotification,ElTree } from 'element-plus'
+import { ElMessage, ElNotification, ElTree } from 'element-plus'
 import { useRoute } from 'vue-router'
 import { DomEditor } from '@wangeditor/editor'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
@@ -466,7 +465,7 @@ const treeRef = ref(ElTree)
 const route = useRoute()
 const loading = ref(true)
 const visitor = ref({})
-const goods = reactive({ type: 'material', attributes: {}, hasvideo: true, exclusive: { status: 1 }, if_show: 1, categorys: [], scategory:[], multispec: false, integral: { exchange_integral: 0 }, goods_images: [], desc_images: [] })
+const goods = reactive({ loading: true, type: 'material', attributes: {}, hasvideo: true, exclusive: { status: 1 }, if_show: 1, categorys: [], scategory: [], multispec: false, integral: { exchange_integral: 0 }, goods_images: [], desc_images: [] })
 const gallery = reactive({ list: [], specs: [{ name: '', items: [{ value: '' }] }] })
 const deliverys = reactive({ list: [], selected: {} })
 const brands = ref([])
@@ -479,7 +478,6 @@ const popover = reactive({ mkprice: false, price: false, stock: false, value: 10
 
 onMounted(() => {
 	visitor.value = JSON.parse(localStorage.getItem('visitor'))
-	loading.value = route.params.id > 0 ? true : false
 
 	if (route.params.id > 0) {
 		goodsRead({ goods_id: route.params.id, querydesc: true }, (data) => {
@@ -503,6 +501,7 @@ onMounted(() => {
 					bindSpecs()
 				}
 			}
+			goods.loading = false
 		})
 	}
 
@@ -658,10 +657,10 @@ const submit = () => {
 	form.video = goods.hasvideo ? goods.video : ''
 	form.haslongimg = goods.haslongimg ? goods.long_image : ''
 
-	if(scategory.length > 0) {
-		form.scate_id =  treeRef.value ? treeRef.value.getCheckedKeys(false) : []
+	if (scategory.length > 0) {
+		form.scate_id = treeRef.value ? treeRef.value.getCheckedKeys(false) : []
 	}
-	
+
 	if (!goods.multispec) gallery.list = []
 	else if (gallery.specs.length > 0) {
 		gallery.specs.forEach((item, index) => {
@@ -867,9 +866,10 @@ function bindTable() {
 }
 
 .border-radius {
-	border:1px #f1f1f1 solid;
+	border: 1px #f1f1f1 solid;
 	border-radius: 4px;
 }
+
 :deep() .el-table__header-wrapper .el-table-column--selection .el-checkbox {
 	vertical-align: middle;
 }

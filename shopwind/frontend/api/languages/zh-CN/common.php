@@ -96,6 +96,7 @@ return array(
 	'send_limit_frequency_five_time'=> '发送太频繁请稍后再试',
 	'send_limit_frequency_daytimes' => '同一号码每天最多发送%s次短信',
 
-	'buying_has_integral_logtext' => '购物订单获积分，订单号[%s]',
+	'buying_has_integral_logtext'  => '购物订单获积分，订单号[%s]',
 	'selling_has_integral_logtext' => '买家使用积分抵扣货款，订单号[%s]',
+	'recharge_give'                => '充值返现',
 );
