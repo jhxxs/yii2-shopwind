@@ -54,7 +54,7 @@ class DefaultController extends \common\base\BaseController
 		$this->params['page'] = Page::seo();
 		return $this->render('../index.html', $this->params);
 	}
-
+	
 	private function getTkd()
 	{
 		return [
