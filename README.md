@@ -139,7 +139,7 @@ ShopWind系统归属于广西南宁领众网络科技有限公司所有，早在
 
 * 开发文档：[https://developer.shopwind.net](https://developer.shopwind.net)
 
-* API接口文档：[http://docs.shopwind.net](http://docs.shopwind.net)
+* API接口文档：[https://ojrjoz6p7z.k.topthink.com/@shopwind/](https://ojrjoz6p7z.k.topthink.com/@shopwind/)
 
 * ShopWind开源协议：[https://www.shopwind.net/license/](https://www.shopwind.net/license/)
 
