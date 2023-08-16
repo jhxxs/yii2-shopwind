@@ -39,6 +39,9 @@ export function userRead(params, callback, loading) {
 export function userUpdate(params, callback, loading) {
     request('user/update', params, (res) => {
         if (res.code == 0) {
+            let visitor = JSON.parse(localStorage.getItem('visitor'))
+            localStorage.setItem('visitor', JSON.stringify(Object.assign(visitor, { portrait: res.data.portrait })));
+
             if (typeof callback == 'function') {
                 callback(res.data)
             }
@@ -77,6 +80,9 @@ export function userEditPhone(params, callback, loading) {
     params.verifycodekey = localStorage.getItem('smsverifycodekey')
     request('user/phone', params, (res) => {
         if (res.code == 0) {
+            let visitor = JSON.parse(localStorage.getItem('visitor'))
+            localStorage.setItem('visitor', JSON.stringify(Object.assign(visitor, { phone_mob: res.data.phone_mob })));
+
             if (typeof callback == 'function') {
                 callback(res.data)
             }
@@ -107,6 +113,7 @@ export function userLogin(params, callback, loading) {
 
                 localStorage.setItem('access_token', res.data.token)
                 localStorage.setItem('visitor', JSON.stringify(res.data.user_info))
+                
                 if (typeof callback == 'function') {
                     callback(res.data)
                 }

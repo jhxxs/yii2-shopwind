@@ -65,9 +65,6 @@ const submit = () => {
             type: 'success',
             position: 'bottom-left'
         })
-
-        localStorage.setItem('visitor', JSON.stringify(Object.assign(visitor, { phone_mob: form.phone_mob })))
-
     }, loading)
 }
 
