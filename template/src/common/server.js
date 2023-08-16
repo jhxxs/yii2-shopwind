@@ -31,13 +31,13 @@ export function request(api, params, callback, loading) {
 	}
 	let token = localStorage.getItem('access_token') || ''
 	if (token) {
-		return doRequest(api, build(params), callback, loading)
+		return http(api, build(params), callback, loading)
 	}
 
-	doRequest('auth/token', build(params), function (res) {
+	http('auth/token', build(params), function (res) {
 		if (res.code == 0) {
 			localStorage.setItem('access_token', res.data.token)
-			doRequest(api, build(params), callback, loading)
+			http(api, build(params), callback, loading)
 		}
 	})
 }
@@ -82,7 +82,7 @@ export function upload(api, file, params, callback, loading) {
 		formData.append(key, obj[key])
 	}
 
-	doRequest(api, formData, callback, loading)
+	http(api, formData, callback, loading)
 }
 
 /**
@@ -92,7 +92,7 @@ export function upload(api, file, params, callback, loading) {
  * @param {Function} callback
  * @param {ElLoading} loading
  */
-function doRequest(api, params, callback, loading) {
+function http(api, params, callback, loading) {
 
 	if (typeof loading != 'undefined' && loading != null) {
 		loading.value = true
@@ -103,9 +103,7 @@ function doRequest(api, params, callback, loading) {
 		if (res.data.code == 4003 || res.data.code == 4002) {
 			localStorage.removeItem('visitor')
 			localStorage.removeItem('access_token')
-			setTimeout(() => {
-				location.reload()
-			}, 1000);
+			location.reload()
 		}
 		// 需要登录
 		//else if (res.data.code == 4004) {

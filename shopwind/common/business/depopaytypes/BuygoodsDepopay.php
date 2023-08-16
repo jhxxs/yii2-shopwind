@@ -14,10 +14,12 @@ namespace common\business\depopaytypes;
 use yii;
 
 use common\models\OrderGoodsModel;
+use common\models\OrderLogModel;
 use common\models\GoodsStatisticsModel;
 use common\models\DepositTradeModel;
 use common\models\TeambuyLogModel;
 
+use common\library\Language;
 use common\library\Timezone;
 use common\library\Def;
 
@@ -87,9 +89,10 @@ class BuygoodsDepopay extends OutlayDepopay
 		}
 
 		$tradeNo = $extra_info['tradeNo'];
+		list($nextOrderStatus, $nextTradeStatus) = $this->getNextStatus($extra_info['gtype']);
 
 		// 修改交易状态为已付款
-		if (!parent::_update_trade_status($tradeNo, ['status' => 'ACCEPTED', 'pay_time' => Timezone::gmtime()])) {
+		if (!parent::_update_trade_status($tradeNo, ['status' => $nextTradeStatus, 'pay_time' => Timezone::gmtime()])) {
 			$this->setErrors('50024');
 			return false;
 		}
@@ -103,14 +106,14 @@ class BuygoodsDepopay extends OutlayDepopay
 		}
 
 		// 修改订单状态为已付款
-		if (!parent::_update_order_status($extra_info['order_id'], ['status' => Def::ORDER_ACCEPTED, 'pay_time' => Timezone::gmtime()])) {
+		if (!parent::_update_order_status($extra_info['order_id'], ['status' => $nextOrderStatus, 'pay_time' => Timezone::gmtime()])) {
 			$this->setErrors('50021');
 			return false;
 		}
 
 		// 如果是拼团订单
 		if ($extra_info['otype'] == 'teambuy') {
-			if (!$this->updateTeamBuyInfo($trade_info['userid'], $extra_info['order_id'])) {
+			if (!$this->updateTeamBuyInfo($trade_info['userid'], $extra_info['order_id'], $nextOrderStatus)) {
 				$this->setErrors('50024');
 				return false;
 			}
@@ -124,6 +127,12 @@ class BuygoodsDepopay extends OutlayDepopay
 			}
 		}
 
+		// 订单操作日志
+		if (!in_array($extra_info['otype'], ['teambuy', 'guidebuy'])) {
+			OrderLogModel::change($extra_info['order_id'], Language::get('order_ispayed'));
+			OrderLogModel::create($extra_info['order_id'], $nextOrderStatus);
+		}
+
 		// 更新累计销售件数
 		foreach (OrderGoodsModel::find()->select('goods_id,quantity')->where(['order_id' => $extra_info['order_id']])->all() as $query) {
 			GoodsStatisticsModel::updateStatistics($query->goods_id, 'sales', $query->quantity);
@@ -135,7 +144,7 @@ class BuygoodsDepopay extends OutlayDepopay
 	/**
 	 * 修改拼团订单信息
 	 */
-	private function updateTeamBuyInfo($userid, $order_id)
+	public function updateTeamBuyInfo($userid, $order_id, $status = '')
 	{
 		$query = TeambuyLogModel::find()->select('logid,teamid,people')->where(['userid' => $userid, 'order_id' => $order_id])->one();
 		if (!$query) {
@@ -155,11 +164,18 @@ class BuygoodsDepopay extends OutlayDepopay
 				$model->status = 1; // 设置为成团状态
 				if ($model->save()) {
 
-					// 修改状态为已付款待发货
-					parent::_update_order_status($model->order_id, ['status' => Def::ORDER_ACCEPTED]);
+					// 订单操作日志
+					OrderLogModel::create($model->order_id, $status);
+
+					// 修改状态为已付款待发货（待使用）
+					parent::_update_order_status($model->order_id, ['status' => $status]);
 				}
 			}
 		} else {
+
+			// 订单操作日志
+			OrderLogModel::change($order_id, Language::get('order_ispayed'));
+			OrderLogModel::create($order_id, Def::ORDER_TEAMING);
 
 			//  如果不满足成团，把订单状态调整为待成团
 			parent::_update_order_status($order_id, ['status' => Def::ORDER_TEAMING]);
@@ -171,9 +187,27 @@ class BuygoodsDepopay extends OutlayDepopay
 	/**
 	 * 修改社区团购订单信息
 	 */
-	private function updateGuidebuyInfo($userid, $order_id)
+	public function updateGuidebuyInfo($userid, $order_id)
 	{
+		// 订单操作日志
+		OrderLogModel::change($order_id, Language::get('order_ispayed'));
+		OrderLogModel::create($order_id, Def::ORDER_PICKING);
+
 		// 修改订单状态为待配送（社区团购订单没有商家发货环节，统一由平台完成到店配送）
 		return parent::_update_order_status($order_id, ['status' => Def::ORDER_PICKING]);
+	}
+
+	/**
+	 * 针对服务类商品订单，下一个状态是：待使用
+	 * 其他类型订单，下一个状态是：待发货
+	 */
+	private function getNextStatus($gtype = 'normal')
+	{
+		// 如果是服务类商品，则下一个状态是待使用
+		if ($gtype == 'service') {
+			return [Def::ORDER_USING, 'USING'];
+		}
+
+		return [Def::ORDER_ACCEPTED, 'ACCEPTED'];
 	}
 }

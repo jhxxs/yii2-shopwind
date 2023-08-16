@@ -24,11 +24,11 @@
 									<el-radio-button label="teaming">待成团({{ sells.teaming || 0 }})</el-radio-button>
 									<el-radio-button label="accepted">待发货({{ sells.accepted || 0 }})
 									</el-radio-button>
-									<el-radio-button label="shipped">已发货({{ sells.shipped || 0 }})
+									<el-radio-button label="shipped">待收货({{ sells.shipped || 0 }})
 									</el-radio-button>
-									<el-radio-button label="picking">待配送({{ sells.picking || 0 }})</el-radio-button>
+									<!-- <el-radio-button label="picking">待配送({{ sells.picking || 0 }})</el-radio-button>
 									<el-radio-button label="delivered">待取货({{ sells.delivered || 0 }})
-									</el-radio-button>
+									</el-radio-button> -->
 									<el-radio-button label="finished">交易完成({{ sells.finished || 0 }})
 									</el-radio-button>
 								</el-radio-group>

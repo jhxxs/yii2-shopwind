@@ -79,7 +79,7 @@ class UserForm extends Model
 			'picking' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_PICKING])->count(),
 			'delivered' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_DELIVERED])->count(),
       		'accepted'  => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_ACCEPTED])->count(),
-    		'shipped'  => OrderModel::find()->where([$field => Yii::$app->user->id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED, Def::ORDER_PICKING, Def::ORDER_DELIVERED]])->count(),
+    		'shipped'  => OrderModel::find()->where([$field => Yii::$app->user->id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED, Def::ORDER_PICKING, Def::ORDER_DELIVERED, Def::ORDER_USING]])->count(),
 			'finished' => OrderModel::find()->where([$field => Yii::$app->user->id, 'status' => Def::ORDER_FINISHED])->count(),
 			'refund'  => RefundModel::find()->where(['and', [$field => Yii::$app->user->id], ['not in', 'status', ['SUCCESS', 'CLOSED']]])->count(),
  		);

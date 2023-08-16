@@ -279,3 +279,19 @@ export function orderCreate(params, callback, loading) {
 		}
 	}, loading)
 }
+
+/**
+ * 获取订单状态时间线
+ * @param {Object} params 
+ * @param {Function} callback 
+ * @param {ElLoading} loading 
+ */
+export function orderTimeline(params, callback, loading) {
+	request('order/timeline', params, (res) => {
+		if (res.code == 0) {
+			if (typeof callback == 'function') {
+				callback(res.data)
+			}
+		}
+	}, loading)
+}

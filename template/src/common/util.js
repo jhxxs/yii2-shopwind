@@ -67,12 +67,13 @@ export function translator(value, type = 'order') {
 	let array = {}
 	if (type == 'trade') {
 		array = {
-			'PENDING': '待买家付款',
-			'ACCEPTED': '买家已付款',
-			'SHIPPED': '商家已发货',
+			'PENDING': '待付款',
+			'ACCEPTED': '待发货',
+			'SHIPPED': '待收货',
+			'USING': '待使用',
 			'CLOSED': '交易关闭',
 			'SUCCESS': '交易完成',
-			'VERIFY': '待平台审核'
+			'VERIFY': '待审核'
 		}
 	} else if (type == 'refund') {
 		array = {
@@ -84,14 +85,15 @@ export function translator(value, type = 'order') {
 		}
 	} else {
 		array = {
-			0: "交易关闭",
-			11: "待买家付款",
-			19: "待成团",
-			20: "买家已付款",
-			30: "商家已发货",
-			35: "待配送",
-			36: "待取货",
-			40: "交易完成"
+			11: '待付款',
+			19: '待成团',
+			20: '待发货',
+			30: '待收货',
+			35: '待配送',
+			36: '待取货',
+			38: '待使用',
+			40: '交易完成',
+			0: '交易关闭',
 		}
 	}
 	if (array[value]) {

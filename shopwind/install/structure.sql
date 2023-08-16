@@ -1196,14 +1196,13 @@ CREATE TABLE IF NOT EXISTS `swd_order_integral` (
 --
 DROP TABLE IF EXISTS `swd_order_log`;
 CREATE TABLE IF NOT EXISTS `swd_order_log` (
-  `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(10) unsigned NOT NULL DEFAULT '0',
   `operator` varchar(60) DEFAULT '',
-  `order_status` varchar(60) DEFAULT '',
-  `changed_status` varchar(60) DEFAULT '',
+  `status` varchar(60) DEFAULT '',
   `remark` varchar(255) DEFAULT NULL,
-  `log_time` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`log_id`),
+  `created` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

@@ -15,10 +15,10 @@ use Yii;
 use yii\base\Model; 
 
 use common\models\OrderModel;
+use common\models\OrderLogModel;
 use common\models\DepositTradeModel;
 use common\models\UserModel;
 use common\models\IntegralModel;
-use common\models\OrderLogModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -67,18 +67,11 @@ class Buyer_orderCancelForm extends Model
 			OrderModel::changeStock('+', $order_id);
 				
 			// 记录订单操作日志
-			$model = new OrderLogModel();
-			$model->order_id = $order_id;
-			$model->operator = addslashes(Yii::$app->user->identity->username);
-			$model->order_status = Def::getOrderStatus($orderInfo['status']);
-			$model->changed_status = Def::getOrderStatus(Def::ORDER_CANCELED);
-			$model->remark = $post->remark ? $post->remark : $post->cancel_reason;
-			$model->log_time = Timezone::gmtime();
-			$model->save();
-			
+			OrderLogModel::create($order_id, Def::ORDER_FINISHED, addslashes(Yii::$app->user->identity->username), $post->remark ? $post->remark : $post->cancel_reason);
+
 			// 发送给卖家订单取消通知
 			if($sendNotify === true) {
-				$mailer = Basewind::getMailer('toseller_cancel_order_notify', ['order' => $orderInfo, 'reason' => $model->remark]);
+				$mailer = Basewind::getMailer('toseller_cancel_order_notify', ['order' => $orderInfo, 'reason' => $post->cancel_reason]);
 				if($mailer && ($toEmail = UserModel::find()->select('email')->where(['userid' => $orderInfo['seller_id']])->scalar())) {
 					$mailer->setTo($toEmail)->send();
 				}

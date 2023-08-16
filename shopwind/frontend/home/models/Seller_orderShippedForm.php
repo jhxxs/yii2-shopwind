@@ -78,14 +78,8 @@ class Seller_orderShippedForm extends Model
 
 		DepositTradeModel::updateAll(['status' => 'SHIPPED'], ['bizOrderId' => $orderInfo['order_sn'], 'bizIdentity' => Def::TRADE_ORDER, 'seller_id' => $orderInfo['seller_id']]);
 
-		$model = new OrderLogModel();
-		$model->order_id = $orderInfo['order_id'];
-		$model->operator = addslashes(Yii::$app->user->identity->username);
-		$model->order_status = Def::getOrderStatus($orderInfo['status']);
-		$model->changed_status = Def::getOrderStatus(Def::ORDER_SHIPPED);
-		$model->remark = $post->remark ? $post->remark : '';
-		$model->log_time = Timezone::gmtime();
-		$model->save();
+		// 记录订单操作日志
+		OrderLogModel::create( $orderInfo['order_id'], Def::ORDER_SHIPPED, addslashes(Yii::$app->user->identity->username), $post->remark);
 
 		if ($sendNotify === true) {
 			// 短信和邮件提醒： 卖家已发货通知买家

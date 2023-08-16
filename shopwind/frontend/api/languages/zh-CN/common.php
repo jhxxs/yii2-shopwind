@@ -51,12 +51,13 @@ return array(
 	'RECHARGECARD'		=> '充值卡',
 	
 	// 针对交易的状态
-	'TRADE_PENDING'				=> '待买家付款',
-	'TRADE_ACCEPTED'    		=> '买家已付款',
-	'TRADE_SHIPPED'				=> '商家已发货',
+	'TRADE_PENDING'				=> '待付款',
+	'TRADE_ACCEPTED'    		=> '待发货',
+	'TRADE_SHIPPED'				=> '待收货',
+	'TRADE_USING'				=> '待使用',
 	'TRADE_SUCCESS'				=> '交易完成',
 	'TRADE_CLOSED'				=> '交易关闭',
-	'TRADE_VERIFY' 				=> '待平台审核',
+	'TRADE_VERIFY' 				=> '待审核',
 
 	
 	// 针对退款的状态
@@ -65,6 +66,22 @@ return array(
 	'REFUND_WAIT_SELLER_AGREE'		=> '买家申请退款，等待商家同意',
 	'REFUND_SELLER_REFUSE_BUYER'	=> '商家拒绝退款，等待买家修改中',
 	'REFUND_WAIT_SELLER_CONFIRM'	=> '退款申请等待商家确认中',
+
+	// 针对订单状态
+	'order_pending'     => '待付款',
+	'order_teaming'		=> '待成团',
+    'order_accepted'    => '待发货',
+	'order_picking'		=> '待配送',
+	'order_delivered'	=> '待取货',
+    'order_canceled'    => '交易关闭',
+    'order_shipped'     => '待收货',
+	'order_using'		=> '待使用',
+    'order_finished'    => '交易完成',
+	'order_success'		=> '交易完成',
+	'order_closed'		=> '交易关闭',
+	'order_submited'	=> '已下单',
+	'order_ispayed'		=> '已付款',
+	'order_received'	=> '已收货',
 
 	'has_apply_refund'			=> '已申请退款',
 	'party_apply_refund'		=> '对方已申请退款',

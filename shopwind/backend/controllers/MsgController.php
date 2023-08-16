@@ -78,7 +78,7 @@ class MsgController extends \common\base\BaseAdminController
 	}
 
 	/**
-	 * 短信充值记录
+	 * 短信充值记录（线下）
 	 */
 	public function actionRecharge()
 	{

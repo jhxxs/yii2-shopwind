@@ -15,6 +15,7 @@ use yii;
 use yii\helpers\ArrayHelper;
 
 use common\models\OrderModel;
+use common\models\OrderLogModel;
 use common\models\OrderGoodsModel;
 use common\models\OrderExtmModel;
 use common\models\CartModel;
@@ -136,37 +137,52 @@ class BaseOrder
 	}
 
 	/**
+	 * 插入订单操作日志
+	 */
+	public function insertOrderLog($order_id = 0)
+	{
+		return OrderLogModel::create($order_id, Def::ORDER_PENDING);
+	}
+
+	/**
 	 * 插入订单相关信息
 	 * @return int $insertFail 插入失败数
 	 * @return array $result 包含店铺和订单号的数组
 	 */
 	public function insertOrderData($base_info = [], $goods_info = [], $consignee_info = [])
 	{
-		$insertFail = 0;
 		$result = [];
+		$fails = [];
 		foreach ($base_info as $store_id => $store) {
 			if (!($order_id = $this->insertOrder($base_info[$store_id]))) {
-				$insertFail++;
 				$this->errors = Language::get('create_order_failed');
 				break;
 			}
+
 			if (!($this->insertOrderGoods($order_id, $goods_info['orderList'][$store_id]))) {
-				$insertFail++;
+				$fails[] = $order_id;
 				$this->errors = Language::get('create_order_failed');
 				break;
 			}
 			// tips: 虚拟商品没有收货人信息
 			if ($consignee_info && !($this->insertOrderExtm($order_id, $consignee_info[$store_id]))) {
-				$insertFail++;
+				$fails[] = $order_id;
 				$this->errors = Language::get('create_order_failed');
 				break;
 			}
+			if (!($this->insertOrderLog($order_id))) {
+				$fails[] = $order_id;
+				$this->errors = Language::get('create_order_failed');
+				break;
+			}
+
 			$result[$store_id] = $order_id;
 		}
 
 		// 考虑合并付款的情况下（优惠，积分抵扣等问题），必须保证本批次的所有订单都插入成功，要不都删除本次订单
-		if ($insertFail > 0) {
-			$this->deleteOrderData($result);
+		$fails = array_unique($fails);
+		if (count($fails) > 0) {
+			$this->deleteOrderData($fails);
 			return false;
 		}
 
@@ -183,6 +199,7 @@ class BaseOrder
 			OrderModel::deleteAll(['order_id' => $order_id]);
 			OrderGoodsModel::deleteAll(['order_id' => $order_id]);
 			OrderExtmModel::deleteAll(['order_id' => $order_id]);
+			OrderLogModel::deleteAll(['order_id' => $order_id]);
 		}
 	}
 
@@ -267,7 +284,7 @@ class BaseOrder
 	{
 		$post = ArrayHelper::toArray($this->post);
 		if (!isset($post['region_id'])) $post['region_id'] = 0;
-		
+
 		if (($address = $this->getAddressInfo($post['addr_id'], $post['region_id']))) {
 			$post = array_merge($post, $address);
 		}

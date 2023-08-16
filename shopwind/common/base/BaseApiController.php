@@ -29,4 +29,14 @@ class BaseApiController extends BaseController
 	 * 关闭CSRF验证
 	 */
 	public $enableCsrfValidation = false;
+
+	/**
+	 * 初始化
+	 * @var array $params 传递给视图的公共参数
+	 */
+	public function init()
+	{
+		parent::init();
+		$this->params = [];
+	}
 }

@@ -21,7 +21,6 @@ use common\models\IntegralModel;
 use common\models\GoodsStatisticsModel;
 use common\models\TeambuyLogModel;
 
-use common\library\Language;
 use common\library\Timezone;
 use common\library\Def;
 
@@ -76,14 +75,7 @@ class Taskqueue
 			OrderModel::changeStock('+', $orderInfo['order_id']);
 
 			// 记录订单操作日志
-			$model = new OrderLogModel();
-			$model->order_id = $orderInfo['order_id'];
-			$model->operator = Language::get('system');
-			$model->order_status = Def::getOrderStatus($orderInfo['status']);
-			$model->changed_status = Def::getOrderStatus(Def::ORDER_CANCELED);
-			$model->remark = '';
-			$model->log_time = Timezone::gmtime();
-			$model->save();
+			OrderLogModel::create($orderInfo['order_id'], Def::ORDER_CANCELED);
 		}
 	}
 
@@ -123,14 +115,7 @@ class Taskqueue
 			}
 
 			// 记录订单操作日志 
-			$query = new OrderLogModel();
-			$query->order_id = $orderInfo['order_id'];
-			$query->operator = Language::get('system');
-			$query->order_status = Def::getOrderStatus($orderInfo['status']);
-			$query->changed_status = Def::getOrderStatus(Def::ORDER_FINISHED);
-			$query->remark = '';
-			$query->log_time = Timezone::gmtime();
-			$query->save();
+			OrderLogModel::create($orderInfo['order_id'], Def::ORDER_FINISHED);
 
 			// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
 			$depopay_type    = \common\library\Business::getInstance('depopay')->build('sellgoods');
@@ -165,8 +150,15 @@ class Taskqueue
 		foreach ($list as $model) {
 			$model->status = 1;
 			if ($model->save()) {
-				// 从待成团状态设置为待发货状态
-				OrderModel::updateAll(['status' => Def::ORDER_ACCEPTED], ['status' => Def::ORDER_TEAMING, 'order_id' => $model->order_id]);
+
+				$query = OrderModel::find()->select('gtype')->where(['order_id' => $model->order_id])->one();
+				list($status) = self::getNextStatus($query->gtype);
+
+				// 订单操作日志
+				OrderLogModel::create($model->order_id, $status);
+
+				// 从待成团状态设置为待发货(待使用)
+				OrderModel::updateAll(['status' => $status], ['status' => Def::ORDER_TEAMING, 'order_id' => $model->order_id]);
 			}
 		}
 	}
@@ -192,5 +184,19 @@ class Taskqueue
 		$query->andWhere("ship_time + {$interval} < {$today}")->andWhere(['o.status' => $status]);
 
 		return $query;
+	}
+
+	/**
+	 * 针对服务类商品订单，下一个状态是：待使用
+	 * 其他类型订单，下一个状态是：待发货
+	 */
+	private static function getNextStatus($gtype = 'normal')
+	{
+		// 如果是服务类商品，则下一个状态是待使用
+		if ($gtype == 'service') {
+			return [Def::ORDER_USING, 'USING'];
+		}
+
+		return [Def::ORDER_ACCEPTED, 'ACCEPTED'];
 	}
 }

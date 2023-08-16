@@ -15,6 +15,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 
 use common\models\OrderModel;
+use common\models\OrderLogModel;
 use common\models\OrderGoodsModel;
 use common\models\OrderExtmModel;
 use common\models\DepositTradeModel;
@@ -27,6 +28,7 @@ use common\library\Business;
 use common\library\Plugin;
 use common\library\Page;
 use common\library\Def;
+use common\library\Timezone;
 
 use frontend\api\library\Respond;
 use frontend\api\library\Formatter;
@@ -477,6 +479,40 @@ class OrderController extends \common\base\BaseApiController
 		}
 
 		return $respond->output(true, null, $record);
+	}
+
+	/**
+	 * 获取订单状态时间线
+	 */
+	public function actionTimeline()
+	{
+		// 验证签名
+		$respond = new Respond();
+		if (!$respond->verify(true)) {
+			return $respond->output(false);
+		}
+
+		// 业务参数
+		$post = Basewind::trimAll($respond->getParams(), true, ['order_id']);
+		$post->order_id = $this->getOrderId($post);
+
+		if (!$post->order_id) {
+			return $respond->output(Respond::PARAMS_INVALID, Language::get('order_id_sn_empty'));
+		}
+
+		if (!($list = OrderLogModel::find()->select('status,created')->where(['order_id' => $post->order_id])->orderBy(['id' => SORT_DESC])->all())) {
+			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_order'));
+		}
+
+		$result = [];
+		foreach ($list as $value) {
+			$result[] = [
+				'label' => $value->status,
+				'time' => Timezone::localDate('Y-m-d H:i:s', $value->created)
+			];
+		}
+
+		return $respond->output(true, null, $result);
 	}
 
 	/**

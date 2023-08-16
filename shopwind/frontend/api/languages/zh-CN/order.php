@@ -25,8 +25,6 @@ return array(
 	'order_for_fullperfer_decrease'	=> '购物满<em class="f60">%s</em>元，享减价%s元',
 	'free_amount_ship_title'        => '购物满%s元包邮',
 	'free_acount_ship_title'        => '购物满%s件包邮',
-	'order_pending' 				=> '等待买家付款',
-	'order_canceled'				=> '交易关闭',
 	'cannot_evaluate'				=> '该订单不支持评价',
 	'goodstype_invalid'				=> '实物商品和虚拟服务类商品不能同时结算',
 	'writeoff_invalid'				=> '没有权限核销该订单',

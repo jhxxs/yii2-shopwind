@@ -68,18 +68,11 @@ class Seller_orderCancelForm extends Model
 			OrderModel::changeStock('+', $order_id);
 				
 			// 记录订单操作日志
-			$model = new OrderLogModel();
-			$model->order_id = $order_id;
-			$model->operator = addslashes(Yii::$app->user->identity->username);
-			$model->order_status = Def::getOrderStatus($orderInfo['status']);
-			$model->changed_status = Def::getOrderStatus(Def::ORDER_CANCELED);
-			$model->remark = $post->remark ? $post->remark : $post->reason;
-			$model->log_time = Timezone::gmtime();
-			$model->save(false);
+			OrderLogModel::create($order_id, Def::ORDER_CANCELED, addslashes(Yii::$app->user->identity->username), $post->remark ? $post->remark : $post->reason);
 			
 			// 发送给买家订单取消通知
 			if($sendNotify === true) {
-				$mailer = Basewind::getMailer('tobuyer_cancel_order_notify', ['order' => $orderInfo, 'reason' => $model->remark]);
+				$mailer = Basewind::getMailer('tobuyer_cancel_order_notify', ['order' => $orderInfo, 'reason' => $post->reason]);
 				if($mailer && ($toEmail = UserModel::find()->select('email')->where(['userid' => $orderInfo['seller_id']])->scalar())) {
 					$mailer->setTo($toEmail)->send();
 				}

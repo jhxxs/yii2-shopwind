@@ -18,10 +18,8 @@
                     <div class="round-edge pd10 bgf mt20">
                         <p class="mt5 mb5 pl10 pr10 bold">
                             <span
-                                :class="[trade.status == 'SUCCESS' ? 'f-blue' : (trade.status == 'CLOSED' ? 'f-gray' : '')]">{{
-                                        translator(trade.status,
-                                            'trade')
-                                }}</span>
+                                :class="[trade.status == 'SUCCESS' ? 'f-blue' : (trade.status == 'CLOSED' ? 'f-gray' : '')]">
+                                {{ translator(trade.status, 'trade') }}</span>
                         </p>
                     </div>
                     <div class="round-edge pd10 bgf mt20">
@@ -31,7 +29,7 @@
                                 <el-col :span="12">消费名称：{{ truncate(trade.title, 30) }}</el-col>
                                 <el-col :span="12">交易编号：{{ trade.tradeNo }}</el-col>
                                 <el-col :span="12">交易金额：<span class="f-red f-yahei">{{
-                                        currency(trade.amount)
+                                    currency(trade.amount)
                                 }}</span></el-col>
                                 <el-col :span="12">支付方式：{{ trade.payment_name }}</el-col>
                                 <el-col :span="12">商户交易号：{{ trade.bizOrderId || '-' }}</el-col>
@@ -54,7 +52,7 @@
                                     </el-col>
                                     <el-col :span="20" class="l-h20">
                                         <router-link :to="'/goods/detail/' + item.goods_id" class="rlink line-clamp-2">{{
-                                                item.goods_name
+                                            item.goods_name
                                         }}</router-link>
                                         <p v-if="item.specification" class="f-gray">{{ item.specification }}</p>
                                         <p class="mt5 f-red">{{ currency(item.price) }} x {{ item.quantity }}</p>

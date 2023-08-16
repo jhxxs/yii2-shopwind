@@ -152,24 +152,26 @@ return array(
     'if_recommended'    =>  '是否推荐',
     'view'          => '查看',
 
-	'order_pending'     => '待买家付款',
+	'order_pending'     => '待付款',
 	'order_teaming'		=> '待成团',
-    'order_accepted'    => '买家已付款',
+    'order_accepted'    => '待发货',
 	'order_picking'		=> '待配送',
 	'order_delivered'	=> '待取货',
+	'order_using'		=> '待使用',
     'order_canceled'    => '交易关闭',
-    'order_shipped'     => '商家已发货',
+    'order_shipped'     => '待收货',
     'order_finished'    => '交易完成',
 	'order_success'		=> '交易完成',
 	'order_closed'		=> '交易关闭',
 	
 	// 针对交易的状态
-	'TRADE_PENDING'				=> '待买家付款',
-	'TRADE_ACCEPTED'    		=> '买家已付款',
-	'TRADE_SHIPPED'				=> '商家已发货',
+	'TRADE_PENDING'				=> '待付款',
+	'TRADE_ACCEPTED'    		=> '待发货',
+	'TRADE_SHIPPED'				=> '待收货',
+	'TRADE_USING'				=> '待使用',
 	'TRADE_SUCCESS'				=> '交易完成',
 	'TRADE_CLOSED'				=> '交易关闭',
-	'TRADE_VERIFY' 				=> '待平台审核',
+	'TRADE_VERIFY' 				=> '待审核',
 	
 	// 交易类型
 	'PAY'				=> '在线支付',

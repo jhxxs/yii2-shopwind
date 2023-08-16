@@ -365,15 +365,15 @@
 								<strong class="f-16">其他设置</strong>
 							</el-form-item>
 							<el-form-item label="是否推荐" :label-width="100">
-								<el-switch v-model="goods.recommended" active-value="1" inactive-value="0" />
+								<el-switch v-model="goods.recommended" :active-value="1" :inactive-value="0" />
 								<span class="f-gray f-13 ml10">将有机会在首页显示</span>
 							</el-form-item>
 							<el-form-item label="是否新品" :label-width="100">
-								<el-switch v-model="goods.isnew" active-value="1" inactive-value="0" />
+								<el-switch v-model="goods.isnew" :active-value="1" :inactive-value="0" />
 								<span class="f-gray f-13 ml10">在移动端显示新款标</span>
 							</el-form-item>
 							<el-form-item label="是否上架" :label-width="100">
-								<el-switch v-model="goods.if_show" active-value="1" inactive-value="0" />
+								<el-switch v-model="goods.if_show" :active-value="1" :inactive-value="0" />
 								<span class="f-gray f-13 ml10">发布后立即上架销售</span>
 							</el-form-item>
 							<el-form-item :label-width="100">
@@ -606,7 +606,6 @@ const fileUpload = (file, field, index) => {
 		})
 	}
 	else {
-		if (field == 'video') params.folder = 'goods/long/'
 		uploadFile(file.raw, Object.assign(params, field == 'video' ? { archived: 2, folder: 'video/' } : {}), (data) => {
 			if (!isNaN(parseInt(index)) && isFinite(index)) {
 				goods[field][index] = data.fileUrl

@@ -81,14 +81,8 @@ class Buyer_orderConfirmForm extends Model
 		}
 
 		// 记录订单操作日志 
-		$query = new OrderLogModel();
-		$query->order_id = $orderInfo['order_id'];
-		$query->operator = addslashes(Yii::$app->user->identity->username);
-		$query->order_status = Def::getOrderStatus($orderInfo['status']);
-		$query->changed_status = Def::getOrderStatus(Def::ORDER_FINISHED);
-		$query->remark = Language::get('buyer_confirm');
-		$query->log_time = Timezone::gmtime();
-		$query->save();
+		OrderLogModel::create($orderInfo['order_id'], Language::get('order_received'));
+		OrderLogModel::create($orderInfo['order_id'], Def::ORDER_FINISHED, addslashes(Yii::$app->user->identity->username), Language::get('buyer_confirm'));
 
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
 		$depopay_type = \common\library\Business::getInstance('depopay')->build('sellgoods', $post);

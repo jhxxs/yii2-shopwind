@@ -17,6 +17,7 @@ use common\models\DepositSettingModel;
 use common\models\DistributeModel;
 use common\models\GuideshopModel;
 use common\models\OrderGoodsModel;
+use common\models\OrderLogModel;
 use common\models\IntegralModel;
 use common\models\GoodsStatisticsModel;
 
@@ -109,6 +110,10 @@ class CodpayDepopay extends OutlayDepopay
 
 		// 将确认的商品状态设置为 交易完成
 		OrderGoodsModel::updateAll(['status' => 'SUCCESS'], ['order_id' => $extra_info['order_id']]);
+
+		// 订单操作日志
+		OrderLogModel::change($extra_info['order_id'], Language::get('order_ispayed'));
+		OrderLogModel::create($extra_info['order_id'], Def::ORDER_FINISHED);
 
 		// 更新累计销售件数
 		foreach (OrderGoodsModel::find()->select('goods_id,quantity')->where(['order_id' => $extra_info['order_id']])->all() as $query) {

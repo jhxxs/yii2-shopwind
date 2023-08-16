@@ -69,6 +69,11 @@ class BaseSms extends BasePlugin
 	public $signName;
 
 	/**
+	 * 短信模板ID
+	 */
+	public $templateId;
+
+	/**
 	 * 一天内允许某个手机号发送的短信数量
 	 */
 	private $dayTimes = 10;
@@ -236,7 +241,7 @@ class BaseSms extends BasePlugin
 			'toseller_finish_notify', 				// 买家已确认通知卖家
 			'toseller_refund_apply_notify', 		// 买家退款申请，通知卖家
 			'tobuyer_refund_agree_notify', 			// 卖家同意退款成功，通知买家
-			'tobuyer_deliver_notify'				// 货已到门店可以取货，通知买家
+			'tobuyer_deliver_notify'				// 货到门店可以取货，通知买家
 		];
 		if ($all) {
 			$array = array_merge(

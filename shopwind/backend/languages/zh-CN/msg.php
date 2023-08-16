@@ -7,7 +7,7 @@ return array(
 	'content_no_null' => '短信内容不能为空',
 	'phone_desc' => '手机号码错误',
 	'sendmsg' => '发送短信',
-	'sendtest'=> '测试发送',
+	'sendtest' => '测试发送',
 	'touser_sendcode_verify' => '用户发送验证短信',
 	'touser_register_verify' => '用户注册短信验证',
 	'touser_findpassword_verify' => '找回密码短信验证',
@@ -17,6 +17,8 @@ return array(
 	'toseller_finish_notify' => '买家收货通知卖家',
 	'toseller_refund_apply_notify' => '买家退款通知卖家',
 	'tobuyer_refund_agree_notify' => '退款成功通知买家',
+	'tobuyer_deliver_notify' => '门店取货通知买家',
+
 	'set_ok' => '设置成功',
 	'to_user' => '短信发送者',
 	'receiver' => '接收者手机号',
@@ -31,7 +33,7 @@ return array(
 	'send_failed' => '发送失败',
 	'send_success' => '发送成功',
 	'add_time' => '添加时间',
-	
+
 	'msgrecharge' => '充值记录',
 	'msgtemplate' => '短信模板',
 	'msguser' => '短信用户',
@@ -58,7 +60,7 @@ return array(
 	'template_id_desc' => '网建短信通平台无需填写',
 	'template_content' => '短信模板内容',
 	'template_content_desc' => '如果是阿里云通信平台，模板内容必须与阿里云后台填写的完全一致！',
-	'addtemplate' =>'新增短信模板',
+	'addtemplate' => '新增短信模板',
 	'sms_type' => '短信场景',
 
 	'no_such_smsplat' => '请选择短信平台',
