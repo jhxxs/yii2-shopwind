@@ -136,6 +136,7 @@ class UserController extends \common\base\BaseApiController
 			return $respond->output(Respond::CURD_FAIL, Language::get('user_update_fail'));
 		}
 		$record = UserModel::find()->select('userid,username,nickname,real_name,phone_mob,email,gender,portrait,birthday,im_qq')->where(['userid' => $model->userid])->asArray()->one();
+		$record['portrait'] = Formatter::path($record['portrait'], 'portrait');
 
 		return $respond->output(true, null, $record);
 	}

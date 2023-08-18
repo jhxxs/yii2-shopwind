@@ -181,7 +181,7 @@ class GoodsForm extends Model
 
 			// （移动端商家版）为了数据一致，覆盖PC端详情字段
 			if (isset($post->content)) {
-				$model->description = $this->getGoodsHtml($model->content, $images);
+				$model->description = $this->getGoodsHtml($post->content, $images);
 			}
 			$model->save();
 		}
@@ -413,7 +413,7 @@ class GoodsForm extends Model
 			$html .= '<img src="' . Page::urlFormat($value) . '">';
 		}
 
-		return sprintf('<p>%s</p><p>%s</p>', $content ? $content : '', $html);
+		return sprintf('%s<p>%s</p>', $content ? $content : '', $html);
 	}
 
 

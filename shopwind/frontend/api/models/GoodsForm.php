@@ -227,23 +227,6 @@ class GoodsForm extends Model
 		}
 		$result['by_brand'] = $by_brand;
 
-		// 按价格统计
-		// $by_price = array();
-		// $priceMin = $this->getConditions($post)->min('g.price');
-		// $priceMax = min($this->getConditions($post)->max('g.price'), 10000);
-		// $priceStep = max(ceil(($priceMax - $priceMin) / 5), 50);
-		// $queryByPrice = $this->getConditions($post)->select("FLOOR((g.price-'{$priceMin}')/{$priceStep}) AS i, count(*) as count")->groupBy('i')->orderBy(['i' => SORT_ASC])->orderBy(['count' => SORT_DESC])->asArray()->all();
-		// foreach($queryByPrice as $key => $val) {
-		// 	$min = $priceMin + $val['i'] * $priceStep;
-		// 	$max = $priceMin + ($val['i'] + 1) * $priceStep;
-		// 	$by_price[] = array(
-		// 		'value' => $min . '-' . $max,
-		// 		'name'  => $min .'-'. $max,
-		// 		'count' => $val['count'],
-		// 	);
-		// }
-		// $result['by_price'] = $by_price;
-
 		// 按属性统计
 		$by_props = [];
 		$queryByProps = $this->getConditions($post)->select('gp.pvs')->andWhere(['<>', 'gp.pvs', ''])->column();
@@ -304,10 +287,6 @@ class GoodsForm extends Model
 		}
 		$result['by_props'] = array_values($by_props);
 
-		// 按地区统计
-		// $by_region = $this->getConditions($post)->select('count(*) as count,s.region_id,s.region_name')->joinWith('store s', false)->andWhere(['>', 's.region_id', 0])->groupBy('s.region_id')->orderBy(['count' => SORT_DESC])->asArray()->all();
-		// $result['by_region'] = $by_region;
-
 		return ['selectors' => $result];
 	}
 
@@ -323,20 +302,7 @@ class GoodsForm extends Model
 		if (!empty($post->brand)) {
 			$filters['brand'] = ['key' => 'brand', 'category' => Language::get('brand'), 'name' => $post->brand, 'value' => $post->brand];
 		}
-		// if ($post->region_id && ($array = RegionModel::find()->select('region_id as value,region_name as name')->where(['region_id' =>  $post->region_id])->asArray()->one())) {
-		// 	$filters['region'] = array_merge(['key' => 'region_id', 'category' => Language::get('region')], $array);
-		// }
-		// if ($post->price) {
-		// 	list($priceMin, $priceMax) = Basewind::trimAll(explode('-', $post->price));
-		// 	if ($priceMin <= 0) {
-		// 		$value = '<=' . $priceMax;
-		// 	} elseif ($priceMax <= 0) {
-		// 		$value = '>=' . $priceMin;
-		// 	} else {
-		// 		$value = $priceMin . '-' . $priceMax;
-		// 	}
-		// 	$filters['price'] = ['key' => 'price', 'category' => Language::get('price'), 'name' => $value, 'value' => $value];
-		// }
+		
 		if ($post->props) {
 			foreach (explode('|', $post->props) as $key => $value) {
 				list($pid, $vid) = explode(':', $value);

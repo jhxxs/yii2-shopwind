@@ -17,18 +17,18 @@ use yii\helpers\ArrayHelper;
 
 use common\models\OrderModel;
 use common\models\OrderGoodsModel;
-use common\models\OrderLogModel;
 use common\models\RefundModel;
 use common\models\DepositTradeModel;
 use common\models\GoodsStatisticsModel;
 use common\models\OrderExtmModel;
+use common\models\OrderLogModel;
+use common\models\GuideshopModel;
 
 use common\library\Basewind;
 use common\library\Language;
 use common\library\Timezone;
 use common\library\Page;
 use common\library\Def;
-use common\library\Business;
 
 use frontend\api\library\Formatter;
 
@@ -79,9 +79,9 @@ class OrderForm extends Model
 		}
 		// 根据订单状态筛选订单
 		if (isset($post->type) && ($status = Def::getOrderStatusTranslator($post->type)) > -1) {
-			// 已收货包含（商家发货，待配送，待取货）
-			if($status == Def::ORDER_SHIPPED) {
-				$query->andWhere(['or', ['o.status' => $status], ['o.status' => Def::ORDER_PICKING], ['o.status' => Def::ORDER_DELIVERED]]);
+			// 待收货包含（已发货，待配送，待取货，待使用）
+			if ($status == Def::ORDER_SHIPPED) {
+				$query->andWhere(['in', 'o.status', [Def::ORDER_SHIPPED, Def::ORDER_PICKING, Def::ORDER_DELIVERED, Def::ORDER_USING]]);
 			} else $query->andWhere(['o.status' => $status]);
 		}
 		// 根据评价状态筛选
@@ -207,20 +207,14 @@ class OrderForm extends Model
 		OrderModel::updateAll(['status' => Def::ORDER_DELIVERED, 'ship_time' => Timezone::gmtime()], ['order_id' => $orderInfo['order_id'], 'guider_id' => Yii::$app->user->id]);
 
 		// 记录订单操作日志
-		$model = new OrderLogModel();
-		$model->order_id = $orderInfo['order_id'];
-		$model->operator = Language::get('system');
-		$model->order_status = Def::getOrderStatus($orderInfo['status']);
-		$model->changed_status = Def::getOrderStatus(Def::ORDER_DELIVERED);
-		$model->remark = '';
-		$model->log_time = Timezone::gmtime();
-		$model->save();
+		OrderLogModel::create($orderInfo['order_id'], Def::ORDER_DELIVERED);
 
-		// 短信提醒： 可以取货通知买家
+		// 短信/邮件提醒： 可以取货通知买家
 		if ($receiver = OrderExtmModel::find()->select('phone_mob')->where(['order_id' => $orderInfo['order_id']])->scalar()) {
+			$orderInfo['shop_name'] = GuideshopModel::find()->select('name as shop_name')->where(['userid' => Yii::$app->user->id])->scalar();
 			Basewind::sendMailMsgNotify(
 				$orderInfo,
-				[],
+				['key' => 'tobuyer_deliver_notify'],
 				['key' => 'tobuyer_deliver_notify', 'receiver' => $receiver]
 			);
 		}
@@ -230,6 +224,7 @@ class OrderForm extends Model
 
 	/**
 	 * 买家确认收货
+	 * 不包含货到付款的收货操作
 	 */
 	public function orderFinished($post, $orderInfo = [])
 	{
@@ -270,14 +265,7 @@ class OrderForm extends Model
 		}
 
 		// 记录订单操作日志 
-		$query = new OrderLogModel();
-		$query->order_id = $model->order_id;
-		$query->operator = addslashes(Yii::$app->user->identity->username);
-		$query->order_status = Def::getOrderStatus($model->status);
-		$query->changed_status = Def::getOrderStatus(Def::ORDER_FINISHED);
-		$query->remark = Language::get('writeoff_confirm');
-		$query->log_time = Timezone::gmtime();
-		$query->save();
+		OrderLogModel::create($model->order_id, Def::ORDER_FINISHED, '', Language::get('writeoff_confirm'));
 
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
 		$depopay_type = \common\library\Business::getInstance('depopay')->build('sellgoods', $post);
@@ -320,14 +308,8 @@ class OrderForm extends Model
 		DepositTradeModel::updateAll(['status' => 'PENDING'], ['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn'], 'buyer_id' => Yii::$app->user->id]);
 
 		// 记录订单操作日志
-		$model = new OrderLogModel();
-		$model->order_id = $orderInfo['order_id'];
-		$model->operator = addslashes(Yii::$app->user->identity->username);
-		$model->order_status = Def::getOrderStatus($orderInfo['status']);
-		$model->changed_status = Def::getOrderStatus($post->status);
-		$model->remark = Language::get('buyer_confirm');
-		$model->log_time = Timezone::gmtime();
-		$model->save();
+		OrderLogModel::create($orderInfo['order_id'], Language::get('order_received'));
+		OrderLogModel::create($orderInfo['order_id'], $post->status, addslashes(Yii::$app->user->identity->username), Language::get('buyer_confirm'));
 
 		return true;
 	}

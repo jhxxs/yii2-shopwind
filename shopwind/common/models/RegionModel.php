@@ -68,7 +68,7 @@ class RegionModel extends ActiveRecord
 	 */
 	public static function getOptions($parent_id = -1, $except = null, $layer = 0, $shown = true, $space = '&nbsp;&nbsp;')
 	{
-		$regions = self::getList($parent_id, $shown);
+		$regions = self::getList($parent_id, $shown, false);
 
 		$tree = new Tree();
 		$tree->setTree($regions, 'region_id', 'parent_id', 'region_name');
