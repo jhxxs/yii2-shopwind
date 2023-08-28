@@ -590,6 +590,7 @@ CREATE TABLE IF NOT EXISTS `swd_distribute_merchant` (
   `name` varchar(100) NOT NULL DEFAULT '',
   `logo` varchar(255) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
+  `remark` varchar(100) DEFAULT NULL,
   `created` int(11) DEFAULT NULL,
   PRIMARY KEY (`dmid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

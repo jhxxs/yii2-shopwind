@@ -238,6 +238,7 @@ class Page
 		if (!empty($config['image'])) {
 			foreach ($config['image'] as $key => $val) {
 				$val = array_merge($imageDefault, $val);
+				if(substr($val['url'], 0, 2) == '//') $val['url'] = 'http:'.$val['url'];
 				$val['url'] = str_replace("https://", "http://", $val['url']); // for https 临时解决方案，不要开启强制https
 				$info = getimagesize($val['url']);
 				$function = 'imagecreatefrom' . image_type_to_extension($info[2], false);

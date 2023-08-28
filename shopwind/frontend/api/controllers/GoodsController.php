@@ -1006,10 +1006,14 @@ class GoodsController extends \common\base\BaseApiController
 			'background' => $background
 		];
 
-		$qrcode = Page::createPoster($config, $path . "poster" . md5($post->page) . ".png");
-		$result['poster'] = str_replace(Yii::getAlias('@public'), Basewind::baseUrl(), $qrcode);
-
-		return $respond->output(true, null, $result);
+		try {
+			$qrcode = Page::createPoster($config, $path . "poster" . md5($post->page) . ".png");
+			$result['poster'] = str_replace(Yii::getAlias('@public'), Basewind::baseUrl(), $qrcode);
+			return $respond->output(true, null, $result);
+			
+		} catch (\Exception $e) {
+			return $respond->output(Respond::HANDLE_INVALID, $e->getMessage());
+		}
 	}
 
 	private function getGuideshop($post)
