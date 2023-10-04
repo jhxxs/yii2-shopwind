@@ -89,7 +89,7 @@ return array (
           ),
         ),
         'txtcolor' => '#000000',
-        'selColor' => '#e23435',
+        'selcolor' => '#e23435',
         'cate_id' => '73',
         'cate_name' => '电脑办公',
         'catebgcolor' => '#000000',

@@ -83,7 +83,7 @@ class CardrechargeDepopay extends IncomeDepopay
 				'seller_id'		=> $trade_info['party_id'],
 				'amount'		=> $trade_info['amount'],
 				'status'		=> 'PENDING',
-				'payment_code'	=> 'RECHARGECARD',
+				'payment_code'	=> 'deposit',
 				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
 				'flow'     		=> $this->_flow,

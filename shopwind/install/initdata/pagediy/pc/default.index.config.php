@@ -120,7 +120,7 @@ return array (
           ),
         ),
         'txtcolor' => '#000000',
-        'selColor' => '#e23435',
+        'selcolor' => '#e23435',
         'cate_id' => '',
         'cate_name' => '',
         'catebgcolor' => '#f80303',

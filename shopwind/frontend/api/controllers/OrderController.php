@@ -466,7 +466,7 @@ class OrderController extends \common\base\BaseApiController
 		}
 
 		// 未核销
-		if ($record['status'] == Def::ORDER_ACCEPTED) {
+		if ($record['status'] == Def::ORDER_USING) {
 			$model = new \frontend\api\models\OrderForm();
 			if (!$model->orderWriteoff($post, $record)) {
 				return $respond->output(Respond::HANDLE_INVALID, $model->errors);
