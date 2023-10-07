@@ -228,7 +228,7 @@ class StoreModel extends ActiveRecord
 	public static function compareIndustry($value = 0)
 	{
 		$name = $value > 0 ? 'high' : ($value < 0 ? 'low' : 'equal');
-		return ['value' => abs($value), 'name' => $name];
+		return ['value' => sprintf("%.3f", abs($value)), 'name' => $name];
 	}
 
 	/**

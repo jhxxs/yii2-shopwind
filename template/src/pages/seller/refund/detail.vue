@@ -61,8 +61,8 @@
                             <div class="pl10 pr10 pt10">
                                 <h3 class="f-14">发货状态</h3>
                                 <el-row class="f-13 f-c55 mt20 mb10">
-                                    <el-col :span="12">配送方式：{{ order.express_company || '-' }}</el-col>
-                                    <el-col :span="12">物流单号：{{ order.express_no || '-' }}</el-col>
+                                    <el-col :span="12">配送方式：{{ order.express.company || '-' }}</el-col>
+                                    <el-col :span="12">物流单号：{{ order.express.number || '-' }}</el-col>
                                     <el-col :span="12">发货时间：{{ order.ship_time || '-' }}</el-col>
                                 </el-row>
                             </div>

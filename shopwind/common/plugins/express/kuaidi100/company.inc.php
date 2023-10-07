@@ -15,7 +15,7 @@ return array(
     'fengwang'          =>    '丰网速运',
     'debangkuaidi'      =>    '德邦快递',
     'debangwuliu'       =>    '德邦物流',
-    'zhongtongkuaiyun'  =>    '中通快',
+    'zhongtongkuaiyun'  =>    '中通快递',
     'annengwuliu'       =>    '安能快运',
     'ewe'               =>    'EWE全球快递',
 );

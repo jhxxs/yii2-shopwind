@@ -62,6 +62,22 @@ export function orderExtm(params, callback, loading) {
 }
 
 /**
+ * 获取订单发货信息
+ * @param {Object} params 
+ * @param {Function} callback 
+ * @param {ElLoading} loading 
+ */
+export function orderExpress(params, callback, loading) {
+	request('order/express', params, (res) => {
+		if (res.code == 0) {
+			if (typeof callback == 'function') {
+				callback(res.data ? res.data : [])
+			}
+		}
+	}, loading)
+}
+
+/**
  * 获取订单物流详情
  * @param {Object} params 
  * @param {Function} callback 
@@ -73,6 +89,8 @@ export function orderLogistic(params, callback, loading) {
 			if (typeof callback == 'function') {
 				callback(res.data)
 			}
+		} else {
+			ElMessage.warning(res.message)
 		}
 	}, loading)
 }
@@ -85,7 +103,6 @@ export function orderLogistic(params, callback, loading) {
  */
 export function orderQrcode(params, callback, loading) {
 	request('order/qrcode', params, (res) => {
-		console.log(res)
 		if (res.code == 0) {
 			if (typeof callback == 'function') {
 				callback(res.data)

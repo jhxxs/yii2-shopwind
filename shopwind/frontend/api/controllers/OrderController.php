@@ -21,6 +21,7 @@ use common\models\OrderExtmModel;
 use common\models\DepositTradeModel;
 use common\models\RefundModel;
 use common\models\RegionModel;
+use common\models\OrderExpressModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -69,7 +70,7 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::PARAMS_INVALID, Language::get('order_id_sn_empty'));
 		}
 
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.express_no,o.express_company,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.receive_time,o.finished_time,o.evaluation_time,o.guider_id,oe.shipping_fee')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.receive_time,o.finished_time,o.evaluation_time,o.guider_id,oe.shipping_fee')
 			->joinWith('orderExtm oe', false)->where(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])
 			->andWhere(['o.order_id' => $post->order_id]);
 
@@ -210,9 +211,10 @@ class OrderController extends \common\base\BaseApiController
 		}
 
 		$result = OrderModel::find()
-			->select('buyer_id,seller_id,status,add_time,pay_time,ship_time,express_no,receive_time,finished_time')
+			->select('status,add_time,pay_time,ship_time,receive_time,finished_time')
 			->where(['order_id' => $post->order_id])
 			->asArray()->one();
+
 		return $respond->output(true, null, $result);
 	}
 
@@ -373,6 +375,30 @@ class OrderController extends \common\base\BaseApiController
 	}
 
 	/**
+	 * 获取订单发货信息
+	 * @api 接口访问地址: http://api.xxx.com/order/exrpess
+	 */
+	public function actionExpress()
+	{
+		// 验证签名
+		$respond = new Respond();
+		if (!$respond->verify(true)) {
+			return $respond->output(false);
+		}
+
+		// 业务参数
+		$post = Basewind::trimAll($respond->getParams(), true, ['order_id']);
+		$post->order_id = $this->getOrderId($post);
+
+		$result = OrderExpressModel::find()->select('code,company,number')
+			->where(['order_id' => $post->order_id])
+			//->asArray()->all(); // 一个订单有多条快递单
+			->asArray()->one();
+
+		return $respond->output(true, null, $result);
+	}
+
+	/**
 	 * 获取订单物流跟踪数据
 	 * @api 接口访问地址: http://api.xxx.com/order/logistic
 	 */
@@ -392,18 +418,22 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::PARAMS_INVALID, Language::get('order_id_sn_empty'));
 		}
 
-		if (!($order = OrderModel::find()->select('order_id,order_sn,express_code,express_no,express_comkey,express_company,buyer_id,seller_id')->where(['and', ['order_id' => $post->order_id], ['>', 'ship_time', 0]])->andWhere(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])->one())) {
+		if (!($order = OrderModel::find()->select('order_id,order_sn,buyer_id,seller_id')->where(['order_id' => $post->order_id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED, Def::ORDER_FINISHED]])->andWhere(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])->one())) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_order'));
 		}
 
 		// 每个订单发货用的快递插件会有不同
-		$model = Plugin::getInstance('express')->build($order->express_code);
-		if (!$model->isInstall(null, true)) {
+		//$model = Plugin::getInstance('express')->build($order->express_code);
+		$model = Plugin::getInstance('express')->autoBuild();
+		if (!$model || !$model->isInstall()) {
 			return $respond->output(Respond::HANDLE_INVALID, Language::get('no_such_express_plugin'));
 		}
 
-		if (($result = $model->submit($post, $order)) === false) {
-			return $respond->output(Respond::HANDLE_INVALID, $model->errors);
+		$result = [];
+		$list = OrderExpressModel::find()->where(['order_id' => $order->order_id])->all();
+		foreach ($list as $value) {
+			$array = $model->submit($post, $value);
+			$result[] = array_merge(ArrayHelper::toArray($order), $array ? $array : []);
 		}
 
 		return $respond->output(true, null, $result);

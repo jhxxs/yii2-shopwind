@@ -18,6 +18,7 @@ use yii\helpers\Json;
 use common\models\OrderModel;
 use common\models\GuideshopModel;
 use common\models\DepositTradeModel;
+use common\models\OrderExpressModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -81,6 +82,11 @@ class OrderController extends \common\base\BaseAdminController
 
 			return Message::warning(Language::get('no_such_order'));
 		}
+
+		if ($order['ship_time'] > 0) {
+			$order['express'] = OrderExpressModel::find()->select('company,number')->where(['order_id' => $post->id])->asArray()->one();
+		}
+
 		if ($order['guider_id'] && ($array = GuideshopModel::find()->select('owner,phone_mob,region_name,address,name,banner')->where(['userid' => $order['guider_id']])->asArray()->one())) {
 			$this->params['guideshop'] = $array;
 		}
@@ -228,7 +234,7 @@ class OrderController extends \common\base\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if ($post->id) $post->id = explode(',', $post->id);
 
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.express_no,o.postscript,o.pay_message,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,o.pay_message,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
 			->joinWith('orderExtm oe', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
 		if (!empty($post->id)) {

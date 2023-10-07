@@ -133,7 +133,7 @@ class SDK
 
 	public function format($data)
 	{
-		return [];
+		return $data;
 	}
 }
 

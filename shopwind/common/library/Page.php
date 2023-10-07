@@ -221,7 +221,7 @@ class Page
 			'fontColor' => '0,0,0', //字体颜色
 			'angle' => 0,
 		);
-		$background = $config['background']; //海报最底层得背景
+		$background = self::replaceHttps($config['background']); //海报最底层得背景
 		//背景方法
 		$backgroundInfo = getimagesize($background);
 		$backgroundFun = 'imagecreatefrom' . image_type_to_extension($backgroundInfo[2], false);
@@ -238,8 +238,7 @@ class Page
 		if (!empty($config['image'])) {
 			foreach ($config['image'] as $key => $val) {
 				$val = array_merge($imageDefault, $val);
-				if(substr($val['url'], 0, 2) == '//') $val['url'] = 'http:'.$val['url'];
-				$val['url'] = str_replace("https://", "http://", $val['url']); // for https 临时解决方案，不要开启强制https
+				$val['url'] = self::replaceHttps($val['url']);
 				$info = getimagesize($val['url']);
 				$function = 'imagecreatefrom' . image_type_to_extension($info[2], false);
 				if ($val['stream']) {   //如果传的是字符串图像流
@@ -289,6 +288,20 @@ class Page
 			imagejpeg($imageRes);     //在浏览器上显示
 			imagedestroy($imageRes);
 		}
+	}
+
+	/**
+	 * 将图片访问地址https修改为http
+	 * 部分php函数不支持https图片（如：getimagesize）
+	 * 注意：（宝塔)Web环境不要开启强制https
+	 */
+	private static function replaceHttps($value)
+	{
+		if (substr($value, 0, 2) == '//') {
+			return 'http:' . $value;
+		}
+
+		return str_replace("https://", "http://", $value);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <template>
-	<blocks :page="route.params.id"></blocks>
+	<blocks v-if="route.params" :page="route.params.id"></blocks>
 </template>
 
 <script setup>

@@ -57,15 +57,15 @@ class WebimController extends \common\base\BaseApiController
 			if ($user = UserModel::find()->select('userid,username,nickname,portrait')->where(['userid' => $value['fromid'] == Yii::$app->user->id ? $value['toid'] : $value['fromid']])->asArray()->one()) {
 				$user['portrait'] = Formatter::path($user['portrait'], 'portrait');
 				$value['to'] = $user;
-			}
 
-			// 获取最后一条信息
-			$record = WebimModel::find()->select('id,fromid,toid,content,created')->where(['or', ['fromid' => $value['fromid'], 'toid' => $value['toid']], ['fromid' => $value['toid'], 'toid' => $value['fromid']]])->orderBy(['id' => SORT_DESC])->asArray()->one();
-			$record['created'] = Timezone::localDate('m/d H:i', $record['created']);
+				// 获取最后一条信息
+				$record = WebimModel::find()->select('id,fromid,toid,content,created')->where(['or', ['fromid' => $value['fromid'], 'toid' => $value['toid']], ['fromid' => $value['toid'], 'toid' => $value['fromid']]])->orderBy(['id' => SORT_DESC])->asArray()->one();
+				$record['created'] = Timezone::localDate('m/d H:i', $record['created']);
 
-			// 获取未读消息数量
-			$record['unreads'] = intval(WebimModel::find()->where(['fromid' => $record['fromid'], 'toid' => Yii::$app->user->id, 'unread' => 1])->sum('unread'));
-			$list[$key] = array_merge($value, $record);
+				// 获取未读消息数量
+				$record['unreads'] = intval(WebimModel::find()->where(['fromid' => $record['fromid'], 'toid' => Yii::$app->user->id, 'unread' => 1])->sum('unread'));
+				$list[$key] = array_merge($value, $record);
+			} else unset($list[$key]);
 		}
 
 		// 使最后发言显示在前面

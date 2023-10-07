@@ -20,9 +20,6 @@
 				<router-link to="/my/address/list"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/address/list' ? 'f-red' : '']">收货地址
 				</router-link>
-				<router-link to="/my/bank/list"
-					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/bank/list' ? 'f-red' : '']">提现设置
-				</router-link>
 				<router-link to="/my/mailbox/list"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/mailbox/list' ? 'f-red' : '']">短消息
 				</router-link>
@@ -42,17 +39,20 @@
 				<router-link to="/deposit/setting/pay"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/deposit/setting/pay' ? 'f-red' : '']">支付设置
 				</router-link>
+				<router-link to="/my/bank/list"
+					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/bank/list' ? 'f-red' : '']">提现设置
+				</router-link>
 				<router-link to="/deposit/trade/list"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/deposit/trade/list' ? 'f-red' : '']">交易记录
 				</router-link>
 				<router-link to="/deposit/trade/record"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/deposit/trade/record' ? 'f-red' : '']">财务明细
 				</router-link>
-				<router-link to="/my/coupon/list"
-					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/coupon/list' ? 'f-red' : '']">优惠券
-				</router-link>
 				<router-link to="/my/integral/list"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/integral/list' ? 'f-red' : '']">我的积分
+				</router-link>
+				<router-link to="/my/coupon/list"
+					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/coupon/list' ? 'f-red' : '']">优惠券
 				</router-link>
 				<router-link to="/my/cashcard/list"
 					:class="['mt5 ml5 mr10 mb10 rlink', curmenu == '/my/cashcard/list' ? 'f-red' : '']">充值卡

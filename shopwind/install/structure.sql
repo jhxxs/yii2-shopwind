@@ -1103,10 +1103,6 @@ CREATE TABLE IF NOT EXISTS `swd_order` (
   `pay_time` int(10) unsigned DEFAULT NULL,
   `pay_message` varchar(255) DEFAULT '',
   `ship_time` int(10) unsigned DEFAULT NULL,
-  `express_code` varchar(20) DEFAULT NULL,
-  `express_no` varchar(50) DEFAULT NULL,
-  `express_comkey` varchar(30) DEFAULT NULL,
-  `express_company` varchar(50) DEFAULT NULL,
   `receive_time` int(10) unsigned DEFAULT NULL,
   `finished_time` int(10) unsigned DEFAULT NULL,
   `goods_amount` decimal(10,2) unsigned DEFAULT '0.00',
@@ -1126,6 +1122,21 @@ CREATE TABLE IF NOT EXISTS `swd_order` (
   PRIMARY KEY (`order_id`),
   KEY `order_sn` (`order_sn`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `swd_order_express`
+--
+DROP TABLE IF EXISTS `swd_order_express`;
+CREATE TABLE IF NOT EXISTS `swd_order_express` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) unsigned NOT NULL,
+  `code` varchar(20) DEFAULT '',
+  `company` varchar(50) DEFAULT '',
+  `number` varchar(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

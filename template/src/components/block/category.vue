@@ -1,6 +1,6 @@
 <template>
     <div class="categorybox"
-        :style="{ '--bgcolor': options.bgcolor || '#ffffff', '--catebgcolor': options.catebgcolor || '#e23435', '--catebodybgcolor': options.catebodybgcolor || 'rgba(0, 0, 0, 0.6)', '--catetxtcolor': options.catetxtcolor || '#ffffff', '--selColor': options.selColor || '#e23435', '--txtcolor': options.txtcolor, '--w': width + 'px', '--width': categories.width + 'px', '--height': categories.height + 'px', '--space': options.space + 'px' }"
+        :style="{ '--bgcolor': options.bgcolor || '#ffffff', '--catebgcolor': options.catebgcolor || '#e23435', '--catebodybgcolor': options.catebodybgcolor || 'rgba(0, 0, 0, 0.6)', '--catetxtcolor': options.catetxtcolor || '#ffffff', '--selcolor': options.selcolor || '#e23435', '--txtcolor': options.txtcolor, '--w': width + 'px', '--width': categories.width + 'px', '--height': categories.height + 'px', '--space': options.space + 'px' }"
         v-loading="loading">
         <div ref="wraper" :class="['wraper relative', (options.showfull == 1 && route.path == '/') ? '' : 'w']">
             <ul class="content flex-middle line-clamp-1">
@@ -158,7 +158,7 @@ watch(() => categories.list, (value) => {
 }
 
 .categorybox .content .item.selected .rlink {
-    color: var(--selColor);
+    color: var(--selcolor);
 }
 
 .categorybox .item.all {

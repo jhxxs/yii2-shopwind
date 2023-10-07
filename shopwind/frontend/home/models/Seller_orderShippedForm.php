@@ -17,6 +17,7 @@ use yii\base\Model;
 use common\models\OrderModel;
 use common\models\DepositTradeModel;
 use common\models\OrderLogModel;
+use common\models\OrderExpressModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -33,21 +34,12 @@ class Seller_orderShippedForm extends Model
 	public $store_id = 0;
 	public $errors = null;
 
-	public function formData($post = null)
-	{
-		if (!$post->order_id || !($orderInfo = OrderModel::find()->alias('o')->select('o.order_id,o.status,order_sn,buyer_id,seller_id,buyer_name,seller_name,express_no,express_comkey,ex.phone_mob')->joinWith('orderExtm ex', false)->where(['o.order_id' => $post->order_id, 'seller_id' => $this->store_id])->andWhere(['in', 'status', [Def::ORDER_ACCEPTED, Def::ORDER_SHIPPED]])->asArray()->one())) {
-			$this->errors = Language::get('no_such_order');
-			return false;
-		}
-		return $orderInfo;
-	}
-
 	/**
 	 * 卖家发货
 	 */
 	public function submit($post = null, $orderInfo = [], $sendNotify = true)
 	{
-		if ($post->express_comkey != 'noneed' && !$post->express_no) {
+		if ($post->code != 'noneed' && !$post->number) {
 			$this->errors = Language::get('express_no_empty');
 			return false;
 		}
@@ -55,20 +47,8 @@ class Seller_orderShippedForm extends Model
 		$model = OrderModel::findOne($orderInfo['order_id']);
 		$model->status = Def::ORDER_SHIPPED;
 
-		if (!$model->express_no) {
+		if (!$model->ship_time) {
 			$model->ship_time = Timezone::gmtime();
-		}
-		$model->express_no = $post->express_no;
-
-		// 取得一个可用的快递跟踪插件
-		if (($expresser = Plugin::getInstance('express')->autoBuild())) {
-			if (!$post->express_comkey) {
-				$this->errors = Language::get('express_company_empty');
-				return false;
-			}
-			$model->express_code = $expresser->getCode();
-			$model->express_comkey = $post->express_comkey;
-			$model->express_company = $expresser->getCompanyName($post->express_comkey);
 		}
 
 		if (!$model->save()) {
@@ -76,15 +56,41 @@ class Seller_orderShippedForm extends Model
 			return false;
 		}
 
+		if ($post->code != 'noneed') {
+
+			// 如果需要支持多条快递单，则拓展此
+			if (!($express = OrderExpressModel::find()->where(['order_id' => $model->order_id])->one())) {
+				$express = new OrderExpressModel();
+				$express->order_id = $model->order_id;
+			}
+
+			// 取得一个可用的快递跟踪插件
+			if (($expresser = Plugin::getInstance('express')->autoBuild())) {
+				if (!$post->code) {
+					$this->errors = Language::get('express_company_empty');
+					return false;
+				}
+				//$express->express_code = $expresser->getCode();
+				$express->company = $expresser->getCompanyName($post->code);
+			}
+
+			$express->code = $post->code;
+			$express->number = $post->number;
+			if (!$express->save()) {
+				$this->errors = $model->errors;
+				return false;
+			}
+		}
+
 		DepositTradeModel::updateAll(['status' => 'SHIPPED'], ['bizOrderId' => $orderInfo['order_sn'], 'bizIdentity' => Def::TRADE_ORDER, 'seller_id' => $orderInfo['seller_id']]);
 
 		// 记录订单操作日志
-		OrderLogModel::create( $orderInfo['order_id'], Def::ORDER_SHIPPED, addslashes(Yii::$app->user->identity->username), $post->remark);
+		OrderLogModel::create($orderInfo['order_id'], Def::ORDER_SHIPPED, addslashes(Yii::$app->user->identity->username), $post->remark);
 
 		if ($sendNotify === true) {
 			// 短信和邮件提醒： 卖家已发货通知买家
 			Basewind::sendMailMsgNotify(
-				$orderInfo,
+				array_merge($orderInfo, ['express_no' => $post->number]),
 				array(
 					'key' 		=> 'tobuyer_shipped_notify',
 					'receiver' 	=> $orderInfo['buyer_id']

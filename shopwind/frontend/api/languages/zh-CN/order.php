@@ -10,7 +10,7 @@ return array(
 	'discount_gt_storeAmount' 	=> '优惠折扣不能大于店铺总价',
 	'integral_gt_amount' 		=> '使用的积分抵扣不能大于订单总价',
 	'no_shipping_methods'       => '该店铺没有配送方式，无法下单',
-	'no_such_express_plugin'	=> '物流插件不存在或已失效',
+	'no_such_express_plugin'	=> '物流插件未配置或已关闭',
 	'invoice_or_company_empty'  => '快递单号或快递公司有误',
 	'create_order_failed'       => '新增订单失败',
 	'no_such_order'				=> '没有该订单',

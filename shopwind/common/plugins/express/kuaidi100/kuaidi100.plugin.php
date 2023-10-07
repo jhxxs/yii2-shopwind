@@ -48,7 +48,7 @@ class Kuaidi100 extends BaseExpress
 	 */
 	public function valid($post = null, $order = null)
 	{
-		if(empty($order->express_comkey) || empty($order->express_no)) {
+		if(empty($order->code) || empty($order->number)) {
 			$this->errors = Language::get('invoice_or_company_empty');
 			return false;
 		}
@@ -81,10 +81,8 @@ class Kuaidi100 extends BaseExpress
 		
 		if($result) {
 			$result = array_merge($result, [
-				'order_id' 	=> $order->order_id, 
-				'order_sn' 	=> $order->order_sn, 
-				'company' 	=> $order->express_company,
-				'number' 	=> $order->express_no, 
+				'company' 	=> $order->company,
+				'number' 	=> $order->number, 
 				'details' 	=> $result['data']
 			]);
 			
@@ -100,7 +98,7 @@ class Kuaidi100 extends BaseExpress
 	private function queryPoll($post = null, $order = null)
 	{
 		$params['customer'] = $this->config['customer'];
-		$params['param'] 	= json_encode(['com' => $order->express_comkey, 'num' => $order->express_no]);
+		$params['param'] 	= json_encode(['com' => $order->code, 'num' => $order->number]);
 		$params['sign'] 	= strtoupper(md5($params['param'] . $this->config['key'] . $this->config['customer']));
 		
 		$result = Basewind::curl($this->gateway, 'post', $params);
@@ -120,8 +118,8 @@ class Kuaidi100 extends BaseExpress
 		$this->gateway = 'http://api.kuaidi100.com/api';
 		
 		$params['id'] 	= $this->config['key'];
-		$params['com'] 	= $order->express_comkey;
-		$params['nu']	= $order->express_no;
+		$params['com'] 	= $order->code;
+		$params['nu']	= $order->number;
 		$params['show'] = 2;
 		$params['muti'] = 1;
 		$params['order']= 'desc';
@@ -142,8 +140,8 @@ class Kuaidi100 extends BaseExpress
 		$this->gateway = 'http://www.kuaidi100.com/applyurl';
 		
 		$params['key']  = $this->config['key'];
-		$params['com'] 	= $order->express_comkey;
-		$params['nu']	= $order->express_no;
+		$params['com'] 	= $order->code;
+		$params['nu']	= $order->number;
 		
 		$result = Basewind::curl($this->gateway.'?'. http_build_query($params));
 		$array = json_decode($result, true);

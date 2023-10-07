@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'sys_notice'        => '系统提示',
     'install_eula'      => '许可协议',
     'install_check'     => '环境检测',
     'install_config'    => '系统配置',

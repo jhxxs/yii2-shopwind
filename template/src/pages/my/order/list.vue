@@ -148,7 +148,7 @@
 								<el-button v-if="scope.row.status == 11" class="mb5" size="small"
 									@click="redirect('/trade/cashier/pay/' + scope.row.bizIdentity.toLowerCase() + '/' + scope.row.bizOrderId)"
 									type="primary">付款</el-button>
-								<router-link v-if="scope.row.express_no" class="rlink f-blue block"
+								<router-link v-if="scope.row.ship_time && scope.row.gtype == 'material'" class="rlink f-blue block"
 									:to="'/my/order/logistic/' + scope.row.order_id">查看物流</router-link>
 								<el-button v-if="scope.row.status == 30 || scope.row.status == 36" type="primary"
 									class="mb5" size="small" @click="finishClick(scope.$index)" plain>确认收货</el-button>

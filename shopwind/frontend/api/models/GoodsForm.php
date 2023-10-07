@@ -221,7 +221,7 @@ class GoodsForm extends Model
 		$result['by_category'] = array_values($by_category);
 
 		// 按品牌统计
-		$by_brand = $this->getConditions($post)->select('count(*) as count,g.brand,b.logo')->joinWith('brand b', false)->andWhere(['b.if_show' => 1])->groupBy('g.brand,b.logo')->orderBy(['count' => SORT_DESC])->asArray()->all();
+		$by_brand = $this->getConditions($post)->select('count(*) as count,g.brand,b.logo')->joinWith('brand b', false)->andWhere(['b.if_show' => 1])->groupBy('g.brand')->orderBy(['count' => SORT_DESC])->asArray()->all();
 		foreach ($by_brand as $key => $value) {
 			$by_brand[$key]['logo'] = Formatter::path($value['logo']);
 		}

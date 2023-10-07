@@ -31,7 +31,7 @@ onMounted(() => {
 				if (data > message.unread) {
 					webimList(null, (res) => {
 						for (let i = 0; i < res.length; i++) {
-							if (res[i].unreads > 0) {
+							if (res[i].unreads > 0 && res[i].to) {
 								message.lastid = res[i].to.userid
 								break
 							}

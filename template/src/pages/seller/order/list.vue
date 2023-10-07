@@ -24,8 +24,7 @@
 									<el-radio-button label="teaming">待成团({{ sells.teaming || 0 }})</el-radio-button>
 									<el-radio-button label="accepted">待发货({{ sells.accepted || 0 }})
 									</el-radio-button>
-									<el-radio-button label="picking">待配送({{ sells.picking || 0 }})</el-radio-button>
-									<el-radio-button label="delivered">待取货({{ sells.delivered || 0 }})
+									<el-radio-button label="shipped">待收货({{ sells.shipped || 0 }})
 									</el-radio-button>
 									<el-radio-button label="finished">交易完成({{ sells.finished || 0 }})
 									</el-radio-button>
@@ -164,7 +163,7 @@
 										修改单号
 									</el-button>
 								</div>
-								<router-link v-if="scope.row.express_no" class="rlink f-blue block"
+								<router-link v-if="scope.row.ship_time && scope.row.gtype == 'material'" class="rlink f-blue block"
 									:to="'/seller/order/logistic/' + scope.row.order_id">查看物流</router-link>
 							</template>
 						</el-table-column>
@@ -180,8 +179,8 @@
 		</el-row>
 	</div>
 
-	<shipped title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]" @close="dialogClose"></shipped>
-	<canceled title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]" @close="dialogClose"></canceled>
+	<shipped v-if="gallery.length > 0" title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]" @close="dialogClose"></shipped>
+	<canceled v-if="gallery.length > 0" title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]" @close="dialogClose"></canceled>
 
 	<myfoot></myfoot>
 </template>
