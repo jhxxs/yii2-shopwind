@@ -30,7 +30,11 @@
                             <div v-if="refund.status != 'SUCCESS' && refund.status != 'CLOSED'" class="mt20 pl10 pr10 mb20">
                                 <el-button @click="cancelClick">取消退款</el-button>
                                 <el-button type="primary" @click="modifyClick">修改退款</el-button>
-                                <el-button type="success" @click="redirect('/webim/chat/'+order.seller_id+'/'+order.seller_id)" plain><el-icon class="mr5"><Service /></el-icon>联系客服</el-button>
+                                <el-button type="success"
+                                    @click="redirect('/webim/chat/' + order.seller_id + '/' + order.seller_id)" plain><el-icon
+                                        class="mr5">
+                                        <Service />
+                                    </el-icon>联系客服</el-button>
                             </div>
                         </div>
                         <div class="round-edge pd10 bgf mt20 gallery">
@@ -75,7 +79,7 @@
                                 </el-row>
                             </div>
                         </div>
-                        <div class="round-edge pd10 bgf mt20">
+                        <div v-if="order.express" class="round-edge pd10 bgf mt20">
                             <div class="pl10 pr10 pt10">
                                 <h3 class="f-14">发货状态</h3>
                                 <el-row class="f-13 f-c55 mt20 mb10">
@@ -120,7 +124,7 @@ import { ref, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { orderRead, orderGoods } from '@/api/order.js'
 import { refundRead, refundLogs } from '@/api/refund.js'
-import { currency, translator,redirect } from '@/common/util.js'
+import { currency, translator, redirect } from '@/common/util.js'
 import { getMoment } from '@/common/moment.js'
 
 import router from '@/router'
@@ -179,5 +183,4 @@ const dialogClose = (value) => {
     background: #5b48a0;
     display: inline-block;
     border-radius: 4px;
-}
-</style>
+}</style>

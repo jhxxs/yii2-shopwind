@@ -1010,10 +1010,10 @@ CREATE TABLE IF NOT EXISTS `swd_message` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_msg`
+-- 表的结构 `swd_sms`
 --
-DROP TABLE IF EXISTS `swd_msg`;
-CREATE TABLE IF NOT EXISTS `swd_msg` (
+DROP TABLE IF EXISTS `swd_sms`;
+CREATE TABLE IF NOT EXISTS `swd_sms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `num` int(10) unsigned DEFAULT '0',
@@ -1025,10 +1025,10 @@ CREATE TABLE IF NOT EXISTS `swd_msg` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_msg_log`
+-- 表的结构 `swd_sms_log`
 --
-DROP TABLE IF EXISTS `swd_msg_log`;
-CREATE TABLE IF NOT EXISTS `swd_msg_log` (
+DROP TABLE IF EXISTS `swd_sms_log`;
+CREATE TABLE IF NOT EXISTS `swd_sms_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(20) NOT NULL,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1047,10 +1047,10 @@ CREATE TABLE IF NOT EXISTS `swd_msg_log` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_msg_template`
+-- 表的结构 `swd_sms_template`
 --
-DROP TABLE IF EXISTS `swd_msg_template`;
-CREATE TABLE IF NOT EXISTS `swd_msg_template` (
+DROP TABLE IF EXISTS `swd_sms_template`;
+CREATE TABLE IF NOT EXISTS `swd_sms_template` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL,
   `scene` varchar(50) NOT NULL,

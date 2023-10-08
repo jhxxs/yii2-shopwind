@@ -13,7 +13,7 @@ namespace common\plugins\sms\smschinese;
 
 use yii;
 
-use common\models\MsgTemplateModel;
+use common\models\SmsTemplateModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -149,7 +149,7 @@ class Smschinese extends BaseSms
         }
         
         // 使用其他平台的短信模板
-		$query = MsgTemplateModel::find()->where(['and', ['scene' => $this->scene], ['!=', 'content', '']])->orderBy(['id' => SORT_DESC])->one();
+		$query = SmsTemplateModel::find()->where(['and', ['scene' => $this->scene], ['!=', 'content', '']])->orderBy(['id' => SORT_DESC])->one();
         return $query ? $query : null;
     }
 }

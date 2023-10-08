@@ -14,7 +14,7 @@ namespace frontend\api\controllers;
 use Yii;
 
 use common\models\UserModel;
-use common\models\MsgModel;
+use common\models\SmsModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -48,7 +48,7 @@ class SmsController extends \common\base\BaseApiController
 		}
 
 		$array = [];
-		if ($record = MsgModel::find()->where(['userid' => Yii::$app->user->id])->asArray()->one()) {
+		if ($record = SmsModel::find()->where(['userid' => Yii::$app->user->id])->asArray()->one()) {
 			$array = explode(',', $record['functions']);
 		}
 
@@ -106,8 +106,8 @@ class SmsController extends \common\base\BaseApiController
 			}
 		}
 
-		if (!($model = MsgModel::find()->where(['userid' => Yii::$app->user->id])->one())) {
-			$model = new MsgModel();
+		if (!($model = SmsModel::find()->where(['userid' => Yii::$app->user->id])->one())) {
+			$model = new SmsModel();
 			$model->userid = Yii::$app->user->id;
 		}
 		$model->state = $post->state ? 1 : 0;

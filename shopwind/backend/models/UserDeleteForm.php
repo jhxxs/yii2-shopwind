@@ -19,7 +19,7 @@ use common\models\UserPrivModel;
 use common\models\BindModel;
 use common\models\IntegralModel;
 use common\models\UserEnterModel;
-use common\models\MsgModel;
+use common\models\SmsModel;
 
 /**
  * @Id UserDeleteForm.php 2018.8.18 $
@@ -56,7 +56,7 @@ class UserDeleteForm extends Model
 				// 删除用户访问记录
 				UserEnterModel::deleteAll(['userid' => $id]);
 				// 删除短信用户
-				MsgModel::deleteAll(['userid' => $id, 'num' => 0]);
+				SmsModel::deleteAll(['userid' => $id, 'num' => 0]);
 			}
 		}
 		return true;

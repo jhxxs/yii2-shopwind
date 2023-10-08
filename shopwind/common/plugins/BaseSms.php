@@ -15,9 +15,9 @@ use yii;
 use yii\helpers\Url;
 
 use common\models\UserModel;
-use common\models\MsgModel;
-use common\models\MsgLogModel;
-use common\models\MsgTemplateModel;
+use common\models\SmsModel;
+use common\models\SmsLogModel;
+use common\models\SmsTemplateModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -93,7 +93,7 @@ class BaseSms extends BasePlugin
 	 */
 	public function insert($quantity = 1, $message = null)
 	{
-		$model = new MsgLogModel();
+		$model = new SmsLogModel();
 		$model->code = $this->code;
 		$model->userid = $this->sender ? $this->sender : 0;
 		$model->receiver = $this->receiver;
@@ -148,7 +148,7 @@ class BaseSms extends BasePlugin
 
 		// 如果是用户发送短信，则检查用户是否有发送短信的权限
 		if ($this->sender > 0 && $this->scene) {
-			$query = MsgModel::find()->where(['userid' => $this->sender])->one();
+			$query = SmsModel::find()->where(['userid' => $this->sender])->one();
 
 			// 短信功能被关闭
 			if (!$query->state) {
@@ -197,7 +197,7 @@ class BaseSms extends BasePlugin
 		$dayBegin = strtotime(Timezone::localDate("Y-m-d 00:00:00", Timezone::gmtime()));
 
 		// 当天已经成功发送的短信条数
-		$query = MsgLogModel::find()->select('add_time')->where(['status' => 1, 'type' => 0, 'code' => $this->code])->andWhere(['receiver' => $this->receiver])
+		$query = SmsLogModel::find()->select('add_time')->where(['status' => 1, 'type' => 0, 'code' => $this->code])->andWhere(['receiver' => $this->receiver])
 			->andWhere(['>=', 'add_time', $dayBegin])->orderBy(['add_time' => SORT_DESC]);
 
 		$count = $query->count();
@@ -270,7 +270,7 @@ class BaseSms extends BasePlugin
 			return false;
 		}
 
-		$query = MsgTemplateModel::find()->where(['code' => $this->code, 'scene' => $this->scene])->one();
+		$query = SmsTemplateModel::find()->where(['code' => $this->code, 'scene' => $this->scene])->one();
 		return $query ? $query : null;
 	}
 
@@ -313,7 +313,7 @@ class BaseSms extends BasePlugin
 	 */
 	public function setSessionByCodekey($verifycodekey = '')
 	{
-		$model = MsgLogModel::find()->select('receiver,verifycode,add_time')->where(['codekey' => $verifycodekey])->one();
+		$model = SmsLogModel::find()->select('receiver,verifycode,add_time')->where(['codekey' => $verifycodekey])->one();
 		if ($verifycodekey && $model) {
 			Yii::$app->session->set('phone_code', md5($model->receiver . $model->verifycode));
 			Yii::$app->session->set('last_send_time_phone_code', $model->add_time + 120);

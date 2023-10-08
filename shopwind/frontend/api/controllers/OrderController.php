@@ -77,6 +77,9 @@ class OrderController extends \common\base\BaseApiController
 		if (!($record = $query->asArray()->one())) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_order'));
 		}
+		if ($record['ship_time']) {
+			$record['express'] = OrderExpressModel::find()->select('number,code,company')->where(['order_id' => $post->order_id])->asArray()->one();
+		}
 		if (($trade = DepositTradeModel::find()->select('tradeNo,bizOrderId,bizIdentity,payType')->where(['bizOrderId' => $record['order_sn'], 'bizIdentity' => Def::TRADE_ORDER])->asArray()->one())) {
 			$record = array_merge($record, $trade);
 			if (($refund = RefundModel::find()->select('refund_sn,status as refund_status')->where(['tradeNo' => $trade['tradeNo']])->andWhere(['!=', 'status', 'CLOSED'])->asArray()->one())) {

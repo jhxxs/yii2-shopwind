@@ -30,7 +30,7 @@ return array(
     'buttons' => array(
         array(
             'label' => Language::get('manage'),
-            'url' => Url::toRoute(['msg/index'])
+            'url' => Url::toRoute(['sms/index'])
         )
     ),
     'config' => array(

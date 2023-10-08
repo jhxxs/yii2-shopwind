@@ -3,8 +3,6 @@
 return array(
 	'colon' => '：',
 	'admin_backend' => '商城后台管理中心',
-	'msg' => '手机短信',
-	'msg_manage' => '手机短信管理',
 	'waybill' => '运单模板',
 	'order_stat' => '订单统计',
 	'batch_del'  => '批量删除',
