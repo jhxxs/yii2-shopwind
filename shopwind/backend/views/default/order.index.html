@@ -68,11 +68,15 @@
       //, size: 'lg'
       , cols: [[
         { type: 'checkbox', fixed: 'left' }
-        , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true, totalRowText: '汇总' }
-        , { field: 'order_sn', title: '订单编号', width: 200 }
+       // , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true, totalRowText: '汇总' }
+        , { field: 'order_sn', title: '订单编号', width: 180, fixed: 'left', totalRowText: '汇总' }
         , {
-          field: 'tradeNo', title: '交易号', width: 200, templet: function (res) {
-            return res.tradeNo ? res.tradeNo : '';
+          field: 'items', title: '订单商品', width: 300, templet: function (res) {
+            var html = '';
+            res.items.forEach(item => {
+              html += item.goods_name + '<br/>';
+            });
+            return html;
           }
         }
         , { field: 'store_name', title: '店铺名称', width: 160 }
@@ -80,6 +84,11 @@
         , { field: 'order_amount', title: '订单金额', width: 125, sort: true, align: 'center', totalRow: true }
         , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center' }
         , { field: 'payment_name', title: '支付方式', width: 120 }
+        , {
+          field: 'tradeNo', title: '交易号', width: 200, templet: function (res) {
+            return res.tradeNo ? res.tradeNo : '';
+          }
+        }
         , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
         , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
         , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }

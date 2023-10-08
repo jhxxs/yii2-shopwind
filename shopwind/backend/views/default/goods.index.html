@@ -1,4 +1,10 @@
 {include file="header.html"}
+<style>
+	.layui-layout-admin .layui-table-cell {
+		height: 50px;
+		line-height: 50px;
+	}
+</style>
 <div id="main">
 	{include file="menus.html"}
 	<div id="rightCon" class="clearfix layui-body">
@@ -75,7 +81,11 @@
 			, cols: [[
 				{ type: 'checkbox', fixed: 'left' }
 				, { field: 'goods_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
-				, { field: 'goods_name', title: '商品名称', width: 400, edit: 'text' }
+				, {
+					field: 'goods_name', title: '商品名称', width: 400, edit: 'text', templet: function (res) {
+						return '<img width="40" height="40" class="inline-block mr5" src="' + res.default_image + '"/>' + res.goods_name;
+					}
+				}
 				, { field: 'price', title: '价格', width: 120 }
 				, { field: 'store_name', title: '店铺名', width: 150 }
 				, { field: 'brand', title: '品牌', width: 125, sort: true, align: 'center' }

@@ -53,7 +53,7 @@ class GoodsController extends \common\base\BaseAdminController
 		}
 		else
 		{
-			$query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,store_id,cate_id,price,brand,if_show,closed,cate_name,add_time,views')
+			$query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,default_image,store_id,cate_id,price,brand,if_show,closed,cate_name,add_time,views')
 				->joinWith('goodsStatistics gst', false);
 			$query = $this->getConditions($post, $query)->orderBy(['goods_id' => SORT_DESC]);
 			
@@ -61,6 +61,7 @@ class GoodsController extends \common\base\BaseAdminController
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value)
 			{
+				$list[$key]['default_image'] = Page::urlFormat($value['default_image'], 'goods');
 				$list[$key]['cate_name'] = GcategoryModel::formatCateName($value['cate_name'], false, ' / ');
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['store_name'] = StoreModel::find()->select('store_name')->where(['store_id' => $value['store_id']])->scalar();

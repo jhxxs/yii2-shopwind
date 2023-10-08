@@ -19,6 +19,7 @@ use common\models\OrderModel;
 use common\models\GuideshopModel;
 use common\models\DepositTradeModel;
 use common\models\OrderExpressModel;
+use common\models\OrderGoodsModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -58,6 +59,7 @@ class OrderController extends \common\base\BaseAdminController
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value) {
+				$list[$key]['items'] = OrderGoodsModel::find()->select('goods_name,goods_image')->where(['order_id' => $value['order_id']])->asArray()->all();
 				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);

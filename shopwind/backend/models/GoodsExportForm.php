@@ -59,8 +59,11 @@ class GoodsExportForm extends Model
 				if(in_array($k, ['if_show', 'closed'])) {
 					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
 				}
+				if($k == 'views') {
+					$value[$k] = intval($value[$k]);
+				}
 	
-				$record_value[$k] = $value[$k] ? $value[$k] : '';
+				$record_value[$k] = $value[$k];
 			}
         	$record_xls[] = $record_value;
     	}
