@@ -40,7 +40,7 @@
 				<div class="round-edge pd10 bgf mt20" v-loading="loading">
 					<el-table :data="gallery" :border="false" :stripe="false">
 						<el-table-column type="selection" />
-						<el-table-column prop="coupon_name" width="150" label="名称" />
+						<el-table-column prop="name" width="150" label="名称" />
 						<el-table-column label="优惠券号码" width="150">
 							<template #default="scope">
 								<strong class="f-price">{{ scope.row.coupon_sn }}</strong>
@@ -48,12 +48,12 @@
 						</el-table-column>
 						<el-table-column label="优惠金额（元）" width="120">
 							<template #default="scope">
-								<strong class="f-price">{{ scope.row.coupon_value }}</strong>
+								<strong class="f-price">{{ scope.row.money }}</strong>
 							</template>
 						</el-table-column>
 						<el-table-column label="购满金额（元）" width="120">
 							<template #default="scope">
-								<strong class="f-price">{{ scope.row.min_amount }}</strong>
+								<strong class="f-price">{{ scope.row.amount }}</strong>
 							</template>
 						</el-table-column>
 						<el-table-column prop="start_time" label="生效时间" width="100" sortable />

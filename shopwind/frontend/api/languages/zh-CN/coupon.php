@@ -11,7 +11,7 @@ return array(
 
 	'coupon_name_required'			=>	'优惠券名不能为空',
 	'coupon_value_not'				=>	'优惠金额不合法',
-	'min_amount_gt_zero'			=> 	'消费满金额必须大于零',
+	'amount_gt_zero'				=> 	'消费满金额必须大于零',
 	'coupon_total_required'			=> 	'发行张数不能为空',
 	'end_gt_start'					=> 	'结束时间不能早于开始时间',
 	'time_invalid'					=>  '开始和结束时间不能为空'

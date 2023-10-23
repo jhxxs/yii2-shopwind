@@ -88,7 +88,7 @@
             if (data.done) {
                 var html = '';
                 $.each(data.retval.list, function (i, item) {
-                    html += sprintf($('.template').html(), item.coupon_id, item.coupon_name, price_format(item.coupon_value), '购满' + item.min_amount + '元可用', (item.total - item.surplus) + '/' + item.surplus, item.end_time, item.store_name);
+                    html += sprintf($('.template').html(), item.id, item.name, price_format(item.money), '购满' + item.amount + '元可用', (item.total - item.surplus) + '/' + item.surplus, item.end_time, item.store_name);
                 });
                 if (html) {
                     $('.J_List').html(html);

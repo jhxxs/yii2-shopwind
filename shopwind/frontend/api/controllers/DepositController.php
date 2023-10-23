@@ -53,10 +53,7 @@ class DepositController extends \common\base\BaseApiController
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true);
 
-		if (!($query = DepositAccountModel::find()->where(['userid' => Yii::$app->user->id])->one())) {
-			$query = DepositAccountModel::createDepositAccount(Yii::$app->user->id);
-		}
-		if (!$query) {
+		if (!($query = DepositAccountModel::getAccountInfo(Yii::$app->user->id))) {
 			return $respond->output(Respond::HANDLE_INVALID, Language::get('handle_exception'));
 		}
 

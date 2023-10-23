@@ -395,7 +395,7 @@ class BaseOrder
 				if (isset($result[$store_id]['coupon_list']) && !empty($result[$store_id]['coupon_list'])) {
 					foreach ($result[$store_id]['coupon_list'] as $key => $value) {
 						if ($coupon_sn == $value['coupon_sn']) {
-							$discount_info['coupon'][$store_id] = array('coupon_value' => $value['coupon_value'], 'coupon_sn' => $coupon_sn);
+							$discount_info['coupon'][$store_id] = array('money' => $value['money'], 'coupon_sn' => $coupon_sn);
 							break;
 						}
 					}
@@ -433,8 +433,8 @@ class BaseOrder
 			$couponDiscount = $fullpreferDiscount = 0;
 
 			// 每个订单的店铺优惠券优惠
-			if (isset($discount_info['coupon'][$store_id]['coupon_value'])) {
-				$couponDiscount = $discount_info['coupon'][$store_id]['coupon_value'];
+			if (isset($discount_info['coupon'][$store_id]['money'])) {
+				$couponDiscount = $discount_info['coupon'][$store_id]['money'];
 				if ($couponDiscount > 0) {
 					// 如果优惠折扣大于订单总价
 					if ($couponDiscount > $storeAmount) {

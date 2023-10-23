@@ -26,22 +26,22 @@ use common\library\Timezone;
  */
 class Seller_couponForm extends Model
 {
-	public $coupon_id = 0;
+	public $id = 0;
 	public $store_id = 0;
 	public $errors = null;
 
 	public function valid($post)
 	{
-		if(!$post->coupon_name) {
+		if(!$post->name) {
 			$this->errors = Language::get('coupon_name_required');
 			return false;
 		}
-		if(!$post->coupon_value || ($post->coupon_value < 0)) {
+		if(!$post->money || ($post->money < 0)) {
 			$this->errors = Language::get('coupon_value_not');
 			return false;
 		}
-		if(!$post->min_amount || ($post->min_amount < 0)) {
-			$this->errors = Language::get('min_amount_gt_zero');
+		if(!$post->amount || ($post->amount < 0)) {
+			$this->errors = Language::get('amount_gt_zero');
 			return false;
 		}
 		if(!$post->total || ($post->total < 0)) {
@@ -65,7 +65,7 @@ class Seller_couponForm extends Model
 		if($valid === true && !$this->valid($post)) {
 			return false;
 		}
-		if(!$this->coupon_id || !($model = CouponModel::find()->where(['coupon_id' => $this->coupon_id, 'store_id' => $this->store_id])->one())) {
+		if(!$this->id || !($model = CouponModel::find()->where(['id' => $this->id, 'store_id' => $this->store_id])->one())) {
 			$model = new CouponModel();
 			$model->store_id = $this->store_id;
 			$model->available = 1;
@@ -74,12 +74,12 @@ class Seller_couponForm extends Model
 			$model->surplus = $post->total;
 		}
 		
-		$model->coupon_name = $post->coupon_name;
-		$model->coupon_value = $post->coupon_value;
+		$model->name = $post->name;
+		$model->money = $post->money;
 		$model->start_time = Timezone::gmstr2time($post->start_time);
 		$model->end_time = stripos($post->end_time, ':') == false ? Timezone::gmstr2time_end($post->end_time) : Timezone::gmstr2time($post->end_time);
-		$model->min_amount = $post->min_amount;
-		$model->clickreceive = isset($post->clickreceive) ? intval($post->clickreceive) : 0;
+		$model->amount = $post->amount;
+		$model->received = isset($post->received) ? intval($post->received) : 0;
 		
 		if(!$model->save()) {
 			$this->errors = $model->errors;

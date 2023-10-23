@@ -421,27 +421,6 @@ function move_favorite(id, type, altMsg) {
 	});
 }
 
-/* 领取优惠券（方便调用）
- * 比如上传一张图片，设置 onclick="couponReceive(coupon_id, $(this));即可领取
- * 如设置：href="javascript:couponReceive(coupon_id, $(this));"  disabled控制无效
- * 比如首页挂件的广告图片，店铺页面的广告图片，都可以设置领取优惠券
- * 实现多处可领券的目的 
- */
-function couponReceive(coupon_id, obj) {
-	if (!obj.hasClass('disabled')) {
-		obj.addClass('disabled');
-		$.getJSON(url(['coupon/receive', { id: coupon_id }]), function (data) {
-			obj.removeClass('disabled');
-
-			if (isMobile()) {
-				layer.open({ content: data.msg, time: 3 });
-			} else {
-				layer.msg(data.msg);
-			}
-		});
-	}
-}
-
 function replace_all(str, s, r) {
 
 	if (typeof str != 'string') return str;

@@ -43,9 +43,19 @@
 				<div class="round-edge pd10 bgf mt20" v-loading="loading">
 					<el-table :data="gallery" :border="false" :stripe="false">
 						<el-table-column type="selection" />
-						<el-table-column prop="refund_sn" label="退款单号" width="130">
+						<el-table-column prop="refund_sn" label="退款单号" width="110">
 							<template #default="scope">
 								<strong>{{ scope.row[scope.column.property] }}</strong>
+							</template>
+						</el-table-column>
+						<el-table-column label="商品信息" width="330">
+							<template #default="scope">
+								<p>
+									{{ scope.row.items[0].goods_name }}
+									<span v-if="scope.row.items.length > 1">等多件</span>
+								</p>
+								<img width="40" height="40" v-for="(item, index) in scope.row.items" :src="item.goods_image"
+									class="inline-block mr5 mt5 pd5 bgf" style="border:1px #f1f1f1 solid;" />
 							</template>
 						</el-table-column>
 						<el-table-column prop="total_fee" label="订单总价" width="120">
@@ -58,7 +68,6 @@
 								{{ currency(scope.row[scope.column.property]) }}
 							</template>
 						</el-table-column>
-						<el-table-column prop="store_name" label="卖家" width="150" sortable />
 						<el-table-column prop="status" label="退款状态" width="150">
 							<template #default="scope">
 								<p class="bold">
@@ -72,6 +81,7 @@
 								</p>
 							</template>
 						</el-table-column>
+						<el-table-column prop="store_name" label="卖家" width="150" sortable />
 						<el-table-column prop="bizOrderId" label="订单编号" width="110" sortable />
 						<el-table-column prop="tradeNo" label="交易号" width="110" sortable />
 						<el-table-column prop="created" label="申请时间" width="100" sortable />
@@ -87,9 +97,8 @@
 					</el-table>
 					<div v-if="pagination.total > 0" class="mt20 mb20">
 						<el-pagination v-model:currentPage="pagination.page" v-model:page-size="pagination.page_size"
-							:page-sizes="[10, 50, 100, 200]" :background="false"
-							layout="total, sizes, prev, pager, next" :total="pagination.total"
-							@size-change="handleSizeChange" @current-change="handleCurrentChange"
+							:page-sizes="[10, 50, 100, 200]" :background="false" layout="total, sizes, prev, pager, next"
+							:total="pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange"
 							:hide-on-single-page="false" class="center" />
 					</div>
 				</div>

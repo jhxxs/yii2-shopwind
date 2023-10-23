@@ -31,7 +31,7 @@ class CouponsnModel extends ActiveRecord
 	// 关联表
 	public function getCoupon()
 	{
-		return parent::hasOne(CouponModel::className(), ['coupon_id' => 'coupon_id']);
+		return parent::hasOne(CouponModel::className(), ['id' => 'coupon_id']);
 	}
 	
 	public static function createRandom( $length = 8 )

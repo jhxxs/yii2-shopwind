@@ -337,20 +337,20 @@ CREATE TABLE IF NOT EXISTS `swd_collect` (
 --
 DROP TABLE IF EXISTS `swd_coupon`;
 CREATE TABLE IF NOT EXISTS `swd_coupon` (
-  `coupon_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `store_id` int(10) unsigned DEFAULT '0',
-  `coupon_name` varchar(100) DEFAULT '',
-  `coupon_value` decimal(10,2) unsigned DEFAULT '0.00',
+  `name` varchar(100) DEFAULT '',
+  `money` decimal(10,2) unsigned DEFAULT '0.00',
   `use_times` int(10) unsigned DEFAULT '0',
   `start_time` int(10) unsigned DEFAULT NULL,
   `end_time` int(10) unsigned DEFAULT NULL,
-  `min_amount` decimal(10,2) unsigned DEFAULT '0.00',
+  `amount` decimal(10,2) unsigned DEFAULT '0.00',
   `available` int(11) DEFAULT '1',
   `image` varchar(255) DEFAULT NULL,
   `total` int(11) DEFAULT '0',
   `surplus` int(11) DEFAULT '0',
-  `clickreceive` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`coupon_id`),
+  `received` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
   KEY `store_id` (`store_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

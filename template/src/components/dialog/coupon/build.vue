@@ -3,18 +3,18 @@
         :destroy-on-close="true" :close-on-click-modal="false" :before-close="close">
         <el-form :inline="true">
             <el-form-item label="优惠券名称" :label-width="85">
-                <el-input v-model="coupon.coupon_name" clearable />
+                <el-input v-model="coupon.name" clearable />
             </el-form-item>
             <el-form-item label="优惠券数量" :label-width="85">
-                <el-input v-model="coupon.total" :disabled="coupon.coupon_id" class="number" style="margin-right:300px;"
+                <el-input v-model="coupon.total" :disabled="coupon.id" class="number" style="margin-right:300px;"
                     clearable />
             </el-form-item>
             <el-form-item label="优惠金额" :label-width="85">
-                <el-input v-model="coupon.coupon_value" class="number" clearable />
+                <el-input v-model="coupon.money" class="number" clearable />
                 <span class="f-13 f-gray ml10">元</span>
             </el-form-item>
             <el-form-item label="购满金额" :label-width="85">
-                <el-input v-model="coupon.min_amount" class="number" clearable />
+                <el-input v-model="coupon.amount" class="number" clearable />
                 <span class="f-13 f-gray ml10">元，单笔订单购满多少金额可用</span>
             </el-form-item>
             <el-form-item label="有效期起" :label-width="85">
@@ -61,7 +61,7 @@ watch(() => props.data, (value) => {
 
 const emit = defineEmits(['close'])
 const submit = () => {
-    if (coupon.value.coupon_id) {
+    if (coupon.value.id) {
         couponUpdate(coupon.value, (data) => {
             ElMessage.success('编辑成功')
             emit('close', coupon.value)

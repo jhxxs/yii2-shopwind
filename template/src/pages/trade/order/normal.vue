@@ -113,7 +113,7 @@
 													<el-option value="0" label="不使用优惠券" />
 													<el-option v-for="(item) in order.coupon_list"
 														:value="item.coupon_sn"
-														:label="item.coupon_name + ' : ' + currency(item.coupon_value)" />
+														:label="item.name + ' : ' + currency(item.money)" />
 												</el-select>
 											</p>
 											<p class="center f-red f-14">
@@ -322,7 +322,7 @@ function couponValue(store_id) {
 	let list = orders.orderList[store_id].coupon_list
 	for (let index in list) {
 		if (list[index].coupon_sn == form.coupon_sn[store_id]) {
-			return parseFloat(list[index].coupon_value)
+			return parseFloat(list[index].money)
 		}
 	}
 	return 0

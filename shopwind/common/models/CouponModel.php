@@ -44,15 +44,15 @@ class CouponModel extends ActiveRecord
 	{
 		$time = Timezone::gmtime();
 		$list = CouponsnModel::find()->alias('sn')
-			->select('sn.coupon_sn,c.coupon_value,c.coupon_name')
-			//->select('sn.coupon_sn as number,c.coupon_value as value,c.coupon_name as name')
+			->select('sn.coupon_sn,c.money,c.name')
+			//->select('sn.coupon_sn as number,c.money as value')
 			->joinWith('coupon c', false)
 			->where(['c.store_id' => $order['store_id'], 'sn.userid' => Yii::$app->user->id])
 			->andWhere(['>=', 'sn.remain_times', 1])
 			->andWhere(['<=', 'c.start_time', $time])
 			->andWhere(['>=', 'c.end_time', $time])
-			->andWhere(['<=', 'c.min_amount', $order['amount']])
-			->orderBy(['c.coupon_value' => SORT_DESC])
+			->andWhere(['<=', 'c.amount', $order['amount']])
+			->orderBy(['c.money' => SORT_DESC])
 			//->indexBy('number')
 			->asArray()->all();
 

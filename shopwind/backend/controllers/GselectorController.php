@@ -137,12 +137,12 @@ class GselectorController extends \common\base\BaseAdminController
 
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
-			$query = CouponModel::find()->alias('c')->select('coupon_id,coupon_name, coupon_value, min_amount, total, surplus, c.end_time, s.store_name')
+			$query = CouponModel::find()->alias('c')->select('id,name, money, amount, total, surplus, c.end_time, s.store_name')
 				->joinWith('store s', false)
-				->where(['clickreceive' => 1, 'available' => 1])
+				->where(['received' => 1, 'available' => 1])
 				->andWhere(['>', 'c.end_time', Timezone::gmtime()])
 				->andWhere(['or', ['total' => 0], ['and', ['>', 'total', 0], ['>', 'surplus', 0]]])
-				->orderBy(['coupon_id' => SORT_DESC]);
+				->orderBy(['id' => SORT_DESC]);
 
 			$page = Page::getPage($query->count(), 5, true, $post->page);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();

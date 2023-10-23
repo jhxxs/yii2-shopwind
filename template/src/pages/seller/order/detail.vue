@@ -46,8 +46,8 @@
                                 }}</el-col>
                                 <el-col :span="12">联系电话：{{ shipping.phone_mob }}</el-col>
                                 <el-col :span="12">发货时间：{{ order.ship_time || '-' }}</el-col>
-                                <el-col :span="12">配送方式：{{ order.express.company || '-' }}</el-col>
-                                <el-col :span="12">物流单号：{{ order.express.number || '-' }}</el-col>
+                                <el-col :span="12" v-if="order.express">配送方式：{{ order.express.company || '-' }}</el-col>
+                                <el-col :span="12" v-if="order.express">物流单号：{{ order.express.number || '-' }}</el-col>
                             </el-row>
                         </div>
                     </div>

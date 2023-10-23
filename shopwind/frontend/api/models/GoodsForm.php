@@ -223,7 +223,6 @@ class GoodsForm extends Model
 		// 按品牌统计
 		$by_brand = $this->getConditions($post)->select('count(*) as count,g.brand,b.logo')->joinWith('brand b', false)->andWhere(['b.if_show' => 1])
 			->groupBy('g.brand,b.logo')->orderBy(['count' => SORT_DESC])->asArray()->all();
-			
 		foreach ($by_brand as $key => $value) {
 			$by_brand[$key]['logo'] = Formatter::path($value['logo']);
 		}

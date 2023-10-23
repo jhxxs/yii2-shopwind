@@ -37,15 +37,15 @@
 					<el-button @click="addClick" type="primary" class="f-13 mb10 ml10 mt5" plain>新增优惠券</el-button>
 					<el-table :data="gallery" :border="false" :stripe="false">
 						<el-table-column type="selection" />
-						<el-table-column prop="coupon_name" width="120" label="名称" />
+						<el-table-column prop="name" width="120" label="名称" />
 						<el-table-column label="金额(元)" width="80">
 							<template #default="scope">
-								<strong class="f-price">{{ scope.row.coupon_value }}</strong>
+								<strong class="f-price">{{ scope.row.money }}</strong>
 							</template>
 						</el-table-column>
 						<el-table-column label="使用条件" width="150">
 							<template #default="scope">
-								<p class="f-price l-h17">单笔订单购满{{ currency(scope.row.min_amount) }}元可用</p>
+								<p class="f-price l-h17">单笔订单购满{{ currency(scope.row.amount) }}元可用</p>
 							</template>
 						</el-table-column>
 						<el-table-column label="已领用/总量" width="160">
@@ -120,8 +120,8 @@ const queryClick = () => {
 const dialogClose = (value) => {
 	dialog.visible = false
 
-	if (value && value.coupon_name) {
-		if (value.coupon_id) {
+	if (value && value.name) {
+		if (value.id) {
 			Object.assign(gallery.value[modifyIndex.value], value)
 		} else gallery.value.unshift(value)
 	}
@@ -129,7 +129,7 @@ const dialogClose = (value) => {
 const addClick = () => {
 	dialog.title = '创建优惠券'
 	dialog.visible = true
-	dialog.data = { clickreceive: 1, total: 100, coupon_value: 10, min_amount: 1000 }
+	dialog.data = { received: 1, total: 100, value: 10, amount: 1000 }
 }
 const modifyClick = (value) => {
 	dialog.title = '编辑优惠券'

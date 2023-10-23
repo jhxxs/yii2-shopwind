@@ -108,8 +108,9 @@ class UserRegisterForm extends Model
 		}
 		$user->generateAuthKey();
 		if ($user->save()) {
+			
 			// 创建资金账户
-			DepositAccountModel::createDepositAccount($user->userid);
+			DepositAccountModel::getAccountInfo($user->userid);
 
 			// 注册送积分
 			IntegralModel::updateIntegral(['userid' => $user->userid, 'type' => 'register_has_integral', 'amount' => IntegralSettingModel::getSysSetting('register')]);

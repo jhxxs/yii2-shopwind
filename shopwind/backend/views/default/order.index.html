@@ -69,7 +69,7 @@
       , cols: [[
         { type: 'checkbox', fixed: 'left' }
        // , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true, totalRowText: '汇总' }
-        , { field: 'order_sn', title: '订单编号', width: 180, fixed: 'left', totalRowText: '汇总' }
+        , { field: 'order_sn', title: '订单编号', width: 200, fixed: 'left', totalRowText: '汇总' }
         , {
           field: 'items', title: '订单商品', width: 300, templet: function (res) {
             var html = '';
@@ -79,7 +79,7 @@
             return html;
           }
         }
-        , { field: 'store_name', title: '店铺名称', width: 160 }
+        , { field: 'store_name', title: '商家', width: 160 }
         , { field: 'buyer_name', title: '买家', width: 150 }
         , { field: 'order_amount', title: '订单金额', width: 125, sort: true, align: 'center', totalRow: true }
         , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center' }

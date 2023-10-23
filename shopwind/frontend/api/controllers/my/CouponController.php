@@ -35,45 +35,44 @@ class CouponController extends \common\base\BaseApiController
 	 * 获取我的优惠券列表
 	 * @api 接口访问地址: http://api.xxx.com/my/coupon/list
 	 */
-    public function actionList()
+	public function actionList()
 	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['page', 'page_size']);
 
-		$query = CouponsnModel::find()->alias('cs')->select('cs.coupon_sn,cs.remain_times,c.coupon_id,c.coupon_name,c.coupon_value,c.start_time,c.end_time,c.min_amount,c.store_id,c.available')
-			->joinWith('coupon c',false)
-			->where(['and', ['>', 'c.coupon_id', 0],['userid' => Yii::$app->user->id]])
-			->orderBy(['available' => SORT_DESC, 'coupon_value' => SORT_DESC, 'coupon_id' => SORT_DESC]);
-		
-		if($post->coupon_sn) {
+		$query = CouponsnModel::find()->alias('cs')->select('cs.coupon_sn,cs.remain_times,c.id,c.name,c.money,c.start_time,c.end_time,c.amount,c.store_id,c.available')
+			->joinWith('coupon c', false)
+			->where(['and', ['>', 'c.id', 0], ['userid' => Yii::$app->user->id]])
+			->orderBy(['available' => SORT_DESC, 'money' => SORT_DESC, 'id' => SORT_DESC]);
+
+		if ($post->coupon_sn) {
 			$query->andWhere(['coupon_sn' => $post->coupon_sn]);
 		}
-		if(isset($post->available) && $post->available != '' && $post->available != null) {
+		if (isset($post->available) && $post->available != '' && $post->available != null) {
 			$query->andWhere(['available' => intval($post->available)]);
 		}
-		if($post->keyword) {
-			$query->andWhere(['like', 'coupon_name', $post->keyword]);
+		if ($post->keyword) {
+			$query->andWhere(['like', 'name', $post->keyword]);
 		}
 		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-		foreach($list as $key => $value)
-		{
-			if($value['store_id']) {
-				if($store = StoreModel::find()->select('store_name,store_logo')->where(['store_id' => $value['store_id']])->asArray()->one()){
+		foreach ($list as $key => $value) {
+			if ($value['store_id']) {
+				if ($store = StoreModel::find()->select('store_name,store_logo')->where(['store_id' => $value['store_id']])->asArray()->one()) {
 					$store['store_logo'] = Formatter::path($store['store_logo'], 'store');
 					$list[$key] += $store;
 				}
 			}
-	
-			if($value['available'] && (($value['remain_times'] < 1) || ($value['end_time'] > 0 && $value['end_time'] < Timezone::gmtime()))) {
+
+			if ($value['available'] && (($value['remain_times'] < 1) || ($value['end_time'] > 0 && $value['end_time'] < Timezone::gmtime()))) {
 				$list[$key]['available'] = 0;
-				CouponModel::updateAll(['available' => 0], ['coupon_id' => $value['coupon_id']]);
+				CouponModel::updateAll(['available' => 0], ['id' => $value['id']]);
 			}
 			unset($list[$key]['remain_times']);
 			$list[$key]['start_time'] = Timezone::localDate('Y-m-d H:i:s', $value['start_time']);
@@ -88,14 +87,14 @@ class CouponController extends \common\base\BaseApiController
 	 * 获取我的优惠券的数量
 	 * @api 接口访问地址: http://api.xxx.com/my/coupon/quantity
 	 */
-    public function actionQuantity()
-    {
+	public function actionQuantity()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true);
 
@@ -103,5 +102,5 @@ class CouponController extends \common\base\BaseApiController
 		$this->params = ['quantity' => $query->count()];
 
 		return $respond->output(true, null, $this->params);
-    }
+	}
 }

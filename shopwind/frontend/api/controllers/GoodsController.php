@@ -105,10 +105,10 @@ class GoodsController extends \common\base\BaseApiController
 			}
 
 			// 读取适用的优惠券
-			$list[$key]['coupons'] = CouponModel::find()->select('coupon_id,coupon_name,coupon_value,min_amount')
+			$list[$key]['coupons'] = CouponModel::find()->select('id,name,money,amount')
 				->where(['and', ['store_id' => $value['store_id']], ['available' => 1], ['<', 'start_time', Timezone::gmtime()], ['>', 'end_time', Timezone::gmtime()]])
-				->andWhere(['<=', 'min_amount', $promotion ? $promotion['price'] : $value['price']])
-				->limit(2)->orderBy(['coupon_value' => SORT_DESC])->asArray()->all();
+				->andWhere(['<=', 'amount', $promotion ? $promotion['price'] : $value['price']])
+				->limit(2)->orderBy(['money' => SORT_DESC])->asArray()->all();
 
 			// 商品所在类目
 			if ($value['cate_id'] && ($ancestor = GcategoryModel::getAncestor($value['cate_id']))) {
@@ -180,10 +180,10 @@ class GoodsController extends \common\base\BaseApiController
 			}
 
 			// 读取适用的优惠券
-			$list[$key]['coupons'] = CouponModel::find()->select('coupon_id,coupon_name,coupon_value,min_amount')
+			$list[$key]['coupons'] = CouponModel::find()->select('id,name,money,amount')
 				->where(['and', ['store_id' => $value['store_id']], ['available' => 1], ['<', 'start_time', Timezone::gmtime()], ['>', 'end_time', Timezone::gmtime()]])
-				->andWhere(['<=', 'min_amount', $promotion ? $promotion['price'] : $value['price']])
-				->limit(2)->orderBy(['coupon_value' => SORT_DESC])->asArray()->all();
+				->andWhere(['<=', 'amount', $promotion ? $promotion['price'] : $value['price']])
+				->limit(2)->orderBy(['money' => SORT_DESC])->asArray()->all();
 
 			// 商品所在类目
 			if ($value['cate_id'] && ($ancestor = GcategoryModel::getAncestor($value['cate_id']))) {

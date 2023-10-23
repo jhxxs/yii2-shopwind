@@ -32,4 +32,5 @@ return array(
 	'buyer_name'  => '买家名称',
     'payment_name'  => '支付方式',
     'order_sn'  => '订单编号',
+	'store_name' => '供货商'
 );
