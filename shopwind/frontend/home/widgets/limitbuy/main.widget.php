@@ -31,7 +31,7 @@ class LimitbuyWidget extends BaseWidget
 
     public function getData()
     {
-        $query = LimitbuyModel::find()->alias('lb')->select('g.goods_id,g.goods_name,g.default_image,g.price,g.default_spec as spec_id')
+        $query = LimitbuyModel::find()->alias('lb')->select('lb.id,g.goods_id,g.goods_name,g.default_image,g.price,g.default_spec as spec_id')
             ->joinWith('goods g', false, 'INNER JOIN')
             ->joinWith('store s', false)
             ->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]])
@@ -49,7 +49,10 @@ class LimitbuyWidget extends BaseWidget
 
         $promotool = Promotool::getInstance()->build();
         foreach ($list as $key => $value) {
-            $list[$key]['promotion'] = $promotool->getItemProInfo($value['goods_id'], $value['spec_id']);
+            if ($value && ($promotion = $promotool->getItemProInfo($value['goods_id'], $value['spec_id']))) {
+                $promotion['status'] = LimitBuyModel::getLimitbuyStatus($value['id'], true);
+                $list[$key]['promotion'] = $promotion;
+            }
         }
 
         return array_merge(['list' => $list], $this->options);

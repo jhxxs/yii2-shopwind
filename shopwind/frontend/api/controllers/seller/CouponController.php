@@ -44,16 +44,16 @@ class CouponController extends \common\base\BaseApiController
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['page', 'page_size']);
 		
-		$query = CouponModel::find()->alias('c')->select('c.coupon_id,c.coupon_name,c.coupon_value,c.min_amount,c.clickreceive,c.total,c.surplus,c.start_time,c.end_time,c.available,s.store_id,s.store_name,s.store_logo')
+		$query = CouponModel::find()->alias('c')->select('c.id,c.name,c.money,c.amount,c.received,c.total,c.surplus,c.start_time,c.end_time,c.available,s.store_id,s.store_name,s.store_logo')
 			->joinWith('store s', false)
 			->where(['c.store_id' => Yii::$app->user->id])
-			->orderBy(['coupon_id' => SORT_DESC]);
+			->orderBy(['id' => SORT_DESC]);
 		
 		if(isset($post->available) && $post->available != '' && $post->available != null) {
 			$query->andWhere(['available' => intval($post->available)]);
 		}
 		if($post->keyword) {
-			$query->andWhere(['like', 'coupon_name', $post->keyword]);
+			$query->andWhere(['like', 'name', $post->keyword]);
 		}
 		
 		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
@@ -62,11 +62,11 @@ class CouponController extends \common\base\BaseApiController
 			$list[$key]['start_time'] = Timezone::localDate('Y-m-d H:i:s', $value['start_time']);
 			$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
 			$list[$key]['store_logo'] = Formatter::path($value['store_logo'], 'store');
-			$list[$key]['min_amount'] = floatval($value['min_amount']);
-			$list[$key]['coupon_value'] = floatval($value['coupon_value']);
+			$list[$key]['amount'] = floatval($value['amount']);
+			$list[$key]['money'] = floatval($value['money']);
 
 			if($value['end_time'] > 0 && $value['end_time'] < Timezone::gmtime()) {
-				CouponModel::updateAll(['available' => 0], ['coupon_id' => $value['coupon_id']]);
+				CouponModel::updateAll(['available' => 0], ['id' => $value['id']]);
 				$list[$key]['available'] = 0;
 			}
 		}

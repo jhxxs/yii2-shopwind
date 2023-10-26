@@ -26,6 +26,10 @@
         width: auto;
     }
 
+    .colslist .layui-form li.disabled {
+        opacity: 0.3;
+    }
+
     .layui-form-select dl dd.layui-this {
         background-color: #0d6fb8;
     }
@@ -53,12 +57,16 @@
     <div class="wraper clearfix">
         <ul class="column J_List layui-form"></ul>
         <ul class="template hidden">
-            <li class="uni-flex uni-row mb20">
-                <p class="checked pt20"><input lay-skin="primary" lay-filter="filter" type="checkbox" value="[1]"></p>
-                <p class="image"><img width="60" height="60" srctemp="[2]"></p>
+            <li class="uni-flex uni-row mb20 [1]">
+                <p class="checked pt20 relative"><input lay-skin="primary" lay-filter="filter" type="checkbox"
+                        value="[2]"><span class="absolute f-red bgf pt10 f-12 [3]" style="left: -2px;">失效</span></p>
+                <p class="image">
+
+                    <img width="60" height="60" srctemp="[4]">
+                </p>
                 <div class="extra width-surplus ml20">
-                    <p class="desc f-13">[3]</p>
-                    <p class="mt10"><span class="f-red">[4]</span> <del class="f-gray ml5">[5]</del></p>
+                    <p class="desc f-13">[5]</p>
+                    <p class="mt10"><span class="f-red">[6]</span> <del class="f-gray ml5">[7]</del></p>
                 </div>
             </li>
         </ul>
@@ -94,7 +102,8 @@
             if (data.done) {
                 var html = '';
                 $.each(data.retval.list, function (i, item) {
-                    html += sprintf($('.template').html().replace('srctemp', 'src'), item.goods_id, url_format(item.default_image), item.goods_name, price_format(item.promotion.price), price_format(item.price));
+                    var status = (item.promotion.status == 'going' || item.promotion.status == 'waiting') ? true : false;
+                    html += sprintf($('.template').html().replace('srctemp', 'src'), status ? '' : 'disabled', item.goods_id, status ? 'hidden' : '', url_format(item.default_image), item.goods_name, price_format(item.promotion.price), price_format(item.price));
                 });
                 $('.J_List').html(html || '<p class="center">没有相关商品!</p>');
 

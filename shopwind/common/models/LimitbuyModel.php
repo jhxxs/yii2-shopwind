@@ -139,6 +139,10 @@ class LimitbuyModel extends ActiveRecord
 		else $limitbuy = parent::find()->select('goods_id,start_time,end_time,rules')->where(['id' => intval($data)])->one();
 		// data = id
 
+		if (!$limitbuy) {
+			return false;
+		}
+
 		if ($limitbuy->end_time < Timezone::gmtime()) {
 			$status = 'ended';
 		} elseif ($limitbuy->start_time > Timezone::gmtime()) {

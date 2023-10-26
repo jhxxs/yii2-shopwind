@@ -137,10 +137,10 @@ class Promotool
 	public function getItemProInfo($goods_id = 0, $spec_id = 0, $force = true)
 	{
 		// 返回结果数组
-		$result 	= false;
+		$result = false;
 
 		// 用于标识是否获取到了优惠价格
-		$proPrice 	= false;
+		$proPrice = false;
 
 		if (!isset($this->params['store_id']) || !$this->params['store_id'] || !$spec_id) {
 			$query = GoodsModel::find()->select('store_id,default_spec')->where(['goods_id' => $goods_id])->one();
