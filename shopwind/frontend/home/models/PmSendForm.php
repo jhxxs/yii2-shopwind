@@ -14,7 +14,7 @@ namespace frontend\home\models;
 use Yii;
 use yii\base\Model; 
 
-use common\models\MessageModel;
+use common\models\MailboxModel;
 use common\library\Timezone;
 
 /**
@@ -53,7 +53,7 @@ class PmSendForm extends Model
 				//不能发给自己
           		continue; 
             }
-			$model = new MessageModel();
+			$model = new MailboxModel();
 			$model->from_id = $this->from_id;
 			$model->to_id = $id;
 			$model->title = $this->title;
@@ -63,7 +63,7 @@ class PmSendForm extends Model
 			$model->status = 3; // 双方未删除
 			$model->parent_id = $this->parent_id ? $this->parent_id : 0; // 0：新消息 >1: 回复
 			
-			if($this->parent_id > 0 && ($query = MessageModel::findOne($this->parent_id))) {
+			if($this->parent_id > 0 && ($query = MailboxModel::findOne($this->parent_id))) {
 				$model->new = ($this->from_id == $query->from_id) ? 1 : 2; // 如果回复自己发送的主题时
 			} else $model->new = 1; // 收件方新消息
 			

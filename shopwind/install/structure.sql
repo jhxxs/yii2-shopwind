@@ -988,11 +988,11 @@ CREATE TABLE IF NOT EXISTS `swd_meal_goods` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_message`
+-- 表的结构 `swd_mailbox`
 --
-DROP TABLE IF EXISTS `swd_message`;
-CREATE TABLE IF NOT EXISTS `swd_message` (
-  `msg_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `swd_mailbox`;
+CREATE TABLE IF NOT EXISTS `swd_mailbox` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `from_id` int(10) unsigned NOT NULL DEFAULT '0',
   `to_id` int(10) unsigned NOT NULL DEFAULT '0',
   `title` varchar(100) DEFAULT '',
@@ -1002,7 +1002,7 @@ CREATE TABLE IF NOT EXISTS `swd_message` (
   `new` tinyint(3) unsigned DEFAULT '0',
   `parent_id` int(10) unsigned DEFAULT '0',
   `status` tinyint(3) unsigned DEFAULT '0',
-  PRIMARY KEY (`msg_id`),
+  PRIMARY KEY (`id`),
   KEY `from_id` (`from_id`),
   KEY `to_id` (`to_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
