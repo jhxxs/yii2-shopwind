@@ -46,11 +46,12 @@ class OrderForm extends Model
 	 */
 	public function formData($post = null)
 	{
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.evaluation_time,o.guider_id,oe.shipping_fee')
+		$query = OrderModel::find()->alias('o')
+			->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.evaluation_time,o.guider_id,oe.shipping_fee')
 			->joinWith('orderExtm oe', false)
 			->where(['>', 'o.order_id', 0])
 			->orderBy(['o.order_id' => SORT_DESC]);
-	
+
 		// 指定获取某个店铺的订单
 		if ($post->store_id) {
 			$query->andWhere(['o.seller_id' => $post->store_id]);
@@ -66,7 +67,7 @@ class OrderForm extends Model
 		// 卖家获取订单管理数据
 		if ($this->enter == 'seller') {
 			$query->andWhere(['o.seller_id' => Yii::$app->user->id]);
-			$query->addSelect('oe.consignee,oe.phone_mob');
+			$query->addSelect('oe.consignee,oe.phone_mob,region_name,address,phone_tel,shipping_name');
 		}
 		// 团长获取订单管理数据
 		elseif ($this->enter == 'guider') {
@@ -141,8 +142,12 @@ class OrderForm extends Model
 
 			// 对卖家订单和团长订单返回收（取）货人信息
 			if (in_array($this->enter, ['seller', 'guider'])) {
-				$shipping = ['name' => $value['consignee'], 'phone_mob' => $value['phone_mob']];
-				unset($list[$key]['phone_mob']);
+				$shipping = [
+					'name' => $value['consignee'],
+					'phone_mob' => $value['phone_mob'] ? $value['phone_mob'] : $value['phone_tel'],
+					'address' => str_replace(' ', '', $value['region_name']) . $value['address']
+				];
+				unset($list[$key]['phone_mob'], $list[$key]['phone_tel'], $list[$key]['region_name'], $list[$key]['address']);
 				$list[$key]['consignee'] = $shipping;
 			}
 		}

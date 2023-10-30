@@ -13,7 +13,7 @@ namespace frontend\api\controllers;
 
 use Yii;
 
-use common\models\MessageModel;
+use common\models\MailboxModel;
 
 use common\library\Basewind;
 use common\library\Page;
@@ -42,13 +42,13 @@ class MailboxController extends \common\base\BaseApiController
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['page', 'page_size']);
 
-		$query = MessageModel::find()->where(['or', ['from_id' => Yii::$app->user->id], ['to_id' => Yii::$app->user->id]]);
+		$query = MailboxModel::find()->where(['or', ['from_id' => Yii::$app->user->id], ['to_id' => Yii::$app->user->id]]);
 		if ($post->title) {
 			$query->andWhere(['like', 'title', $post->title]);
 		}
 
 		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
-		$list = $query->orderBy(['new' => SORT_DESC, 'msg_id' => SORT_DESC])->offset($page->offset)->limit($page->limit)->asArray()->all();
+		$list = $query->orderBy(['new' => SORT_DESC, 'id' => SORT_DESC])->offset($page->offset)->limit($page->limit)->asArray()->all();
 		$this->params = ['list' => $list, 'pagination' => Page::formatPage($page, false)];
 
 		return $respond->output(true, null, $this->params);
