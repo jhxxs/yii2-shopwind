@@ -15,6 +15,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import ElementPlus from 'element-plus'
+import print from "vue3-print-nb";
 import * as icons from '@element-plus/icons-vue'
 import { isMobile, siteUrl } from './common/util.js'
 import NProgress from 'nprogress'
@@ -27,6 +28,7 @@ Object.keys(icons).forEach(key => {
 })
 app.use(router)
 app.use(ElementPlus)
+app.use(print);
 
 /**
  * 终端判断

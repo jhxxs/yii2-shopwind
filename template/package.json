@@ -20,7 +20,8 @@
     "vue": "^3.2.25",
     "vue-baidu-map-3x": "^1.0.29",
     "vue-meta": "^3.0.0-alpha.8",
-    "vue-router": "^4.0.14"
+    "vue-router": "^4.0.14",
+    "vue3-print-nb": "^0.1.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.0",

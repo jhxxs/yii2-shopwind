@@ -72,8 +72,8 @@
 									<el-input v-model="form.keyword" clearable />
 								</el-form-item>
 								<el-form-item label="买家用户名">
-								<el-input v-model="form.buyer_name" clearable />
-							</el-form-item>
+									<el-input v-model="form.buyer_name" clearable />
+								</el-form-item>
 								<el-form-item>
 									<el-button @click="queryClick" type="primary" class="f-13">查询</el-button>
 								</el-form-item>
@@ -82,7 +82,8 @@
 					</div>
 				</div>
 				<div class="round-edge pd10 bgf mt20" v-loading="loading">
-					<el-table :data="gallery" :border="false" :stripe="false">
+					<el-table ref="multipleTableRef" :data="gallery" :border="false" :stripe="false" @select="selectClick"
+						@selectAll="selectClick">
 						<el-table-column type="selection" />
 						<el-table-column width="420" label="商品信息">
 							<template #default="scope">
@@ -163,11 +164,15 @@
 										修改单号
 									</el-button>
 								</div>
-								<router-link v-if="scope.row.ship_time && scope.row.gtype == 'material'" class="rlink f-blue block"
+								<router-link v-if="scope.row.ship_time && scope.row.gtype == 'material'"
+									class="rlink f-blue block"
 									:to="'/seller/order/logistic/' + scope.row.order_id">查看物流</router-link>
 							</template>
 						</el-table-column>
 					</el-table>
+					<div v-if="mulselection.length > 0" class="mt20 center">
+						<el-button type="primary" @click="printClick">打印订单</el-button>
+					</div>
 					<div v-if="pagination.total > 0" class="mt20 mb20">
 						<el-pagination v-model:currentPage="pagination.page" v-model:page-size="pagination.page_size"
 							:page-sizes="[10, 50, 100, 200]" :background="false" layout="total, sizes, prev, pager, next"
@@ -179,8 +184,12 @@
 		</el-row>
 	</div>
 
-	<shipped v-if="gallery.length > 0" title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]" @close="dialogClose"></shipped>
-	<canceled v-if="gallery.length > 0" title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]" @close="dialogClose"></canceled>
+	<shipped v-if="gallery.length > 0" title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]"
+		@close="dialogClose"></shipped>
+	<canceled v-if="gallery.length > 0" title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]"
+		@close="dialogClose"></canceled>
+	<printed v-if="mulselection.length > 0" title="打印订单" :visible="dialogPrintVisible" :data="mulselection"
+		@close="dialogClose"></printed>
 
 	<myfoot></myfoot>
 </template>
@@ -197,14 +206,17 @@ import myfoot from '@/pages/layout/footer/user.vue'
 import menus from '@/pages/layout/menus/seller.vue'
 import shipped from '@/components/dialog/order/shipped.vue'
 import canceled from '@/components/dialog/order/canceled.vue'
+import printed from '@/components/dialog/order/printed.vue'
 
 const loading = ref(false)
 const gallery = ref([])
 const pagination = ref({})
 const form = reactive({ queryitem: true })
 const sells = ref({})
+const mulselection = ref([])
 const dialogShipVisible = ref(false)
 const dialogCancelVisible = ref(false)
+const dialogPrintVisible = ref(false)
 const modifyIndex = ref(0)
 const route = useRoute()
 
@@ -227,10 +239,21 @@ const cancelClick = (value) => {
 	dialogCancelVisible.value = true
 	modifyIndex.value = value
 }
+const printClick = (value) => {
+	dialogPrintVisible.value = true
+}
+
+const selectClick = (selection, row) => {
+	mulselection.value = []
+	selection.forEach((item) => {
+		mulselection.value.push(item)
+	})
+}
 
 const dialogClose = (value) => {
 	dialogShipVisible.value = false
 	dialogCancelVisible.value = false
+	dialogPrintVisible.value = false
 	Object.assign(gallery.value[modifyIndex.value], value ? value : {})
 }
 
@@ -267,6 +290,7 @@ const handleCurrentChange = (value) => {
 	getList({ page: value, page_size: pagination.value.page_size })
 }
 function getList(params) {
+	mulselection.value = []
 	sellerOrderList(Object.assign(form, params), (data) => {
 		gallery.value = data.list
 		pagination.value = data.pagination

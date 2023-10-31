@@ -31,6 +31,10 @@
 						<p class="mb20 vertical-middle flex-center">
 							<el-tag v-if="store.joinway == 1" effect="dark" size="small" type="danger"
 								class="mr5">自营</el-tag>
+							<el-tag v-else-if="store.stype == 'company'" effect="dark" size="small" type="danger"
+								class="mr5">企业</el-tag>
+							<el-tag v-else effect="dark" size="small" type="danger" class="mr5">个人</el-tag>
+
 							<span class="mr10">{{ store.store_name }}</span>
 							<img v-if="store.joinway == 0" :src="store.credit_image" />
 						</p>
@@ -70,13 +74,19 @@
 						<el-menu :unique-opened="true">
 							<el-sub-menu v-for="(category) in scategory">
 								<template #title>
-									<router-link :to="'/store/list/' + category.store_id + '/' + category.cate_id" class="rlink f-12">
-										<el-icon :size="12"><ArrowRight /></el-icon>{{ category.cate_name }}
+									<router-link :to="'/store/list/' + category.store_id + '/' + category.cate_id"
+										class="rlink f-12">
+										<el-icon :size="12">
+											<ArrowRight />
+										</el-icon>{{ category.cate_name }}
 									</router-link>
 								</template>
 								<el-menu-item v-for="(item) in category.children">
-									<router-link :to="'/store/list/' + item.store_id + '/' + item.cate_id" class="rlink f-12">
-										<el-icon :size="12"><ArrowRight /></el-icon>{{ item.cate_name }}
+									<router-link :to="'/store/list/' + item.store_id + '/' + item.cate_id"
+										class="rlink f-12">
+										<el-icon :size="12">
+											<ArrowRight />
+										</el-icon>{{ item.cate_name }}
 									</router-link>
 								</el-menu-item>
 							</el-sub-menu>

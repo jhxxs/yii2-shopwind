@@ -483,6 +483,10 @@ ul {
 	cursor: pointer;
 }
 
+.el-dialog__header {
+	margin-left: 16px;
+}
+
 /* 支付工具相关 */
 .iconfont.alipay::after {
 	content: '\e65f';

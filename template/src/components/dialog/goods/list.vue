@@ -132,8 +132,8 @@ const callback = (value) => {
 
 const selectClick = (selection, row) => {
     let array = []
-    selection.forEach((row) => {
-        array.push(parseInt(row.goods_id))
+    selection.forEach((item) => {
+        array.push(parseInt(item.goods_id))
     })
     let value = parseInt(row.goods_id)
     if (array.indexOf(value) > -1) {
@@ -145,15 +145,15 @@ const selectClick = (selection, row) => {
 }
 const selectAllClick = (selection) => {
     if (selection.length == 0) {
-        gallery.value.forEach((row) => {
-            let value = parseInt(row.goods_id)
+        gallery.value.forEach((item) => {
+            let value = parseInt(item.goods_id)
             if (form.selected.indexOf(value) > -1) {
                 form.selected.splice(form.selected.indexOf(value), 1)
             }
         })
     } else {
-        selection.forEach((row) => {
-            form.selected.push(parseInt(row.goods_id))
+        selection.forEach((item) => {
+            form.selected.push(parseInt(item.goods_id))
         })
     }
     form.selected = getValues()
