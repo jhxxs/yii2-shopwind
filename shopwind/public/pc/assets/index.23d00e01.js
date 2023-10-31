@@ -1,0 +1,1 @@
+import{_ as a}from"./blocks.266145c0.js";import{_ as r}from"./home.9b935403.js";import{_ as o}from"./home.6f74a59e.js";import{o as s,c as t,a as e,F as m}from"./index.5367eff4.js";import"./chat.251db3e2.js";const u={setup(_){return(n,c)=>(s(),t(m,null,[e(r,{page:"index"}),e(a,{page:"index",header:!1,footer:!1}),e(o,{page:"index"})],64))}};export{u as default};

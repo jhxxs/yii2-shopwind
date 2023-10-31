@@ -1,0 +1,1 @@
+import{_ as r}from"./blocks.266145c0.js";import{o as a,g as t}from"./index.5367eff4.js";const o={props:{page:{type:String,default:""},exclude:{type:Array,default(){return[]}}},setup(e){return(c,u)=>(a(),t(r,{page:e.page,header:!0,exclude:e.exclude},null,8,["page","exclude"]))}};export{o as _};
