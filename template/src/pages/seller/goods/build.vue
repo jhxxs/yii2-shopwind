@@ -100,7 +100,9 @@
 											<div>
 												<span>规格名</span>
 												<el-input v-model="gallery.specs[quantity - 1].name"
-													class="normal-width ml10" clearable />
+													class="normal-width ml10"
+													@change="(value) => { changeClick(value, quantity - 1, index) }"
+													clearable />
 												<el-checkbox v-model="goods.hasspecimg" v-if="quantity == 1"
 													class="pl10 pr10">规格图片</el-checkbox>
 											</div>
@@ -242,8 +244,9 @@
 								</div>
 							</el-form-item>
 							<el-form-item v-if="scategory.length > 0" label="本店分类" :label-width="100">
-								<el-tree ref="treeRef" :data="scategory" :default-checked-keys="goods.scategory" node-key="id" :props="{ label: 'value' }"
-									show-checkbox empty-text="" class="pd10 width-surplus border-radius">
+								<el-tree ref="treeRef" :data="scategory" :default-checked-keys="goods.scategory"
+									node-key="id" :props="{ label: 'value' }" show-checkbox empty-text=""
+									class="pd10 width-surplus border-radius">
 								</el-tree>
 							</el-form-item>
 							<el-form-item label="是否添加视频" :label-width="100">
@@ -552,6 +555,14 @@ const callback = (value) => {
 }
 
 const changeClick = (value, quantity, index) => {
+	if (value == '') {
+		if (index) {
+			changeSpecItem('del', quantity, index)
+		} else {
+			//changeSpec('del', quantity)
+		}
+	}
+
 	let items = gallery.specs[quantity].items
 
 	// 重复值检测
@@ -662,12 +673,21 @@ const submit = () => {
 
 	if (!goods.multispec) gallery.list = []
 	else if (gallery.specs.length > 0) {
-		gallery.specs.forEach((item, index) => {
+		
+		for (let i = 0; i < gallery.specs.length; i++) {
+			let item = gallery.specs[i]
 			if (item.name) {
 				form.spec_qty++
-				form['spec_name_' + (index + 1)] = item.name
-			}
-		})
+				form['spec_name_' + (i + 1)] = item.name
+
+				// 规格名是否有重复
+				if (i > 0) {
+					if (form['spec_name_1'] == item.name) {
+						return ElMessage.warning('规格名不能重复')
+					}
+				}
+			} else return ElMessage.warning('规格名不能为空')
+		}
 
 		form.specs = gallery.list || []
 		gallery.specs[0].items.forEach((find) => {
@@ -675,15 +695,22 @@ const submit = () => {
 				if (item.spec_1 == find.value) {
 					item.image = (find.image && goods.hasspecimg) ? find.image : ''
 				}
+
+				// 规格名为空，规格值也置空
+				for (let i = 1; i <= 2; i++) {
+					if (!form['spec_name_' + i] || form['spec_name_' + i] == '') {
+						item['spec_' + i] = ''
+					}
+				}
 			})
 		})
 	}
 
 	// 处理字段
 	['price', 'stock', 'mkprice', 'type', 'goods_name', 'goods_images', 'tags', 'cate_id', 'dt_id', 'brand', 'default_image', 'isnew', 'recommended', 'if_show', 'description', 'attributes', 'exclusive'].forEach((field) => {
-		if (!isEmpty(goods[field])) {
+		//if (!isEmpty(goods[field])) { // 与不传不更新规则冲突
 			form[field] = goods[field]
-		}
+		//}
 	})
 
 	if (goods.goods_id > 0) {
@@ -746,7 +773,7 @@ function bindTable() {
 	gallery.specs[0].items.forEach((each, index) => {
 		spec = { spec_1: each.value, price: '', mkprice: '', stock: '' }
 		if (!isEmpty(gallery.list[index])) {
-			Object.assign(spec, gallery.list[index])
+			Object.assign(spec, gallery.list[index], { spec_1: each.value })
 		}
 		if (gallery.specs[1] && gallery.specs[1].items.length > 0) {
 			gallery.specs[1].items.forEach((item) => {

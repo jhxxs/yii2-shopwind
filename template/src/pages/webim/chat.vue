@@ -192,7 +192,8 @@ const scrollbarRef = ref(ElScrollbar)
 const { proxy } = getCurrentInstance()
 
 // 需要输入富文本使用editor
-//const editorConfig = { placeholder: '请输入消息，按发送键发送' }
+// const editorConfig = { placeholder: '请输入消息，按发送键发送' }
+// editor.isEmpty() // 判断当前编辑器内容是否为空（只有一个空段落）
 const loading = ref(false)
 const route = useRoute()
 const visitor = ref({})

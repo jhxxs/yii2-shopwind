@@ -6,7 +6,7 @@
                 <div class="hd">销售清单</div>
                 <table>
                     <tr>
-                        <td class="noborder" colspan="2"><span>卖家：{{ order.seller_name }}</span></td>
+                        <td class="noborder" colspan="2"><span>店铺：{{ order.seller_name }}</span></td>
                         <td class="noborder" colspan="2" style="text-align: right;">
                             <span>制单时间：{{ getMoment().format('YYYY-MM-DD HH:mm:ss') }}</span>
                         </td>
@@ -129,7 +129,7 @@ const close = () => {
         width: 100%;
         height: 500px;
         overflow-y: scroll;
-        color: #000
+        color: #000;
     }
 
     .gallery .item {
@@ -162,13 +162,13 @@ const close = () => {
     }
 
     .gallery table td {
-        width: 35%
+        width: 35%;
     }
 
     .gallery table tr td span,
     .gallery table tr th span {
         padding: 0 5px;
-        display: block
+        display: block;
     }
 
     .gallery table tr th span i {

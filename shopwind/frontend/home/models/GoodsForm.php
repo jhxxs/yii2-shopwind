@@ -350,10 +350,27 @@ class GoodsForm extends Model
 
 	private function validSpecs($post = null)
 	{
-		$specs = ArrayHelper::toArray($post->specs);
-		if (empty($specs) && (!isset($post->price) || !isset($post->stock))) {
-			$this->errors = Language::get('price_invalid');
-			return false;
+		if (!isset($post->specs)) {
+			if ((!isset($post->price) || $post->price === '' || !isset($post->stock) || $post->stock === '')) {
+				$this->errors = Language::get('price_invalid');
+				return false;
+			}
+		} else {
+			//$specs = ArrayHelper::toArray($post->specs);
+			foreach ($post->specs as $value) {
+				if ($value->price === '' || $value->stock === '') {
+					$this->errors = Language::get('price_invalid');
+					return false;
+				}
+				if (!$value->spec_1 && !$value->spec_2) {
+					$this->errors = Language::get('goods_spec_invalid');
+					return false;
+				}
+				if ($post->spec_qty == 2 && (!isset($post->spec_name_2) || !$post->spec_name_2)) {
+					$this->errors = Language::get('goods_spec_invalid');
+					return false;
+				}
+			}
 		}
 		return true;
 	}

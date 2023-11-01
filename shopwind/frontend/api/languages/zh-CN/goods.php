@@ -6,7 +6,7 @@ return array(
 	'goods_add_fail'			=> '商品添加失败',
 	'goods_update_fail'			=> '商品更新失败',
 	'goods_delete_fail' 		=> '商品删除失败',
-	'goods_spec_invalid'		=> '该商品规格不存在',
+	'goods_spec_invalid'		=> '商品规格不存在/无效',
 	'goods_name_required'		=> '商品名称不能为空',
 	'goods_name_invalid'		=> '商品名称非法',
 	'goods_type_editforbidden'	=> '商品类型不允许修改',
