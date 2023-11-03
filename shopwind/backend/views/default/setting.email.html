@@ -10,7 +10,7 @@
         <ul>
           <li>1. 设置的邮箱服务器需开启POP3/SMTP服务，如果邮箱不支持该服务，请选择其他邮箱系统</li>
           <li>2. 阿里云ECS不再提供开放25端口，即使加入安全组也无法使用。<a href="https://tool.hi.cn/port" target="_blank">端口开通检测</a></li>
-          <li>3. 如果发送模式选择异步发送，请执行cmd命令：项目根目录/console > yii queue/listen</li>
+          <li>3. 如果发送模式选择异步发送，请执行cmd命令：项目根目录/console > php yii queue/listen</li>
         </ul>
       </div>
       <div class="flexigrid">
@@ -26,7 +26,7 @@
             <tr>
               <th class="paddingT15"><label>{$lang.email_port}</label></th>
               <td class="paddingT15 wordSpacing5"><input class="infoTableInput" type="text" name="mailer[port]"
-                  value="{$setting.mailer.port|default:465}" />
+                  value="{$setting.mailer.port|default:587}" />
                 <label class="field_notice">{$lang.email_port_note}</label>
               </td>
             </tr>

@@ -268,6 +268,7 @@ class Basewind
 		}
 
 		$params = ArrayHelper::merge([
+			'base_url' => self::baseUrl(),
 			'site_url'  => self::homeUrl(),
 			'site_name' => Yii::$app->params['site_name'],
 			'send_time' => Timezone::localDate('Y-m-d H:i:s', Timezone::gmtime())

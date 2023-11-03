@@ -30,7 +30,7 @@ return array(
     'email_host'  => 'SMTP服务器',
     'email_host_note' => '服务器的地址',
     'email_port' => 'SMTP端口号',
-    'email_port_note' => '端口默认为465',
+    'email_port_note' => '端口默认为587或465',
     'email_addr' => '发信人邮件地址',
     'email_id' => 'SMTP身份验证用户名',
     'email_pass' => 'SMTP身份验证密码',
