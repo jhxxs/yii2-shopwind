@@ -27,6 +27,7 @@ return array(
 	'email_existed'			=> '该邮箱已存在',
 	'no_such_item'			=> '查询的数据不存在',
 	'drop_fail'				=> '删除失败',
+	'plugin_disallow'       => '插件未配置',
 	
 	'express'				=> '快递',
 	'ems'					=> 'EMS',

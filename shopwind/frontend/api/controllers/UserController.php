@@ -284,6 +284,10 @@ class UserController extends \common\base\BaseApiController
 		$post->logintype = $respond->getRealLogintype($post);
 
 		$connect = Plugin::getInstance('connect')->build($post->logintype, $post);
+		if (!$connect->isInstall($post->logintype)) {
+			return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
+		}
+
 		if (!($response = $connect->getAccessToken())) {
 			return $respond->output(Respond::HANDLE_INVALID, Language::get('handle_exception'));
 		}
@@ -316,12 +320,12 @@ class UserController extends \common\base\BaseApiController
 
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true);
-		$post->logintype = $respond->getRealLogintype($post);
+		//$post->logintype = $respond->getRealLogintype($post);
 
 		// 对微信来说，微信公众号登录、APP登录与小程序登录CODE值不同，必须都删去关联
-		if ($query = BindModel::find()->select('unionid')->where(['userid' => Yii::$app->user->id, 'code' => $post->logintype])->one()) {
-			BindModel::deleteAll(['unionid' => $query->unionid]);
-		}
+		$wxarray = ['weixin', 'weixinmp', 'weixinapp'];
+		$array = in_array($post->logintype, $wxarray) ? $wxarray : [$post->logintype];
+		BindModel::deleteAll(['and', ['userid' => Yii::$app->user->id], ['in', 'code', $array]]);
 
 		$list = BindModel::find()->select('openid')->where(['userid' => Yii::$app->user->id])->indexBy('code')->column();
 		return $respond->output(true, null, $list);
