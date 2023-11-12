@@ -31,10 +31,10 @@ app.use(ElementPlus)
 app.use(print);
 
 /**
- * 终端判断
+ * 终端判断 (商业版才有)
  */
 if (isMobile()) {
-    window.location.href = siteUrl() + '/h5'
+    // window.location.href = siteUrl() + '/h5'
 }
 
 /**
