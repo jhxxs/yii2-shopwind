@@ -45,7 +45,7 @@
                             <el-date-picker v-model="form.birthday" type="date" value-format="YYYY-MM-DD" />
                         </el-form-item>
                         <el-form-item label="QQ" :label-width="100">
-                            <el-input v-model="form.im_qq" clearable />
+                            <el-input v-model="form.qq" clearable />
                         </el-form-item>
                         <el-form-item label="邮箱" :label-width="100">
                             <el-input v-model="form.email" clearable />
@@ -78,7 +78,7 @@ const random = ref('')
 
 onMounted(() => {
     userRead(null, (data) => {
-        ['nickname', 'real_name', 'im_qq', 'email', 'birthday', 'gender', 'portrait'].forEach((item) => {
+        ['nickname', 'real_name', 'qq', 'email', 'birthday', 'gender', 'portrait'].forEach((item) => {
             form[item] = item == 'gender' ? parseInt(data[item]) : data[item]
         })
         visitor.value = data

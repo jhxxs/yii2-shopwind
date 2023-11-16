@@ -103,8 +103,8 @@ class AuthController extends \common\base\BaseApiController
 		$post->logintype = $respond->getRealLogintype($post);
 
 		$connect = Plugin::getInstance('connect')->build($post->logintype, $post);
-		if(!$connect->isInstall($post->logintype)) {
-		    return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
+		if (!$connect->isInstall($post->logintype)) {
+			return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
 		}
 
 		$result = $connect->login();
@@ -118,10 +118,10 @@ class AuthController extends \common\base\BaseApiController
 	private function unilogin($respond, $post)
 	{
 		$connect = Plugin::getInstance('connect')->build($post->logintype, $post);
-		if(!$connect->isInstall($post->logintype)) {
-		    return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
+		if (!$connect->isInstall($post->logintype)) {
+			return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
 		}
-		
+
 		if (!$connect->callback(true)) {
 			return $respond->output(Respond::TOKEN_FAIL, $connect->errors);
 		}
@@ -137,7 +137,7 @@ class AuthController extends \common\base\BaseApiController
 
 		// 登录后的处理
 		UserModel::afterLogin($identity);
-		
+
 		$result['user_info'] = $array;
 		return $respond->output(true, null, $result);
 	}
@@ -166,7 +166,7 @@ class AuthController extends \common\base\BaseApiController
 
 		// 登录后的处理
 		UserModel::afterLogin($identity);
-		
+
 		$result['user_info'] = $array;
 		return $respond->output(true, null, $result);
 	}
@@ -247,12 +247,8 @@ class AuthController extends \common\base\BaseApiController
 	 */
 	private function getUserInfo($identity, $post = null)
 	{
-		if (!$identity) {
-			return false;
-		}
-
-		// 用户被锁定（在移动端当做注销处理）
-		if ($identity->locked) {
+		// 用户不存在或被锁定（在移动端当做注销处理）
+		if (!$identity || $identity->locked) {
 			$this->errors = Language::get('user_logoff');
 			return false;
 		}
@@ -286,10 +282,14 @@ class AuthController extends \common\base\BaseApiController
 		$model = new \frontend\home\models\UserRegisterForm();
 
 		do {
-			$model->username = UserModel::generateName($post->logintype);
+			$model->username = UserModel::generateName();
 			$model->password  = mt_rand(1000, 9999);
 			$model->phone_mob = $post->phone_mob ? $post->phone_mob : '';
-			$user = $model->register(['portrait' => $post->portrait ? $post->portrait : '', 'nickname' => $post->nickname ? $post->nickname : '']);
+			$user = $model->register([
+				'portrait' => $post->portrait ? $post->portrait : '',
+				'nickname' => $post->nickname ? $post->nickname : $model->username,
+				'regtype'  => $post->terminal
+			]);
 		} while (!$user);
 
 		return $user;

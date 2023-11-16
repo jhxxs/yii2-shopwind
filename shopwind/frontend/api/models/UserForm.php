@@ -102,7 +102,7 @@ class UserForm extends Model
 		if(isset($post->real_name)) $model->real_name = $post->real_name;
 		if(isset($post->gender)) $model->gender = $post->gender;
 		if(isset($post->birthday)) $model->birthday = $post->birthday;
-		if(isset($post->im_qq)) $model->im_qq = $post->im_qq;
+		if(isset($post->qq)) $model->qq = $post->qq;
 		if(isset($post->portrait)) $model->portrait = $post->portrait;
 		if(isset($post->password)) $model->setPassword($post->password);
 		

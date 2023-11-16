@@ -49,7 +49,7 @@ class WebimController extends \common\base\BaseApiController
 
 		$list = WebimModel::find()->select('fromid,toid,store_id,store_name')
 			->where(['or', ['fromid' => Yii::$app->user->id], ['toid' => Yii::$app->user->id]])
-			->groupBy('groupid')
+			->groupBy('groupid,fromid,toid,store_id,store_name')
 			->limit($post->limit ? $post->limit : 50)
 			->asArray()->all();
 

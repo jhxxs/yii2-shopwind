@@ -21,7 +21,7 @@
 						<el-form :inline="true">
 							<el-form-item class="mt10" label="充值渠道" :label-width="150">
 								<el-radio-group v-model="form.payment_code">
-									<el-radio label="wxpay" size="large" border><i class="iconfont wxpay mr5"></i>微信支付
+									<el-radio label="wxpay" size="large" border disabled><i class="iconfont wxpay mr5"></i>微信支付
 									</el-radio>
 									<el-radio label="alipay" size="large" border><i class="iconfont alipay mr5"></i>支付宝
 									</el-radio>
@@ -67,7 +67,7 @@ import myfoot from '@/pages/layout/footer/user.vue'
 import menus from '@/pages/layout/menus/my.vue'
 
 const loading = ref(false)
-const form = reactive({ payment_code: 'wxpay', money: 100 })
+const form = reactive({ payment_code: 'alipay', money: 1 })
 const dialogVisible = ref(false)
 
 const submit = () => {

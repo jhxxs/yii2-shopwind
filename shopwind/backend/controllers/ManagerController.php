@@ -191,7 +191,7 @@ class ManagerController extends \common\base\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = UserPrivModel::find()->alias('up')->select('up.userid,u.username,u.phone_mob,u.im_qq,u.email,u.create_time,u.last_login,u.last_ip,u.logins')
+		$query = UserPrivModel::find()->alias('up')->select('up.userid,u.username,u.phone_mob,u.qq,u.email,u.create_time,u.last_login,u.last_ip,u.logins')
 			->joinWith('user u', false)->where(['store_id' => 0])
 			->orderBy(['userid' => SORT_ASC]);
 		if(!empty($post->id)) {

@@ -12,7 +12,6 @@ return array(
     'phone' => '电话',
     'create_time' => '注册时间',
     'last_login' => '最后登录',
-    'im_qq' => 'QQ',
     'logins' => '登录次数',
     'store' => '店铺',
     'note_password' => '留空表示不修改密码',

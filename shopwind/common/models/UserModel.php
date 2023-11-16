@@ -278,15 +278,19 @@ class UserModel extends ActiveRecord implements IdentityInterface
     /**
      * 生成不重复的用户名
      */
-    public static function generateName($prefix = 'sw')
+    public static function generateName($prefix = '', $length = 10)
     {
-        if ($prefix === null) {
-            $prefix = 'sw';
+        if ($prefix !== null) $prefix = 'id_';
+
+        $username = $prefix;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for ($i = 0; $i < $length; $i++) {
+            $username .= $characters[rand(0, strlen($characters) - 1)];
         }
-        $username = $prefix . Timezone::localDate('shymd', true) . mt_rand(100, 999);
+
         if (!self::findByUsername($username)) {
             return $username;
         }
-        return self::generateName($prefix);
+        return self::generateName($prefix, $length);
     }
 }

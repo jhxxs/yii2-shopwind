@@ -34,7 +34,7 @@ class UserExportForm extends Model
     		'real_name' 	=> '真实姓名',
     		'email' 		=> '电子邮箱',
 			'phone_mob' 	=> '手机号码',
-    		'im_qq' 		=> 'QQ',
+    		'qq' 			=> 'QQ',
     		'create_time' 	=> '注册时间',
 			'last_login' 	=> '最后登录时间',
 			'last_ip' 		=> '最后登录IP',

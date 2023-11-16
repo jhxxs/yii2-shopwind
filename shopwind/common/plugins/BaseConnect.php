@@ -121,10 +121,14 @@ class BaseConnect extends BasePlugin
 		$model = new \frontend\home\models\UserRegisterForm();
 
 		do {
-			$model->username = UserModel::generateName($this->code);
+			$model->username = UserModel::generateName();
 			$model->password  = mt_rand(1000, 9999);
 			$model->phone_mob = $post->phone_mob ? $post->phone_mob : '';
-			$user = $model->register(['portrait' => $post->portrait ? $post->portrait : '', 'nickname' => $post->nickname ? $post->nickname : '']);
+			$user = $model->register([
+				'portrait' => $post->portrait ? $post->portrait : '',
+				'nickname' => $post->nickname ? $post->nickname : $model->username,
+				'regtype'  => $this->params->terminal
+			]);
 		} while (!$user);
 
 		return $user;

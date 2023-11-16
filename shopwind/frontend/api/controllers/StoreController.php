@@ -53,7 +53,7 @@ class StoreController extends \common\base\BaseApiController
 
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['cate_id', 'sgrade', 'region_id', 'page', 'page_size']);
-		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.tel,s.credit_value,s.praise_rate,s.stype,s.sgrade,s.joinway,s.add_time,s.store_logo,s.im_qq,s.region_id,s.address,cs.cate_id')
+		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.tel,s.credit_value,s.praise_rate,s.stype,s.sgrade,s.joinway,s.add_time,s.store_logo,s.qq,s.region_id,s.address,cs.cate_id')
 			->joinWith('categoryStore cs', false)
 			->where(['state' => Def::STORE_OPEN]);
 		$query = $this->getConditions($query, $post);
@@ -95,7 +95,7 @@ class StoreController extends \common\base\BaseApiController
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['store_id']);
 
-		$query = StoreModel::find()->alias('s')->select('s.store_id,store_name,tel,credit_value,praise_rate,stype,sgrade,joinway,state,close_reason,apply_remark,add_time,certification,banner,pcbanner,store_logo,im_qq,longitude,latitude,address,region_id,description,cs.cate_id')
+		$query = StoreModel::find()->alias('s')->select('s.store_id,store_name,tel,credit_value,praise_rate,stype,sgrade,joinway,state,close_reason,apply_remark,add_time,certification,banner,pcbanner,store_logo,qq,longitude,latitude,address,region_id,description,cs.cate_id')
 			->joinWith('categoryStore cs', false)
 			->where(['s.store_id' => $post->store_id]);
 		if (!($record = $query->asArray()->one())) {
@@ -179,7 +179,7 @@ class StoreController extends \common\base\BaseApiController
 		if ($post->region_id) {
 			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
 		}
-		$fields = ['store_logo', 'banner', 'pcbanner', 'tel', 'im_qq', 'latitude', 'longitude', 'region_id', 'address', 'description'];
+		$fields = ['store_logo', 'banner', 'pcbanner', 'tel', 'qq', 'latitude', 'longitude', 'region_id', 'address', 'description'];
 		foreach ($fields as $key => $value) {
 			if (isset($post->$value)) {
 				if (in_array($value, ['store_logo', 'banner', 'pcbanner'])) {

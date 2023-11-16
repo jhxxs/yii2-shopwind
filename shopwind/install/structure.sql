@@ -1010,60 +1010,6 @@ CREATE TABLE IF NOT EXISTS `swd_mailbox` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_sms`
---
-DROP TABLE IF EXISTS `swd_sms`;
-CREATE TABLE IF NOT EXISTS `swd_sms` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `num` int(10) unsigned DEFAULT '0',
-  `functions` varchar(255) DEFAULT NULL,
-  `state` tinyint(3) unsigned DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `swd_sms_log`
---
-DROP TABLE IF EXISTS `swd_sms_log`;
-CREATE TABLE IF NOT EXISTS `swd_sms_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL,
-  `userid` int(10) unsigned NOT NULL DEFAULT '0',
-  `receiver` varchar(20) NOT NULL DEFAULT '',
-  `verifycode` int(10) unsigned DEFAULT NULL,
-  `codekey` varchar(32) NOT NULL DEFAULT '',
-  `content` text,
-  `quantity` int(10) DEFAULT '0',
-  `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(3) DEFAULT '0',
-  `message` varchar(100) DEFAULT NULL,
-  `add_time` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- 表的结构 `swd_sms_template`
---
-DROP TABLE IF EXISTS `swd_sms_template`;
-CREATE TABLE IF NOT EXISTS `swd_sms_template` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(30) NOT NULL,
-  `scene` varchar(50) NOT NULL,
-  `signName` varchar(50) NOT NULL,
-  `templateId` varchar(40) NOT NULL,
-  `content` varchar(255) NOT NULL DEFAULT '',
-  `add_time` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `swd_navigation`
 --
 DROP TABLE IF EXISTS `swd_navigation`;
@@ -1451,6 +1397,60 @@ CREATE TABLE IF NOT EXISTS `swd_sgrade_integral` (
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `swd_sms`
+--
+DROP TABLE IF EXISTS `swd_sms`;
+CREATE TABLE IF NOT EXISTS `swd_sms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `num` int(10) unsigned DEFAULT '0',
+  `functions` varchar(255) DEFAULT NULL,
+  `state` tinyint(3) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `swd_sms_log`
+--
+DROP TABLE IF EXISTS `swd_sms_log`;
+CREATE TABLE IF NOT EXISTS `swd_sms_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) NOT NULL,
+  `userid` int(10) unsigned NOT NULL DEFAULT '0',
+  `receiver` varchar(20) NOT NULL DEFAULT '',
+  `verifycode` int(10) unsigned DEFAULT NULL,
+  `codekey` varchar(32) NOT NULL DEFAULT '',
+  `content` text,
+  `quantity` int(10) DEFAULT '0',
+  `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(3) DEFAULT '0',
+  `message` varchar(100) DEFAULT NULL,
+  `add_time` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `swd_sms_template`
+--
+DROP TABLE IF EXISTS `swd_sms_template`;
+CREATE TABLE IF NOT EXISTS `swd_sms_template` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(30) NOT NULL,
+  `scene` varchar(50) NOT NULL,
+  `signName` varchar(50) NOT NULL,
+  `templateId` varchar(40) NOT NULL,
+  `content` varchar(255) NOT NULL DEFAULT '',
+  `add_time` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `swd_store`
 --
 DROP TABLE IF EXISTS `swd_store`;
@@ -1464,6 +1464,7 @@ CREATE TABLE IF NOT EXISTS `swd_store` (
   `address` varchar(255) DEFAULT '',
   `zipcode` varchar(20) DEFAULT '',
   `tel` varchar(60) DEFAULT '',
+  `qq` varchar(60) DEFAULT '',
   `sgrade` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stype` VARCHAR(20) NOT NULL DEFAULT 'personal',
   `joinway` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1485,7 +1486,6 @@ CREATE TABLE IF NOT EXISTS `swd_store` (
   `identity_front` varchar(255) DEFAULT '',
   `identity_back` varchar(255) DEFAULT '',
   `business_license` varchar(255) DEFAULT '',
-  `im_qq` varchar(60) DEFAULT '',
   `swiper` text DEFAULT '',
   `longitude` varchar(20) DEFAULT '',
   `latitude` varchar(20) DEFAULT '',
@@ -1572,13 +1572,14 @@ CREATE TABLE IF NOT EXISTS `swd_user` (
   `birthday` varchar(50) NOT NULL DEFAULT '',
   `phone_tel` varchar(60) NOT NULL DEFAULT '',
   `phone_mob` varchar(20) NOT NULL DEFAULT '',
-  `im_qq` varchar(60) NOT NULL DEFAULT '',
+  `qq` varchar(60) NOT NULL DEFAULT '',
   `create_time` int(10) unsigned DEFAULT NULL,
   `update_time` int(10) unsigned DEFAULT NULL,
   `last_login` int(10) unsigned DEFAULT NULL,
   `last_ip` varchar(15) DEFAULT NULL,
   `logins` int(10) unsigned DEFAULT '0',
   `ugrade` tinyint(3) unsigned DEFAULT '1',
+  `regtype` varchar(60) NOT NULL DEFAULT '' COMMENT '注册渠道',
   `portrait` varchar(255) DEFAULT NULL,
   `activation` varchar(60) DEFAULT NULL,
   `locked` int(1) DEFAULT '0',

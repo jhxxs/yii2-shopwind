@@ -97,7 +97,7 @@ class UserController extends \common\base\BaseAdminController
 		if(!Yii::$app->request->isPost)
 		{
 			$this->params['user'] = UserModel::find()
-				->select('userid,username,nickname,real_name,email,phone_mob,gender,im_qq,locked,portrait')
+				->select('userid,username,nickname,real_name,email,phone_mob,gender,qq,locked,portrait')
 				->where(['userid' => $id])->asArray()->one();
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('user_edit')]);
@@ -144,7 +144,7 @@ class UserController extends \common\base\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = UserModel::find()->select('userid,username,real_name,phone_mob,email,im_qq,create_time,last_login,last_ip,logins')
+		$query = UserModel::find()->select('userid,username,real_name,phone_mob,email,qq,create_time,last_login,last_ip,logins')
 			->orderBy(['userid' => SORT_ASC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'userid', $post->id]);

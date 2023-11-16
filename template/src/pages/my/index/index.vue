@@ -12,8 +12,11 @@
 							<img :src="visitor.portrait" width="80" height="80" />
 						</div>
 						<div class="ml20 pt10 pb10">
-							<p class="bold f-16">{{ visitor.nickname || visitor.username }}</p>
-							<p class="f-13 f-gray mt10">上次登录时间：{{ visitor.last_login }} 上次登录 IP：{{ visitor.last_ip }}
+							<p>
+								<strong class="f-18">{{ visitor.nickname || visitor.username }}</strong>
+								<i @click="dialogVisible = true" class="iconfont icon-bianji f-13 ml10 pointer f-blue"></i>
+							</p>
+							<p class="f-13 f-gray mt10">上次登录时间：{{ visitor.last_login||'无' }} <span class="ml10 mr10"></span>上次登录IP：{{ visitor.last_ip||'无' }}
 							</p>
 						</div>
 					</div>
@@ -129,6 +132,9 @@
 			</el-col>
 		</el-row>
 	</div>
+
+	<build title="修改昵称" :visible="dialogVisible" :data="visitor" @close="dialogClose"></build>
+
 	<myfoot></myfoot>
 </template>
 
@@ -139,9 +145,11 @@ import { myOrderRemind } from '@/api/order.js'
 import myhead from '@/pages/layout/header/my.vue'
 import myfoot from '@/pages/layout/footer/user.vue'
 import menus from '@/pages/layout/menus/my.vue'
+import build from '@/components/dialog/user/build.vue'
 
 const visitor = ref({})
 const orders = ref({})
+const dialogVisible = ref(false)
 
 onMounted(() => {
 	visitor.value = JSON.parse(localStorage.getItem('visitor'))
@@ -151,6 +159,12 @@ onMounted(() => {
 	})
 })
 
+const dialogClose = (value) => {
+	dialogVisible.value = false
+	if (value) {
+		localStorage.setItem('visitor', JSON.stringify(value))
+	}
+}
 
 </script>
 

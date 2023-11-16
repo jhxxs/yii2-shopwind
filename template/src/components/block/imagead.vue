@@ -23,7 +23,7 @@ const props = defineProps({
     }
 })
 
-const loading = ref(true)
+const loading = ref(false)
 onMounted(() => {
     loading.value = false
 })

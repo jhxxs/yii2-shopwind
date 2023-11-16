@@ -102,7 +102,7 @@ class UserForm extends Model
 			$model->setPassword($post->password);
 		}
 		$model->gender = $post->gender;
-		$model->im_qq = $post->im_qq ? $post->im_qq : '';
+		$model->qq = $post->qq ? $post->qq : '';
 		$model->nickname = $post->nickname ? $post->nickname : '';
 		$model->real_name = $post->real_name ? $post->real_name : '';
 		$model->locked = $post->locked;

@@ -532,8 +532,8 @@ function secondColumn(field, thefield) {
 <style scoped>
 .carousel .preview {
 	border: 1px #ddd solid;
-	width: 400px;
-	height: 400px;
+	width: 100%;
+	/* height: 400px; */
 }
 
 .carousel .preview img {

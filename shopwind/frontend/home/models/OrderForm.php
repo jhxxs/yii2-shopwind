@@ -105,7 +105,7 @@ class OrderForm extends Model
 				$storeQuantity += intval($goods['quantity']);
 				$result['gtype'][] = $goods['gtype'];
 			}
-			$storeInfo = StoreModel::find()->select('store_id, store_name, sgrade as sgrade_id, im_qq')->where(['store_id' => $store_id])->asArray()->one();
+			$storeInfo = StoreModel::find()->select('store_id, store_name, sgrade as sgrade_id, qq')->where(['store_id' => $store_id])->asArray()->one();
 			$result['orderList'][$store_id] = array_merge(
 				[
 					'items' => $items,
@@ -146,7 +146,7 @@ class OrderForm extends Model
 				$storeQuantity += intval($goods['quantity']);
 				$result['gtype'][] = $goods['gtype'];
 			}
-			$storeInfo = StoreModel::find()->select('store_id, store_name, sgrade as sgrade_id, im_qq')->where(['store_id' => $store_id])->asArray()->one();
+			$storeInfo = StoreModel::find()->select('store_id, store_name, sgrade as sgrade_id, qq')->where(['store_id' => $store_id])->asArray()->one();
 			$result['orderList'][$store_id] = array_merge(
 				[
 					'items' => $items,

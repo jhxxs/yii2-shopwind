@@ -123,23 +123,25 @@
 						<div v-if="swiper.length > 0" class="hd flex-middle center mt20 mb20">
 							<h3 class="f-18 f-yahei pl20 pr20 mt10 mb10 relative">店铺推荐</h3>
 						</div>
-						<div class="uni-flex uni-row flex-wrap bd">
-							<div v-for="(item) in gallery" class="item bgf pb5 relative">
-								<em v-if="item.promotion" class="f-12 f-white bgr absolute tag">秒杀</em>
-								<router-link :to="'/goods/detail/' + item.goods_id" class="rlink">
-									<img :src="item.default_image" class="block bgp" />
-								</router-link>
-								<router-link :to="'/goods/detail/' + item.goods_id"
-									class="rlink line-clamp-2 pl10 pr10 mt5 mb5 f-13 center desc">{{
-										item.goods_name
-									}}</router-link>
-								<p v-if="item.promotion" class="center f-red pd10">
-									<del class="f-gray mr10">{{ currency(item.price) }}</del>
-									<span>{{ currency(item.promotion.price) }}</span>
-								</p>
-								<p v-else class="center f-red pd10">{{ currency(item.price) }}</p>
-							</div>
-						</div>
+						<el-row class="uni-flex uni-row flex-wrap bd" :gutter="20">
+							<el-col :span="6" v-for="(item) in gallery">
+								<div class="item bgf mb20 relative">
+									<em v-if="item.promotion" class="f-12 f-white bgr absolute tag">秒杀</em>
+									<router-link :to="'/goods/detail/' + item.goods_id" class="rlink">
+										<img :src="item.default_image" class="block bgp" />
+									</router-link>
+									<router-link :to="'/goods/detail/' + item.goods_id"
+										class="rlink line-clamp-2 pl10 pr10 mt5 mb5 f-13 center desc">{{
+											item.goods_name
+										}}</router-link>
+									<p v-if="item.promotion" class="center f-red pd10">
+										<del class="f-gray mr10">{{ currency(item.price) }}</del>
+										<span>{{ currency(item.promotion.price) }}</span>
+									</p>
+									<p v-else class="center f-red pd10">{{ currency(item.price) }}</p>
+								</div>
+							</el-col>
+						</el-row>
 						<div v-if="(pagination.page_count > 1)" class="fd center mt10">
 							<router-link :to="'/store/list/' + store.store_id" class="rlink pd10 f-c55">查看更多</router-link>
 						</div>
@@ -279,8 +281,6 @@ const collect = (value) => {
 }
 
 .gallery .item {
-	width: 222px;
-	margin: 0 19px 19px 0;
 	border-radius: 4px;
 }
 

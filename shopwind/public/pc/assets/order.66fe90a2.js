@@ -1,0 +1,11 @@
+import{r as f}from"./blocks.ccf7c496.js";import{E as n}from"./index.d9c42d52.js";/**
+ * @link https://www.shopwind.net/
+ * @copyright Copyright (c) 2018 ShopWind Inc. All Rights Reserved.
+ *
+ * This is not free software. Do not use it for commercial purposes. 
+ * If you need commercial operation, please contact us to purchase a license.
+ * @license https://www.shopwind.net/license/
+ * 
+ * @Id order.js 2021.11.5 $
+ * @author mosir
+ */function a(i,o,t){f("order/read",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function u(i,o,t){f("order/goods",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function s(i,o,t){f("order/extm",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function p(i,o,t){f("order/express",i,e=>{e.code==0&&typeof o=="function"&&o(e.data?e.data:[])},t)}function y(i,o,t){f("order/logistic",i,e=>{e.code==0?typeof o=="function"&&o(e.data):n.warning(e.message)},t)}function m(i,o,t){f("order/qrcode",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function c(i,o,t){f("my/order/list",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function g(i,o,t){f("my/order/remind",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function v(i,o,t){f("seller/order/list",i,e=>{e.code==0?typeof o=="function"&&o(e.data):n.warning(e.message)},t)}function E(i,o,t){f("seller/order/remind",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function w(i,o,t){f("order/update",i,e=>{e.code==0?typeof o=="function"&&o(e.data):n.warning(e.message)},t)}function O(i,o,t){f("order/evaluate",i,e=>{e.code==0?typeof o=="function"&&o(e.data):n.warning(e.message)},t)}function x(i,o,t){f("order/replyevaluate",i,e=>{e.code==0?typeof o=="function"&&o(e.data):n.warning(e.message)},t)}function R(i,o,t){f("my/order/evaluates",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function q(i,o,t){f("seller/order/evaluates",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function L(i,o,t){f("order/build",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}function h(i,o,t){f("order/create",i,e=>{e.code==0?typeof o=="function"&&o(e.data):n.warning(e.message)},t)}function j(i,o,t){f("order/timeline",i,e=>{e.code==0&&typeof o=="function"&&o(e.data)},t)}export{c as a,a as b,s as c,u as d,m as e,j as f,y as g,O as h,R as i,p as j,v as k,q as l,g as m,x as n,w as o,L as p,h as q,E as s};

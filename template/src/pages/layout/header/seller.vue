@@ -64,7 +64,7 @@ const logout = () => {
 
 <style scoped>
 .header {
-	background-color: #6a6d5e;
+	background-color: #505458;
 }
 
 .image {

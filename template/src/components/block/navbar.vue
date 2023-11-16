@@ -41,7 +41,7 @@ const props = defineProps({
 })
 
 const route = useRoute()
-const loading = ref(true)
+const loading = ref(false)
 const visitor = ref({})
 onMounted(() => {
     visitor.value = JSON.parse(localStorage.getItem('visitor')) || {}

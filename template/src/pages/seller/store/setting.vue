@@ -40,7 +40,7 @@
                             <el-input v-model="store.address" clearable />
                         </el-form-item>
                         <el-form-item label="联系QQ" :label-width="100">
-                            <el-input v-model="store.im_qq" clearable />
+                            <el-input v-model="store.qq" clearable />
                         </el-form-item>
                         <el-form-item label="联系电话" :label-width="100">
                             <el-input v-model="store.tel" clearable />
@@ -78,7 +78,7 @@ const random = ref(Math.random())
 onMounted(() => {
     visitor.value = JSON.parse(localStorage.getItem('visitor'))
     storeRead({ store_id: visitor.value.store_id }, (data) => {
-        ['store_logo', 'store_name', 'region_id', 'address', 'description', 'tel', 'im_qq', 'province', 'city', 'district'].forEach((field) => {
+        ['store_logo', 'store_name', 'region_id', 'address', 'description', 'tel', 'qq', 'province', 'city', 'district'].forEach((field) => {
             store[field] = data[field]
         })
     })

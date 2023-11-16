@@ -32,7 +32,7 @@ const props = defineProps({
     }
 })
 
-const loading = ref(true)
+const loading = ref(false)
 const site = reactive({})
 onMounted(() => {
     siteRead(null, (data) => {

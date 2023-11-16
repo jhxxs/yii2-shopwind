@@ -44,7 +44,7 @@ import { Search } from '@element-plus/icons-vue'
 import { redirect } from '@/common/util.js'
 import { siteRead } from '@/api/site.js'
 
-const loading = ref(true)
+const loading = ref(false)
 const route = useRoute()
 const form = reactive({ keyword: '' })
 const site = reactive({ keywords: [] })
@@ -63,7 +63,7 @@ onMounted(() => {
     siteRead(null, (data) => {
         site.keywords = data.hot_keywords
         site.site_logo = data.site_logo
-    }, loading)
+    })
 })
 
 const search = (keyword) => {

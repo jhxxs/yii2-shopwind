@@ -48,7 +48,7 @@ class UserController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true, ['page', 'page_size']);
 
 		$query = UserModel::find()->alias('u')
-			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.im_qq,u.portrait,u.last_login,s.store_id,i.amount as integral,da.money')
+			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.qq,u.portrait,u.last_login,s.store_id,i.amount as integral,da.money')
 			->joinWith('store s', false)
 			->joinWith('integral i', false)
 			->joinWith('depositAccount da', false);
@@ -81,7 +81,7 @@ class UserController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true, ['userid']);
 
 		$query = UserModel::find()->alias('u')
-			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.im_qq,u.portrait,u.last_login,s.store_id,i.amount as integral,da.money')
+			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.qq,u.portrait,u.last_login,s.store_id,i.amount as integral,da.money')
 			->joinWith('store s', false)
 			->joinWith('integral i', false)
 			->joinWith('depositAccount da', false);
@@ -135,7 +135,7 @@ class UserController extends \common\base\BaseApiController
 		if (!$model->save($post, false)) {
 			return $respond->output(Respond::CURD_FAIL, Language::get('user_update_fail'));
 		}
-		$record = UserModel::find()->select('userid,username,nickname,real_name,phone_mob,email,gender,portrait,birthday,im_qq')->where(['userid' => $model->userid])->asArray()->one();
+		$record = UserModel::find()->select('userid,username,nickname,real_name,phone_mob,email,gender,portrait,birthday,qq')->where(['userid' => $model->userid])->asArray()->one();
 		$record['portrait'] = Formatter::path($record['portrait'], 'portrait');
 
 		return $respond->output(true, null, $record);
