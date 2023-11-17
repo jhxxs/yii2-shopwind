@@ -146,14 +146,14 @@ class RegionModel extends ActiveRecord
 		}
 
 		// 处理直辖市的情况
-		$directly = ['北京市', '上海市', '天津市', '重庆市'];
-		foreach ($directly as $key => $value) {
-			$array[0] = str_replace(substr($value, 0, -3) . $value, $value, $array[0]); // example: 北京北京市=》北京市 
-			if ($array[0] == $value) {
-				array_unshift($array, substr($value, 0, -3)); // 把“市”去掉，中文是3个字符
-				break;
-			}
-		}
+		// $directly = ['北京市', '上海市', '天津市', '重庆市'];
+		// foreach ($directly as $key => $value) {
+		// 	$array[0] = str_replace(substr($value, 0, -3) . $value, $value, $array[0]); // example: 北京北京市=》北京市 
+		// 	if ($array[0] == $value) {
+		// 		array_unshift($array, substr($value, 0, -3)); // 把“市”去掉，中文是3个字符
+		// 		break;
+		// 	}
+		// }
 
 		$result = array();
 		$fields = ['province', 'city', 'district'];
