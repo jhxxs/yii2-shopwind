@@ -99,6 +99,7 @@ export function userEditPhone(params, callback, loading) {
  * @param {ElLoading} loading 
  */
 export function userLogin(params, callback, loading) {
+    params.terminal = 'PC'
     request('auth/login', params, (res) => {
         if (res.code == 0 && res.data) {
             if (res.data.user_info) {
@@ -113,7 +114,7 @@ export function userLogin(params, callback, loading) {
 
                 localStorage.setItem('access_token', res.data.token)
                 localStorage.setItem('visitor', JSON.stringify(res.data.user_info))
-                
+
                 if (typeof callback == 'function') {
                     callback(res.data)
                 }
@@ -152,6 +153,7 @@ export function userLogout(callback) {
  * @param {ElLoading} loading 
  */
 export function userConnect(params, callback, loading) {
+    params.terminal = 'PC'
     request('auth/connect', params, (res) => {
         if (res.code == 0) {
             if (typeof callback == 'function') {

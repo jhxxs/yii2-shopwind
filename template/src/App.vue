@@ -17,5 +17,5 @@ import 'element-plus/dist/index.css'
 @import '@/assets/css/main.css';
 
 /* 引入阿里巴巴矢量图 */
-@import url("//at.alicdn.com/t/c/font_3292940_1ei7l59c0ct.css");
+@import url("//at.alicdn.com/t/c/font_3292940_6am46g4ypld.css");
 </style>

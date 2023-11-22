@@ -18,7 +18,6 @@ const APIURL = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : sit
 const APPID = import.meta.env.VITE_API_APPID
 const SECRET = import.meta.env.VITE_API_SECRET
 
-console.log(APIURL)
 /**
  * 请求数据
  * @param {String} api 

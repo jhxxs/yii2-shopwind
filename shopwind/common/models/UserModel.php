@@ -280,7 +280,7 @@ class UserModel extends ActiveRecord implements IdentityInterface
      */
     public static function generateName($prefix = '', $length = 10)
     {
-        if ($prefix !== null) $prefix = 'id_';
+        if ($prefix !== null) $prefix = 'id';
 
         $username = $prefix;
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

@@ -13,4 +13,5 @@ return array(
 	'password_empty'						=> '支付密码不能为空',
 	'password_confirm_error'				=> '两次密码不一致',
 	'payment_not_available'					=> '支付方式错误',
+	'money_not_enough' 						=> '余额不足',
 );

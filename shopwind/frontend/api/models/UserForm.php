@@ -18,6 +18,7 @@ use common\models\UserModel;
 
 use common\library\Basewind;
 use common\library\Language;
+use common\library\Def;
 
 /**
  * @Id UserForm.php 2018.10.25 $
@@ -103,7 +104,7 @@ class UserForm extends Model
 		if(isset($post->gender)) $model->gender = $post->gender;
 		if(isset($post->birthday)) $model->birthday = $post->birthday;
 		if(isset($post->qq)) $model->qq = $post->qq;
-		if(isset($post->portrait)) $model->portrait = $post->portrait;
+		if(isset($post->portrait)) $model->portrait = $this->getFileSavePath($post->portrait);
 		if(isset($post->password)) $model->setPassword($post->password);
 		
 		if(!$model->save()) {
@@ -138,5 +139,16 @@ class UserForm extends Model
 			return false;
 		}
 		return empty($post->$fields);
+	}
+
+	/**
+	 * 如果是本地存储，存相对地址，如果是云存储，存完整地址
+	 */
+	private function getFileSavePath($image = '')
+	{
+		if (stripos($image, Def::fileSaveUrl()) !== false) {
+			return str_replace(Def::fileSaveUrl() . '/', '', $image);
+		}
+		return $image;
 	}
 }
