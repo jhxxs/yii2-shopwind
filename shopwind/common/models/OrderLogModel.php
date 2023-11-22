@@ -40,7 +40,9 @@ class OrderLogModel extends ActiveRecord
     public static function create($order_id, $status, $operator = '', $remark = '')
     {
         if (!$operator) $operator = Language::get('system');
-        if (!($model = parent::find()->where(['order_id' => $order_id])->exists())) {
+        
+        $query = parent::find()->where(['order_id' => $order_id]);
+        if (!($model = $query->exists())) {
             $model = new OrderLogModel();
             $model->order_id = $order_id;
             $model->operator = $operator;
@@ -50,6 +52,13 @@ class OrderLogModel extends ActiveRecord
             if (!$model->save()) {
                 return false;
             }
+        }
+        
+        $status = is_int($status) ? Def::getOrderStatus($status) : $status;
+        
+        // 针对高并发，已插入不再插入
+        if($query->andWhere(['status' => $status])->exists()) {
+            return true;
         }
 
         $model = new OrderLogModel();

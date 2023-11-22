@@ -77,6 +77,7 @@ location / {
 [IIS]
 
 ```
+<rewrite>
 <rules>
  <rule name="rewrite_admin_rewrite" stopProcessing="true">
   <match url="admin/?(.*)"/>
@@ -102,15 +103,23 @@ location / {
   </conditions>
   <action type="Rewrite" url="index.php" appendQueryString="true"/>
  </rule>
-</rules>
+</rules> 
+</rewrite>
 ```
 
+## 配置通讯秘钥（编译前）
+1. 设置后端秘钥：平台后台-> 设置-> 接口设置-> 开放接口
+2. 配置PC端，@template/pc/env/.env.production 填写的值与后端的一致
+
 ## 重新编译
-> 使用VS Code开发工具加载源码包中的template/pc目录
+> 安装Nodejs环境（下载地址：https://nodejs.org/en/download）
+> 使用VS Code开发工具加载源码包中的@template/pc目录
 > 运行终端命令【Terminal > New Terminal】初始化项目：npm i
 > 运行终端命令：npm run build
 > 将编译后的dist文件夹里的文件上传到服务器根目录/public/pc
 
+## 开启地图定位
+> PC端，配置平台后台-> 设置-> 接口设置-> 百度地图KEY
 ## 常见问题
 
 1. 系统安装时报 Warning:require():open_baseDir restriction in effect....
