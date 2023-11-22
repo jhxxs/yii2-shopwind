@@ -51,6 +51,7 @@ class CouponModel extends ActiveRecord
 			->andWhere(['>=', 'sn.remain_times', 1])
 			->andWhere(['<=', 'c.start_time', $time])
 			->andWhere(['>=', 'c.end_time', $time])
+			->andWhere(['c.available' => 1])
 			->andWhere(['<=', 'c.amount', $order['amount']])
 			->orderBy(['c.money' => SORT_DESC])
 			//->indexBy('number')
