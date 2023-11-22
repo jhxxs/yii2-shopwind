@@ -119,7 +119,8 @@ location / {
 > 将编译后的dist文件夹里的文件上传到服务器根目录/public/pc
 
 ## 开启地图定位
-> PC端，配置平台后台-> 设置-> 接口设置-> 百度地图KEY
+> 配置平台后台-> 设置-> 接口设置-> 百度地图KEY
+
 ## 常见问题
 
 1. 系统安装时报 Warning:require():open_baseDir restriction in effect....
