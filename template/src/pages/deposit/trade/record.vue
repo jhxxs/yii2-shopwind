@@ -33,14 +33,14 @@
 									value-format="YYYY-MM-DD" @change="changeClick($event, 'daterange')" class="ml10" />
 							</el-form-item>
 							<el-form-item label="交易类型">
-								<el-select v-model="form.bizIdentity" @change="queryClick" placeholder="不限制" clearable>
-									<el-option label="支付" value="ORDER,BUYAPP" />
+								<el-select v-model="form.tradeType" @change="queryClick" placeholder="不限制" clearable>
+									<el-option label="支付" value="PAY" />
 									<el-option label="充值" value="RECHARGE" />
-									<el-option label="提现" value="DRAW" />
-									<el-option label="转账" value="TRANS" />
+									<el-option label="提现" value="WITHDRAW" />
+									<el-option label="转账" value="TRANSFER" />
+									<el-option label="服务费" value="SERVICE" />
+									<el-option label="返现" value="REGIVE" />
 									<el-option label="扣费" value="CHARGE" />
-									<el-option label="分销" value="FX" />
-									<el-option label="返现" value="REGIVE,GUIDE" />
 								</el-select>
 							</el-form-item>
 							<el-form-item label="资金方向">

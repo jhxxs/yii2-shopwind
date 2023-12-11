@@ -15,7 +15,8 @@ return array(
 	'login_please' 			=> '请先登录',
 	'token_invalid'			=> 'TOKEN无效',
 	'token_expire'			=> 'TOKEN已过期',
-	
+	'no_permission'			=> '没有权限',
+
 	'item_invalid'			=> '数据项不能为空或非法',
 	'no_such_user'			=> '用户不存在',
 	'username_existed'		=> '该用户名已存在',
@@ -28,21 +29,21 @@ return array(
 	'no_such_item'			=> '查询的数据不存在',
 	'drop_fail'				=> '删除失败',
 	'plugin_disallow'       => '插件未配置',
-	
+
 	'express'				=> '快递',
 	'ems'					=> 'EMS',
 	'post'					=> '邮政',
-	
+
 	'stock'     			=> '库存',
 	'defray'				=> '支付',
 	'transfer'				=> '转账',
 	'recharge'				=> '充值',
-	
+
 	// 支付类型
 	'SHIELD'			=> '担保交易',
 	'INSTANT'			=> '即时到账',
 	'COD'				=> '货到付款',
-	
+
 	// 交易类型
 	'PAY'				=> '在线支付',
 	'TRANSFER'			=> '转账',
@@ -50,7 +51,7 @@ return array(
 	'WITHDRAW'			=> '提现',
 	'RECHARGE'			=> '充值',
 	'RECHARGECARD'		=> '充值卡',
-	
+
 	// 针对交易的状态
 	'TRADE_PENDING'				=> '待付款',
 	'TRADE_ACCEPTED'    		=> '待发货',
@@ -60,7 +61,7 @@ return array(
 	'TRADE_CLOSED'				=> '交易关闭',
 	'TRADE_VERIFY' 				=> '待审核',
 
-	
+
 	// 针对退款的状态
 	'REFUND_SUCCESS'				=> '退款成功',
 	'REFUND_CLOSED'					=> '退款关闭',
@@ -71,13 +72,13 @@ return array(
 	// 针对订单状态
 	'order_pending'     => '待付款',
 	'order_teaming'		=> '待成团',
-    'order_accepted'    => '待发货',
+	'order_accepted'    => '待发货',
 	'order_picking'		=> '待配送',
 	'order_delivered'	=> '待取货',
-    'order_canceled'    => '交易关闭',
-    'order_shipped'     => '待收货',
+	'order_canceled'    => '交易关闭',
+	'order_shipped'     => '待收货',
 	'order_using'		=> '待使用',
-    'order_finished'    => '交易完成',
+	'order_finished'    => '交易完成',
 	'order_success'		=> '交易完成',
 	'order_closed'		=> '交易关闭',
 	'order_submited'	=> '已下单',
@@ -89,7 +90,9 @@ return array(
 	'trade_refund_return'		=> '交易退款',
 	'trade_refund_pay'			=> '交易付款',
 	'chargeback'				=> '扣减服务费',
-	
+	'drawalfee'					=> '提现手续费',
+	'recharge_give'             => '充值返现',
+
 	'deposit'				=> '余额支付',
 	'alipay'				=> '支付宝',
 	'tenpay' 				=> '财付通',
@@ -100,7 +103,7 @@ return array(
 	'wxh5pay' 				=> '微信H5支付',
 	'wxapppay'             	=> '微信APP支付',
 	'cod'					=> '货到付款',
-	
+
 	'sms_buy' 				=> '您店铺下了一个新订单，订单号为[%s]，请联系买家及时付款',
 	'sms_send' 				=> '您的订单[%s]，商家[%s]已经发货，请及时查收！',
 	'sms_check' 			=> '您的订单[%s]，买家[%s]已经确认！',
@@ -111,10 +114,9 @@ return array(
 	'phone_code_check_failed'   	=> '手机验证码错误或已失效',
 	'phone_code_check_timeout' 		=> '短信验证码已经过期',
 	'send_limit_frequency_one_time' => '请过%s秒后重试',
-	'send_limit_frequency_five_time'=> '发送太频繁请稍后再试',
+	'send_limit_frequency_five_time' => '发送太频繁请稍后再试',
 	'send_limit_frequency_daytimes' => '同一号码每天最多发送%s次短信',
 
 	'buying_has_integral_logtext'  => '购物订单获积分，订单号[%s]',
 	'selling_has_integral_logtext' => '买家使用积分抵扣货款，订单号[%s]',
-	'recharge_give'                => '充值返现',
 );

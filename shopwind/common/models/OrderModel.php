@@ -125,19 +125,22 @@ class OrderModel extends ActiveRecord
 		return addslashes($subject);
 	}
 
-	/* 获取每笔订单，订单总额，商品总额等各项实际的金额（或调价后分摊的金额，考虑折扣，运费，改价等情况） */
+	/* 获取每笔订单，订单总额，商品总额等各项实际的金额（或调价后分摊的金额，考虑折扣，运费等情况） */
 	public static function getRealAmount($order_id = 0)
 	{
-		$orderInfo = parent::find()->select('goods_amount,discount,order_amount,adjust_amount')->where(['order_id' => $order_id])->one();
+		$orderInfo = parent::find()->select('goods_amount,discount,order_amount')->where(['order_id' => $order_id])->one();
 		$orderExtm = OrderExtmModel::find()->select('shipping_fee')->where(['order_id' => $order_id])->one();
 
 		$realGoodsAmount = $realShippingFee = $realOrderAmount = 0;
-		if ($orderInfo && $orderExtm) {
+		if ($orderInfo) {
 			$realOrderAmount = $orderInfo->order_amount;
+			$realGoodsAmount = $orderInfo->order_amount; // 无运费情况
 
-			// 如果实际支付的金额还不到运费的总额，那么先扣完商品总价后，剩余为运费分摊的金额
-			$realShippingFee = ($orderExtm->shipping_fee >= $orderInfo->order_amount) ? $orderInfo->order_amount : $orderExtm->shipping_fee;
-			$realGoodsAmount = $orderInfo->order_amount - $realShippingFee;
+			if ($orderExtm) { // 注：服务类核销商品没有记录
+				// 如果实际支付的金额还不到运费的总额，那么先扣完商品总价后，剩余为运费分摊的金额
+				$realShippingFee = ($orderExtm->shipping_fee >= $orderInfo->order_amount) ? $orderInfo->order_amount : $orderExtm->shipping_fee;
+				$realGoodsAmount = $orderInfo->order_amount - $realShippingFee;
+			}
 		}
 
 		return array($realGoodsAmount, $realShippingFee, $realOrderAmount);
@@ -164,7 +167,7 @@ class OrderModel extends ActiveRecord
 	public static function checkCodPaymentEnable($order_info = [])
 	{
 		// 拼团订单/虚拟服务类商品订单不支持货到付款
-		if ($order_info['otype'] == 'teambuy' || in_array($order_info['gtype'], ['virtual','service'])) {
+		if ($order_info['otype'] == 'teambuy' || in_array($order_info['gtype'], ['virtual', 'service'])) {
 			return false;
 		}
 

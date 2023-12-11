@@ -131,7 +131,7 @@ class BasePlugin
 				$plugins[$entry] = $info;
 
 				if ($checkInstall) {
-					$plugins[$entry]['isInstall'] = $this->isInstall($entry);
+					$plugins[$entry]['isInstall'] = $this->isInstall($entry, false);
 				}
 			}
 			$folder->close();
@@ -155,10 +155,9 @@ class BasePlugin
 	 * @param string $code 获取插件列表需要该参数
 	 * @param boolean $checkabled 是否验证插件启用状态
 	 */
-	public function isInstall($code = null, $checkabled = false)
+	public function isInstall($code = null, $checkabled = true)
 	{
-		if (!$code) $code = $this->code;
-
+		$code = $code ? $code : $this->getCode();
 		if ($model = PluginModel::find()->where(['instance' => $this->instance, 'code' => $code])->one()) {
 			return $checkabled ? $model->enabled == 1 : true;
 		}

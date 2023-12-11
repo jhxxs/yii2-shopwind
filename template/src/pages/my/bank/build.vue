@@ -31,10 +31,10 @@
 							<p class="w-full"><span class="f-c60 mt5 f-12">请绑定持卡人本人的银行卡</span></p>
 						</el-form-item>
 						<el-form-item label="卡号" :label-width="150">
-							<el-input v-model.number="form.account" placeholder="持卡人银行卡号" />
+							<el-input v-model.number="form.account" class="small" placeholder="持卡人银行卡号" />
 						</el-form-item>
 						<el-form-item label="支行" :label-width="150">
-							<el-input v-model="form.area" placeholder="XXX支行" />
+							<el-input v-model="form.area" class="small" placeholder="XXX支行" />
 						</el-form-item>
 						<el-form-item label=" " :label-width="150" class="pt20">
 							<el-button type="primary" @click="submit" :loading="loading" :disabled="loading">提交</el-button>
@@ -110,7 +110,8 @@ const close = (done) => {
 	margin-top: 50px;
 	width: 500px;
 }
+
 .el-form .el-input.small {
-	width: 188px;
+	width: 205px;
 }
 </style>

@@ -98,8 +98,8 @@ class RefundForm extends Model
 				return false;
 			}
 			
-			// 如果订单状态是已付款、待成团、待配货、已发货、待提货、已发货的订单，且不是交易完成的、交易关闭的可以申请退款
-			if(!in_array($order->status, [Def::ORDER_ACCEPTED, Def::ORDER_TEAMING, Def::ORDER_PICKING, Def::ORDER_SHIPPED, Def::ORDER_DELIVERED])) { 
+			// 如果订单状态是已付款、待成团、待配货、已发货、待取货、待使用的订单，且不是交易完成的、交易关闭的可以申请退款
+			if(!in_array($order->status, [Def::ORDER_ACCEPTED, Def::ORDER_TEAMING, Def::ORDER_PICKING, Def::ORDER_SHIPPED, Def::ORDER_DELIVERED, Def::ORDER_USING])) { 
 				$this->errors = Language::get('order_not_apply_refund');
 				return false;
 			}	

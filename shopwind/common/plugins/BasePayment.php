@@ -239,7 +239,7 @@ class BasePayment extends BasePlugin
 
 			if (in_array($payment['code'], ['deposit'])) {
 				if ($showDepositPay === true) {
-					
+
 					$depositAccount = DepositAccountModel::getAccountInfo(Yii::$app->user->id);
 					if (in_array($depositAccount->pay_status, ['ON'])) {
 						if ($orderInfo['amount'] > $depositAccount->money) {
@@ -410,8 +410,8 @@ class BasePayment extends BasePlugin
 	 */
 	public function updateTradeInfo($payTradeNo)
 	{
-		list($notifyMoney, $outTradeNo) = $this->getNotifySpecificData();
-		DepositTradeModel::updateAll(['outTradeNo' => $outTradeNo], ['payTradeNo' => $payTradeNo]);
+		list($notifyMoney, $outTradeNo, $openid) = $this->getNotifySpecificData();
+		DepositTradeModel::updateAll(['outTradeNo' => $outTradeNo, 'openid' => $openid], ['payTradeNo' => $payTradeNo]);
 	}
 
 	/**

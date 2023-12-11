@@ -33,6 +33,7 @@ class OrderController extends \common\base\BaseApiController
 {
 	public function init()
 	{
+		parent::init();
 		Taskqueue::run();
 	}
 	

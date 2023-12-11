@@ -236,7 +236,7 @@ class OrderController extends \common\base\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if ($post->id) $post->id = explode(',', $post->id);
 
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,o.pay_message,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
 			->joinWith('orderExtm oe', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
 		if (!empty($post->id)) {

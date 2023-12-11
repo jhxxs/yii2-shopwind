@@ -31,12 +31,7 @@ use common\library\Def;
 class BuygoodsDepopay extends OutlayDepopay
 {
 	/**
-	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	 */
-	public $_tradeCat	= 'SHOPPING';
-
-	/**
-	 * 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
 	 */
 	public $_tradeType 	= 'PAY';
 
@@ -65,7 +60,6 @@ class BuygoodsDepopay extends OutlayDepopay
 			$model->seller_id = $trade_info['party_id'];
 			$model->amount = $trade_info['amount'];
 			$model->status = 'PENDING';
-			$model->tradeCat = $this->_tradeCat;
 			$model->payType = $this->_payType;
 			$model->flow = $this->_flow;
 			$model->title = $extra_info['title'];
@@ -91,7 +85,7 @@ class BuygoodsDepopay extends OutlayDepopay
 		$tradeNo = $extra_info['tradeNo'];
 		list($nextOrderStatus, $nextTradeStatus) = $this->getNextStatus($extra_info['gtype']);
 
-		// 修改交易状态为已付款
+		// 修改交易状态为待发货/待使用
 		if (!parent::_update_trade_status($tradeNo, ['status' => $nextTradeStatus, 'pay_time' => Timezone::gmtime()])) {
 			$this->setErrors('50024');
 			return false;
@@ -105,7 +99,7 @@ class BuygoodsDepopay extends OutlayDepopay
 			}
 		}
 
-		// 修改订单状态为已付款
+		// 修改订单状态为待发货/待使用
 		if (!parent::_update_order_status($extra_info['order_id'], ['status' => $nextOrderStatus, 'pay_time' => Timezone::gmtime()])) {
 			$this->setErrors('50021');
 			return false;
@@ -201,7 +195,7 @@ class BuygoodsDepopay extends OutlayDepopay
 	 * 针对服务类商品订单，下一个状态是：待使用
 	 * 其他类型订单，下一个状态是：待发货
 	 */
-	private function getNextStatus($gtype = 'normal')
+	private function getNextStatus($gtype = 'material')
 	{
 		// 如果是服务类商品，则下一个状态是待使用
 		if ($gtype == 'service') {

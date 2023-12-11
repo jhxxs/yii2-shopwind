@@ -103,7 +103,7 @@ class AuthController extends \common\base\BaseApiController
 		$post->logintype = $respond->getRealLogintype($post);
 
 		$connect = Plugin::getInstance('connect')->build($post->logintype, $post);
-		if (!$connect->isInstall($post->logintype)) {
+		if (!$connect->isInstall()) {
 			return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
 		}
 
@@ -118,7 +118,7 @@ class AuthController extends \common\base\BaseApiController
 	private function unilogin($respond, $post)
 	{
 		$connect = Plugin::getInstance('connect')->build($post->logintype, $post);
-		if (!$connect->isInstall($post->logintype)) {
+		if (!$connect->isInstall()) {
 			return $respond->output(Respond::HANDLE_INVALID, Language::get('plugin_disallow'));
 		}
 

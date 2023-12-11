@@ -131,3 +131,19 @@ export function depositDrawal(params, callback, loading) {
         }
     }, loading)
 }
+
+/**
+ * 资金配置
+ * @param {Object} params 
+ * @param {Function} callback 
+ * @param {ElLoading} loading 
+ */
+export function depositSetting(params, callback, loading) {
+    request('deposit/setting', params, (res) => {
+        if (res.code == 0) {
+            if (typeof callback == 'function') {
+                callback(res.data)
+            }
+        }
+    }, loading)
+}

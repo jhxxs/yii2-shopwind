@@ -48,7 +48,11 @@
                         <th><span>收<i style="margin:0 7px">货</i>人</span></th>
                         <td><span>{{ order.consignee.name }}</span></td>
                         <th><span>收货地址</span></th>
-                        <td><span>{{ order.consignee.address }}</span></td>
+                        <td>
+                            <span>
+                                {{ order.consignee.province || '' }}{{ order.consignee.city || ''}}{{ order.consignee.district || '' }}{{ order.consignee.address }}
+                            </span>
+                        </td>
                     </tr>
                     <tr>
                         <th><span>联系电话</span></th>
@@ -63,8 +67,8 @@
                     <tr v-for="(goods, index) in order.items">
                         <td colspan="3" align="left">
                             <span> {{ index + 1 }}) {{ goods.goods_name }}
-                                <i v-if="goods.specification">({{
-                                    goods.specification }})</i>
+                                <label v-if="goods.specification">({{
+                                    goods.specification }})</label>
                             </span>
                         </td>
                         <td><span>{{ currency(goods.price) }} x {{ goods.quantity }}</span></td>

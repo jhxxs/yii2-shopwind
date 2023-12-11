@@ -222,6 +222,7 @@ class DepositController extends \common\base\BaseAdminController
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value) {
+				$list[$key]['amount'] = $value['amount'] - $value['fee'];
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
 				if ($user = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one()) {

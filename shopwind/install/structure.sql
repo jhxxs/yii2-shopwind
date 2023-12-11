@@ -477,6 +477,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_setting` (
   `setting_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `trade_rate` decimal(10,3) DEFAULT '0' COMMENT '交易手续费',
+  `drawal_rate` decimal(10,3) DEFAULT '0' COMMENT '提现手续费',
   `transfer_rate` decimal(10,3) DEFAULT '0' COMMENT '转账手续费',
   `regive_rate` decimal(10,3) DEFAULT '0' COMMENT '充值赠送金额比率',
   `guider_rate` decimal(10,3) DEFAULT '0' COMMENT '团长返佣比率',
@@ -492,7 +493,7 @@ DROP TABLE IF EXISTS `swd_deposit_trade`;
 CREATE TABLE IF NOT EXISTS `swd_deposit_trade` (
   `trade_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tradeNo` varchar(32) NOT NULL COMMENT '交易号',
-  `outTradeNo` varchar(255) DEFAULT '' COMMENT '第三方支付接口的交易号',
+  `outTradeNo` varchar(255) DEFAULT '' COMMENT '第三方平台的交易号',
   `payTradeNo` varchar(32) DEFAULT '' COMMENT '支付订单号',
   `bizOrderId` varchar(32) DEFAULT '' COMMENT '商户订单号',
   `bizIdentity` varchar(20) DEFAULT '' COMMENT '商户交易类型识别号',
@@ -509,6 +510,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_trade` (
   `title` varchar(100) NOT NULL DEFAULT '' COMMENT '交易标题',
   `buyer_remark` varchar(255) DEFAULT '' COMMENT '买家备注',
   `seller_remark` varchar(255) DEFAULT '' COMMENT '卖家备注',
+  `openid` varchar(255) DEFAULT '' COMMENT '第三方平台支付者用户标识',
   `add_time` int(11) DEFAULT NULL,
   `pay_time` int(11) DEFAULT NULL,
   `end_time` int(11) DEFAULT NULL,
@@ -535,6 +537,7 @@ CREATE TABLE IF NOT EXISTS `swd_deposit_withdraw` (
   `account` varchar(255) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
   `bank` varchar(100) DEFAULT NULL,
+  `fee` decimal(10,2) DEFAULT '0' COMMENT '手续费',
   PRIMARY KEY (`draw_id`),
   KEY `orderId` (`orderId`),
   KEY `userid` (`userid`)

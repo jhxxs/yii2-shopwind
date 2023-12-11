@@ -27,13 +27,8 @@ use common\library\Def;
 
 class TransferDepopay extends OutlayDepopay
 {
-    /**
-	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	 */
-	public $_tradeCat  = 'TRANSFER'; 
-	
 	/**
-	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
 	 */
     public $_tradeType = 'TRANSFER';
 	
@@ -80,7 +75,6 @@ class TransferDepopay extends OutlayDepopay
 			'amount'		=>	$trade_info['amount'],
 			'status'		=>	'SUCCESS',
 			'payment_code'  =>  'deposit',
-			'tradeCat'		=>	$this->_tradeCat,
 			'payType'		=>  $this->_payType,
 			'flow'			=>	$this->_flow,
 			'title'			=>	Language::get(strtolower($this->_tradeType)),

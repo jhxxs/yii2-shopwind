@@ -147,7 +147,7 @@ class Alipay extends BasePayment
 	public function getNotifySpecificData()
 	{
 		$notify = $this->getNotify();
-		return array($notify['total_amount'], $notify['trade_no']);
+		return array($notify['total_amount'], $notify['trade_no'], '');
 	}
 
 	/**

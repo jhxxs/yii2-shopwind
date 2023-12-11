@@ -8,7 +8,7 @@
  * If you need commercial operation, please contact us to purchase a license.
  * @license https://www.shopwind.net/license/
  */
- 
+
 namespace common\business\depopaytypes;
 
 use yii;
@@ -31,16 +31,11 @@ use common\library\Def;
 
 class DistributeDepopay extends IncomeDepopay
 {
-    /**
-	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	 */
-	public $_tradeCat  = 'TRANSFER'; 
-	
 	/**
-	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
 	 */
-    public $_tradeType = 'TRANSFER';
-	
+	public $_tradeType = 'REGIVE';
+
 	public function submit($data = array())
 	{
 		// NOT TO...
@@ -52,90 +47,87 @@ class DistributeDepopay extends IncomeDepopay
 	 */
 	public function distribute($order = array())
 	{
-        $items = OrderGoodsModel::find()->select('rec_id,price,quantity,inviteType,inviteRatio,inviteUid')->where(['order_id' => $order['order_id']])->indexBy('rec_id')->all();
-		if(empty($items)) {
+		$items = OrderGoodsModel::find()->select('rec_id,price,quantity,inviteType,inviteRatio,inviteUid')->where(['order_id' => $order['order_id']])->indexBy('rec_id')->all();
+		if (empty($items)) {
 			return false;
 		}
-		
+
 		// 可返佣的金额基数小于零
 		$distributeAmount = DistributeModel::getDistributeAmount($order);
-		if($distributeAmount <= 0) {
+		if ($distributeAmount <= 0) {
 			return false;
 		}
-		
+
 		list($each) = DistributeModel::getItemRate($items, $distributeAmount);
-		
+
 		// 无需分佣
-		if($each === false) {
+		if ($each === false) {
 			return false;
 		}
-		
+
 		// 三级返佣总金额
 		$amount = 0;
 		$profit = array();
-						
+
 		// 计算该笔订单应该返现多少金额
-		foreach($items as $key => $item)
-		{
+		foreach ($items as $key => $item) {
 			$money = $ratio = array();
-			if($item->inviteRatio && ($inviteRatio = unserialize($item->inviteRatio))) 
-			{
-				for($i = 1; $i <= 3; $i++) {
-					$ratio[$i] = $inviteRatio['ratio'.$i];
+			if ($item->inviteRatio && ($inviteRatio = unserialize($item->inviteRatio))) {
+				for ($i = 1; $i <= 3; $i++) {
+					$ratio[$i] = $inviteRatio['ratio' . $i];
 					$money[$i] = round($distributeAmount * $each[$key] * $ratio[$i], 2);
 				}
 			}
 
 			$parents = DistributeMerchantModel::getParents($item->inviteUid);
-			foreach($parents as $i => $parent)
-			{
-				if(!$parent) {
+			foreach ($parents as $i => $parent) {
+				if (!$parent) {
 					break;
 				}
-				
+
 				$profit[$key][] = array(
-					'userid'=> $parent, 
-					'money'	=> $money[$i+1], 
-					'layer' => $i+1, 
-					'type' 	=> $item->inviteType, 
-					'ratio' => $ratio[$i+1]
+					'userid' => $parent,
+					'money'	=> $money[$i + 1],
+					'layer' => $i + 1,
+					'type' 	=> $item->inviteType,
+					'ratio' => $ratio[$i + 1]
 				);
-				$amount += $money[$i+1];
+				$amount += $money[$i + 1];
 			}
 		}
-		
+
 		// 先从供货商处扣除返佣总额
 		$options = ['title' => sprintf(Language::get('distribute_outlay'), $order['order_sn'])];
-		if(!$this->distributeProfit($order['seller_id'], $amount, $order['order_sn'], 'reduce', 0, 'goods', $options)) {
+		if (!$this->distributeProfit($order['seller_id'], $amount, $order['order_sn'], 'reduce', 0, 'goods', $options)) {
 			return false;
 		}
-		
+
 		// 给每个上级返佣
-		foreach($profit as $key => $val) {
-			foreach($val as $k => $v) {
+		foreach ($profit as $key => $val) {
+			foreach ($val as $k => $v) {
 				$options = [
-					'title' 	=> sprintf(Language::get('distribute_income'), $order['order_sn']), 
-					'remark' 	=> Language::get('distribute_layer'.$v['layer']),
+					'title' 	=> sprintf(Language::get('distribute_income'), $order['order_sn']),
+					'remark' 	=> Language::get('distribute_layer' . $v['layer']),
 					'ratio'		=> $v['ratio'],
 					'rec_id'    => $key,
 				];
-				
+
 				$this->distributeProfit($v['userid'], $v['money'], $order['order_sn'], 'add', $v['layer'], $v['type'], $options);
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * 	@var string $change  add|reduce
 	 */
 	private function distributeProfit($userid, $money, $order_sn, $change = 'add', $layer = 0, $type = 'goods', $options = array())
 	{
-		if(!$userid || !$money || ($money < 0)) {
+		if (!$userid || !$money || ($money < 0)) {
 			return false;
 		}
-		
+
 		$model = new DepositTradeModel();
 		$model->tradeNo = $model->genTradeNo();
 		$model->bizOrderId = $model->genTradeNo(12, 'bizOrderId');
@@ -145,16 +137,14 @@ class DistributeDepopay extends IncomeDepopay
 		$model->amount = $money;
 		$model->status = 'SUCCESS';
 		$model->payment_code = 'deposit';
-		$model->tradeCat = $this->_tradeCat;
 		$model->payType = $this->_payType;
 		$model->flow = $change == 'add' ? 'income' : 'outlay';
 		$model->title = $options['title'];
 		$model->add_time = Timezone::gmtime();
 		$model->pay_time = Timezone::gmtime();
 		$model->end_time = Timezone::gmtime();
-		
-		if($model->save())
-		{
+
+		if ($model->save()) {
 			$query = new DepositRecordModel();
 			$query->tradeNo = $model->tradeNo;
 			$query->userid = $model->buyer_id;
@@ -163,30 +153,29 @@ class DistributeDepopay extends IncomeDepopay
 			$query->tradeType = $this->_tradeType;
 			$query->flow = $model->flow;
 			$query->name = $model->title;
-			$query->remark = isset($options['remark']) ? $options['remark'] : '';			
-			if($query->save())
-			{
+			$query->remark = isset($options['remark']) ? $options['remark'] : '';
+			if ($query->save()) {
 				// 只统计增加的收益，扣减供货商的返现金额不统计
-				if($change == 'add') {
-					
-					if(!($post = DistributeModel::find()->where(['userid' => $userid])->one())) {
+				if ($change == 'add') {
+
+					if (!($post = DistributeModel::find()->where(['userid' => $userid])->one())) {
 						$post = new DistributeModel();
 						$post->userid = $userid;
 						$post->save();
 					}
 					// 汇总总收益
 					$post->updateCounters(['amount' => $money]);
-					
+
 					// 汇总分别通过商品分销/店铺分销的总收益
-					if(in_array($type, ['goods', 'store'])) {
+					if (in_array($type, ['goods', 'store'])) {
 						$post->updateCounters([$type => $money]);
 					}
-					
+
 					// 汇总每一级分销的总收益
-					if(in_array($layer, [1,2,3]) && ($field = 'layer'.$layer)) {
+					if (in_array($layer, [1, 2, 3]) && ($field = 'layer' . $layer)) {
 						$post->updateCounters([$field => $money]);
 					}
-					
+
 					// 插入分销订单表记录
 					$this->insertDistributeOrder($userid, $money, $order_sn, $model->tradeNo, $layer, $type, $options);
 				}
@@ -195,7 +184,7 @@ class DistributeDepopay extends IncomeDepopay
 		}
 		return false;
 	}
-	
+
 	private function insertDistributeOrder($userid, $money, $order_sn, $tradeNo, $layer, $type, $options = array())
 	{
 		$model = new DistributeOrderModel();
@@ -208,7 +197,7 @@ class DistributeDepopay extends IncomeDepopay
 		$model->ratio = $options['ratio'];
 		$model->type = $type;
 		$model->created = Timezone::gmtime();
-		if(!$model->save()) {
+		if (!$model->save()) {
 			return false;
 		}
 		return true;

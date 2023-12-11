@@ -62,7 +62,7 @@ export function orderExtm(params, callback, loading) {
 }
 
 /**
- * 获取订单发货信息
+ * 获取订单物流信息（可能会有多条物流）
  * @param {Object} params 
  * @param {Function} callback 
  * @param {ElLoading} loading 
@@ -309,6 +309,24 @@ export function orderTimeline(params, callback, loading) {
 			if (typeof callback == 'function') {
 				callback(res.data)
 			}
+		}
+	}, loading)
+}
+
+/**
+ * 订单导出EXCEL
+ * @param {Object} params 
+ * @param {Function} callback 
+ * @param {ElLoading} loading 
+ */
+export function orderExport(params, callback, loading) {
+	request('order/export', params, (res) => {
+		if (res.code == 0) {
+			if (typeof callback == 'function') {
+				callback(res.data)
+			}
+		} else {
+			ElMessage.warning(res.message)
 		}
 	}, loading)
 }

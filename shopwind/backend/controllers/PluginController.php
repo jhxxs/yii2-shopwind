@@ -116,7 +116,7 @@ class PluginController extends \common\base\BaseAdminController
 
 		if (!Yii::$app->request->isPost) {
 			$client = Plugin::getInstance($get->instance)->build($get->code);
-			if (!$client || !$client->isInstall(null, true)) {
+			if (!$client || !$client->isInstall()) {
 				return Message::warning(Language::get('plugin_disabled'));
 			}
 
@@ -129,7 +129,7 @@ class PluginController extends \common\base\BaseAdminController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
 			$client = Plugin::getInstance($get->instance)->build($get->code, $post);
-			if (!$client || !$client->isInstall(null, true)) {
+			if (!$client || !$client->isInstall()) {
 				return Message::warning(Language::get('plugin_disabled'));
 			}
 

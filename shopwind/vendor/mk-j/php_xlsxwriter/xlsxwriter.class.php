@@ -17,6 +17,7 @@ class XLSXWriter
 	protected $author;
 	protected $isRightToLeft;
 	protected $company;
+	protected $tempdir;
 	protected $description;
 	protected $keywords = array();
 	

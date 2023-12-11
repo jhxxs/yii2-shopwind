@@ -2,7 +2,7 @@
     <el-dialog v-model="dialogVisible" :title="title" :width="500" :center="true" :draggable="true" :destroy-on-close="true"
         :close-on-click-modal="false" :before-close="close">
         <el-form>
-            <el-form-item label="物流公司">
+            <el-form-item v-if="companys.length > 0" label="物流公司">
                 <el-select v-model="form.code" placeholder="请选择">
                     <el-option v-for="(item, index) in companys" :key="index" :label="item.name" :value="item.code" />
                 </el-select>

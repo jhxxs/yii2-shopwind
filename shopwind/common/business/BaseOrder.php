@@ -221,7 +221,6 @@ class BaseOrder
 				'seller_name'   =>  addslashes($order['store_name']),
 				'buyer_id'      =>  Yii::$app->user->id,
 				'buyer_name'    =>  addslashes(Yii::$app->user->identity->username),
-				'buyer_email'   =>  Yii::$app->user->identity->email ? Yii::$app->user->identity->email : '',
 				'status'       	=>  Def::ORDER_PENDING,
 				'add_time'      =>  Timezone::gmtime(),
 				'goods_amount'  =>  $order['amount'],

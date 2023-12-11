@@ -28,13 +28,8 @@ use common\library\Def;
  
 class BuyappDepopay extends OutlayDepopay
 {
-    /**
-	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	 */
-	public $_tradeCat	= 'SHOPPING'; 
-	
 	/**
-	 * 针对财务明细的交易类型，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
 	 */
     public $_tradeType 	= 'PAY';
 	
@@ -59,7 +54,6 @@ class BuyappDepopay extends OutlayDepopay
 			$model->seller_id = $trade_info['party_id'];
 			$model->amount = $trade_info['amount'];
 			$model->status = 'PENDING';
-			$model->tradeCat = $this->_tradeCat;
 			$model->payType = $this->_payType;
 			$model->flow = $this->_flow;
 			$model->title = $extra_info['title'];

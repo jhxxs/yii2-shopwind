@@ -32,6 +32,9 @@ class Weixin
 	public $config = null;
 	public $errors = null;
 
+	/**
+	 * @param string $code mp|applet
+	 */
 	public function __construct($config = null, $userid = 0, $code = 'mp')
 	{
 		$this->userid = $userid;

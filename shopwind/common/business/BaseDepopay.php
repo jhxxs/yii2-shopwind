@@ -174,7 +174,6 @@ class BaseDepopay
 			'amount'		=>	$fee,
 			'status'		=>	'SUCCESS',
 			'payment_code' 	=>  'deposit',
-			'tradeCat'		=>	'SERVICE', // 服务费
 			'payType'		=>	'INSTANT',
 			'flow'			=>	'outlay',
 			'title'			=>	Language::get('chargeback'),

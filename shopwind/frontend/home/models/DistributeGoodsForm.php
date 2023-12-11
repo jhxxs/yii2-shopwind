@@ -43,7 +43,8 @@ class DistributeGoodsForm extends Model
 		// 可分销的商品
 		if($post->type == 'pending') {
 			$query = DistributeSettingModel::find()->alias('ds')->select('ds.item_id as goods_id')
-				->joinWith('goods g', false, 'INNER JOIN')->where(['enabled' => 1, 'ds.type' => 'goods'])
+				->joinWith('goods g', false, 'INNER JOIN')
+				->where(['enabled' => 1, 'ds.type' => 'goods', 'g.if_show' => 1, 'g.closed' => 0])
 				->andWhere(['not in', 'item_id', DistributeItemsModel::find()->select('item_id')->where(['userid' => Yii::$app->user->id, 'type' => 'goods'])->column()])
 				->orderBy(['dsid' => SORT_DESC]);
 		}

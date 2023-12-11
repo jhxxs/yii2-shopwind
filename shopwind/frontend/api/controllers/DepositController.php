@@ -20,6 +20,7 @@ use common\models\OrderGoodsModel;
 use common\models\DepositAccountModel;
 use common\models\DepositTradeModel;
 use common\models\DepositRecordModel;
+use common\models\DepositSettingModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -138,15 +139,16 @@ class DepositController extends \common\base\BaseApiController
 		if ($post->flow) {
 			$query->andwhere(['flow' => $post->flow]);
 		}
+		if ($post->bizIdentity) {
+			$query->andWhere(['bizIdentity' => $post->bizIdentity]);
+		}
 
 		// 如果查询的是冻结的记录
 		// 目前只冻结待审核的提现，如果还有其他类型的冻结交易，则加到此
 		if ($post->frozen) {
-			$query->andwhere(['tradeCat' => 'WITHDRAW', 'status' => 'VERIFY']);
+			$query->andwhere(['bizIdentity' => 'DRAW', 'status' => 'VERIFY']);
 		}
-		if ($post->bizIdentity) {
-			$query->andWhere(['bizIdentity' => $post->bizIdentity]);
-		}
+		
 		if ($post->status) {
 			$query->andWhere(['status' => $post->status]);
 		}
@@ -249,14 +251,16 @@ class DepositController extends \common\base\BaseApiController
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['page', 'page_size']);
 
-		$query = DepositRecordModel::find()->alias('dr')->select('dr.record_id,dr.userid,dr.amount,dr.balance,dr.flow,dr.name,dt.title,dt.tradeNo,dt.bizOrderId,dt.bizIdentity,dt.add_time,dt.pay_time,dt.end_time,u.username,u.nickname,u.portrait')->joinWith('depositTrade dt', false)->joinWith('user u', false)
+		$query = DepositRecordModel::find()->alias('dr')
+			->select('dr.record_id,dr.userid,dr.amount,dr.balance,dr.flow,dr.name,dt.title,dt.tradeNo,dt.bizOrderId,dt.bizIdentity,dt.add_time,dt.pay_time,dt.end_time,u.username,u.nickname,u.portrait')
+			->joinWith('depositTrade dt', false)->joinWith('user u', false)
 			->where(['dr.userid' => Yii::$app->user->id])->orderBy(['record_id' => SORT_DESC]);
 
 		if ($post->tradeNo) {
 			$query->andWhere(['tradeNo' => $post->tradeNo]);
 		}
-		if ($post->bizIdentity) {
-			$query->andWhere(['in', 'bizIdentity', explode(',', $post->bizIdentity)]);
+		if ($post->tradeType) {
+			$query->andWhere(['in', 'tradeType', explode(',', $post->tradeType)]);
 		}
 		if ($post->flow) {
 			$query->andWhere(['dr.flow' => $post->flow]);
@@ -294,7 +298,13 @@ class DepositController extends \common\base\BaseApiController
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['record_id']);
 
-		$query = DepositRecordModel::find()->alias('dr')->select('dr.record_id,dr.userid,dr.amount,dr.balance,dr.flow,dr.name,dt.title,dt.tradeNo,dt.bizOrderId,dt.bizIdentity,dt.add_time,dt.pay_time,dt.end_time,u.username,u.nickname,u.portrait')->joinWith('depositTrade dt', false)->joinWith('user u', false)->where(['and', ['dr.userid' => Yii::$app->user->id], ['record_id' => $post->record_id]])->orderBy(['record_id' => SORT_DESC]);
+		$query = DepositRecordModel::find()->alias('dr')
+			->select('dr.record_id,dr.userid,dr.amount,dr.balance,dr.flow,dr.name,dt.title,dt.tradeNo,dt.bizOrderId,dt.bizIdentity,dt.add_time,dt.pay_time,dt.end_time,u.username,u.nickname,u.portrait')
+			->joinWith('depositTrade dt', false)
+			->joinWith('user u', false)
+			->where(['and', ['dr.userid' => Yii::$app->user->id], ['record_id' => $post->record_id]])
+			->orderBy(['record_id' => SORT_DESC]);
+
 		if (!($record = $query->asArray()->one())) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no such record'));
 		}
@@ -363,6 +373,24 @@ class DepositController extends \common\base\BaseApiController
 			return $respond->output(Respond::PARAMS_INVALID, $model->errors);
 		}
 		return $respond->output(true, null, ['tradeNo' => $result]);
+	}
+
+	/**
+	 * 获取资金配置
+	 * @api 接口访问地址: http://api.xxx.com/deposit/setting
+	 */
+	public function actionSetting()
+	{
+		// 验证签名
+		$respond = new Respond();
+		if (!$respond->verify(true)) {
+			return $respond->output(false);
+		}
+
+		// 业务参数
+		$post = Basewind::trimAll($respond->getParams(), true, ['userid']);
+		$record = DepositSettingModel::getDepositSetting($post->userid);
+		return $respond->output(true, null, $record);
 	}
 
 	/**

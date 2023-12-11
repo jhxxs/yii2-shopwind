@@ -52,7 +52,7 @@ class DepositWithdrawModel extends ActiveRecord
 	/**
 	 * 处理提现的资金及改变交易状态
 	 * @var string $tradeNo 交易号
-	 * @var string $method 转账方式，取值：manual（人工转账）、online（在线转账，目前仅支持支付宝） 
+	 * @var string $method 转账方式，取值：manual（人工转账）、online（在线转账，目前仅支持支付宝/微信） 
 	 */
 	public function handleMoney($tradeNo, $method = 'manual')
 	{
@@ -64,8 +64,8 @@ class DepositWithdrawModel extends ActiveRecord
 			}
 
 			if ($method == 'online') {
-				$payee = parent::find()->select('name,account,drawtype,terminal')->where(['orderId' => $model->bizOrderId])->asArray()->one();
-				if (!($orderId = $this->transfer($this->getCode($payee), $model->payTradeNo, $model->amount, $payee, $model->title))) {
+				$draw = parent::find()->select('name,account,drawtype,terminal,fee')->where(['orderId' => $model->bizOrderId])->asArray()->one();
+				if (!($orderId = $this->transfer($this->getCode($draw['drawtype'], $draw['terminal']), $model->payTradeNo, $model->amount - $draw->fee, $draw, $model->title))) {
 					return false;
 				}
 
@@ -122,18 +122,18 @@ class DepositWithdrawModel extends ActiveRecord
 	 * 获取不同的提现终端的CODE值
 	 * 主要是针对提现至微信零钱场景，不同的终端对应不同的OPENID值
 	 */
-	private function getCode($payee)
+	private function getCode($drawtype = '', $terminal = '')
 	{
-		if ($payee['drawtype'] == 'wxpay') {
+		if ($drawtype == 'wxpay') {
 
-			if ($payee['terminal'] == 'APP') {
+			if ($terminal == 'APP') {
 				return 'wxapppay';
 			}
-			if ($payee['terminal'] == 'MP') {
+			if ($terminal == 'MP') {
 				return 'wxmppay';
 			}
 		}
 
-		return $payee['drawtype'];
+		return $drawtype;
 	}
 }

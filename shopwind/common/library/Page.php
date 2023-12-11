@@ -307,20 +307,29 @@ class Page
 	/**
 	 * 导出xlsx文件
 	 */
-	public static function export($config = [])
+	public static function export($config = [], $outfile = false)
 	{
 		$writer = new \XLSXWriter();
-		header('Content-disposition: attachment; filename="' . $writer->sanitize_filename($config['fileName']) . '.xlsx"');
-		header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-		header('Content-Transfer-Encoding: binary');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
 
 		$writer->setTempDir(Yii::getAlias('@public/data'));
 		$writer->writeSheet($config['models']);
 
-		$writer->writeToStdOut();
-		exit(0);
+		if (!$outfile) {
+			header('Content-disposition: attachment; filename="' . $writer->sanitize_filename($config['filename']) . '.xlsx"');
+			header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			header('Content-Transfer-Encoding: binary');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			$writer->writeToStdOut();
+			exit(0);
+		}
+
+		// 输出下载文件路径
+		$path = Yii::getAlias('@public/data/files/mall/excel/');
+		$file = $path . $config['filename'] . '.xlsx';
+		$writer->writeToFile($file);
+
+		return str_replace(Yii::getAlias('@public'), Basewind::baseUrl(), $file);
 	}
 
 	public static function writeLog($key = '', $word = '')

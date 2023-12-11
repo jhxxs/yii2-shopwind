@@ -34,7 +34,7 @@ class BaseExpress extends BasePlugin
 	 */
 	public function getCompanys()
 	{
-		if (!$this->isInstall($this->code)) {
+		if (!$this->isInstall($this->code, false)) {
 			return false;
 		}
 

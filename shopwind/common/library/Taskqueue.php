@@ -190,7 +190,7 @@ class Taskqueue
 	 * 针对服务类商品订单，下一个状态是：待使用
 	 * 其他类型订单，下一个状态是：待发货
 	 */
-	private static function getNextStatus($gtype = 'normal')
+	private static function getNextStatus($gtype = 'material')
 	{
 		// 如果是服务类商品，则下一个状态是待使用
 		if ($gtype == 'service') {

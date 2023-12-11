@@ -549,6 +549,32 @@ class OrderController extends \common\base\BaseApiController
 	}
 
 	/**
+	 * 订单导出
+	 */
+	public function actionExport()
+	{
+		// 验证签名
+		$respond = new Respond();
+		if (!$respond->verify(true)) {
+			return $respond->output(false);
+		}
+
+		// 业务参数
+		$post = Basewind::trimAll($respond->getParams(), true);
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+			->joinWith('orderExtm oe', false)
+			->orderBy(['o.order_id' => SORT_DESC])
+			->where(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])
+			->andWhere(['in', 'o.order_id', $post->items]);
+
+		if ($query->count() == 0) {
+			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_data'));
+		}
+		$file = \backend\models\OrderExportForm::download($query->asArray()->all(), true);
+		return $respond->output(true, null, $file);
+	}
+
+	/**
 	 * 从具体实例获取预支付订单数据
 	 * @param string $otype = 'normal' 取购物车商品(可能包含多个店铺的商品)
 	 * 				 $otype = 'mealbuy' 取搭配套餐商品(只会有一个店铺的商品)

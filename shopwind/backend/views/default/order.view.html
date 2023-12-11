@@ -18,9 +18,6 @@
                 <!--{if $order.payment_code}-->
                 <li>{$lang.payment_name}{$lang.colon}{$order.payment_name|escape}</li>
                 <!--{/if}-->
-                <!--{if $order.pay_message}-->
-                <li>{$lang.pay_message}{$lang.colon}{$order.pay_message|escape}</li>
-                <!--{/if}-->
                 <li>{$lang.add_time}{$lang.colon}{$order.add_time|date_format:"%Y-%m-%d %H:%M:%S"}</li>
                 <!--{if $order.pay_time}-->
                 <li>{$lang.pay_time}{$lang.colon}{$order.pay_time|date_format:"%Y-%m-%d %H:%M:%S"}</li>

@@ -59,16 +59,28 @@
 		</el-row>
 	</div>
 
-	<el-dialog v-model="dialogVisible" title="提现验证" :width="340" :center="true" :draggable="true" :destroy-on-close="true"
+	<el-dialog v-model="dialogVisible" title="提现确认" :width="340" :center="true" :draggable="true" :destroy-on-close="true"
 		:close-on-click-modal="false" :before-close="close">
-		<el-form>
-			<el-form-item label="支付密码" style="margin-bottom:0">
-				<el-input v-model="form.password" type="password" clearable />
+		<div class="center">
+			<p>提现</p>
+			<p class="f-25 mt5">{{ currency(form.money) }}</p>
+			<p class="uni-flex uni-row width-between f-12 f-gray bt pt10 mt20">
+				<text>服务费</text>
+				<span>{{ currency(form.money * setting.drawal_rate) }}</span>
+			</p>
+			<p class="uni-flex uni-row width-between f-12 f-gray">
+				<text>费率</text>
+				<span>{{ setting.drawal_rate * 100 + '%' }}</span>
+			</p>
+		</div>
+		<el-form class="mt20">
+			<el-form-item label="支付密码" style="margin-bottom: 0;">
+				<el-input v-model="form.password" type="password" placeholder="支付密码" clearable />
 				<p class="f-12 f-c60 l-h17 mt5">请输入站内钱包账户的支付密码<br>（非银行卡密码）</p>
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button type="primary" @click="confirm" :loading="loading == false">确定
+			<el-button type="primary" @click="confirm" :loading="!loading">确定
 			</el-button>
 		</template>
 	</el-dialog>
@@ -79,9 +91,9 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { depositDrawal } from '@/api/deposit.js'
+import { depositDrawal, depositSetting } from '@/api/deposit.js'
 import { bankList } from '@/api/bank.js'
-import { redirect } from '@/common/util.js'
+import { redirect, currency } from '@/common/util.js'
 
 import myhead from '@/pages/layout/header/my.vue'
 import myfoot from '@/pages/layout/footer/user.vue'
@@ -90,6 +102,7 @@ import menus from '@/pages/layout/menus/my.vue'
 const loading = ref(false)
 const form = reactive({ drawtype: 'alipay', money: 100 })
 const banks = ref([])
+const setting = ref({})
 const dialogVisible = ref(false)
 
 onMounted(() => {
@@ -99,6 +112,11 @@ onMounted(() => {
 			form.name = data.list[0].name
 		}
 	})
+
+	depositSetting(null, (data) => {
+		setting.value = data
+		console.log(data)
+	})
 })
 
 const confirm = () => {
@@ -106,15 +124,15 @@ const confirm = () => {
 		return ElMessage.warning('支付密码不能为空')
 	}
 
-	dialogVisible.value = false
 	if (form.drawtype == 'bank') {
 		form.bank = banks.value[form.index].bank
 		form.name = banks.value[form.index].name
 		form.account = banks.value[form.index].account
 	}
 	depositDrawal(form, (data) => {
+		dialogVisible.value = false
 		ElMessageBox({
-			title: '提现成功',
+			title: '提现已提交',
 			type: 'success', message: '提现申请已提交，平台将在2个工作日后审核完成！', showCancelButton: false, beforeClose: (action, instance, done) => {
 				redirect('/deposit/trade/detail/' + data.tradeNo)
 				done()
@@ -142,8 +160,9 @@ const change = (value) => {
 	margin-top: 60px;
 	width: 500px;
 }
+
 .el-form .el-input {
-	width: 188px;
+	width: 205px;
 }
 
 .el-form .el-radio__inner {

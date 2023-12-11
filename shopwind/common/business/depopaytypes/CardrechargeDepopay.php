@@ -31,12 +31,7 @@ use common\library\Def;
 class CardrechargeDepopay extends IncomeDepopay
 {
 	/**
-	 * 针对交易记录的交易分类，值有：购物：SHOPPING； 理财：FINANCE；缴费：CHARGE； 还款：CCR；转账：TRANSFER ...
-	 */
-	public $_tradeCat  = 'RECHARGE'; 
-	
-	/**
-	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW; 服务费：SERVICE；转账：TRANSFER
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
 	 */
     public $_tradeType = 'RECHARGE';
 	
@@ -84,7 +79,6 @@ class CardrechargeDepopay extends IncomeDepopay
 				'amount'		=> $trade_info['amount'],
 				'status'		=> 'PENDING',
 				'payment_code'	=> 'deposit',
-				'tradeCat'		=> $this->_tradeCat,
 				'payType'		=> $this->_payType,
 				'flow'     		=> $this->_flow,
 				'title'			=> Language::get('recharge') . ' - ' . Language::get('rechargecard'),

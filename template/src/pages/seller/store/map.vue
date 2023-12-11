@@ -53,7 +53,7 @@ import menus from '@/pages/layout/menus/seller.vue'
 
 const loading = ref(true)
 const visitor = ref({})
-const position = ref({ lng: 116.404, lat: 39.915 })
+const position = reactive({ lng: 116.404, lat: 39.915 })
 const baidukey = ref(null)
 
 onMounted(() => {
@@ -66,7 +66,7 @@ onMounted(() => {
 
 const handler = ({ BMap, map }) => {
     storeRead({ store_id: visitor.value.store_id }, (data) => {
-        position.value = { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude) }
+        Object.assign(position, { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude) })
     })
 }
 

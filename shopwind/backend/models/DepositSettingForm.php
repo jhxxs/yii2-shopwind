@@ -26,10 +26,10 @@ class DepositSettingForm extends Model
 {
 	public $userid = 0;
 	public $errors = null;
-	
-    public function valid($post)
+
+	public function valid($post)
 	{
-		if(!$this->isNumeric($post)) {
+		if (!$this->isNumeric($post)) {
 			$this->errors = Language::get('number_error');
 			return false;
 		}
@@ -43,23 +43,23 @@ class DepositSettingForm extends Model
 	 */
 	public function save($post, $valid = true)
 	{
-		if($valid === true && !$this->valid($post)) {
+		if ($valid === true && !$this->valid($post)) {
 			return false;
 		}
-		
-		if(!($model = DepositSettingModel::find()->where(['userid' => $this->userid])->one())) {
+
+		if (!($model = DepositSettingModel::find()->where(['userid' => $this->userid])->one())) {
 			$model = new DepositSettingModel();
 		}
 		$model->userid = $this->userid;
-		
+
 		$fields = $this->getFields();
-		foreach($fields as $field) {
-			if(isset($post->$field)) {
+		foreach ($fields as $field) {
+			if (isset($post->$field)) {
 				$model->$field = floatval($post->$field);
 			}
 
 			// 在新增情况下，如果是用户配置，将缺省字段设置值为-1,让该字段取值继承系统配置
-			elseif($this->userid && !$model->setting_id) {
+			elseif ($this->userid && !$model->setting_id) {
 				$model->$field = -1;
 			}
 		}
@@ -70,12 +70,12 @@ class DepositSettingForm extends Model
 	private function isNumeric($post)
 	{
 		$fields = $this->getFields();
-		foreach($fields as $field) {
-			if(!isset($post->$field)) {
+		foreach ($fields as $field) {
+			if (!isset($post->$field)) {
 				continue;
 			}
 
-			if(!is_numeric($post->$field) || $post->$field < 0 || $post->$field >= 1) {
+			if (!is_numeric($post->$field) || $post->$field < 0 || $post->$field >= 1) {
 				return false;
 			}
 		}
@@ -83,7 +83,8 @@ class DepositSettingForm extends Model
 		return true;
 	}
 
-	private function getFields() {
-		return ['trade_rate', 'transfer_rate', 'regive_rate', 'guider_rate'];
+	private function getFields()
+	{
+		return ['trade_rate', 'drawal_rate', 'transfer_rate', 'regive_rate', 'guider_rate'];
 	}
 }
