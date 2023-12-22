@@ -667,7 +667,7 @@ const submit = () => {
 	form.video = goods.hasvideo ? goods.video : ''
 	form.haslongimg = goods.haslongimg ? goods.long_image : ''
 
-	if (scategory.length > 0) {
+	if (scategory.value.length > 0) {
 		form.scate_id = treeRef.value ? treeRef.value.getCheckedKeys(false) : []
 	}
 
