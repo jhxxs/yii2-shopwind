@@ -302,11 +302,9 @@ class RegionModel extends ActiveRecord
 	 */
 	public static function getAddressByCoord($latitude, $longitude)
 	{
-		$ak = Yii::$app->params['baidukey']['browser'];
-		$gateway = 'https://api.map.baidu.com/geocoder';
-		if ($ak) {
-			$gateway = 'https://api.map.baidu.com/reverse_geocoding/v3/';
-		}
+		$gateway = 'https://api.map.baidu.com/reverse_geocoding/v3/';
+		$ak = Yii::$app->params['baidukey']['server'];
+
 		$result = Basewind::curl($gateway . '?ak=' . $ak . '&output=json&location=' . implode(',', [$latitude, $longitude]));
 		$result = json_decode($result);
 		if ($result->status == 'OK' || $result->status == '0') {
@@ -317,6 +315,6 @@ class RegionModel extends ActiveRecord
 			];
 		}
 
-		return array();
+		return [];
 	}
 }
