@@ -1,4 +1,9 @@
 {include file="header.html"}
+<style>
+  #region select {
+    margin-right: 5px;
+  }
+</style>
 <div id="main">
   {include file="menus.html"}
   <div id="rightCon" class="clearfix layui-body">
@@ -10,9 +15,7 @@
               <th class="paddingT15"><label>{$lang.scategory}</label></th>
               <td class="paddingT15 wordSpacing5"><select name="cate_id">
                   <option value="0">{$lang.select_pls}</option>
-
                   {html_options options=$scategories selected=$store.scate_id}
-
                 </select></td>
             </tr>
             <tr>
@@ -23,9 +26,7 @@
                   <input type="hidden" name="region_name" value="" class="mls_names" />
                   <select>
                     <option value="0">{$lang.select_pls}</option>
-
                     {html_options options=$regions}
-
                   </select>
                   <span class="field_notice">{$lang.note_for_select}</span>
                 </div>
@@ -36,9 +37,7 @@
               </th>
               <td class="paddingT15 wordSpacing5"><select name="sgrade" id="sgrade">
                   <option value="0">{$lang.select_pls}</option>
-
                   {html_options options=$sgrades}
-
                 </select>
                 <span class="field_notice">{$lang.note_for_select}</span>
               </td>

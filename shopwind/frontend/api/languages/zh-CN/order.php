@@ -27,8 +27,8 @@ return array(
 	'free_acount_ship_title'        => '购物满%s件包邮',
 	'cannot_evaluate'				=> '该订单不支持评价',
 	'goodstype_invalid'				=> '实物商品和虚拟服务类商品不能同时结算',
-	'writeoff_invalid'				=> '没有权限核销该订单',
-	'writeoff_confirm'				=> '卖家扫码核销订单',
+	'verusedf_invalid'				=> '没有权限核销该订单',
+	'verused_confirm'				=> '卖家扫码核销订单',
 	'no_order_extm'					=> '没有订单配送信息',
 
 	'distribute_income'				=> '分销佣金收入',

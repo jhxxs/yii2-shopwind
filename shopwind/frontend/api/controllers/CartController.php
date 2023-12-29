@@ -30,46 +30,46 @@ class CartController extends \common\base\BaseApiController
 	 * 获取购物车商品，包含多个店铺的商品
 	 * @api 接口访问地址: http://api.xxx.com/cart/list
 	 */
-    public function actionList()
-    {
+	public function actionList()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true);
-		
+
 		$model = new \frontend\api\models\CartForm();
 		$carts = $model->formData($model->getCart());
-		
+
 		// 店铺满折满减
 		$carts['list'] = $model->getCartFullprefer($carts['list']);
-		
+
 		// 是否显示领取优惠券按钮
 		$carts['list'] = $model->getCouponEnableReceive($carts['list']);
-		
+
 		return $respond->output(true, null, $carts);
 	}
-	
+
 	/**
 	 * 单个商品插入购物车
 	 * @api 接口访问地址: http://api.xxx.com/cart/add
 	 */
-    public function actionAdd()
-    {
+	public function actionAdd()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['spec_id', 'quantity', 'selected']);
-		
-		$model = new \frontend\api\models\CartForm();	
-		if(($result = $model->valid($post)) === false) {
+
+		$model = new \frontend\api\models\CartForm();
+		if (($result = $model->valid($post)) === false) {
 			return $respond->output($model->code, $model->errors);
 		}
 		$this->addCart([$result], $post);
@@ -81,22 +81,22 @@ class CartController extends \common\base\BaseApiController
 	 * 批量加入购物车
 	 * @api 接口访问地址: http://api.xxx.com/cart/many
 	 */
-    public function actionMany()
-    {
+	public function actionMany()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['selected']);
-		
+
 		$list = array();
 		$model = new \frontend\api\models\CartForm();
-		foreach($post->specs as $key => $value) {
-			if(($value = intval($value)) && $value > 0) {
-				if(($list[] = $model->valid((Object)['spec_id' => $key, 'quantity' => $value])) === false) {
+		foreach ($post->specs as $key => $value) {
+			if (($value = intval($value)) && $value > 0) {
+				if (($list[] = $model->valid((object)['spec_id' => $key, 'quantity' => $value])) === false) {
 					return $respond->output($model->code, $model->errors);
 				}
 			}
@@ -105,106 +105,110 @@ class CartController extends \common\base\BaseApiController
 
 		return $respond->output(true, Language::get('add_cart_successed'), $model->getCart());
 	}
-	
+
 	/**
 	 * 更新购物车商品
 	 * @api 接口访问地址: http://api.xxx.com/cart/update
 	 */
-    public function actionUpdate()
-    {
+	public function actionUpdate()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['spec_id', 'quantity', 'selected']);
-		
+
 		$model = new \frontend\api\models\CartForm();
-		if(($result = $model->valid($post)) === false) {
+		if (($result = $model->valid($post)) === false) {
 			return $respond->output($model->code, $model->errors);
 		}
-		
+
 		// 用于识别购物车产品唯一性的ID
 		$product_id = Yii::$app->cart->getId($result);
 		Yii::$app->cart->change($product_id, $post->quantity, $result['price']);
 
 		// 如果是设置选中/取消操作
-		if(isset($post->selected)) {
+		if (isset($post->selected)) {
 			Yii::$app->cart->chose($product_id, $post->selected);
 		}
-		
+
 		return $respond->output(true, Language::get('update_item_successed'), $model->getCart());
 	}
 
 	/**
- 	 * 删除整个购物车商品
+	 * 删除整个购物车商品
 	 * @api 接口访问地址: http://api.xxx.com/cart/delete
 	 */
-    public function actionDelete()
-    {
+	public function actionDelete()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
-		}  
-		
+		}
+
 		// 业务参数
 		//$post = Basewind::trimAll($respond->getParams(), true);
 		Yii::$app->cart->clear();
 
-		return $respond->output(true);	
+		return $respond->output(true);
 	}
-	
+
 	/**
- 	 * 移除购物车商品
+	 * 移除购物车商品
 	 * @api 接口访问地址: http://api.xxx.com/cart/remove
 	 */
-    public function actionRemove()
-    {
+	public function actionRemove()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
-		}  
-		
+		}
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true);
-		
+
 		$model = new \frontend\api\models\CartForm();
-		if(!$post->product_id || !($product = Yii::$app->cart->getItem($post->product_id)->getProduct()) || ($product->userid != Yii::$app->user->id) || !(Yii::$app->cart->remove($post->product_id))) {
+		if (!$post->product_id && $post->spec_id) {
+			$post->product_id = Yii::$app->cart->getId(['spec_id' => $post->spec_id]);
+		}
+
+		if (!$post->product_id || !($product = Yii::$app->cart->getItem($post->product_id)->getProduct()) || ($product->userid != Yii::$app->user->id) || !(Yii::$app->cart->remove($post->product_id))) {
 			return $respond->output(Respond::CURD_FAIL, Language::get('drop_item_failed'));
 		}
-		
+
 		return $respond->output(true, Language::get('drop_item_successed'), $model->getCart());
 	}
-	
+
 	/**
- 	 * 设置购物车商品为选中/取消状态
+	 * 设置购物车商品为选中/取消状态
 	 * @api 接口访问地址: http://api.xxx.com/cart/chose
 	 */
-    public function actionChose()
-    {
+	public function actionChose()
+	{
 		// 验证签名
 		$respond = new Respond();
-		if(!$respond->verify(true)) {
+		if (!$respond->verify(true)) {
 			return $respond->output(false);
 		}
-		
+
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true, ['selected']);
-		
-		$model = new \frontend\api\models\CartForm();		
-		if(!isset($post->product_ids) || empty($post->product_ids)) {
+
+		$model = new \frontend\api\models\CartForm();
+		if (!isset($post->product_ids) || empty($post->product_ids)) {
 			return $respond->output(Respond::PARAMS_INVALID, Language::get('params_invalid'));
 		}
-	
+
 		$allId = ArrayHelper::toArray($post->product_ids);
-		foreach($allId as $product_id) {
+		foreach ($allId as $product_id) {
 			Yii::$app->cart->chose(trim($product_id), !isset($post->selected) ? 1 : $post->selected);
 		}
-		
+
 		return $respond->output(true, Language::get('update_item_successed'), $model->getCart());
 	}
 
@@ -214,22 +218,21 @@ class CartController extends \common\base\BaseApiController
 	 */
 	private function addCart($list = [], $post = null)
 	{
-		foreach($list as $key => $result)
-		{
+		foreach ($list as $key => $result) {
 			// 用于识别购物车产品唯一性的ID
 			$product_id = Yii::$app->cart->getId($result);
-			if(($product = Yii::$app->cart->getItem($product_id)->getProduct())) {
-				if($result['stock'] < $product->quantity + $result['quantity']) {
+			if (($product = Yii::$app->cart->getItem($product_id)->getProduct())) {
+				if ($result['stock'] < $product->quantity + $result['quantity']) {
 					Yii::$app->cart->remove($product->product_id);
 				}
 			} else $product = Yii::$app->cart->createItem(array_merge($result, ['product_id' => $product_id]));
-			
+
 			// 放入购物车（自动判断是加入商品，还是增加已加入商品的数量）
 			Yii::$app->cart->put($product, $result['quantity']);
 
 			// 立即购买的操作（确保只购买的是当前立即购买的商品）
-			if(isset($post->selected) && $post->selected) {
-				if($key == 0) Yii::$app->cart->unchoses();
+			if (isset($post->selected) && $post->selected) {
+				if ($key == 0) Yii::$app->cart->unchoses();
 				Yii::$app->cart->chose($product->product_id);
 				Yii::$app->cart->change($product->product_id, $result['quantity'], $result['price']);
 			}

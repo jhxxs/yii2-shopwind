@@ -66,14 +66,14 @@ class RegionModel extends ActiveRecord
 	 * 保留级别缩进效果，一般用于select
 	 * @return array(21 => 'abc', 22 => '&nbsp;&nbsp;');
 	 */
-	public static function getOptions($parent_id = -1, $except = null, $layer = 0, $shown = true, $space = '&nbsp;&nbsp;')
+	public static function getOptions($parent_id = -1, $except = null, $layer = 0, $shown = true, $space = '')
 	{
 		$regions = self::getList($parent_id, $shown, false);
 
 		$tree = new Tree();
 		$tree->setTree($regions, 'region_id', 'parent_id', 'region_name');
 
-		return $tree->getOptions($layer, 0, $except, $space);
+		return $tree->getOptions($layer, 0, $except, ($parent_id == -1 && $space !== false) ? '&nbsp;&nbsp;' : $space);
 	}
 
 	/* 寻找某ID的所有父级 */

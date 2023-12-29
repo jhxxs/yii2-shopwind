@@ -82,13 +82,14 @@ class Seller_orderShippedForm extends Model
 			}
 		}
 
+		// 更新交易状态
 		DepositTradeModel::updateAll(['status' => 'SHIPPED'], ['bizOrderId' => $orderInfo['order_sn'], 'bizIdentity' => Def::TRADE_ORDER, 'seller_id' => $orderInfo['seller_id']]);
 
 		// 记录订单操作日志
 		OrderLogModel::create($orderInfo['order_id'], Def::ORDER_SHIPPED, addslashes(Yii::$app->user->identity->username), $post->remark);
 
 		if ($sendNotify === true) {
-			// 短信和邮件提醒： 卖家已发货通知买家
+			// 短信和邮件提醒： 已发货通知买家
 			Basewind::sendMailMsgNotify(
 				array_merge($orderInfo, ['express_no' => $post->number]),
 				array(

@@ -29,15 +29,10 @@ use common\library\Def;
 class BaseDepopay
 {
 	/**
-	 * 财务明细的交易类型
-	 */
-	public $_tradeType;
-
-	/**
 	 * 交易类型
-	 * @var string $otype
+	 * @var string $dtype
 	 */
-	protected $otype;
+	protected $dtype;
 
 	/**
 	 * 页面提交参数
@@ -57,9 +52,9 @@ class BaseDepopay
 	 */
 	public $errors;
 
-	public function __construct($otype, $post = null, $params = array())
+	public function __construct($dtype, $post = null, $params = [])
 	{
-		$this->otype 	= $otype;
+		$this->dtype 	= $dtype;
 		$this->post 	= $post;
 		$this->params 	= $params;
 	}

@@ -46,25 +46,25 @@ class BaseOrder
 	 * 订单类型
 	 * @var string $otype
 	 */
-	protected $otype = '';
+	protected $otype;
 
 	/**
 	 * 页面提交参数
 	 * @var object $post
 	 */
-	public $post = null;
+	public $post;
 
 	/**
 	 * 其他额外参数
 	 * @var array $params
 	 */
-	public $params = array();
+	public $params;
 
 	/**
 	 * 错误捕捉
 	 * @var object $errors
 	 */
-	public $errors = null;
+	public $errors;
 
 	public function __construct($otype, $post = null, $params = [])
 	{

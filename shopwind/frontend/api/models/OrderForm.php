@@ -23,6 +23,7 @@ use common\models\GoodsStatisticsModel;
 use common\models\OrderExtmModel;
 use common\models\OrderLogModel;
 use common\models\GuideshopModel;
+use common\models\RegionModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -67,7 +68,7 @@ class OrderForm extends Model
 		// 卖家获取订单管理数据
 		if ($this->enter == 'seller') {
 			$query->andWhere(['o.seller_id' => Yii::$app->user->id]);
-			$query->addSelect('oe.consignee,oe.phone_mob,region_name,address,phone_tel,shipping_name');
+			$query->addSelect('oe.consignee,oe.phone_mob,region_id,address,phone_tel,shipping_name');
 		}
 		// 团长获取订单管理数据
 		elseif ($this->enter == 'guider') {
@@ -142,12 +143,13 @@ class OrderForm extends Model
 
 			// 对卖家订单和团长订单返回收（取）货人信息
 			if (in_array($this->enter, ['seller', 'guider'])) {
-				$shipping = [
+				$array = RegionModel::getArrayRegion($value['region_id']);
+				$shipping = array_merge([
 					'name' => $value['consignee'],
 					'phone_mob' => $value['phone_mob'] ? $value['phone_mob'] : $value['phone_tel'],
-					'address' => str_replace(' ', '', $value['region_name']) . $value['address']
-				];
-				unset($list[$key]['phone_mob'], $list[$key]['phone_tel'], $list[$key]['region_name'], $list[$key]['address']);
+					'address' => $value['address']
+				], $array ? $array : []);
+				unset($list[$key]['phone_mob'], $list[$key]['phone_tel'], $list[$key]['address']);
 				$list[$key]['consignee'] = $shipping;
 			}
 		}
@@ -161,8 +163,8 @@ class OrderForm extends Model
 	 */
 	public function orderCancel($post, $orderInfo = [])
 	{
-		// 只有待付款且未发货（针对货到付款）的订单财可以取消
-		if (!($orderInfo['status'] == Def::ORDER_PENDING && !$orderInfo['ship_time'])) {
+		// 如果已付款，或已发货（如货到付款）则不可以取消订单
+		if ($orderInfo['pay_time'] || $orderInfo['ship_time']) {
 			$this->errors = Language::get('unsupport_status');
 			return false;
 		}
@@ -256,7 +258,7 @@ class OrderForm extends Model
 	/**
 	 * 卖家核销订单（针对虚拟商品订单），交易完成
 	 */
-	public function orderWriteoff($post, $orderInfo = [])
+	public function orderVerused($post, $orderInfo = [])
 	{
 		// 更新订单状态 
 		$model = OrderModel::findOne($orderInfo['order_id']);
@@ -270,7 +272,7 @@ class OrderForm extends Model
 		}
 
 		// 记录订单操作日志 
-		OrderLogModel::create($model->order_id, Def::ORDER_FINISHED, '', Language::get('writeoff_confirm'));
+		OrderLogModel::create($model->order_id, Def::ORDER_FINISHED, '', Language::get('verused_confirm'));
 
 		// 转到对应的业务实例，不同的业务实例用不同的文件处理，如购物，卖出商品，充值，提现等，每个业务实例又继承支出或者收入 
 		$depopay_type = \common\library\Business::getInstance('depopay')->build('sellgoods', $post);

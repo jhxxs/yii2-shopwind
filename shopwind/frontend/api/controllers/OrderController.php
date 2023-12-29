@@ -465,7 +465,7 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_order'));
 		}
 
-		$url = Basewind::mobileUrl(true) . '/pages/trade/order/writeoff?id=' . $post->order_id;
+		$url = Basewind::mobileUrl(true) . '/pages/trade/order/verused?id=' . $post->order_id;
 		list($fileurl) = Page::generateQRCode('qrcode/order/', ['text' => $url, 'size' => 200]);
 		return $respond->output(true, null, ['qrcode' => $fileurl]);
 	}
@@ -473,7 +473,7 @@ class OrderController extends \common\base\BaseApiController
 	/**
 	 * 服务商品订单核销（卖家扫码）
 	 */
-	public function actionWriteoff()
+	public function actionVerused()
 	{
 		// 验证签名
 		$respond = new Respond();
@@ -495,7 +495,7 @@ class OrderController extends \common\base\BaseApiController
 		}
 
 		if ($record['seller_id'] != Yii::$app->user->id) {
-			return $respond->output(Respond::HANDLE_INVALID, Language::get('writeoff_invalid'));
+			return $respond->output(Respond::HANDLE_INVALID, Language::get('verused_invalid'));
 		}
 
 		// 未核销

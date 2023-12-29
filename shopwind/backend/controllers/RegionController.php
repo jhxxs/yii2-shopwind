@@ -39,6 +39,7 @@ class RegionController extends \common\base\BaseAdminController
 				$regions[$key]['switchs'] = 1;
             }
         }
+		
 		$this->params['regions'] = $regions;
 		$this->params['_head_tags'] = Resource::import(['style' => 'javascript/treetable/treetable.css,javascript/dialog/dialog.css']);
 		$this->params['_foot_tags'] = Resource::import(['script' => 'javascript/jquery.ui/jquery.ui.js,javascript/dialog/dialog.js,javascript/treetable/rtree.js,javascript/inline_edit.js']);

@@ -147,10 +147,11 @@
 							<template #default="scope">
 								<router-link class="rlink f-blue mb5"
 									:to="'/seller/order/detail/' + scope.row.order_id">查看订单</router-link>
+								<el-button v-if="!(scope.row.pay_time || scope.row.ship_time || scope.row.finished_time)"
+									class="mb5" size="small" @click="cancelClick(scope.$index)" plain>取消订单</el-button>
 
 								<!--如果是实物 & 虚拟商品-->
-								<div
-									v-if="scope.row.gtype == 'material' || scope.row.gtype == 'virtual'">
+								<div v-if="scope.row.gtype != 'service'">
 									<el-button v-if="scope.row.status == 20 && scope.row.gtype == 'material'" class="mb5"
 										type="warning" size="small" @click="shipClick(scope.$index)" plain>
 										商家发货
@@ -187,6 +188,8 @@
 
 	<shipped v-if="gallery.length > 0" title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]"
 		@close="dialogClose"></shipped>
+	<canceled v-if="gallery.length > 0" title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]"
+		@close="dialogClose"></canceled>
 	<printed v-if="mulselection.length > 0" title="打印订单" :visible="dialogPrintVisible" :data="mulselection"
 		@close="dialogClose"></printed>
 	<exported v-if="mulselection.length > 0" title="导出EXCEL" :visible="dialogExportVisible" :data="mulselection"
@@ -206,6 +209,7 @@ import myhead from '@/pages/layout/header/seller.vue'
 import myfoot from '@/pages/layout/footer/user.vue'
 import menus from '@/pages/layout/menus/seller.vue'
 import shipped from '@/components/dialog/order/shipped.vue'
+import canceled from '@/components/dialog/order/canceled.vue'
 import printed from '@/components/dialog/order/printed.vue'
 import exported from '@/components/dialog/order/export.vue'
 
@@ -216,6 +220,7 @@ const form = reactive({ queryitem: true })
 const sells = ref({})
 const mulselection = ref([])
 const dialogShipVisible = ref(false)
+const dialogCancelVisible = ref(false)
 const dialogPrintVisible = ref(false)
 const dialogExportVisible = ref(false)
 const modifyIndex = ref(0)
@@ -236,6 +241,10 @@ const shipClick = (value) => {
 	dialogShipVisible.value = true
 	modifyIndex.value = value
 }
+const cancelClick = (value) => {
+	dialogCancelVisible.value = true
+	modifyIndex.value = value
+}
 
 const selectClick = (selection, row) => {
 	mulselection.value = []
@@ -246,6 +255,7 @@ const selectClick = (selection, row) => {
 
 const dialogClose = (value) => {
 	dialogShipVisible.value = false
+	dialogCancelVisible.value = false
 	dialogPrintVisible.value = false
 	dialogExportVisible.value = false
 	Object.assign(gallery.value[modifyIndex.value], value ? value : {})

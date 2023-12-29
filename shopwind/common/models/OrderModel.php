@@ -128,14 +128,14 @@ class OrderModel extends ActiveRecord
 	/* 获取每笔订单，订单总额，商品总额等各项实际的金额（或调价后分摊的金额，考虑折扣，运费等情况） */
 	public static function getRealAmount($order_id = 0)
 	{
-		$orderInfo = parent::find()->select('goods_amount,discount,order_amount')->where(['order_id' => $order_id])->one();
-		$orderExtm = OrderExtmModel::find()->select('shipping_fee')->where(['order_id' => $order_id])->one();
-
 		$realGoodsAmount = $realShippingFee = $realOrderAmount = 0;
+
+		$orderInfo = parent::find()->select('goods_amount,discount,order_amount')->where(['order_id' => $order_id])->one();
 		if ($orderInfo) {
 			$realOrderAmount = $orderInfo->order_amount;
 			$realGoodsAmount = $orderInfo->order_amount; // 无运费情况
 
+			$orderExtm = OrderExtmModel::find()->select('shipping_fee')->where(['order_id' => $order_id])->one();
 			if ($orderExtm) { // 注：服务类核销商品没有记录
 				// 如果实际支付的金额还不到运费的总额，那么先扣完商品总价后，剩余为运费分摊的金额
 				$realShippingFee = ($orderExtm->shipping_fee >= $orderInfo->order_amount) ? $orderInfo->order_amount : $orderExtm->shipping_fee;

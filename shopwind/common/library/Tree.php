@@ -61,14 +61,14 @@ class Tree
      * @param string $space
      * @return array (id => value)
      */
-    function getOptions($layer = 0, $root = 0, $except = NULL, $space = '&nbsp;&nbsp;')
+    function getOptions($layer = 0, $root = 0, $except = NULL, $space = '')
     {
         $options = array();
         $layer = intval($layer);
         $childs = $this->getChilds($root, $except);
         foreach ($childs as $id) {
             if ($id > 0 && ($layer <= 0 || $this->getLayer($id) <= $layer)) {
-                $options[$id] = $this->getLayer($id, $space) . htmlspecialchars($this->getValue($id));
+                $options[$id] = $this->getIndent($id, $space) . htmlspecialchars($this->getValue($id));
             }
         }
         return $options;
@@ -135,9 +135,14 @@ class Tree
         return $this->data[$id][$this->value_field];
     }
 
-    function getLayer($id, $space = false)
+    function getLayer($id)
     {
-        return $space ? str_repeat($space, $this->layer[$id]) : $this->layer[$id];
+        return $this->layer[$id];
+    }
+
+    function getIndent($id, $space = '')
+    {
+        return $space ? str_repeat($space, $this->layer[$id]) : '';
     }
 
     function getParent($id)
@@ -199,7 +204,7 @@ class Tree
             if ($layer && $this->layer[$this->parent[$id]] > $layer - 1) {
                 continue;
             }
-            $data[$id] = array('id' => $id, 'value' => $this->getValue($id), 'parent_id'=> $this->parent[$id], 'children' => $this->child[$id] ? $this->getArrayList($id, $layer) : array());
+            $data[$id] = array('id' => $id, 'value' => $this->getValue($id), 'parent_id' => $this->parent[$id], 'children' => $this->child[$id] ? $this->getArrayList($id, $layer) : array());
         }
         return array_values($data);
     }

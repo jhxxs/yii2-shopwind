@@ -574,7 +574,7 @@ class GoodsController extends \common\base\BaseApiController
 	{
 		// 验证签名
 		$respond = new Respond();
-		if (!$respond->verify(true)) {
+		if (!$respond->verify(false)) {
 			return $respond->output(false);
 		}
 
@@ -583,7 +583,7 @@ class GoodsController extends \common\base\BaseApiController
 
 		$uploadedfiles = UploadedFileModel::find()->alias('f')->select('f.file_id,f.file_path,gi.goods_id')
 			->joinWith('goodsImage gi', false)
-			->where(['store_id' => Yii::$app->user->id, 'item_id' => $post->goods_id, 'belong' => 0])
+			->where(['item_id' => $post->goods_id, 'belong' => 0])
 			->orderBy(['sort_order' => SORT_ASC, 'file_id' => SORT_ASC])
 			->asArray()->all();
 
