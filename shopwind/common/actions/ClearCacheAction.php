@@ -57,7 +57,7 @@ class ClearCacheAction extends Action
 		$this->clearResourceFiles();
 
 		// 删除无用的上传文件
-		$this->clearUploadedFiles();
+		//$this->clearUploadedFiles();
 
 		return Message::display(Language::get('clear_cache_ok'));
 	}
