@@ -109,7 +109,7 @@ class GoodsForm extends Model
 		}
 
 		// 编辑状态下，不传的字段不更新到数据库
-		foreach (['goods_name', 'cate_id', 'tags', 'content', 'description', 'brand', 'long_image', 'video', 'recommended', 'if_show', 'isnew', 'dt_id'] as $field) {
+		foreach (['goods_name', 'cate_id', 'tags', 'description', 'brand', 'long_image', 'video', 'recommended', 'if_show', 'isnew', 'dt_id'] as $field) {
 			if (isset($post->$field)) {
 				if (in_array($field, ['long_image', 'video'])) {
 					$post->$field = str_replace(Basewind::baseUrl() . '/', '',  $post->$field);
@@ -178,12 +178,6 @@ class GoodsForm extends Model
 			foreach ($images as $key => $value) {
 				UploadedFileModel::updateAll(['item_id' => $model->goods_id], ['file_path' => $value]);
 			}
-
-			// （移动端商家版）为了数据一致，覆盖PC端详情字段
-			if (isset($post->content)) {
-				$model->description = $this->getGoodsHtml($post->content, $images);
-			}
-			$model->save();
 		}
 
 		// 商品规格
@@ -416,23 +410,6 @@ class GoodsForm extends Model
 
 		return $specs;
 	}
-
-	/**
-	 * 获取手机端详情页的Html
-	 * @desc 1）因移动端不利于使用编辑器来编辑商品描述，所以PC和移动端的描述字段做了分离处理
-	 * 	     2）移动端只支持纯文本描述，PC和移动端共用一致的描述图，将纯文本描述加到描述图前面（类似拼DD做法）
-	 * 		 3）如果编辑移动端详情，则会覆盖PC端详情字段，如果编辑PC端详情，则不会覆盖移动端详情
-	 */
-	private function getGoodsHtml($content = '', $descimages = [])
-	{
-		$html = '';
-		foreach ($descimages as $key => $value) {
-			$html .= '<img src="' . Page::urlFormat($value) . '">';
-		}
-
-		return sprintf('%s<p>%s</p>', $content ? $content : '', $html);
-	}
-
 
 	/**
 	 * 从第三方平台采集数据导入到本地系统

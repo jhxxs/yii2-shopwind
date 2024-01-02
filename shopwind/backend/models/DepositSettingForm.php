@@ -74,7 +74,7 @@ class DepositSettingForm extends Model
 			if (!isset($post->$field)) {
 				continue;
 			}
-
+			if (empty($post->$field)) $post->$field = 0;
 			if (!is_numeric($post->$field) || $post->$field < 0 || $post->$field >= 1) {
 				return false;
 			}
