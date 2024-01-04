@@ -61,7 +61,7 @@ class SmsLogExportForm extends Model
 		
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
-			'fileName' 	=> $folder,
+			'filename' 	=> $folder,
 		]);
 	}
 }

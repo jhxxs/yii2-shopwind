@@ -229,12 +229,12 @@ class Page
 		$backgroundWidth = imagesx($background);  //背景宽度
 		$backgroundHeight = imagesy($background);  //背景高度
 		$imageRes = imageCreatetruecolor($backgroundWidth, $backgroundHeight);
-		$color = imagecolorallocate($imageRes, 0, 0, 0);
+		$color = imagecolorallocate($imageRes, 255, 255, 255);
 		imagefill($imageRes, 0, 0, $color);
 		// imageColorTransparent($imageRes, $color);  //颜色透明
 		imagecopyresampled($imageRes, $background, 0, 0, 0, 0, imagesx($background), imagesy($background), imagesx($background), imagesy($background));
 
-		//处理了图片
+		//处理图片
 		if (!empty($config['image'])) {
 			foreach ($config['image'] as $key => $val) {
 				$val = array_merge($imageDefault, $val);
