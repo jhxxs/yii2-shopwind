@@ -94,7 +94,7 @@ class SDK
 			'merId' 			=> $this->merId,		//商户代码，请改自己的测试商户号。
 			'orderId' 			=> $this->payTradeNo,	//商户订单号，8-32位数字字母，不能含“-”或“_”。
 			'txnTime' 			=> date("YmdHis", time()),	//订单发送时间，格式为YYYYMMDDhhmmss，取北京时间。
-			'txnAmt' 			=> $orderInfo['amount'] * 100,	//交易金额，单位分
+			'txnAmt' 			=> intval($orderInfo['amount'] * 100),	//交易金额，单位分
 		);
 		//$uri = SDK_FRONT_TRANS_URL;
 		//$html_form = AcpService::createAutoFormHtml( $params, $uri );
@@ -112,8 +112,8 @@ class SDK
 			return false;
 		}
 
-		// 必须加round避免字符类型不一致导致比对有误
-		if (round($orderInfo['amount']) != round($notify['txnAmt']) / 100) {
+		// 必须加intval避免字符类型不一致导致比对有误
+		if (intval($orderInfo['amount'] * 100) != intval($notify['txnAmt'])) {
 			// 支付的金额与实际金额不一致
 			$this->errors = Language::get('price_inconsistent');
 			return false;

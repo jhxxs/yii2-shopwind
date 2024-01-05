@@ -400,7 +400,7 @@ class BasePayment extends BasePlugin
 
 	public function getNotifySpecificData()
 	{
-		return [0, ''];
+		return [0, '', ''];
 	}
 
 	/**

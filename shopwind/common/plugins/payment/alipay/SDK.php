@@ -192,7 +192,7 @@ class SDK
 			$biz_content = array(
 				//'refund_reason' => '',
 				'out_trade_no'  => $this->payTradeNo,
-				'refund_amount'  => $orderInfo['amount'],
+				'refund_amount'  => round($orderInfo['amount'], 2),
 				'out_request_no' => $orderInfo['refund_sn'], // 标识一次退款请求，需要保证在交易号下唯一，如需部分退款，则此参数必传
 			);
 
@@ -249,7 +249,7 @@ class SDK
 			$biz_content = array(
 				'order_title' => $orderInfo['title'],
 				'out_biz_no'  => $this->payTradeNo,
-				'trans_amount' => $orderInfo['amount'],
+				'trans_amount' => round($orderInfo['amount'], 2),
 				'product_code' => 'TRANS_ACCOUNT_NO_PWD',
 				'payee_info'  => [
 					'identity'  => $orderInfo['payee']['account'],
@@ -323,7 +323,7 @@ class SDK
 		}
 
 		// 必须加round避免字符类型不一致导致比对有误
-		if (round($orderInfo['amount']) != round($notify['total_amount'])) {
+		if (round($orderInfo['amount'], 2) != round($notify['total_amount'], 2)) {
 			// 支付的金额与实际金额不一致
 			$this->errors = Language::get('price_inconsistent');
 			return false;

@@ -97,7 +97,7 @@ class Unionpay extends BasePayment
 	public function getNotifySpecificData()
 	{
 		$notify = $this->getNotify();
-		return array($notify['txnAmt'] / 100, $notify['queryId']);
+		return array($notify['txnAmt'] / 100, $notify['queryId'], '');
 	}
 
 	/**
