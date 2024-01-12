@@ -32,9 +32,9 @@
                 <!--{if $region.switchs}--><i class="layui-icon layui-icon-addition" ectype="flex" controller="region" status="open"
                   fieldid="{$region.region_id}"></i>
                 <!--{else}--><i class="tv-item"></i>
-                <!--{/if}--><span ectype="inline_edit" fieldname="region_name"
+                <!--{/if}--><span ectype="inline_edit" fieldname="name"
                   fieldid="{$region.region_id}" required="1" title="{$lang.editable}"
-                  controller="region">{$region.region_name|escape}<i class="layui-icon layui-icon-edit layui-font-14 layui-font-blue"></i></span>
+                  controller="region">{$region.name|escape}<i class="layui-icon layui-icon-edit layui-font-14 layui-font-blue"></i></span>
               </td>
               <td class="align_center"><span ectype="inline_edit" fieldname="sort_order"
                   fieldid="{$region.region_id}" datatype="number" title="{$lang.editable}"

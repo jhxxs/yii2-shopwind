@@ -42,6 +42,20 @@ class CategoryForm extends Model
 			$query->andWhere(['parent_id' => $post->parent_id]);
 		}
 
+		if (isset($post->channel)) {
+			if ($childs = GuideshopModel::getCategoryId(true, true)) {
+
+				// 不取社区团购分类
+				if ($post->channel == 'normal') {
+					$query->andWhere(['not in', 'cate_id', $childs]);
+				}
+				// 只取社区团购分类
+				if ($post->channel == 'community') {
+					$query->andWhere(['in', 'cate_id', $childs]);
+				}
+			}
+		}
+
 		if (!isset($post->store_id)) {
 			$query->andWhere(['store_id' => 0]);
 		} else {

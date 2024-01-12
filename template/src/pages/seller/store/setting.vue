@@ -30,7 +30,7 @@
                             <el-input v-model="store.store_name" />
                         </el-form-item>
                         <el-form-item v-if="store.store_name" label="所在地区" :label-width="100">
-                            <multiselector api="region/list" idField="region_id" nameField="region_name"
+                            <multiselector api="region/list" idField="region_id" nameField="name"
                                 parentField="parent_id"
                                 :original="[store.province || '', store.city || '', store.district || '']"
                                 @callback="(data) => { callback(data, 'region_id') }">

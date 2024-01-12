@@ -977,8 +977,8 @@ class GoodsController extends \common\base\BaseApiController
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('goods_invalid'));
 		}
 
-		$path = UploadedFileModel::getSavePath('qrcode/poster/', $goods['store_id']);
-		$wxacode = $path . "wxacode" . md5($post->page) . ".png";
+		$path = UploadedFileModel::getSavePath('qrcode/goods/',0, $post->goods_id);
+		$wxacode = $path . "wxacode.png";
 		if (!file_exists($wxacode)) {
 			$response = Weixin::getInstance(null, 0, 'applet')->getWxaCode(['path' => $post->page, 'width' => 280], $wxacode);
 			if ($response === false) {
@@ -1007,7 +1007,7 @@ class GoodsController extends \common\base\BaseApiController
 		];
 
 		try {
-			$qrcode = Page::createPoster($config, $path . "poster" . md5($post->page) . ".png");
+			$qrcode = Page::createPoster($config, $path . "poster.png");
 			$result['poster'] = str_replace(Yii::getAlias('@public'), Basewind::baseUrl(), $qrcode);
 			return $respond->output(true, null, $result);
 			

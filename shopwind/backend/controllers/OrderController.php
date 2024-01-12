@@ -20,6 +20,8 @@ use common\models\GuideshopModel;
 use common\models\DepositTradeModel;
 use common\models\OrderExpressModel;
 use common\models\OrderGoodsModel;
+use common\models\RegionModel;
+use common\models\UserModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -77,7 +79,7 @@ class OrderController extends \common\base\BaseAdminController
 		if (!$post->id) {
 			return Message::warning(Language::get('no_such_order'));
 		}
-		if (!($order = OrderModel::find()->alias('o')->select('o.*,oe.consignee,oe.region_name,oe.zipcode,oe.phone_tel,oe.phone_mob,oe.address,oe.shipping_name')
+		if (!($order = OrderModel::find()->alias('o')->select('o.*,oe.consignee,oe.region_id,oe.phone_mob,oe.address,oe.shipping_name')
 			->where(['o.order_id' => $post->id])
 			->joinWith('orderExtm oe', false)
 			->with('orderGoods')->asArray()->one())) {
@@ -88,8 +90,14 @@ class OrderController extends \common\base\BaseAdminController
 		if ($order['ship_time'] > 0) {
 			$order['express'] = OrderExpressModel::find()->select('company,number')->where(['order_id' => $post->id])->asArray()->one();
 		}
+		if ($address = RegionModel::getArrayRegion($order['region_id'])) {
+			$order['address'] = implode('', $address). $order['address'];
+		}
 
-		if ($order['guider_id'] && ($array = GuideshopModel::find()->select('owner,phone_mob,region_name,address,name,banner')->where(['userid' => $order['guider_id']])->asArray()->one())) {
+		if ($order['guider_id'] && ($array = GuideshopModel::find()->select('owner,phone_mob,region_id,address,name,banner')->where(['userid' => $order['guider_id']])->asArray()->one())) {
+			if ($address = RegionModel::getArrayRegion($array['region_id'])) {
+				$array['region'] = implode('', $address);
+			}
 			$this->params['guideshop'] = $array;
 		}
 		$this->params['order'] = $order;
@@ -236,7 +244,7 @@ class OrderController extends \common\base\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if ($post->id) $post->id = explode(',', $post->id);
 
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_id,oe.address,oe.phone_mob')
 			->joinWith('orderExtm oe', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
 		if (!empty($post->id)) {

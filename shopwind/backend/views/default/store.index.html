@@ -90,7 +90,7 @@
 						return res.recommended == 1 ? '<em class="yes" ectype="inline_edit" controller="store" fieldname="recommended" fieldid="' + res.store_id + '" fieldvalue="1" title="' + lang.editable + '"><i class="fa fa-check-circle"></i>' + lang.yes + '</em>' : '<em class="no" ectype="inline_edit" controller="store" fieldname="recommended" fieldid="' + res.store_id + '" fieldvalue="0" title="' + lang.editable + '"><i class="fa fa-ban"></i>' + lang.no + '</em>';
 					}
 				}
-				, { field: 'region_name', title: '所在地区', width: 260 }
+				, { field: 'region', title: '所在地区', width: 260 }
 				, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 200, align: 'center' }
 			]]
 			, page: {

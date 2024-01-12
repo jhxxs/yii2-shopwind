@@ -205,15 +205,14 @@ const orders = ref({})
 onMounted(() => {
 	visitor.value = JSON.parse(localStorage.getItem('visitor')) || {}
 
-	//getList()
 	setInterval(() => {
 		getList()
-	}, 4000)
+	}, 2000)
 
 	getlogs()
 	setInterval(() => {
 		getlogs()
-	}, 3000)
+	}, 1000)
 
 	if (route.params.store_id > 0) {
 		storeRead(route.params, (data) => {

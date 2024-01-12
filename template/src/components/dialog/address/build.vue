@@ -1,12 +1,12 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="title" :width="600" :center="true" :draggable="true"
-        :destroy-on-close="true" :close-on-click-modal="false" :before-close="close">
+    <el-dialog v-model="dialogVisible" :title="title" :width="600" :center="true" :draggable="true" :destroy-on-close="true"
+        :close-on-click-modal="false" :before-close="close">
         <el-form :inline="true">
             <el-form-item label="收货人姓名" :label-width="85">
                 <el-input v-model="address.consignee" />
             </el-form-item>
             <el-form-item label="所在地区" :label-width="85" class="uni-flex uni-row" style="width:100%">
-                <multiselector api="region/list" idField="region_id" nameField="region_name" parentField="parent_id"
+                <multiselector api="region/list" idField="region_id" nameField="name" parentField="parent_id"
                     :original="[address.province, address.city, address.district]" @callback="callback">
                 </multiselector>
             </el-form-item>
@@ -63,17 +63,13 @@ const emit = defineEmits(['close'])
 const submit = () => {
     if (address.value.addr_id) {
         addressUpdate(address.value, (data) => {
-            if (data) {
-                ElMessage.success('编辑成功')
-                emit('close', address.value)
-            }
+            ElMessage.success('编辑成功')
+            emit('close', data, 'update')
         }, loading)
     } else {
         addressAdd(address.value, (data) => {
-            if (data) {
-                ElMessage.success('添加成功')
-                emit('close', address.value)
-            }
+            ElMessage.success('添加成功')
+            emit('close', data)
         }, loading)
     }
 }
@@ -93,6 +89,7 @@ const callback = (value) => {
 .el-form {
     margin: 0 30px;
 }
+
 :deep() .el-select {
     margin-bottom: 10px;
 }

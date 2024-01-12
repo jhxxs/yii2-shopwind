@@ -29,8 +29,8 @@ class RegionForm extends Model
 	
 	public function valid($post)
 	{
-		if(empty($post->region_name)) {
-			$this->errors = Language::get('region_name_empty');
+		if(empty($post->name)) {
+			$this->errors = Language::get('name_empty');
 			return false;
 		}
 		
@@ -63,7 +63,7 @@ class RegionForm extends Model
 			$model = new RegionModel();
 		}
 		
-        $model->region_name = $post->region_name;
+        	$model->name = $post->name;
 		$model->parent_id = $post->parent_id;
 		
 		// 不应设置该值，理由为：如果修改了该值，那么该地区的下级地区理应也要修改为相应的显示或隐藏，但该操作也有有可能修改地区的上级

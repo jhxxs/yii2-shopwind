@@ -48,11 +48,6 @@ class OrderForm extends Model
 		if ($this->otype == 'normal') {
 			$post->store_id = isset($post->store_id) ? intval($post->store_id) : 0; // 如果传值只结算一个店铺
 		}
-		// if ($this->otype == 'mealbuy') {
-		// 	if (isset($post->id)) {
-		// 		$post->extraParams = (object) array('meal_id' => $post->id); // for PC
-		// 	}
-		// }
 
 		list($goodsList, $extra) = Business::getInstance('order')->build($this->otype, $post)->getOrderGoodsList();
 		if (empty($goodsList)) {

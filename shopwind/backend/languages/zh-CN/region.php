@@ -2,7 +2,7 @@
 return array(
     'region' => '地区设置',
     'region_name' => '地区名称',
-	'region_name_empty' => '地区名称不能为空',
+	'name_empty' => '地区名称不能为空',
     'parent_id' => '上级地区',
     'add_child' => '新增下级',
     'back_list' => '返回地区列表',

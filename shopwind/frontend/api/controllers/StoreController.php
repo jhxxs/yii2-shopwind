@@ -176,9 +176,7 @@ class StoreController extends \common\base\BaseApiController
 		if (!($model = StoreModel::find()->where(['store_id' => Yii::$app->user->id])->one())) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_store'));
 		}
-		if ($post->region_id) {
-			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
-		}
+
 		$fields = ['store_logo', 'banner', 'pcbanner', 'tel', 'qq', 'latitude', 'longitude', 'region_id', 'address', 'description'];
 		foreach ($fields as $key => $value) {
 			if (isset($post->$value)) {

@@ -7,5 +7,5 @@ return array(
 	'region_delete_fail' 		=> '地区删除失败',
 	
 	'region_id_required'		=> '地区ID不能为空',
-	'region_name_required'		=> '地区名称不能为空',
+	'name_required'				=> '地区名称不能为空',
 );

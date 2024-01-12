@@ -33,7 +33,7 @@ class MlselectionForm extends Model
 			$regions = RegionModel::getList($post->pid);
 			foreach($regions as $key => $region)
 			{
-    			$regions[$key]['mls_name'] = htmlspecialchars($region['region_name']);
+    			$regions[$key]['mls_name'] = htmlspecialchars($region['name']);
 				$regions[$key]['mls_id'] = htmlspecialchars($region['region_id']);
    			}
 			return array_values($regions);

@@ -54,7 +54,7 @@ class RegionForm extends Model
 	public function valid($post)
 	{
 		// 新增时必填字段
-		$fields = ['region_name'];
+		$fields = ['name'];
 		
 		// 空值判断
 		foreach($fields as $field) {
@@ -80,7 +80,7 @@ class RegionForm extends Model
 			$model = new RegionModel();
 		}
 		
-		if(isset($post->region_name)) $model->region_name = $post->region_name;
+		if(isset($post->name)) $model->name = $post->name;
 		if(isset($post->parent_id)) $model->parent_id = $post->parent_id;
 		if(isset($post->if_show)) {
 			$model->if_show = $post->if_show;

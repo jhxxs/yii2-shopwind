@@ -57,7 +57,7 @@ class StoreForm extends Model
 		if(!($model = StoreModel::findOne($this->store_id))) {
 			$model = new StoreModel();
 		}
-		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'region_name', 'address', 'zipcode', 'tel', 'sgrade', 'joinway','sort_order', 'recommended'];
+		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'address', 'tel', 'sgrade', 'joinway','sort_order', 'recommended'];
 		foreach($post as $key => $val) {
 			if(in_array($key, $fields)) $model->$key = $val;
 		}

@@ -137,7 +137,7 @@ class RegionController extends \common\base\BaseAdminController
     {
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'if_show', 'sort_order']);
 		
-		if(in_array($post->column, ['region_name', 'if_show', 'sort_order'])) {
+		if(in_array($post->column, ['name', 'if_show', 'sort_order'])) {
 			if($post->column == 'if_show') {
 				$allId = $post->id ? RegionModel::getDescendantIds($post->id) : array();
 				$result = RegionModel::updateAll(['if_show' => $post->value], ['in', 'region_id', $allId]);

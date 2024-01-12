@@ -35,7 +35,7 @@ class Seller_orderShippedForm extends Model
 	public $errors = null;
 
 	/**
-	 * 卖家发货
+	 * 供货商 & 门店发货
 	 */
 	public function submit($post = null, $orderInfo = [], $sendNotify = true)
 	{
@@ -80,6 +80,18 @@ class Seller_orderShippedForm extends Model
 				$this->errors = $model->errors;
 				return false;
 			}
+
+			// 如果是小程序订单，则上传发货信息给微信（小程序上架要求：实物订单必须上传发货信息）
+			/*if ($model->payment_code == 'wxmppay') {
+				$client = Plugin::getInstance('other')->build('wxship');
+				if ($client->isInstall()) {
+					if ($client->upload($model)) {
+						// 0=未退，1=已推，2=已重推，微信限制发货信息只能推送2次
+						$model->shipwx = $model->shipwx ? $model->shipwx + 1 : 1;
+						$model->save();
+					}
+				}
+			}*/
 		}
 
 		// 更新交易状态

@@ -8,7 +8,7 @@
             <el-form-item label="上级分类" :label-width="85">
                 <el-select v-model="category.parent_id">
                     <el-option label="请选择" :value="0" />
-                    <el-option v-for="item in options" :label="item.cate_name" :value="item.cate_id" />
+                    <el-option v-for="item in options" :label="item.cate_name" :value="parseInt(item.cate_id)" />
                 </el-select>
             </el-form-item>
             <el-form-item label="排序" :label-width="85" clearable>

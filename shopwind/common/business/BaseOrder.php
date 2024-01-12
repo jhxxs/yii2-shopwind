@@ -261,9 +261,7 @@ class BaseOrder
 				$result[$store_id] = array(
 					'consignee'     =>  $consignee_info['consignee'],
 					'region_id'     =>  $consignee_info['region_id'],
-					'region_name'   =>  $consignee_info['region_name'],
 					'address'       =>  $consignee_info['address'],
-					'zipcode'       =>  $consignee_info['zipcode'],
 					'phone_tel'     =>  $consignee_info['phone_tel'],
 					'phone_mob'     =>  $consignee_info['phone_mob'],
 					'shipping_name' =>  addslashes(Language::get($delivery_info[$store_id])),

@@ -143,7 +143,7 @@
 							<template #default="scope">
 								<router-link class="rlink f-blue mb5" :to="'/my/order/detail/' + scope.row.order_id">
 									查看订单</router-link>
-								<el-button v-if="!(scope.row.pay_time || scope.row.ship_time || scope.row.finished_time)"
+								<el-button v-if="scope.row.status == 11 && !scope.row.ship_time"
 									class="mb5" size="small" @click="cancelClick(scope.$index)" plain>取消订单</el-button>
 								<el-button v-if="scope.row.status == 11" class="mb5" size="small"
 									@click="redirect('/trade/cashier/pay/' + scope.row.bizIdentity.toLowerCase() + '/' + scope.row.bizOrderId)"

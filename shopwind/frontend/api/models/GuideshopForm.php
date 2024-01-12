@@ -104,7 +104,6 @@ class GuideshopForm extends Model
 		if(isset($post->address)) $model->address = $post->address;
 		if(isset($post->region_id)) {
 			$model->region_id = $post->region_id;
-			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
 		}
 		if(isset($post->banner)) {
 			$model->banner = $this->getFileSavePath($post->banner);

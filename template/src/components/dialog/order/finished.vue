@@ -1,11 +1,11 @@
 <template>
     <el-dialog v-model="dialogVisible" :title="title" :width="500" :center="true" :draggable="true" :destroy-on-close="true"
         :close-on-click-modal="false" :before-close="close">
-        <div class="center" v-if="props.data.payment_code == 'cod'">
+        <div class="center mb20" v-if="props.data.payment_code == 'cod'">
             该订单为货到付款，确认收货后，您需要向商家支付货款<span class="f-red">{{ currency(props.data.order_amount)
             }}</span>
         </div>
-        <div class="center" v-else>
+        <div class="center mb20" v-else>
             确认收货后交易即完成，货款将打给卖家，您要继续吗？
         </div>
         <template #footer>

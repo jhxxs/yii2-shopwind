@@ -34,7 +34,6 @@ return array(
     'owner_real_name' => '店主姓名',
     'identity_card' => '店主身份证号',
     'address' => '详细地址',
-    'zipcode' => '邮政编码',
     'tel' => '联系电话',
 	'applying' => '待审核',
     'nopass' => '未通过',

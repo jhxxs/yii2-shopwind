@@ -47,7 +47,7 @@
                 <ul class="clearfix ml20" style="width: 87.5%;">
                   <li>门店名称{$lang.colon}{$guideshop.name|escape}</li>
                   <li>团长姓名{$lang.colon}{$guideshop.owner|escape}</li>
-                  <li>门店地址{$lang.colon}{$guideshop.region_name|escape} {$guideshop.address|escape}</li>
+                  <li>门店地址{$lang.colon}{$guideshop.region|escape} {$guideshop.address|escape}</li>
                   <li>{$lang.phone_mob}{$lang.colon}{$guideshop.phone_mob|escape}</li>
                 </ul>
               </div>
@@ -67,7 +67,7 @@
               <ul class="clearfix">
                 <li>{$lang.consignee}{$lang.colon}{$order.consignee|escape}</li>
                 <!--{if $order.otype eq 'normal'}-->
-                <li>{$lang.region}{$lang.colon}{$order.region_name|escape} {$order.address|escape}</li>
+                <li>{$lang.region}{$lang.colon}{$order.region|escape} {$order.address|escape}</li>
                 <li>{$lang.shipping_name}{$lang.colon}{$order.express.company|default:$order.shipping_name|escape}</li>
                 <li>{$lang.express_no}{$lang.colon}{$order.express.number|default:'-'}</li>
                 <li>{$lang.phone_tel}{$lang.colon}{$order.phone_tel|escape}</li>

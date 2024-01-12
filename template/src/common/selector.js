@@ -25,7 +25,7 @@ import { promise } from '@/common/server.js'
  * @param {Object} index  
  */
 export async function build(multiIndex, original = null, api = 'region/list', idField = 'region_id', nameField =
-	'region_name', parentField = 'parent_id') {
+	'name', parentField = 'parent_id') {
 
 	let data = await getData(multiIndex, original, api, idField, nameField, parentField)
 

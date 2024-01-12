@@ -48,7 +48,7 @@ class GoodsForm extends Model
 	{
 		$query = GoodsModel::find()->alias('g')->select('g.goods_id,g.type,g.store_id,g.goods_name,g.tags,g.if_show,g.isnew,g.cate_id,g.brand,g.spec_qty,g.spec_name_1,g.spec_name_2,g.add_time,g.default_spec,g.default_image,g.long_image,g.video, g.recommended,g.price,g.mkprice,g.dt_id,gs.stock,s.store_name,s.sgrade,gi.max_exchange,gst.sales,gst.comments,gst.views,gst.collects');
 		if (isset($post->querydesc) && ($post->querydesc === true)) {
-			$query->addSelect('g.description,g.content');
+			$query->addSelect('g.description');
 		}
 
 		$query = $query->joinWith('store s', false)->joinWith('goodsDefaultSpec gs', false)->joinWith('goodsIntegral gi', false)->joinWith('goodsStatistics gst', false)

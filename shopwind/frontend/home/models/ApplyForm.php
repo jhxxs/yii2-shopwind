@@ -103,10 +103,7 @@ class ApplyForm extends Model
 		}
 
 		$model->state = SgradeModel::find()->select('need_confirm')->where(['grade_id' => $post->sgrade])->scalar() ? Def::STORE_APPLYING : Def::STORE_OPEN;
-		if ($post->region_id) {
-			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
-		}
-		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'address', 'zipcode', 'tel', 'sgrade'];
+		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'address', 'tel', 'sgrade'];
 		foreach ($fields as $key => $value) {
 			if (isset($post->$value)) {
 				$model->$value = $post->$value;

@@ -69,12 +69,8 @@ class AddressForm extends Model
 		$model->userid = Yii::$app->user->id;
 		
 		if(isset($post->consignee)) $model->consignee = $post->consignee;
-		if(isset($post->region_id)) {
-			$model->region_id = $post->region_id;
-			$model->region_name = implode(' ', RegionModel::getArrayRegion($post->region_id));
-		}
+		if(isset($post->region_id)) $model->region_id = $post->region_id;
 		if(isset($post->address)) $model->address = $post->address;
-		if(isset($post->zipcode)) $model->zipcode = $post->zipcode;
 		if(isset($post->phone_tel)) $model->phone_tel = $post->phone_tel;
 		if(isset($post->phone_mob)) $model->phone_mob = $post->phone_mob;
 		if(isset($post->defaddr)) $model->defaddr = $post->defaddr ? 1 : 0;

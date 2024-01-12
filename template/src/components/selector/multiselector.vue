@@ -38,7 +38,7 @@ const props = defineProps({
     },
     nameField: {
         type: String,
-        default: 'region_name'
+        default: 'name'
     },
     placeholder: {
         type: Boolean,

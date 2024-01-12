@@ -100,7 +100,7 @@
 
 					<el-form-item label="所在地区：" :label-width="250">
 						<p class="ml20"></p>
-						<multiselector api="region/list" idField="region_id" nameField="region_name"
+						<multiselector api="region/list" idField="region_id" nameField="name"
 							parentField="parent_id" :original="[form.province, form.city, form.district]"
 							@callback="(data) => { callback(data, 'region_id') }">
 						</multiselector>

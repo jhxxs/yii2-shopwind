@@ -108,12 +108,12 @@ const deleteClick = (value) => {
     }).catch(() => { })
 }
 
-const dialogClose = (value) => {
+const dialogClose = (value, mode) => {
     dialog.visible = false
 
     if (value && value.consignee) {
-        if (value.addr_id) {
-            Object.assign(gallery.value[modifyIndex.value], value)
+        if (mode == 'update') {
+            Object.assign(gallery.value[modifyIndex.value] ?? {}, value)
         } else gallery.value.unshift(value)
 
         if (route.query.redirect) {

@@ -163,8 +163,8 @@ class OrderForm extends Model
 	 */
 	public function orderCancel($post, $orderInfo = [])
 	{
-		// 如果已付款，或已发货（如货到付款）则不可以取消订单
-		if ($orderInfo['pay_time'] || $orderInfo['ship_time']) {
+		// 只有待付款且未发货（针对货到付款）的订单才可以取消
+		if (!($orderInfo['status'] == Def::ORDER_PENDING && !$orderInfo['ship_time'])) {
 			$this->errors = Language::get('unsupport_status');
 			return false;
 		}

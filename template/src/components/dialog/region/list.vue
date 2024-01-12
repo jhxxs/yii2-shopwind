@@ -8,7 +8,7 @@
                     :class="['uni-flex uni-row width-between  flex-middle pl10 pr10', item.current ? 'current' : '']">
                     <el-checkbox @change="(value) => {queryClick(layer, item)}" v-model="item.checked"
                         :label="item.region_id" :indeterminate="item.indeterminate" :disabled="item.disabled">
-                        {{item.region_name}}</el-checkbox>
+                        {{item.name}}</el-checkbox>
                     <p @click="queryClick(layer, item)" class="width-surplus" style="text-align:right">
                         <el-icon v-if="layer == 0">
                             <ArrowRight />
@@ -159,12 +159,12 @@ function getValues() {
     Object.values(regions.all).forEach((item) => {
         if (!item.disabled) {
             if (item.checked && !item.indeterminate) {
-                list[0].push(item.region_name)
+                list[0].push(item.name)
                 list[1].push(parseInt(item.region_id))
             } else if (item.indeterminate) {
                 item.children.forEach((child) => {
                     if (child.checked) {
-                        list[0].push(child.region_name)
+                        list[0].push(child.name)
                         list[1].push(parseInt(child.region_id))
                     }
                 })

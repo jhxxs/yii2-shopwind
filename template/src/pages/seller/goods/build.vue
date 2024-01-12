@@ -673,7 +673,7 @@ const submit = () => {
 
 	if (!goods.multispec) gallery.list = []
 	else if (gallery.specs.length > 0) {
-		
+
 		for (let i = 0; i < gallery.specs.length; i++) {
 			let item = gallery.specs[i]
 			if (item.name) {
@@ -707,9 +707,9 @@ const submit = () => {
 	}
 
 	// 处理字段
-	['price', 'stock', 'mkprice', 'type', 'goods_name', 'goods_images', 'tags', 'cate_id', 'dt_id', 'brand', 'default_image', 'isnew', 'recommended', 'if_show', 'description', 'attributes', 'exclusive'].forEach((field) => {
+	['price', 'stock', 'mkprice', 'type', 'goods_name', 'goods_images', 'desc_images', 'tags', 'cate_id', 'dt_id', 'brand', 'default_image', 'isnew', 'recommended', 'if_show', 'description', 'attributes', 'exclusive'].forEach((field) => {
 		//if (!isEmpty(goods[field])) { // 与不传不更新规则冲突
-			form[field] = goods[field]
+		form[field] = goods[field]
 		//}
 	})
 
@@ -902,5 +902,4 @@ function bindTable() {
 
 :deep() .w-e-text-placeholder {
 	top: 10px;
-}
-</style>
+}</style>

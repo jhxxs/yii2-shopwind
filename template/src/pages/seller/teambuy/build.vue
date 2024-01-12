@@ -22,9 +22,9 @@
 							<el-input v-model="teambuy.title" clearable />
 						</el-form-item>
 						<el-form-item label="成团人数" :label-width="100">
-							<el-select v-model="teambuy.people" placeholder="" clearable>
-								<el-option label="2人团" value="2" />
-								<el-option label="3人团" value="3" />
+							<el-select v-model="teambuy.people">
+								<el-option label="2人团" :value="2" />
+								<el-option label="3人团" :value="3" />
 							</el-select>
 						</el-form-item>
 						<el-form-item label="选择商品" :label-width="100">
@@ -109,7 +109,7 @@ import menus from '@/pages/layout/menus/seller.vue'
 const route = useRoute()
 const loading = ref(false)
 const dialog = reactive({ visible: false, selected: [] })
-const teambuy = reactive({ title: '拼团' })
+const teambuy = reactive({ title: '拼团', people: 2 })
 const gallery = reactive({ list: [] })
 const goods = ref({})
 

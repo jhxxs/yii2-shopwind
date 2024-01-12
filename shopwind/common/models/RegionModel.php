@@ -71,7 +71,7 @@ class RegionModel extends ActiveRecord
 		$regions = self::getList($parent_id, $shown, false);
 
 		$tree = new Tree();
-		$tree->setTree($regions, 'region_id', 'parent_id', 'region_name');
+		$tree->setTree($regions, 'region_id', 'parent_id', 'name');
 
 		return $tree->getOptions($layer, 0, $except, ($parent_id == -1 && $space !== false) ? '&nbsp;&nbsp;' : $space);
 	}
@@ -83,7 +83,7 @@ class RegionModel extends ActiveRecord
 		if (!$id) return $result;
 
 		if ($selfIn) $result[] = $id;
-		while (($query = parent::find()->select('region_id,parent_id,region_name')->where(['region_id' => $id])->one())) {
+		while (($query = parent::find()->select('region_id,parent_id,name')->where(['region_id' => $id])->one())) {
 			if ($query->parent_id) $result[] = $query->parent_id;
 			$id = $query->parent_id;
 		}
@@ -107,7 +107,7 @@ class RegionModel extends ActiveRecord
 			$conditions = $shown ? ['if_show' => 1] : null;
 
 			$tree = new Tree();
-			$data = $tree->recursive(new RegionModel(), $conditions)->getArrayList($id, 'region_id', 'parent_id', 'region_name')->fields($selfin);
+			$data = $tree->recursive(new RegionModel(), $conditions)->getArrayList($id, 'region_id', 'parent_id', 'name')->fields($selfin);
 
 			$cache->set($cachekey, $data, 3600);
 		}
@@ -180,7 +180,7 @@ class RegionModel extends ActiveRecord
 		// 如果地址不到区，不做处理
 		if (isset($address['district'])) {
 			$district = str_replace(['区', '市'], ['', ''], $address['district']);
-			$query = parent::find()->select('region_id,parent_id')->where(['in', 'region_name', [$address['district'], $district]]);
+			$query = parent::find()->select('region_id,parent_id')->where(['in', 'name', [$address['district'], $district]]);
 			if (!$query->exists()) {
 				return 0;
 			}
@@ -191,7 +191,7 @@ class RegionModel extends ActiveRecord
 
 			$city = str_replace(['市'], [''], $address['city']);
 			foreach ($query->all() as $key => $value) {
-				$parent = RegionModel::find()->select('region_id')->where(['in', 'region_name', [$address['city'], $city]])->andWhere(['region_id' => $value->parent_id])->one();
+				$parent = RegionModel::find()->select('region_id')->where(['in', 'name', [$address['city'], $city]])->andWhere(['region_id' => $value->parent_id])->one();
 				if ($parent) {
 					return $value->region_id;
 				}
@@ -232,12 +232,12 @@ class RegionModel extends ActiveRecord
 		}
 		$str = '';
 		foreach (explode('|', $region_ids) as $id) {
-			$query = parent::find()->select('region_id,region_name,parent_id')->where(['region_id' => $id])->one();
+			$query = parent::find()->select('region_id,name,parent_id')->where(['region_id' => $id])->one();
 			if ($query) {
-				$str1 = $query->region_name;
+				$str1 = $query->name;
 				while ($full && $query->parent_id != 0) {
-					$query = parent::find()->select('region_id,region_name,parent_id')->where(['region_id' => $query->parent_id])->one();
-					$str1 = $query->region_name . ' ' . $str1;
+					$query = parent::find()->select('region_id,name,parent_id')->where(['region_id' => $query->parent_id])->one();
+					$str1 = $query->name . ' ' . $str1;
 				}
 				$str .= $split . $str1;
 			}
@@ -261,10 +261,10 @@ class RegionModel extends ActiveRecord
 				$city 		= $address['city'];
 
 				$provinceParentId = self::getProvinceParentId();
-				$regionProvince = parent::find()->select('region_id,region_name')->where(['parent_id' => $provinceParentId])->andWhere(['in', 'region_name', [$province, str_replace('省', '', $province)]])->one();
+				$regionProvince = parent::find()->select('region_id,name')->where(['parent_id' => $provinceParentId])->andWhere(['in', 'name', [$province, str_replace('省', '', $province)]])->one();
 
 				if ($regionProvince) {
-					$regionCity = parent::find()->select('region_id,region_name')->where(['parent_id' => $regionProvince->region_id])->andWhere(['in', 'region_name', [$city, str_replace('市', '', $city)]])->one();
+					$regionCity = parent::find()->select('region_id,name')->where(['parent_id' => $regionProvince->region_id])->andWhere(['in', 'name', [$city, str_replace('市', '', $city)]])->one();
 					if ($regionCity) {
 						$data = $regionCity->region_id;
 						$cache->set($cachekey, $data, 3600);

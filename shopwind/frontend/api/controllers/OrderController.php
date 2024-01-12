@@ -304,16 +304,14 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_order'));
 		}
 
-		$extm = OrderExtmModel::find()->select('consignee,region_id,region_name,address,zipcode,phone_tel,phone_mob')
+		$extm = OrderExtmModel::find()->select('consignee,region_id,address,phone_mob')
 			->where(['order_id' => $post->order_id])->asArray()->one();
 
 		if (!$extm) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_order_extm'));
 		}
 
-		$this->params = array_merge($order, $extm, RegionModel::getArrayRegion($extm['region_id'], $extm['region_name']));
-		unset($this->params['region_name']);
-
+		$this->params = array_merge($order, $extm, RegionModel::getArrayRegion($extm['region_id']));
 		return $respond->output(true, null, $this->params);
 	}
 
@@ -501,7 +499,7 @@ class OrderController extends \common\base\BaseApiController
 		// 未核销
 		if ($record['status'] == Def::ORDER_USING) {
 			$model = new \frontend\api\models\OrderForm();
-			if (!$model->orderWriteoff($post, $record)) {
+			if (!$model->orderVerused($post, $record)) {
 				return $respond->output(Respond::HANDLE_INVALID, $model->errors);
 			}
 
@@ -561,7 +559,7 @@ class OrderController extends \common\base\BaseApiController
 
 		// 业务参数
 		$post = Basewind::trimAll($respond->getParams(), true);
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_id,oe.address,oe.phone_mob')
 			->joinWith('orderExtm oe', false)
 			->orderBy(['o.order_id' => SORT_DESC])
 			->where(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])

@@ -14,6 +14,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\models\RegionModel;
 use common\models\OrderExpressModel;
 
 use common\library\Timezone;
@@ -66,11 +67,16 @@ class OrderExportForm extends Model
 				if ($k == 'id') {
 					$value[$k] = $key + 1;
 				}
+				if ($k == 'order_sn') {
+					$value[$k] = '\'' . $value[$k];
+				}
 				if (in_array($k, ['add_time', 'pay_time', 'ship_time', 'finished_time'])) {
 					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
 				}
 				if ($k == 'address') {
-					$value[$k] = $value['region_name'] . $value[$k];
+					if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+						$value[$k] = implode('', $array) . $value[$k];
+					}
 				}
 				if ($k == 'status') {
 					$value[$k] = Def::getOrderStatus($value['status']);

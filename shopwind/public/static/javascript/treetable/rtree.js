@@ -41,7 +41,7 @@ $(function(){
 						
                         //构造每一个tr组成的字符串，标语添加
                         str+="<tr class='row"+id+"'><td class='align_center w30'><input type='checkbox' class='checkitem' value='"+res[i].region_id+"' /></td>"+
-                        "<td class='node' width='50%'><i class='preimg'></i>"+src+"<span ectype='inline_edit' fieldname='region_name' fieldid='"+res[i].region_id+"' required='1' controller='"+controller+"' >"+res[i].region_name+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span></td>"+
+                        "<td class='node' width='50%'><i class='preimg'></i>"+src+"<span ectype='inline_edit' fieldname='name' fieldid='"+res[i].region_id+"' required='1' controller='"+controller+"' >"+res[i].name+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span></td>"+
 						
 						"<td class='align_center'><span ectype='inline_edit' fieldname='sort_order' fieldid='"+res[i].region_id+"' datatype='number' controller='"+controller+"' >"+res[i].sort_order+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span></td>"+
 						"<td class='align_center'>"+if_show+"</td>"+
@@ -92,9 +92,9 @@ function secajax(ob)
           		var if_show = "";
            		var add_child = '';
        			if(res[i].switchs) {
-     				src =  "<i class='layui-icon layui-icon-addition' ectype='flex' controller='"+controller+"' status='open' fieldid="+res[i].region_id+" onclick='secajax($(this))'></i><span ectype='inline_edit' fieldname='region_name' fieldid='"+res[i].region_id+"' required='1' controller='"+controller+"' >"+res[i].region_name+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span>";
+     				src =  "<i class='layui-icon layui-icon-addition' ectype='flex' controller='"+controller+"' status='open' fieldid="+res[i].region_id+" onclick='secajax($(this))'></i><span ectype='inline_edit' fieldname='name' fieldid='"+res[i].region_id+"' required='1' controller='"+controller+"' >"+res[i].name+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span>";
        			} else {
-        			src =  "<i class='tv-item' fieldid='"+res[i].region_id+"'></i><span ectype='inline_edit' fieldname='region_name' fieldid='"+res[i].region_id+"' required='1' controller='"+controller+"' >"+res[i].region_name+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span>";
+        			src =  "<i class='tv-item' fieldid='"+res[i].region_id+"'></i><span ectype='inline_edit' fieldname='name' fieldid='"+res[i].region_id+"' required='1' controller='"+controller+"' >"+res[i].name+"<i class='layui-icon layui-icon-edit layui-font-14 layui-font-blue'></i></span>";
   				}
           		if(res[i].add_child) {
         			add_child =  " <a class='btn green' ectype='dialog' dialog_id='dialog' dialog_width='600' dialog_title="+lang.add_child+" uri='"+url([controller+'/add', {pid:res[i].region_id}])+"'><i class='layui-icon layui-icon-add-1 layui-font-12'></i>"+lang.add_child+"</a>";

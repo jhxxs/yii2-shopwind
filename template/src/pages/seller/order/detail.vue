@@ -40,7 +40,7 @@
                         <div class="pl10 pr10 pt10">
                             <h3 class="f-14">配送信息</h3>
                             <el-row class="f-13 f-c55 mt20 mb10">
-                                <el-col :span="12">收货人姓名：{{ order.buyer_name }}</el-col>
+                                <el-col :span="12">收货人姓名：{{ shipping.consignee }}</el-col>
                                 <el-col :span="12">收货地址：{{ shipping.province + shipping.city + (shipping.district ||
                                     '') + shipping.address
                                 }}</el-col>

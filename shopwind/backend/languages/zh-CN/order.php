@@ -18,7 +18,6 @@ return array(
     'consignee'  => '收货人姓名',
     'region_name'  => '所在地区',
     'address'  => '详细地址',
-    'zipcode'  => '邮政编码',
     'phone_tel'  => '联系电话',
     'phone_mob'  => '手机号码',
     'shipping_name'  => '配送方式',

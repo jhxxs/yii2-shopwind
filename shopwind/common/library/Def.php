@@ -59,7 +59,7 @@ class Def
 	const IMAGE_FILE_SIZE		=   2097152;   	// 普通图片大小限制2MB = 2*1024*1024
 
 	/* 上传文档的大小限制 */
-	const ARCHIVE_FILE_SIZE	=   10485760; 	// 10M
+	const ARCHIVE_FILE_SIZE		=   10485760; 	// 10M
 
 	/* 文件类型 */
 	const IMAGE_FILE_TYPE		=	'gif,jpg,jpeg,png,bmp'; // 图片类型

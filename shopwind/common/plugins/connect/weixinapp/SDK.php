@@ -17,7 +17,7 @@ use common\library\Basewind;
 use common\library\Language;
 
 /**
- * @Id WXSDK.php 2018.6.6 $
+ * @Id SDK.php 2018.6.6 $
  * @author mosir
  */
 

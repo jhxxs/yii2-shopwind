@@ -48,8 +48,7 @@ class AddressController extends \common\base\BaseApiController
 		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach ($list as $key => $value) {
-			$list[$key] = array_merge($value, RegionModel::getArrayRegion($value['region_id'], $value['region_name']));
-			unset($list[$key]['region_name']);
+			$list[$key] = array_merge($value, RegionModel::getArrayRegion($value['region_id']));
 		}
 
 		return $respond->output(true, Language::get('address_list'), ['list' => $list, 'pagination' => Page::formatPage($page, false)]);
@@ -71,10 +70,8 @@ class AddressController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true, ['addr_id']);
 
 		$record = AddressModel::find()->where(['userid' => Yii::$app->user->id, 'addr_id' => $post->addr_id])->asArray()->one();
-		$this->params = array_merge($record, RegionModel::getArrayRegion($record['region_id'], $record['region_name']));
-		unset($this->params['region_name']);
-
-		return $respond->output(true, null, $this->params);
+		$record = array_merge($record, RegionModel::getArrayRegion($record['region_id']));
+		return $respond->output(true, null, $record);
 	}
 
 	/**
@@ -100,10 +97,9 @@ class AddressController extends \common\base\BaseApiController
 		if (($record = $model->save($post, false)) === false) {
 			return $respond->output(Respond::CURD_FAIL, Language::get('address_add_fail'));
 		}
-		$this->params = array_merge($record, RegionModel::getArrayRegion($record['region_id'], $record['region_name']));
-		unset($this->params['region_name']);
 
-		return $respond->output(true, null, $this->params);
+		$record = array_merge($record, RegionModel::getArrayRegion($record['region_id']));
+		return $respond->output(true, null, $record);
 	}
 
 	/**
@@ -131,10 +127,9 @@ class AddressController extends \common\base\BaseApiController
 		if (($record = $model->save($post, false)) === false) {
 			return $respond->output(Respond::CURD_FAIL, Language::get('address_update_fail'));
 		}
-		$this->params = array_merge($record, RegionModel::getArrayRegion($record['region_id'], $record['region_name']));
-		unset($this->params['region_name']);
 
-		return $respond->output(true, null, $this->params);
+		$record = array_merge($record, RegionModel::getArrayRegion($record['region_id']));
+		return $respond->output(true, null, $record);
 	}
 
 	/**

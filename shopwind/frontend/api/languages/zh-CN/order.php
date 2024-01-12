@@ -4,7 +4,7 @@ return array(
 	'goods_empty'          		=> '没有指定商品，无法下单',
 	'consignee_empty'          	=> '收货人姓名不能为空',
 	'shipping_required'         => '配送方式不能为空',
-	'region_empty'          	=> '请选择地区',
+	'region_empty'          	=> '请填写收货地址',
     'address_empty'          	=> '请填写详细地址',
 	'order_can_use_max_integral'=> '您最多可以使用积分：',
 	'discount_gt_storeAmount' 	=> '优惠折扣不能大于店铺总价',
@@ -27,7 +27,7 @@ return array(
 	'free_acount_ship_title'        => '购物满%s件包邮',
 	'cannot_evaluate'				=> '该订单不支持评价',
 	'goodstype_invalid'				=> '实物商品和虚拟服务类商品不能同时结算',
-	'verusedf_invalid'				=> '没有权限核销该订单',
+	'verused_invalid'				=> '没有权限核销该订单',
 	'verused_confirm'				=> '卖家扫码核销订单',
 	'no_order_extm'					=> '没有订单配送信息',
 

@@ -122,7 +122,7 @@ const fileUpload = (file) => {
     border-radius: 4px;
 }
 
-.el-form image {
+.el-form .image {
     padding: 50px;
 }
 

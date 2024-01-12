@@ -33,7 +33,6 @@ class NormalOrder extends BaseOrder
 
 	/**
 	 * 显示订单表单
-	 * @api API接口使用到该数据 
 	 */
 	public function formData(&$goods_info = array())
 	{
@@ -52,8 +51,7 @@ class NormalOrder extends BaseOrder
 			// API接口数据，把收货地址的省市区格式一下
 			if ($result['my_address']) {
 				foreach ($result['my_address'] as $key => $value) {
-					$result['my_address'][$key] = array_merge($value, RegionModel::getArrayRegion(0, $value['region_name']));
-					unset($result['my_address'][$key]['region_name']);
+					$result['my_address'][$key] = array_merge($value, RegionModel::getArrayRegion($value['region_id']));
 				}
 			}
 		}

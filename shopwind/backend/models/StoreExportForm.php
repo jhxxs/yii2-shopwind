@@ -14,6 +14,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 
+use common\models\RegionModel;
 use common\models\SgradeModel;
 
 use common\library\Timezone;
@@ -27,73 +28,76 @@ use common\library\Def;
 class StoreExportForm extends Model
 {
 	public $errors = null;
-	
+
 	public static function download($list)
 	{
 		// 文件数组
-		$record_xls = array();		
+		$record_xls = array();
 		$lang_bill = array(
 			'store_id'		=> 'ID',
 			'store_name'	=> '店铺名称',
 			'stype'			=> '主体类型',
-    		'username' 		=> '用户名',
-    		'owner_name' 	=> '店主姓名',
+			'username' 		=> '用户名',
+			'owner_name' 	=> '店主姓名',
 			'tel'			=> '联系电话',
-    		'region_name' 	=> '所在地区',
-    		'sgrade' 		=> '店铺等级',
+			'region' 		=> '所在地区',
+			'sgrade' 		=> '店铺等级',
 			'recommended'   => '推荐',
 			'state'			=> '状态',
 			'add_time'  	=> '添加时间'
 		);
 		$record_xls[] = array_values($lang_bill);
-		$folder = 'STORE_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
-		
-		$record_value = array();
-		foreach($list as $key => $value)
-    	{
-			foreach($lang_bill as $k => $v) {
+		$folder = 'STORE_' . Timezone::localDate('Ymdhis', Timezone::gmtime());
 
-				if(in_array($k, ['add_time'])) {
+		$record_value = array();
+		foreach ($list as $key => $value) {
+			foreach ($lang_bill as $k => $v) {
+
+				if (in_array($k, ['add_time'])) {
 					$value[$k] = Timezone::localDate('Y-m-d H:i:s', $value[$k]);
-				} elseif($k == 'sgrade') {
+				} elseif ($k == 'sgrade') {
 					$value[$k] = self::getSgrade($value[$k]);
-				} elseif($k == 'state') {
+				} elseif ($k == 'state') {
 					$value[$k] = self::getStatus($value[$k]);
-				} elseif($k == 'recommended') {
+				} elseif ($k == 'recommended') {
 					$value[$k] = $value[$k] == 1 ? Language::get('yes') : Language::get('no');
-				} elseif($k == 'stype') {
+				} elseif ($k == 'stype') {
 					$value[$k] = $value[$k] == 'company' ? Language::get('company') : Language::get('personal');
+				} elseif ($k == 'region') {
+					if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+						$value[$k]  = implode('', $array);
+					}
 				}
 
 				$record_value[$k] = $value[$k] ? $value[$k] : '';
 			}
-        	$record_xls[] = $record_value;
-    	}
+			$record_xls[] = $record_value;
+		}
 
 		return \common\library\Page::export([
-			'models' 	=> $record_xls, 
+			'models' 	=> $record_xls,
 			'filename' 	=> $folder,
 		]);
 	}
-	
+
 	private static function getStatus($status = null)
 	{
 		$result = array(
-            Def::STORE_APPLYING  => Language::get('applying'),
+			Def::STORE_APPLYING  => Language::get('applying'),
 			Def::STORE_NOPASS	 => Language::get('nopass'),
-            Def::STORE_OPEN      => Language::get('open'),
-            Def::STORE_CLOSED    => Language::get('close'),
-        );
-		if($status === null) {
-			return $result;	
+			Def::STORE_OPEN      => Language::get('open'),
+			Def::STORE_CLOSED    => Language::get('close'),
+		);
+		if ($status === null) {
+			return $result;
 		}
 
-		return isset($result[$status]) ? $result[$status] : '';		
+		return isset($result[$status]) ? $result[$status] : '';
 	}
-	
+
 	private static function getSgrade($grade_id = 0)
 	{
 		$sgrades = SgradeModel::getOptions();
 		return isset($sgrades[$grade_id]) ? $sgrades[$grade_id] : '';
-	}	
+	}
 }
