@@ -63,7 +63,7 @@ class DistributeModel extends ActiveRecord
 		list($realGoodsAmount, $realShippingFee, $realOrderAmount) = OrderModel::getRealAmount($order['order_id']);
 		
 		// 如果有退款，减掉退掉的商品金额
-		$query = RefundModel::find()->alias('r')->select('r.refund_goods_fee')->joinWith('depositTrade dt', false)->where(['r.buyer_id' => $order['buyer_id'], 'dt.bizOrderId' => $order['order_sn'], 'r.status' => 'SUCCES'])->one();
+		$query = RefundModel::find()->alias('r')->select('r.refund_goods_fee')->joinWith('depositTrade dt', false)->where(['r.buyer_id' => $order['buyer_id'], 'dt.bizOrderId' => $order['order_sn'], 'r.status' => 'SUCCESS'])->one();
 		if($query && $query->refund_goods_fee > 0) {
 			$realGoodsAmount = $realGoodsAmount - $query->refund_goods_fee;
 		}
