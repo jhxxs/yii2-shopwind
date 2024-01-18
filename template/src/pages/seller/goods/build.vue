@@ -218,7 +218,7 @@
 										:show-file-list="false" :auto-upload="false"
 										:on-change="(file) => { fileUpload(file, 'goods_images', index) }"
 										class="relative slider mr20 mb10">
-										<img :src="item + '?t=' + Math.random()" />
+										<img :src="item" />
 										<el-icon @click.stop="fileRemove('goods_images', index)" class="absolute remove"
 											color="#ffffff">
 											<close-bold />
