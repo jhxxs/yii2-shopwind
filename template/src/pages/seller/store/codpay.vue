@@ -54,7 +54,7 @@ const gallery = ref({})
 const form = reactive({ status: 1, regions: [] })
 
 const defaultProps = {
-    label: 'region_name',
+    label: 'name',
     children: 'children'
 }
 
