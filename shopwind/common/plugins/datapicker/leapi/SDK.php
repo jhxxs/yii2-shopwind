@@ -349,6 +349,10 @@ class Jd extends SDK
 			}
 		}*/
 
+		if (substr($sku['imagePath'], 0, 2) == '//' || substr($sku['imagePath'], 0, 4) == 'http') {
+			return $sku['imagePath'];
+		}
+
 		return $sku['imagePath'] ? '//img10.360buyimg.com/imgzone/' . $sku['imagePath'] : '';
 	}
 
