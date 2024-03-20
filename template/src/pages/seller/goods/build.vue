@@ -625,9 +625,7 @@ const fileUpload = (file, field, index) => {
 	}
 }
 const fileRemove = (field, index) => {
-	if (!isEmpty(goods[field][index])) {
-		goods[field].splice(index, 1)
-	} else goods[field] = ''
+	goods[field].splice(index, 1)
 }
 const deliveryChange = (value) => {
 	goods.dt_id = value

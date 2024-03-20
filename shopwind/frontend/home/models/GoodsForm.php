@@ -311,7 +311,7 @@ class GoodsForm extends Model
 	private function saveSCategory($goods_id, $post)
 	{
 		if (is_array($post->scate_id) || is_object($post->scate_id)) {
-			CategoryGoodsModel::deleteAll(['goods_id' => $$goods_id]);
+			CategoryGoodsModel::deleteAll(['goods_id' => $goods_id]);
 			foreach ($post->scate_id as $value) {
 				$model = new CategoryGoodsModel();
 				$model->goods_id = $goods_id;
