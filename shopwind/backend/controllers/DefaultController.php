@@ -98,11 +98,11 @@ class DefaultController extends \common\base\BaseAdminController
 		$result = [];
 		foreach($list as $key => $value) {
 			$result[$key] = array(
-            	'users'  => UserModel::find()->where(['>', 'create_time', $value])->count('userid'),
-            	'stores' => StoreModel::find()->where(['and', ['in', 'state', [Def::STORE_APPLYING, Def::STORE_OPEN]], ['>', 'add_time', $value]])->count('store_id'),
-            	'orders' => OrderModel::find()->where(['and', ['!=', 'status', Def::ORDER_CANCELED], ['>', 'add_time', $value]])->count('order_id'),
-				'sales' => OrderModel::find()->where(['and', ['>', 'status', Def::ORDER_CANCELED], ['>', 'add_time', $value]])->sum('order_amount')
-        	);
+				'users'  => UserModel::find()->where(['>=', 'create_time', $value])->count('userid'),
+				'stores' => StoreModel::find()->where(['and', ['in', 'state', [Def::STORE_APPLYING, Def::STORE_OPEN]], ['>=', 'add_time', $value]])->count('store_id'),
+				'orders' => OrderModel::find()->where(['and', ['!=', 'status', Def::ORDER_CANCELED], ['>=', 'add_time', $value]])->count('order_id'),
+				'sales' => OrderModel::find()->where(['and', ['>', 'status', Def::ORDER_CANCELED], ['>=', 'pay_time', $value]])->sum('order_amount')
+			);
 		}
 	
 		foreach($result['today'] as $key => $value) {
@@ -127,7 +127,7 @@ class DefaultController extends \common\base\BaseAdminController
 		$result['stores'] = StoreModel::find()->count('store_id');
 		$result['users'] = UserModel::find()->count('userid');
 		$result['orders'] = OrderModel::find()->count('order_id');
-		$result['sales'] = OrderModel::find()->sum('order_amount');
+		$result['sales'] = OrderModel::find()->where(['>', 'pay_time', 0])->sum('order_amount');
 
 		return $result;
     }
