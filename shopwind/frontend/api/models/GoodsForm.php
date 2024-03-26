@@ -65,7 +65,12 @@ class GoodsForm extends Model
 		if (($record = $query->asArray()->one())) {
 			$integral = ['enabled' => false];
 
+			foreach (['if_show', 'recommended', 'isnew'] as $field) {
+				$record[$field] = intval($record[$field]);
+			}
+
 			// 积分功能开启状态下
+			$integral = ['enabled' => false];
 			if (IntegralSettingModel::getSysSetting('enabled')) {
 				$integral['enabled'] = true;
 
