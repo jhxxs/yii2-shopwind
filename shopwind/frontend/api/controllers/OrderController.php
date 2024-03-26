@@ -419,7 +419,12 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::PARAMS_INVALID, Language::get('order_id_sn_empty'));
 		}
 
-		if (!($order = OrderModel::find()->select('order_id,order_sn,buyer_id,seller_id')->where(['order_id' => $post->order_id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED, Def::ORDER_FINISHED]])->andWhere(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])->one())) {
+		if (!($order = OrderModel::find()->select('order_id,order_sn,buyer_id,seller_id')
+			->where(['order_id' => $post->order_id])
+			->andWhere(['in', 'status', [Def::ORDER_SHIPPED, Def::ORDER_FINISHED]])
+			->andWhere(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])
+			->one())) {
+
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_order'));
 		}
 
@@ -431,9 +436,12 @@ class OrderController extends \common\base\BaseApiController
 		}
 
 		$result = [];
-		$list = OrderExpressModel::find()->where(['order_id' => $order->order_id])->all();
+		$list = OrderExpressModel::find()->alias('e')->select('e.*,oe.phone_mob')
+			->where(['e.order_id' => $order->order_id])
+			->joinWith('orderExtm oe', false)
+			->asArray()->all();
 		foreach ($list as $value) {
-			$array = $model->submit($post, $value);
+			$array = $model->submit($post, (object) $value);
 			$result[] = array_merge(ArrayHelper::toArray($order), $array ? $array : []);
 		}
 

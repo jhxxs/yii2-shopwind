@@ -23,7 +23,7 @@ return array(
 	
 	'alipay'  => '支付宝',
     'alipay_desc'   => '支付宝是国内先进的网上支付平台，支持电脑网站支付、手机网站支付、APP支付。<a href="https://open.alipay.com/develop/manage" target="_blank">接口申请</a>',
-    'alipay_remark' => '创建应用时类型务必移动应用，产品绑定：获取会员信息、电脑网站支付、手机网站支付、APP支付、转账到支付宝账户',
+    'alipay_remark' => '创建应用时类型务必移动应用，加签方式选证书模式，产品绑定：获取会员信息、电脑网站支付、手机网站支付、APP支付、转账到支付宝账户',
     'alipay_currency'   => '人民币',
     'appId'    => 'APPID',
     'rsaPublicKey'         => '应用公钥',

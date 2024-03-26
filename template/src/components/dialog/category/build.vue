@@ -1,6 +1,6 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="title" :width="600" :center="true" :draggable="true" :destroy-on-close="true"
-        :close-on-click-modal="false" :before-close="close">
+    <el-dialog v-model="dialogVisible" :title="title" :width="600" :center="true" :draggable="true"
+        :destroy-on-close="true" :close-on-click-modal="false" :before-close="close">
         <el-form :inline="true">
             <el-form-item label="分类名称" :label-width="85">
                 <el-input v-model="category.cate_name" clearable />
@@ -48,6 +48,7 @@ watch(() => props.visible, (value) => {
     dialogVisible.value = value
 })
 watch(() => props.data, (value) => {
+    if (value.parent_id) value.parent_id = parseInt(value.parent_id);
     category.value = value
 })
 

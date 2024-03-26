@@ -511,7 +511,7 @@ class BaseOrder
 					$delivery = DeliveryTemplateModel::find()->where(['store_id' => $store_id])->orderBy(['template_id' => SORT_ASC])->asArray()->one();
 					// 如果店铺也没有默认的运费模板
 					if (empty($delivery)) {
-						$delivery = DeliveryTemplateModel::addFirstTemplate();
+						$delivery = DeliveryTemplateModel::addFirstTemplate($store_id);
 					}
 				}
 				$base_deliverys[$store_id][$goods['goods_id']] = $delivery;
