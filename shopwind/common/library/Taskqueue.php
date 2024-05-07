@@ -55,7 +55,7 @@ class Taskqueue
 	{
 		$now = Timezone::gmtime();
 
-		$list = StoreModel::find()->where(['state' => Def::STORE_OPEN])->andWhere(['<=', 'end_time', $now])->indexBy('store_id')->orderBy(['store_id' => SORT_ASC])->limit(2)->asArray()->all();
+		$list = StoreModel::find()->where(['state' => Def::STORE_OPEN])->andWhere(['and', ['>', 'end_time', 0], ['<=', 'end_time', $now]])->indexBy('store_id')->orderBy(['store_id' => SORT_ASC])->limit(2)->asArray()->all();
 		$reason = '店铺已到期';
 		foreach ($list as $store) {
 			if (StoreModel::updateAll(['state' => Def::STORE_CLOSED, 'close_reason' => $reason], ['store_id' => $store['store_id']])) {
