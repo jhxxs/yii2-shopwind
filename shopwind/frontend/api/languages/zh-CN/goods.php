@@ -13,11 +13,12 @@ return array(
 	'category_invalid'			=> '商品类目非法',
 	'price_invalid'				=> '商品价格/库存不合理',
 	'goods_image_invalid'		=> '请上传商品主图',
-	
+	'goods_limit_arrived'		=> '商品发布大于店铺等级限制数量',
+
 	'not_question_self'			=> '不能咨询自己店铺的商品',
 	'question_content_invalid'	=> '咨询内容不能为空',
 	'question_content_fail'		=> '咨询提交失败',
-	
+
 	'keyword'					=> '关键字',
 	'brand'						=> '品牌',
 	'price'						=> '价格',

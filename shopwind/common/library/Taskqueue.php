@@ -20,9 +20,13 @@ use common\models\DepositTradeModel;
 use common\models\IntegralModel;
 use common\models\GoodsStatisticsModel;
 use common\models\TeambuyLogModel;
+use common\models\StoreModel;
+use common\models\UserModel;
 
+use common\library\Basewind;
 use common\library\Timezone;
 use common\library\Def;
+
 
 /**
  * @Id Taskqueue.php 2018.3.2 $
@@ -33,6 +37,7 @@ class Taskqueue
 {
 	public static function run()
 	{
+		self::autoClosedstore();
 		self::autoClosed();
 		self::autoConfirm();
 
@@ -41,6 +46,32 @@ class Taskqueue
 
 		// 针对社区团购订单
 		self::autoConfirm('guidebuy');
+	}
+
+	/**
+	 * 自动店铺到期
+	 */
+	private static function autoClosedstore()
+	{
+		$now = Timezone::gmtime();
+
+		$list = StoreModel::find()->where(['state' => Def::STORE_OPEN])->andWhere(['<=', 'end_time', $now])->indexBy('store_id')->orderBy(['store_id' => SORT_ASC])->limit(2)->asArray()->all();
+		$reason = '店铺已到期';
+		foreach ($list as $store) {
+			if (StoreModel::updateAll(['state' => Def::STORE_CLOSED, 'close_reason' => $reason], ['store_id' => $store['store_id']])) {
+				$retval = ['store_name' => $store['store_name'], 'owner_name' => $store['owner_name']];
+				// 发站内信
+				$pmer = Basewind::getPmer('toseller_store_closed_notify', ['store' => $retval, 'reason' => $reason]);
+				if ($pmer) {
+					$pmer->sendFrom(0)->sendTo($store['store_id'])->send();
+				}
+				// 发邮件
+				$mailer = Basewind::getMailer('toseller_store_closed_notify', ['store' => $retval, 'reason' => $reason]);
+				if ($mailer && ($toEmail = UserModel::find()->select('email')->where(['userid' => $store['store_id']])->scalar())) {
+					$mailer->setTo($toEmail)->send();
+				}
+			}
+		}
 	}
 
 	/**

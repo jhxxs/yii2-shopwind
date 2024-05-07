@@ -51,6 +51,7 @@ class GoodsForm extends Model
 			$this->errors = Language::get('not_seller');
 			return false;
 		}
+
 		if ($this->goods_id) {
 			$model = GoodsModel::find()->select('store_id,type')->where(['goods_id' => $this->goods_id])->one();
 			if (!$model || $model->store_id != $this->store_id) {
@@ -59,6 +60,13 @@ class GoodsForm extends Model
 			}
 			if (isset($post->type) && $model->type != $post->type) {
 				$this->errors = Language::get('goods_type_editforbidden');
+				return false;
+			}
+		} else {
+			$settings = StoreModel::find()->alias('s')->select('sg.goods_limit')->joinWith('sgrade sg', false)->where(['store_id' => $this->store_id])->asArray()->one();
+			$goodscounts = GoodsModel::find()->where(['store_id' => $this->store_id])->count();
+			if ($goodscounts >= $settings['goods_limit']) {
+				$this->errors = Language::get('goods_limit_arrived');
 				return false;
 			}
 		}

@@ -40,7 +40,7 @@ class GoodslistWidget extends BaseWidget
             $this->options
         );
 
-        $query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,price,mkPrice,default_image,gst.sales')
+        $query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,price,mkprice,default_image,gst.sales')
             ->joinWith('goodsStatistics gst', false)
             ->where(['if_show' => 1, 'closed' => 0]);
 

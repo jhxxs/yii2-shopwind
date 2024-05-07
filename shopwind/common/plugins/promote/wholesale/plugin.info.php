@@ -9,7 +9,7 @@
  * @license https://www.shopwind.net/license/
  */
 
-namespace common\plugins\promote\teambuy;
+namespace common\plugins\promote\wholesale;
 
 use yii;
 use yii\helpers\Url;
@@ -28,7 +28,7 @@ return array(
     'author' => 'SHOPWIND',
 	'website' => 'https://www.shopwind.net',
     'version' => '1.0',
-    'category' => 'store', // user/store
+    'category' => 'store', // user|store
     'icon' => 'icon-jinhuodan',
     'buttons' => array(
         array(
