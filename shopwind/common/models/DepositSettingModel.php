@@ -56,8 +56,8 @@ class DepositSettingModel extends ActiveRecord
 		$setting = self::getSystemSetting();
 		if (($query = parent::find()->select('trade_rate,drawal_rate,transfer_rate,regive_rate,guider_rate')->where(['userid' => $userid])->asArray()->one())) {
 			foreach ($query as $key => $value) {
-				if ($value < 0) {
-					unset($query[$key]);
+				if (!$value || $value < 0) {
+					$query[$key] = 0;
 				}
 			}
 			$setting = array_merge($setting, $query);

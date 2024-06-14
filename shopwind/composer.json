@@ -33,7 +33,8 @@
         "2amigos/qrcode-library": "~1.1",
         "mk-j/php_xlsxwriter": "^0.38.0",
         "guzzlehttp/psr7": "~1.6.1",
-        "wechatpay/wechatpay": "^1.4"
+        "wechatpay/wechatpay": "^1.4",
+        "ezyang/htmlpurifier": "^4.16"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

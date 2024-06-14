@@ -215,7 +215,7 @@ class StoreModel extends ActiveRecord
 			'comprehensive' => [
 				'value' => sprintf("%.4f", $comprehensiveEvaluation),
 				'percentage'  => round($comprehensiveEvaluation / 5, 4) * 100 . '%',
-				'lable' => '综合体验'
+				'label' => '综合体验'
 			]
 		);
 

@@ -29,7 +29,7 @@ class OrderExpressModel extends ActiveRecord
 		return '{{%order_express}}';
 	}
 
-	// ¹ØÁª±í
+	// å…³è”è¡¨
 	public function getOrderExtm()
 	{
 		return parent::hasOne(OrderExtmModel::className(), ['order_id' => 'order_id']);

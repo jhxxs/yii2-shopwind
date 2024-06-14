@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'aa3d6e177b381daf4ee34c8ed9e1a7d4793639bd',
+        'reference' => '618b0f837f0adedbd2b3c2cfb973ed0e7fb16ed9',
         'name' => 'yiisoft/yii2-app-advanced',
         'dev' => true,
     ),
@@ -158,12 +158,12 @@
             'dev_requirement' => true,
         ),
         'ezyang/htmlpurifier' => array(
-            'pretty_version' => 'v4.10.0',
-            'version' => '4.10.0.0',
+            'pretty_version' => 'v4.16.0',
+            'version' => '4.16.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ezyang/htmlpurifier',
             'aliases' => array(),
-            'reference' => 'd85d39da4576a6934b72480be6978fb10c860021',
+            'reference' => '523407fb06eb9e5f3d59889b3978d5bfe94299c8',
             'dev_requirement' => false,
         ),
         'flc/dysms' => array(
@@ -679,7 +679,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'aa3d6e177b381daf4ee34c8ed9e1a7d4793639bd',
+            'reference' => '618b0f837f0adedbd2b3c2cfb973ed0e7fb16ed9',
             'dev_requirement' => false,
         ),
         'yiisoft/yii2-bootstrap' => array(

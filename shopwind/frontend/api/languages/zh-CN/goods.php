@@ -18,7 +18,7 @@ return array(
 	'not_question_self'			=> '不能咨询自己店铺的商品',
 	'question_content_invalid'	=> '咨询内容不能为空',
 	'question_content_fail'		=> '咨询提交失败',
-
+	
 	'keyword'					=> '关键字',
 	'brand'						=> '品牌',
 	'price'						=> '价格',

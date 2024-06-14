@@ -18,6 +18,7 @@ use common\models\OrderModel;
 use common\models\DepositTradeModel;
 use common\models\OrderLogModel;
 use common\models\OrderExpressModel;
+use common\models\OrderExtmModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -77,7 +78,7 @@ class Seller_orderShippedForm extends Model
 			$express->code = $post->code;
 			$express->number = $post->number;
 			if (!$express->save()) {
-				$this->errors = $model->errors;
+				$this->errors = $express->errors;
 				return false;
 			}
 
@@ -101,6 +102,11 @@ class Seller_orderShippedForm extends Model
 		OrderLogModel::create($orderInfo['order_id'], Def::ORDER_SHIPPED, addslashes(Yii::$app->user->identity->username), $post->remark);
 
 		if ($sendNotify === true) {
+
+			// 收货人的手机号
+			$query = OrderExtmModel::find()->select('phone_mob')->where(['order_id' => $orderInfo['order_id']])->one();
+			$phone_mob = $query ? $query->phone_mob : '';
+
 			// 短信和邮件提醒： 已发货通知买家
 			Basewind::sendMailMsgNotify(
 				array_merge($orderInfo, ['express_no' => $post->number]),
@@ -110,7 +116,7 @@ class Seller_orderShippedForm extends Model
 				),
 				array(
 					'key' 		=> 'tobuyer_shipped_notify',
-					'receiver'  => $orderInfo['phone_mob'], // 收货人的手机号
+					'receiver'  => $phone_mob, // 收货人的手机号
 				)
 			);
 		}

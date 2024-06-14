@@ -32,6 +32,11 @@ class OutlayDepopay extends BaseDepopay
 	 * 支付类型，值有：即时到帐：INSTANT；担保交易：SHIELD；货到付款：COD
 	 */
 	public $_payType   	= 'INSTANT';
+
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
+	 */
+	public $_tradeType = 'PAY';
 	
 	public function _handle_trade_info($trade_info, $extra_info = [])
 	{

@@ -173,22 +173,22 @@ class Page
 	public static function generateQRCode($path = 'qrcode/', $params = [])
 	{
 		$text = isset($params['text']) ? $params['text'] : 'TEXT';
-		$size =  isset($params['size']) ? $params['size'] : 100;
-		$margin = isset($params['margin']) ? $params['margin'] : 5;
+		$size =  isset($params['size']) ? floatval($params['size']) : 100;
+		$margin = isset($params['margin']) ? floatval($params['margin']) : 5;
 
 		$outfile = Def::fileSavePath() . '/data/files/mall/' . $path;
 		if (!is_dir($outfile)) {
 			FileHelper::createDirectory($outfile);
 		}
 
-		$outfile .= md5((__METHOD__) . var_export(func_get_args(), true)) . '.PNG';
+		$outfile .= md5((__METHOD__) . var_export(func_get_args(), true)) . '.png';
 		if (!file_exists($outfile)) {
 			$qrCode = (new \Da\QrCode\QrCode($text))->setSize($size)->setMargin($margin);
 			$qrCode->writeFile($outfile);
 		}
 
 		$fileurl = str_replace(Def::fileSavePath(), Basewind::baseUrl(), $outfile);
-		return array($fileurl, $outfile);
+		return array($fileurl, $outfile, $size + $margin * 2);
 	}
 
 	/**
@@ -326,6 +326,8 @@ class Page
 
 		// 输出下载文件路径
 		$path = Yii::getAlias('@public/data/files/mall/excel/');
+		@mkdir($path, 0777);
+
 		$file = $path . $config['filename'] . '.xlsx';
 		$writer->writeToFile($file);
 
@@ -338,7 +340,7 @@ class Page
 		$word = var_export($word, true);
 
 		$path = Yii::getAlias('@public') . "/.logs/" . date('Ymd', time());
-		@mkdir($path, 0777, true);
+		@mkdir($path, 0777);
 
 		$fp = fopen($path . "/log.txt", "a");
 		flock($fp, LOCK_EX);

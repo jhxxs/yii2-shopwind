@@ -47,6 +47,7 @@ class SiteController extends \common\base\BaseApiController
 			'store_allow' => floatval(Yii::$app->params['store_allow']),
 			'baidukey' => Yii::$app->params['baidukey'],
 			'icp' => Yii::$app->params['icp_number'],
+			'ibl' => Yii::$app->params['ibl'],
 			'qrcode' => [
 				'android' => Formatter::path(Yii::$app->params['androidqrcode']),
 				'ios' => Formatter::path(Yii::$app->params['iosqrcode'])

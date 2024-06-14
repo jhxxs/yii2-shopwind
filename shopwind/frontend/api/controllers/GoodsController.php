@@ -438,9 +438,7 @@ class GoodsController extends \common\base\BaseApiController
 				$list[$key]['promotion'] = $promotion;
 			}
 		}
-		$this->params['list'] = $list;
-
-		return $respond->output(true, null, $this->params);
+		return $respond->output(true, null, ['list' => $list]);
 	}
 
 	/**
@@ -539,9 +537,8 @@ class GoodsController extends \common\base\BaseApiController
 			$list[$key]['image_url'] = Formatter::path($value['image_url']);
 			$list[$key]['thumbnail'] = Formatter::path($value['thumbnail']);
 		}
-		$this->params['list'] = $list;
 
-		return $respond->output(true, null, $this->params);
+		return $respond->output(true, null, ['list' => $list]);
 	}
 
 	/**
@@ -618,9 +615,8 @@ class GoodsController extends \common\base\BaseApiController
 		if (!isset($post->goods_id) || !GoodsModel::find()->where(['goods_id' => $post->goods_id])->exists()) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('goods_invalid'));
 		}
-		$this->params['list'] = $model->getGoodProps($post->goods_id);
 
-		return $respond->output(true, null, $this->params);
+		return $respond->output(true, null, ['list' => $model->getGoodProps($post->goods_id)]);
 	}
 
 	/**
@@ -814,8 +810,7 @@ class GoodsController extends \common\base\BaseApiController
 			$list[$key]['time_reply'] = Timezone::localDate('Y-m-d H:i:s', $value['time_reply']);
 		}
 
-		$this->params = ['list' => $list, 'pagination' => Page::formatPage($page, false)];
-		return $respond->output(true, null, $this->params);
+		return $respond->output(true, null, ['list' => $list, 'pagination' => Page::formatPage($page, false)]);
 	}
 
 	/**
@@ -977,12 +972,17 @@ class GoodsController extends \common\base\BaseApiController
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('goods_invalid'));
 		}
 
-		$path = UploadedFileModel::getSavePath('qrcode/goods/',0, $post->goods_id);
+		$path = UploadedFileModel::getSavePath('qrcode/goods/', 0, $post->goods_id);
 		$wxacode = $path . "wxacode.png";
 		if (!file_exists($wxacode)) {
 			$response = Weixin::getInstance(null, 0, 'applet')->getWxaCode(['path' => $post->page, 'width' => 280], $wxacode);
 			if ($response === false) {
-				return $respond->output(Respond::HANDLE_INVALID, Language::get('handle_exception'));
+
+				// 如果没有上线小程序，则无法获取小程序码，则使用H5页二维码取代
+				list($wxacode) = Page::generateQRCode('qrcode/goods/', ['text' => Basewind::mobileUrl(true) . $post->page, 'size' => 280]);
+				if (!$wxacode) {
+					return $respond->output(Respond::HANDLE_INVALID, Language::get('handle_exception'));
+				}
 			}
 		}
 		$goods['default_image'] = Formatter::path($goods['default_image'], 'goods');
@@ -1001,8 +1001,8 @@ class GoodsController extends \common\base\BaseApiController
 
 		// 生成海报
 		$config = [
-			'text' => [['text' => $name, 'left' => 300, 'top' => 400, 'fontSize' => 40], ['text' => mb_substr($goods['goods_name'], 0, 14, Yii::$app->charset), 'left' => 80, 'top' => 1440, 'fontSize' => 30], ['text' => mb_substr($goods['goods_name'], 14, 14, Yii::$app->charset), 'left' => 80, 'top' => 1500, 'fontSize' => 30], ['text' => '￥' . $goods['price'], 'left' => 80, 'top' => 1640, 'fontSize' => 50, 'fontColor' => '255,0,0']],
-			'image' => [['url' => $logo, 'left' => 100, 'top' => 310, 'width' => 160, 'height' => 160], ['url' => $wxacode, 'left' => 670, 'top' => 1370, 'width' => 250, 'height' => 250], ['url' => $goods['default_image'], 'left' => 100, 'top' => 540, 'width' => 800, 'height' => 800]],
+			'text' => [['text' => $name, 'left' => 280, 'top' => 400, 'fontSize' => 40], ['text' => mb_substr($goods['goods_name'], 0, 14, Yii::$app->charset), 'left' => 80, 'top' => 1440, 'fontSize' => 30], ['text' => mb_substr($goods['goods_name'], 14, 14, Yii::$app->charset), 'left' => 80, 'top' => 1500, 'fontSize' => 30], ['text' => '￥' . $goods['price'], 'left' => 80, 'top' => 1640, 'fontSize' => 50, 'fontColor' => '255,0,0']],
+			'image' => [['url' => $logo, 'left' => 80, 'top' => 310, 'width' => 160, 'height' => 160], ['url' => $wxacode, 'left' => 670, 'top' => 1370, 'width' => 250, 'height' => 250], ['url' => $goods['default_image'], 'left' => 80, 'top' => 500, 'width' => 840, 'height' => 840]],
 			'background' => $background
 		];
 
@@ -1010,7 +1010,6 @@ class GoodsController extends \common\base\BaseApiController
 			$qrcode = Page::createPoster($config, $path . "poster.png");
 			$result['poster'] = str_replace(Yii::getAlias('@public'), Basewind::baseUrl(), $qrcode);
 			return $respond->output(true, null, $result);
-			
 		} catch (\Exception $e) {
 			return $respond->output(Respond::HANDLE_INVALID, $e->getMessage());
 		}

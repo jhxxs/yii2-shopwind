@@ -14,6 +14,7 @@ namespace common\library;
 use yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\HtmlPurifier;
 
 use common\models\UserModel;
 
@@ -177,6 +178,7 @@ class Basewind
 	}
 
 	/**
+	 * 清除不安全的JS标记（防止XSS攻击等）
 	 * 数组转对象（并去掉字符串前后空格） 
 	 * @param array|string|int $params
 	 * @param bool $toObject 是否转成对象
@@ -190,12 +192,12 @@ class Basewind
 			} elseif (is_null($params) && $toObject == true) {
 				return (object) $params;
 			}
-			return trim($params);
+			return HtmlPurifier::process(trim($params));
 		}
 
 		foreach ($params as $k => $v) {
 			if (is_string($v)) {
-				$params[$k] = (in_array($k, $intvalFields) ? intval($v) : trim($v));
+				$params[$k] = in_array($k, $intvalFields) ? intval($v) : HtmlPurifier::process(trim($v));
 			} elseif (is_array($v) || is_object($v)) {
 				$params[$k] = self::trimAll($v, $toObject);
 			}
@@ -461,6 +463,16 @@ class Basewind
 	 * 获得访问网站首页的URL地址
 	 * @desc 如果配置了多个域名指向网站，获取的是实际访问的域名地址
 	 * @err 获取有误时查看：https://xiaozhuanlan.com/topic/8720164395
+	 * 解决：在 Nginx 的代理配置中加上 proxy_set_header X-Forwarded-Proto https;
+	 * location / {
+	 *  proxy_set_header Host $host;
+	 *  proxy_set_header X-Real-Ip $remote_addr;
+	 *  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	 *  proxy_set_header X-Forwarded-Proto https; # 加上这一句
+	 *  proxy_redirect off;
+	 *  proxy_pass http://yii2-app-upstream;
+	 * }
+
 	 * @return string
 	 */
 	public static function siteUrl()

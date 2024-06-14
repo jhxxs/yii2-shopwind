@@ -33,6 +33,11 @@ class IncomeDepopay extends BaseDepopay
 	 */
 	public $_payType   	= 'INSTANT';
 
+	/**
+	 * 针对财务明细的资金用途，值有：在线支付：PAY；充值：RECHARGE；提现：WITHDRAW；服务费：SERVICE；转账：TRANSFER；返现：REGIVE；扣费：CHARGE
+	 */
+	public $_tradeType = 'PAY';
+
 	public function _handle_trade_info($trade_info, $extra_info = [])
 	{
 		// 验证金额
