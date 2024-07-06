@@ -60,7 +60,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 
 #### 小程序/APP体验（商业版）
 * 微信小程序：<a href="https://www.shopwind.net/static/images/20210507181842.jpg" target="_blank"> https://www.shopwind.net/static/images/20210507181842.jpg </a> 
-* Android（安卓版）体验：<a href="https://www.shopwind.net/shopwind.apk" target="_blank"> https://www.shopwind.net/shopwind.apk </a>
+* Android（安卓版）体验：<a href="https://www.shopwind.net/static/images/qr-android.jpg" target="_blank"> https://www.shopwind.net/static/images/qr-android.jpg </a>
 * iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
 * 商家端体验（小程序）：<a href="https://www.shopwind.net/static/images/gh_fea54cf5a4a8_258.jpg" target="_blank"> https://www.shopwind.net/static/images/gh_fea54cf5a4a8_258.jpg </a>
 * 通用体验账号：买家（账号：18978189192   密码：111111  支付密码：111111）、商家（账号：18978189171  密码：111111）
