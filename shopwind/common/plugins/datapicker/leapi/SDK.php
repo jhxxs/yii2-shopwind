@@ -161,16 +161,16 @@ class Taobao extends SDK
 		foreach ($item->sku as $key => $value) {
 			if ($value->skuId == 0) {
 				$defaultSpec = [
-					'price' => $value->price,
-					'stock' => $value->quantity
+					'price' => floatval($value->price),
+					'stock' => intval($value->quantity)
 				];
 				continue;
 			}
 
 			$spec = [
 				'sku' => $value->skuId,
-				'price' => $value->price,
-				'stock' => $value->quantity,
+				'price' => floatval($value->price),
+				'stock' => intval($value->quantity),
 				'sort_order' => $key
 			];
 
@@ -252,9 +252,9 @@ class Alibaba extends SDK
 			foreach ($item->skuMap as $k => $v) {
 
 				$spec = [
-					'price' => $v->discountPrice,
-					'mkprice' => $v->price,
-					'stock' => $v->canBookCount,
+					'price' => floatval($v->discountPrice),
+					'mkprice' => floatval($v->price),
+					'stock' => intval($v->canBookCount),
 					'sort_order' => ++$index
 				];
 
@@ -283,7 +283,7 @@ class Alibaba extends SDK
 
 		if (empty($result['specs']) && isset($item->showPriceRanges)) {
 			$result['specs'][] = [
-				'price' => $item->showPriceRanges[0]->price,
+				'price' => floatval($item->showPriceRanges[0]->price),
 				'stock' => 200
 			];
 		}
@@ -319,7 +319,7 @@ class Jd extends SDK
 				'sku' => $value['skuId'],
 				'price' => $this->getPrice($item, $value, 'price'),
 				'mkprice' => $this->getPrice($item, $value, 'originalPrice'),
-				'stock' => $value['stockState'],
+				'stock' => intval($value['stockState']),
 				'image' => $this->getSpecImage($item->clothesColor, $value),
 				'spec_1' => $value[1],
 				'spec_2' => $value[2],
@@ -362,10 +362,10 @@ class Jd extends SDK
 	private function getPrice($item, $value, $field = 'price')
 	{
 		if (isset($value[$field])) {
-			return $value[$field];
+			return floatval($value[$field]);
 		}
 		if ($item->$field) {
-			return $item->$field;
+			return floatval($item->$field);
 		}
 
 		return 0;
@@ -394,9 +394,9 @@ class Pdd extends SDK
 
 			$spec = [
 				'sku' => $value->skuID,
-				'price' => $value->groupPrice,
-				'mkprice' => $value->normalPrice, // $item->marketPrice
-				'stock' => $value->quantity,
+				'price' => floatval($value->groupPrice),
+				'mkprice' => floatval($value->normalPrice), // $item->marketPrice
+				'stock' => intval($value->quantity),
 				'image' => $value->thumbUrl,
 				'sort_order' => $key + 1
 			];

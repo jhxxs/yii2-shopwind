@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
 
 use common\models\StoreModel;
 use common\models\UserEnterModel;
+use common\models\UserTokenModel;
 
 use common\library\Basewind;
 use common\library\Timezone;
@@ -233,6 +234,31 @@ class UserModel extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    /**
+     * 生成TOKEN
+     * @param bool $monopoly  是否单点登录（即独占登录，同一个账号不允许多处登录）
+     */
+    public static function getToken($identity, $expired = 604800, $monopoly = false)
+    {
+        if ($monopoly && $identity) {
+            $model = UserTokenModel::find()->where(['userid' => $identity->userid])->one();
+        }
+
+        if (!$model) {
+            $model = new UserTokenModel();
+        }
+
+        $model->expire_time = $expired;
+        $model->token = md5($expired . mt_rand() . $expired . mt_rand());
+        $model->userid = $identity ? $identity->userid : 0;
+
+        if (!$model->save()) {
+            return false;
+        }
+
+        return $model->token;
+    }
+
     /* 获取用户信息，去掉不安全字段 */
     public static function get($id)
     {
@@ -280,7 +306,7 @@ class UserModel extends ActiveRecord implements IdentityInterface
      */
     public static function generateName($prefix = '', $length = 10)
     {
-        if ($prefix !== null) $prefix = 'id';
+        if ($prefix !== null) $prefix = 'u';
 
         $username = $prefix;
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

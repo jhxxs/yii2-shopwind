@@ -222,24 +222,12 @@ class AuthController extends \common\base\BaseApiController
 	 */
 	private function createToken($respond, $identity = null)
 	{
-		$expire_time = Timezone::gmtime() + $respond->expired;
-		if ($identity) {
-			$token = md5($expire_time . $identity->userid . $identity->username . $expire_time . mt_rand(1000, 9999));
-			if (!($model = UserTokenModel::find()->where(['userid' => $identity->userid])->one())) {
-				$model = new UserTokenModel();
-				$model->userid = $identity->userid;
-			}
-		} else {
-			$model = new UserTokenModel();
-			$model->userid = 0;
-			$token = md5($expire_time . mt_rand(1000000, 9999999) . $expire_time . $respond->expired);
-		}
-		$model->token = $token;
-		$model->expire_time = $expire_time;
-		if (!$model->save()) {
+		$expired = Timezone::gmtime() + $respond->expired;
+		if (!($token = UserModel::getToken($identity, $expired))) {
 			return false;
 		}
-		return ['token' => $token, 'expire_time' => Timezone::localDate('Y-m-d H:i:s', $expire_time)];
+
+		return ['token' => $token, 'expire_time' => Timezone::localDate('Y-m-d H:i:s', $expired)];
 	}
 
 	/**

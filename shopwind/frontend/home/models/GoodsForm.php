@@ -65,7 +65,7 @@ class GoodsForm extends Model
 		} else {
 			$settings = StoreModel::find()->alias('s')->select('sg.goods_limit')->joinWith('sgrade sg', false)->where(['store_id' => $this->store_id])->asArray()->one();
 			$goodscounts = GoodsModel::find()->where(['store_id' => $this->store_id])->count();
-			if ($goodscounts >= $settings['goods_limit']) {
+			if ($settings['goods_limit'] > 0  && ($goodscounts >= $settings['goods_limit'])) {
 				$this->errors = Language::get('goods_limit_arrived');
 				return false;
 			}

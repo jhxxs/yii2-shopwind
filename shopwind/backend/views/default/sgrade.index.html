@@ -65,7 +65,7 @@
 						return res.space_limit > 0 ? res.space_limit : lang.no_limit;
 					}
 				}
-				, { field: 'charge', title: '收费标准', width: 160, sort: true, align: 'center' }
+				// , { field: 'charge', title: '收费标准', width: 160, sort: true, align: 'center' }
 				, {
 					field: 'need_confirm', title: '需要审核', width: 120, sort: true, align: 'center', templet: function (res) {
 						return res.need_confirm == 1 ? '<em class="yes" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="' + res.grade_id + '" fieldvalue="1" title="' + lang.editable + '"><i class="fa fa-check-circle"></i>' + lang.yes + '</em>' : '<em class="no" ectype="inline_edit" controller="sgrade" fieldname="need_confirm" fieldid="' + res.grade_id + '" fieldvalue="0" title="' + lang.editable + '"><i class="fa fa-ban"></i>' + lang.no + '</em>';
