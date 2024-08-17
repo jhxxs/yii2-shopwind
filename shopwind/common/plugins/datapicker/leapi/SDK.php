@@ -218,6 +218,7 @@ class Taobao extends SDK
 	{
 		if (!empty($url) && stripos($url, '?') !== false) {
 			list($host, $query) = explode('?', $url);
+			$query = str_replace('&amp;', '&', $query);
 			parse_str($query, $params);
 			return $params['id'];
 		}
@@ -431,6 +432,7 @@ class Pdd extends SDK
 	{
 		if (!empty($url) && stripos($url, '?') >= 0) {
 			list($host, $query) = explode('?', $url);
+			$query = str_replace('&amp;', '&', $query);
 			parse_str($query, $params);
 			return $params['goods_id'];
 		}

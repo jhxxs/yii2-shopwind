@@ -177,6 +177,7 @@ class SDK
 	{
 		if (!empty($url) && stripos($url, '?') >= 0) {
 			list($host, $query) = explode('?', $url);
+			$query = str_replace('&amp;', '&', $query);
 			parse_str($query, $params);
 			return $params['skuId'];
 		}

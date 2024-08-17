@@ -84,11 +84,13 @@ class UserController extends \common\base\BaseApiController
 			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.qq,u.portrait,u.last_login,s.store_id,i.amount as integral,da.money')
 			->joinWith('store s', false)
 			->joinWith('integral i', false)
-			->joinWith('depositAccount da', false);
-		if ($post->userid) $query->where(['u.userid' => $post->userid]);
-		elseif ($post->username) $query->where(['u.username' => $post->username]);
-		elseif ($post->phone_mob) $query->where(['u.phone_mob' => $post->phone_mob]);
-		else $query->where(['u.userid' => Yii::$app->user->id]);
+			->joinWith('depositAccount da', false)
+			->where(['s.state' => 1]); // 必须加，要不然与登录时存储的用户信息冲突（判断是否为卖家）
+
+		if ($post->userid) $query->andWhere(['u.userid' => $post->userid]);
+		elseif ($post->username) $query->andWhere(['u.username' => $post->username]);
+		elseif ($post->phone_mob) $query->andWhere(['u.phone_mob' => $post->phone_mob]);
+		else $query->andWhere(['u.userid' => Yii::$app->user->id]);
 
 		if (!($record = $query->asArray()->one())) {
 			return $respond->output(Respond::USER_NOTEXIST, Language::get('no_such_user'));
@@ -106,9 +108,7 @@ class UserController extends \common\base\BaseApiController
 	 * 插入用户信息
 	 * @api 接口访问地址: http://api.xxx.com/user/add
 	 */
-	public function actionAdd()
-	{
-	}
+	public function actionAdd() {}
 
 	/**
 	 * 更新用户信息
@@ -240,9 +240,7 @@ class UserController extends \common\base\BaseApiController
 	 * 删除用户信息
 	 * @api 接口访问地址: http://api.xxx.com/user/delete
 	 */
-	public function actionDelete()
-	{
-	}
+	public function actionDelete() {}
 
 	/**
 	 * 注销当前账号
