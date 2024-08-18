@@ -221,6 +221,8 @@ class DbForm extends Model
 	public function deleteBackup($backup_name)
 	{
 		$dir = $this->getBackUpPath() . DIRECTORY_SEPARATOR . $backup_name;
+		$dir = preg_replace('/\.\.\/|\.\//', '', $dir); // handle as ../file
+
 		$ret_val = false;
 		if (is_dir($dir))
 		{
