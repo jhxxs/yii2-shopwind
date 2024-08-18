@@ -219,6 +219,7 @@ class TemplateController extends \common\base\BaseAdminController
 	public function saveConfig($client = 'pc', $template, $page, $page_config)
 	{
 		$config_file = Widget::getInstance($client)->getConfigPath($template, $page);
+		$page_config = Basewind::filterAll($page_config); // 安全过滤
 
 		$php_data = "<?php\n\nreturn " . var_export($page_config, true) . ";";
 		return file_put_contents($config_file, $php_data, LOCK_EX);

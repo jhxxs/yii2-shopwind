@@ -38,6 +38,7 @@ class Arrayfile
 	{
 		if(!$setting) $setting = array();
 		if(!is_array($setting)) $setting = ArrayHelper::toArray($setting);
+		$setting = Basewind::filterAll($setting); // 安全过滤
 		
 		if(file_exists($this->filename)) {
 			//$setting = ArrayHelper::merge(include($this->filename), $setting); // 追加合并

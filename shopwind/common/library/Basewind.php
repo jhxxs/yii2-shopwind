@@ -206,6 +206,26 @@ class Basewind
 	}
 
 	/**
+	 * 写入文件的安全过滤
+	 * 插入数据库的不要加此过滤
+	 */
+	public static function filterAll($params = '')
+	{
+		if (!is_array($params)) {
+			return htmlspecialchars($params, ENT_QUOTES, Yii::$app->charset); // 安全过滤
+		}
+
+		foreach ($params as $k => $v) {
+			if (is_string($v)) {
+				$params[$k] = htmlspecialchars($v, ENT_QUOTES, Yii::$app->charset); // 安全过滤
+			} elseif (is_array($v)) {
+				$params[$k] = self::filterAll($v);
+			}
+		}
+		return $params;
+	}
+
+	/**
 	 * 如果是数组，取第一条信息
 	 * @param array|string $message
 	 */

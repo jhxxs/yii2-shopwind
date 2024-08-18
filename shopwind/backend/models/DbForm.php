@@ -258,6 +258,8 @@ class DbForm extends Model
 	public function downloadBackup($backup_name,$file)
 	{
 		$path = $this->getBackUpPath() . DIRECTORY_SEPARATOR . $backup_name . DIRECTORY_SEPARATOR . $file;
+		$path = preg_replace('/\.\.\/|\.\//', '', $path); // handle as ../file
+		
 		if(file_exists($path)){
 			header('Content-type: application/unknown');
             header('Content-Disposition: attachment; filename="'. $file. '"');
