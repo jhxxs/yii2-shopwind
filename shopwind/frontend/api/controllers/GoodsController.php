@@ -62,7 +62,7 @@ class GoodsController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true, ['cate_id', 'store_id', 'page', 'page_size']);
 
 		$query = GoodsModel::find()->alias('g')
-			->select('g.goods_id,g.goods_name,g.cate_id,g.brand,g.if_show,g.closed,g.add_time,g.default_spec,g.spec_qty,g.default_image,g.long_image,g.isnew,g.recommended,g.price,g.mkprice,s.store_id,s.store_name,gs.stock,gst.views,gst.collects,gst.sales,gst.comments')
+			->select('g.goods_id,g.goods_name,g.cate_id,g.brand,g.if_show,g.type,g.closed,g.add_time,g.default_spec,g.spec_qty,g.default_image,g.long_image,g.isnew,g.recommended,g.price,g.mkprice,s.store_id,s.store_name,gs.stock,gst.views,gst.collects,gst.sales,gst.comments')
 			->joinWith('store s', false)
 			->joinWith('goodsStatistics gst', false)
 			->joinWith('goodsDefaultSpec gs', false);
@@ -406,7 +406,7 @@ class GoodsController extends \common\base\BaseApiController
 			->joinWith('goods g', false)
 			->joinWith('goodsStatistics gst', false)
 			->where(['gs.goods_id' => $post->goods_id])
-			->orderBy(['sort_order' => SORT_ASC, 'spec_1' => SORT_ASC, 'spec_2' => SORT_ASC]);
+			->orderBy(['sort_order' => SORT_ASC, 'spec_id' => SORT_ASC, 'spec_1' => SORT_ASC, 'spec_2' => SORT_ASC]);
 
 		// 如果筛选规格一
 		if (isset($post->spec_1) && $post->spec_1) {

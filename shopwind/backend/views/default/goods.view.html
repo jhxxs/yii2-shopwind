@@ -1,0 +1,129 @@
+{include file="header.html"}
+<style>
+  table th {
+    height: 30px;
+  }
+
+  .specs td {
+    width: 100px;
+    padding: 10px;
+  }
+
+  .specs .name {
+    background-color: #eee;
+  }
+
+  .specs .value {
+    background-color: #fafafa;
+  }
+
+  .desc {
+    background-color: #f1f1f1;
+    width: 598px;
+    height: 400px;
+    overflow-y: scroll;
+  }
+
+  .thumbnail img {
+    border: 1px #f1f1f1 solid;
+  }
+
+  .desc img {
+    width: 100%;
+  }
+</style>
+<div id="main">
+  {include file="menus.html"}
+  <div id="rightCon" class="clearfix layui-body">
+    <div class="scroller">
+
+      <div class="flexigrid">
+        <form method="post" class="ml20">
+          <div class="title bold mb10 f-20">商品信息</div>
+          <div class="content">
+            <table>
+              <tr>
+                <th class="gray">商品标题：</th>
+                <td>{$goods.goods_name}</td>
+              </tr>
+              <!--{if $goods.tags}-->
+              <tr>
+                <th class="gray">副标题：</th>
+                <td>{$goods.tags}</td>
+              </tr>
+              <!--{/if}-->
+              <tr>
+                <th class="gray">商品类目：</th>
+                <td>{$goods.cate_name}</td>
+              </tr>
+              <tr>
+                <th class="gray">商品主图：</th>
+                <td>
+                  <div class="mt10 thumbnail">
+                    <!--{foreach from=$goods.images item=item}-->
+                    <img src="{$item.thumbnail|url_format}" width="100" height="100" class="inline-block mr5" />
+                    <!--{/foreach}-->
+                  </div>
+                </td>
+              </tr>
+              <tr></tr>
+              <th class="gray">商品规格：</th>
+              <td>
+                <table class="specs mt10">
+                  <tr>
+                    <td class="name">{$goods.spec_name_1|default:'规格名称'}</td>
+                    <td class="name">{$goods.spec_name_2|default:''}</td>
+                    <td class="name">划线价</td>
+                    <td class="name">售价</td>
+                    <td class="name">库存</td>
+                  </tr>
+                  <!--{foreach from=$goods.specs item=item}-->
+                  <tr>
+                    <td class="value">{$item.spec_1|default:'默认规格'}</td>
+                    <td class="value">{$item.spec_2|default:''}</td>
+                    <td class="value">{$item.mkprice}</td>
+                    <td class="value">{$item.price}</td>
+                    <td class="value">{$item.stock}</td>
+                  </tr>
+                  <!--{/foreach}-->
+                </table>
+              </td>
+              </tr>
+              <tr>
+                <th class="gray">商品描述：</th>
+                <td>
+                  <div class="desc mt10">
+                    {$goods.description}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p class="mt20">审核通过</p>
+                </td>
+                <td class="layui-form">
+                  <div class="mt20">
+                    <input type="radio" name="closed" value="0" title="{$lang.yes}" {if $goods.closed eq '0'
+                      }checked{/if} />
+                    <input type="radio" name="closed" value="1" title="{$lang.no}" {if $goods.closed eq '1'
+                      }checked{/if} />
+                    <span class="gray">审核通过后，商家即可上架销售</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th></th>
+                <td class="ptb20">
+                  <input type="hidden" name="id" value="{$goods.goods_id}" />
+                  <input class="layui-btn layui-bg-blue J_AjaxSubmit" type="submit" value="{$lang.submit}" />
+                </td>
+              </tr>
+            </table>
+          </div>
+        </form>
+      </div>
+      {include file="version.html"}
+    </div>
+  </div>
+</div>
+{include file="footer.html"}

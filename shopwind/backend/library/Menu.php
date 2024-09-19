@@ -116,6 +116,10 @@ class Menu
 						'url'   => Url::toRoute('gcategory/index'),
 						'priv' => ['key' => 'gcategory|all']
 					),
+					'verify' => array(
+						'text'  => Language::get('goods_verify'),
+						'url'   => Url::toRoute('goods/verify'),
+					),
 					'brand' => array(
 						'text'  => Language::get('brand_manage'),
 						'url'   => Url::toRoute('brand/index'),

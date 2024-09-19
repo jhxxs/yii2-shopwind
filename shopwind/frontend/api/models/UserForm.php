@@ -99,11 +99,11 @@ class UserForm extends Model
 		}
 	
 		if(isset($post->email)) $model->email = $post->email;
-		if(isset($post->nickname)) $model->nickname = $post->nickname;
-		if(isset($post->real_name)) $model->real_name = $post->real_name;
+		if (isset($post->nickname)) $model->nickname = strip_tags($post->nickname);
+		if (isset($post->real_name)) $model->real_name = strip_tags($post->real_name);
 		if(isset($post->gender)) $model->gender = $post->gender;
 		if(isset($post->birthday)) $model->birthday = $post->birthday;
-		if(isset($post->qq)) $model->qq = $post->qq;
+		if (isset($post->qq)) $model->qq = strip_tags($post->qq);
 		if(isset($post->portrait)) $model->portrait = $this->getFileSavePath($post->portrait);
 		if(isset($post->password)) $model->setPassword($post->password);
 		

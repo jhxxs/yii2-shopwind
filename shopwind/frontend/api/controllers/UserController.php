@@ -15,12 +15,14 @@ use Yii;
 
 use common\models\UserModel;
 use common\models\BindModel;
+use common\models\StoreModel;
 
 use common\library\Basewind;
 use common\library\Language;
 use common\library\Page;
 use common\library\Timezone;
 use common\library\Plugin;
+use common\library\Def;
 
 use frontend\api\library\Respond;
 use frontend\api\library\Formatter;
@@ -81,11 +83,9 @@ class UserController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true, ['userid']);
 
 		$query = UserModel::find()->alias('u')
-			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.qq,u.portrait,u.last_login,s.store_id,i.amount as integral,da.money')
-			->joinWith('store s', false)
+			->select('u.userid,u.username,u.email,u.nickname,u.real_name,u.gender,u.birthday,u.phone_mob,u.qq,u.portrait,u.last_login,i.amount as integral,da.money')
 			->joinWith('integral i', false)
-			->joinWith('depositAccount da', false)
-			->where(['s.state' => 1]); // 必须加，要不然与登录时存储的用户信息冲突（判断是否为卖家）
+			->joinWith('depositAccount da', false);
 
 		if ($post->userid) $query->andWhere(['u.userid' => $post->userid]);
 		elseif ($post->username) $query->andWhere(['u.username' => $post->username]);
@@ -95,12 +95,17 @@ class UserController extends \common\base\BaseApiController
 		if (!($record = $query->asArray()->one())) {
 			return $respond->output(Respond::USER_NOTEXIST, Language::get('no_such_user'));
 		}
+
 		$record['portrait'] = Formatter::path($record['portrait'], 'portrait');
 		$record['last_login'] = Timezone::localDate('Y-m-d H:i:s', $record['last_login']);
 		$record['integral'] = floatval($record['integral']);
 		$record['money'] = floatval($record['money']);
-
 		$record['thirds'] = BindModel::find()->select('openid')->where(['userid' => Yii::$app->user->id])->indexBy('code')->column();
+
+		// 查询是否有店铺
+		if ($arary = StoreModel::find()->select('store_id,store_name')->where(['state' => Def::STORE_OPEN, 'store_id' => $record['userid']])->asArray()->one()) {
+			$record = array_merge($record, $arary);
+		}
 		return $respond->output(true, null, $record);
 	}
 

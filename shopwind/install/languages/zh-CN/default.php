@@ -35,6 +35,7 @@ return [
     'db_port'          => '数据库端口',
     'db_port_notice'   => '一般情况下是3306',
     'db_name'          => '数据库名',
+    'db_name_error'          => '数据库名错误，只允许字母数字下划线',
     'db_name_notice'   => '用于安装ShopWind的数据库，若不存在将尝试创建',
     'db_user'          => '数据库用户名',
     'db_user_notice'          => '用于数据库连接验证的用户名',

@@ -171,7 +171,9 @@ class DefaultController extends Controller
 			if (!$post->compatible) {
 				return Message::warning(Language::get('incompatible'));
 			}
-
+			if (!preg_match('/^\w+$/', $post->db_name)) {
+				return Message::warning(Language::get('db_name_error'));
+			}
 			$missing_items = array();
 			foreach ($post as $key => $value) {
 				if (empty($value)) {

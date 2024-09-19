@@ -346,7 +346,9 @@ class DbController extends \common\base\BaseAdminController
 		foreach ($backup_names as $backup_name)
         {
 			$model = new \backend\models\DbForm();
-			$model->deleteBackup($backup_name);
+			if (!$model->deleteBackup($backup_name)) {
+				return Message::warning($model->errors);
+			}
         }
 		return Message::display(Language::get('drop_ok'));
 	}

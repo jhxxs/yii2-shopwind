@@ -16,6 +16,8 @@ use yii\base\Model;
 use yii\helpers\FileHelper;
 
 use common\library\Timezone;
+use common\library\Language;
+use common\library\Page;
 
 /**
  * @Id DbForm.php 2018.10.30 $
@@ -25,7 +27,8 @@ use common\library\Timezone;
 class DbForm extends Model
 {
 	protected $dbdata_path = "sql_backup";
-	
+	public $errors = null;
+
 	/**
 	 *	获取所有数据表
 	 */
@@ -248,9 +251,9 @@ class DbForm extends Model
 				$ret_val = rmdir($dir);
 			 }
 		}
-		else
-		{
-			$ret_val = unlink($dir);
+		else {
+			$this->errors = Language::get('no_such_file');
+			return false;
 		}
 
 		return $ret_val;

@@ -255,6 +255,7 @@ return array(
     'user' => '用户',
     'admin_list' => '管理员列表',
     'goods_list'  => '商品列表',
+	'goods_verify' => '商品审核',
     'goods' => '商品',
     'goods_props'=>'商品属性',  
 	'gcategory_manage' => '分类管理',
