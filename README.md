@@ -25,6 +25,7 @@
   [开源框架](https://www.yiichina.com/) 
 
 </div>
+<div align="left">
 
 #### 介绍
 
@@ -154,3 +155,4 @@ ShopWind系统归属于广西南宁领众网络科技有限公司所有，早在
 <img src="https://www.shopwind.net/static/images/3qrcode.png">
 
 #####
+</div>
