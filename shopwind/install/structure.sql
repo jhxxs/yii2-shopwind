@@ -639,24 +639,6 @@ CREATE TABLE IF NOT EXISTS `swd_distribute_setting` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `swd_flagstore`
---
-DROP TABLE IF EXISTS `swd_flagstore`;
-CREATE TABLE IF NOT EXISTS `swd_flagstore` (
-  `fid` int(255) unsigned NOT NULL AUTO_INCREMENT,
-  `brand_id` int(10) DEFAULT '0',
-  `keyword` varchar(20) DEFAULT '',
-  `cate_id` int(11) DEFAULT '0',
-  `store_id` int(10) DEFAULT '0',
-  `status` tinyint(1) DEFAULT '0',
-  `description` varchar(255) DEFAULT NULL,
-  `sort_order` int(11) DEFAULT '255',
-  PRIMARY KEY (`fid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- 表的结构 `swd_friend`
 --
 DROP TABLE IF EXISTS `swd_friend`;

@@ -285,7 +285,6 @@ return array(
 	'guideshop_order'	=> '自提订单',
     'guideshop_setting' => '门店配置',
 	'guideshop_verify' => '门店审核',
-	'flagstore'=>'旗舰店管理',
 	'distribute' => '分销',
 	'distribute_merchant' => '分销商列表',
 	'distribute_verify' => '分销商审核',

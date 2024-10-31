@@ -26,7 +26,7 @@
                 <select name="brand">
                   <option value="">{$lang.select_pls}</option>
                   <!--{foreach from=$brandList item=item}-->
-                  <option value="{$item.brand_name|escape}">{$item.brand_name|escape}</option>
+                  <option value="{$item.name|escape}">{$item.name|escape}</option>
                   <!--{/foreach}-->
                 </select>
                 <span class="field_notice">{$lang.note_for_batedit}</span>

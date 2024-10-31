@@ -29,7 +29,6 @@ delete from `swd_acategory` where (cate_id > 1 and store_id > 0);
 delete from `swd_article` where (article_id > 4 and store_id > 0);
 delete from `swd_mailbox`;
 delete from `swd_cate_pvs`;
-delete from `swd_flagstore`;
 delete from `swd_goods_integral`;
 delete from `swd_goods_prop`;
 delete from `swd_goods_prop_value`;
