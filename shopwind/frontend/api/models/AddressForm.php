@@ -40,19 +40,21 @@ class AddressForm extends Model
 		$fields = ['consignee', 'phone_mob', 'region_id', 'address'];
 		
 		// 空值判断
-		foreach($fields as $field) {
-			if($this->isempty($post, $field)) {
-				$this->errors = Language::get($field.'_required');
+		foreach ($fields as $field) {
+			if ($this->isempty($post, $field)) {
+				$this->errors = Language::get($field . '_required');
 				return false;
 			}
+
+			// 例外判断[考虑验证顺序问题，估放在此]
+			if ($field == 'phone_mob') {
+				if (isset($post->phone_mob) && (Basewind::isPhone($post->phone_mob) == false)) {
+					$this->errors = Language::get('phone_mob_invalid');
+					return false;
+				}
+			}
 		}
-		
-		// 例外判断
-		if(isset($post->phone_mob) && (Basewind::isPhone($post->phone_mob) == false)) {
-			$this->errors = Language::get('phone_mob_invalid');
-			return false;
-		}
-		
+
 		return true;
 	}
 	
@@ -64,9 +66,8 @@ class AddressForm extends Model
 		
 		if(!$this->addr_id || !($model = AddressModel::find()->where(['addr_id' => $this->addr_id, 'userid' => Yii::$app->user->id])->one())) {
 			$model = new AddressModel();
+			$model->userid = Yii::$app->user->id;
 		}
-		
-		$model->userid = Yii::$app->user->id;
 		
 		if(isset($post->consignee)) $model->consignee = $post->consignee;
 		if(isset($post->region_id)) $model->region_id = $post->region_id;

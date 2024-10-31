@@ -321,11 +321,10 @@ class Basewind
 			$receiver = isset($mail['receiver']) ? intval($mail['receiver']) : $order['seller_id'];
 			$toEmail = UserModel::find()->select('email')->where(['userid' => $receiver])->scalar();
 
-			$mailer = self::getMailer($mail['key'], ['order' => $order]);
-			if (!$mailer || !$toEmail) return false;
-
 			try {
-				$mailer->setTo($toEmail)->send();
+				if ($mailer = self::getMailer($mail['key'], ['order' => $order])) {
+					$mailer->setTo($toEmail)->send();
+				}
 			} catch (\Exception $e) {
 				//print_r($e->getMessage());
 			}
@@ -333,16 +332,19 @@ class Basewind
 
 		// 发送短信提醒
 		if ($sms) {
-			$smser = Plugin::getInstance('sms')->autoBuild();
-			if (!$smser) return false;
-
-			$smser->sender = isset($sms['sender']) ? intval($sms['sender']) : $order['seller_id'];
-			$smser->receiver = isset($sms['receiver']) ? $sms['receiver'] : null;
-			$smser->scene = $sms['key'];
-			$smser->templateParams = $order;
-
 			try {
-				$smser->send();
+				if ($smser = Plugin::getInstance('sms')->autoBuild()) {
+					$smser->sender = isset($sms['sender']) ? intval($sms['sender']) : $order['seller_id'];
+					$smser->receiver = isset($sms['receiver']) ? $sms['receiver'] : null;
+					$smser->scene = $sms['key'];
+
+					// 去掉Null值，防止短信接口（阿里云）解析JSON有误
+					foreach ($order as $key => $value) {
+						if (!$value) unset($order[$key]);
+					}
+					$smser->templateParams = $order;
+					$smser->send();
+				}
 			} catch (\Exception $e) {
 				//print_r($e->getMessage());
 			}

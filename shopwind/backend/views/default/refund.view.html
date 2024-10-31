@@ -28,9 +28,8 @@
                 <li>订单编号：{$order.order_sn}</li>
                 <li>订单总额：{$order.order_amount|price_format}</li>
                 <li>配送费用：{$order.shipping.shipping_fee|price_format}</li>
-                <li>卖家信息：<a href="{url route='store/index' id=$order.seller_id baseUrl=$homeUrl}"
-                    target="_blank">{$order.seller_name}</a></li>
-                <li>买家昵称：{$order.buyer_name}</li>
+                <li>卖家店铺：{$order.seller_name}</li>
+                <li>买家账号：{$order.buyer_name}</li>
               </ul>
             </dd>
           </dl>

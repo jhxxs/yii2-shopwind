@@ -140,7 +140,7 @@ class SmsController extends \common\base\BaseAdminController
 				}
 
 				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
-					$list[$key] = array_merge($value, $array);
+					$list[$key] = array_merge($list[$key], $array);
 				}
 			}
 			

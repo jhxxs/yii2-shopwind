@@ -106,7 +106,9 @@ class UserForm extends Model
 		$model->nickname = $post->nickname ? $post->nickname : '';
 		$model->real_name = $post->real_name ? $post->real_name : '';
 		$model->locked = $post->locked;
-		$model->generateAuthKey();
+		if ($post->password) {
+			$model->generateAuthKey(); // 重新登录
+		}
 
 		if ($model->save()) {
 			if (($image = UploadedFileModel::getInstance()->upload('portrait', 'profile/', 0, $model->userid, 'portrait')) !== false) {

@@ -133,7 +133,7 @@ class BaseSms extends BasePlugin
 			}
 
 			$query = UserModel::find()->select('phone_mob')->where(['userid' => $this->sender])->one();
-			if (!$query) {
+			if (!$query || !$query->phone_mob) {
 				$this->errors = $this->getMessage(-1);
 				return false;
 			}
@@ -188,11 +188,6 @@ class BaseSms extends BasePlugin
 	 */
 	public function validSend()
 	{
-		if (!$this->receiver) {
-			$this->errors = Language::get('phone_empty');
-			return false;
-		}
-
 		// 当天开始时间戳
 		$dayBegin = strtotime(Timezone::localDate("Y-m-d 00:00:00", Timezone::gmtime()));
 

@@ -63,7 +63,8 @@ class Alidayu extends BaseSms
             $codekey = $this->insert(1);
             return $codekey;
         }
-        
+
+        \common\library\Page::writeLog('result', $result);
         $this->errors = $result->Message;
         $this->insert(0, $this->errors);
         return false;

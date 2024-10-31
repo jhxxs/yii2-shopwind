@@ -117,7 +117,7 @@ class OrderForm extends Model
 			$result['storeIds'][] = $store_id;
 
 			// 记录商品类型种类(去重)
-			$result['gtype'] = array_unique($result['gtype']);
+			$result['gtype'] = array_values(array_unique($result['gtype']));
 
 			// 统计各个订单的总额（商品的原价之和，并非订单最终的优惠价格，此值仅作为后续计算各个订单所占总合并订单金额的分摊比例用）
 			$result['amount'] += $storeAmount;
