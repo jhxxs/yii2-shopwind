@@ -1,4 +1,9 @@
 {include file="header.html"}
+<style>
+  .infoTable th {
+    width: 200px;
+  }
+</style>
 <div id="main">
   {include file="menus.html"}
   <div id="rightCon" class="clearfix layui-body">
@@ -10,8 +15,8 @@
               <th class="paddingT15"><label>{$lang.gcategory}</label></th>
               <td class="paddingT15 wordSpacing5">
                 <div id="gcategory">
-                  <input type="hidden" name="cate_id" value="0" class="mls_id" />
-                  <input type="hidden" name="cate_name" value="" class="mls_names" />
+                  <input type="hidden" name="cate_id" value="{$goods.cate_id}" class="mls_id" />
+                  <input type="hidden" name="cate_name" value="{$goods.cate_name}" class="mls_names" />
                   <select>
                     <option value="">{$lang.select_pls}</option>
                     {html_options options=$gcategories selected=$goods.cate_id}
@@ -20,6 +25,14 @@
                 </div>
               </td>
             </tr>
+            <!--{if $goods.cate_name}-->
+            <tr>
+              <th></th>
+              <td>
+                <p class="f-13 red mt5">{str_replace(" ", " / ", $goods.cate_name)}</p>
+              </td>
+            </tr>
+            <!--{/if}-->
             <tr>
               <th class="paddingT15"><label>{$lang.brand}</label></th>
               <td class="paddingT15 wordSpacing5">

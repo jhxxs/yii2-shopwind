@@ -30,7 +30,7 @@ function regionChange()
     }
     $(".mls_id").val(id);
     $(".mls_name").val(name);
-    $(".mls_names").val(names.join("\t"));
+    $(".mls_names").val(names.join(" "));
 
     // ajax请求下级地区
     if (this.value > 0)
@@ -92,7 +92,7 @@ function gcategoryChange()
     }
     $(".mls_id").val(id);
     $(".mls_name").val(name);
-    $(".mls_names").val(names.join("\t"));
+    $(".mls_names").val(names.join(" "));
 
     // ajax请求下级分类
     if (this.value > 0)

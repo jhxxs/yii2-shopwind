@@ -364,7 +364,7 @@ class GoodsForm extends Model
 					$this->errors = Language::get('price_invalid');
 					return false;
 				}
-				if (!$value->spec_1 && !$value->spec_2) {
+				if ($post->spec_qty > 0 && !$value->spec_1 && !$value->spec_2) {
 					$this->errors = Language::get('goods_spec_invalid');
 					return false;
 				}
@@ -388,7 +388,7 @@ class GoodsForm extends Model
 		}
 
 		// 没有规格
-		if (!isset($post->specs) || empty($specs = ArrayHelper::toArray($post->specs)) || $post->spec_qty <= 0) {
+		if (!isset($post->specs) || empty($specs = ArrayHelper::toArray($post->specs))) {
 			return array([
 				'price' => floatval($post->price),
 				'mkprice' => isset($post->mkprice) ? floatval($post->mkprice) : 0,
@@ -453,7 +453,7 @@ class GoodsForm extends Model
 		$model->cate_name = '';
 		$gcategories = GcategoryModel::getAncestor($post->cate_id);
 		foreach ($gcategories as $key => $value) {
-			$model->cate_name .= (($key == 0) ? "" : "\t") . $value['cate_name'];
+			$model->cate_name .= (($key == 0) ? "" : " ") . $value['cate_name'];
 		}
 
 		if (!$model->save()) {

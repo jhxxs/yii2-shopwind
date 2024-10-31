@@ -339,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `swd_coupon` (
   `store_id` int(10) unsigned DEFAULT '0',
   `name` varchar(100) DEFAULT '',
   `money` decimal(10,2) unsigned DEFAULT '0.00',
-  `use_times` int(10) unsigned DEFAULT '0',
+  `use_times` int(10) unsigned DEFAULT '1',
   `start_time` int(10) unsigned DEFAULT NULL,
   `end_time` int(10) unsigned DEFAULT NULL,
   `amount` decimal(10,2) unsigned DEFAULT '0.00',

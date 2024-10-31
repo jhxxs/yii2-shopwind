@@ -201,7 +201,7 @@ class GcategoryModel extends ActiveRecord
 	 */
 	public static function formatCateName($cate_name = '', $textIndent = true, $split = ',')
 	{
-		$arr = explode("\t", $cate_name);
+		$arr = explode(" ", $cate_name);
 		if (count($arr) > 1) {
 			for ($i = 0; $i < count($arr); $i++) {
 				$arr[$i] = ($textIndent ? str_repeat("&nbsp;", $i * 4) : "") . htmlspecialchars($arr[$i]);
