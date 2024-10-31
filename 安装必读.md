@@ -106,10 +106,11 @@ location / {
 ```
 
 ## 重新编译
-1. 使用VS Code开发工具加载源码包中的template目录
-2. 运行终端命令【Terminal > New Terminal】初始化项目：npm i
-3. 运行终端命令：npm run build
-4. 将编译后的dist文件夹里的文件上传到服务器根目录/public/pc
+1. 安装Nodejs包v20.*（已安装则跳过），下载地址：https://nodejs.org/zh-cn
+2. 使用VS Code开发工具加载源码包中的template目录
+3. 运行终端命令【Terminal > New Terminal】初始化项目：npm i
+4. 运行终端命令：npm run build
+5. 将编译后的dist文件夹里的文件上传到服务器根目录/public/pc
 
 ## 常见问题
 
