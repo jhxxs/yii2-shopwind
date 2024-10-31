@@ -109,8 +109,11 @@ class GoodsController extends \common\base\BaseAdminController
 			$this->params['gcategories'] = GcategoryModel::find()->select('cate_name')->where(['parent_id' => 0, 'store_id' => 0])->indexBy('cate_id')->orderBy(['sort_order' => SORT_ASC, 'cate_id' => SORT_ASC])->column();
 			$this->params['brandList'] = BrandModel::find()->where(['if_show' => 1])->asArray()->all();
 
-			$this->params['_foot_tags'] = Resource::import('javascript/mlselection.js');
+			if (($id = Yii::$app->request->get('id')) && is_numeric($id)) {
+				$this->params['goods'] = GoodsModel::find()->select('cate_id,brand,closed')->where(['goods_id' => $id])->asArray()->one();
+			}
 
+			$this->params['_foot_tags'] = Resource::import('javascript/mlselection.js');
 			$this->params['page'] = Page::seo(['title' => Language::get('goods_edit')]);
 			return $this->render('../goods.form.html', $this->params);
 		} else {

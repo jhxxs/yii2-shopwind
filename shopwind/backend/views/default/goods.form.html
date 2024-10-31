@@ -14,7 +14,7 @@
                   <input type="hidden" name="cate_name" value="" class="mls_names" />
                   <select>
                     <option value="">{$lang.select_pls}</option>
-                    {html_options options=$gcategories}
+                    {html_options options=$gcategories selected=$goods.cate_id}
                   </select>
                   <span class="field_notice">{$lang.note_for_batedit}</span>
                 </div>
@@ -26,35 +26,36 @@
                 <select name="brand">
                   <option value="">{$lang.select_pls}</option>
                   <!--{foreach from=$brandList item=item}-->
-                  <option value="{$item.name|escape}">{$item.name|escape}</option>
+                  <option value="{$item.name|escape}" {if $goods.brand eq $item.name} selected{/if}>{$item.name|escape}
+                  </option>
                   <!--{/foreach}-->
                 </select>
                 <span class="field_notice">{$lang.note_for_batedit}</span>
               </td>
             </tr>
             <tr>
-              <th class="paddingT15"><label>{$lang.status}</label></th>
+              <th class="paddingT15">{$lang.status}</th>
               <td class="paddingT15 wordSpacing5">
                 <p>
                   <label>
                     <input type="radio" name="closed" value="-1" checked="checked" />
                     {$lang.no_change}</label>
                   <label>
-                    <input type="radio" name="closed" value="1" />
+                    <input type="radio" name="closed" value="1" {if $goods.closed eq '1' } checked="checked" {/if} />
                     {$lang.close}</label>
                   <label>
-                    <input type="radio" name="closed" value="0" />
+                    <input type="radio" name="closed" value="0" {if $goods.closed eq '0' } checked="checked" {/if} />
                     {$lang.open}</label>
                 </p>
               </td>
             </tr>
             <tr id="close_reason" style="display:none">
-              <th class="paddingT15"><label for="close_reason">{$lang.close_reason}:</label></th>
+              <th class="paddingT15"><label for="close_reason">{$lang.close_reason}</label></th>
               <td class="paddingT15 wordSpacing5"><textarea name="close_reason" cols="60" rows="3"></textarea></td>
             </tr>
             <tr>
               <th></th>
-              <td class="ptb20"><input type="hidden" name="id" value="{$smarty.get.id}" />
+              <td class="ptb20"><input type="hidden" name="id" value="{$smarty.get.id|escape}" />
                 <input class="layui-btn layui-bg-blue J_AjaxSubmit" type="submit" value="{$lang.submit}" />
               </td>
             </tr>
