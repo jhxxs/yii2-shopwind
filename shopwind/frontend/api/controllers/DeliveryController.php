@@ -34,7 +34,7 @@ class DeliveryController extends \common\base\BaseApiController
 {
 	/**
 	 * 读取运费模板
-	 * @api 接口访问地址: http://api.xxx.com/delivery/read
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/read
 	 */
 	public function actionRead()
 	{
@@ -57,7 +57,7 @@ class DeliveryController extends \common\base\BaseApiController
 
 	/**
 	 * 更新运费模板
-	 * @api 接口访问地址: http://api.xxx.com/delivery/update
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/update
 	 */
 	public function actionUpdate()
 	{
@@ -85,7 +85,7 @@ class DeliveryController extends \common\base\BaseApiController
 
 	/**
 	 * 删除运费模板
-	 * @api 接口访问地址: http://api.xxx.com/delivery/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/delete
 	 */
 	public function actionDelete()
 	{
@@ -111,7 +111,7 @@ class DeliveryController extends \common\base\BaseApiController
 
 	/**
 	 * 获取指定店铺的运费模板
-	 * @api 接口访问地址: http://api.xxx.com/delivery/template
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/template
 	 */
 	public function actionTemplate()
 	{
@@ -136,7 +136,7 @@ class DeliveryController extends \common\base\BaseApiController
 
 	/**
 	 * 获取快递公司列表
-	 * @api 接口访问地址: http://api.xxx.com/delivery/company
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/company
 	 */
 	public function actionCompany()
 	{
@@ -162,7 +162,7 @@ class DeliveryController extends \common\base\BaseApiController
 
 	/**
 	 * 获取指定店铺物流配送时效
-	 * @api 接口访问地址: http://api.xxx.com/delivery/timer
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/timer
 	 */
 	public function actionTimer()
 	{
@@ -209,7 +209,7 @@ class DeliveryController extends \common\base\BaseApiController
 
 	/**
 	 * 更新店铺物流配送时效
-	 * @api 接口访问地址: http://api.xxx.com/delivery/timerupdate
+	 * @api 接口访问地址: https://www.xxx.com/api/delivery/timerupdate
 	 */
 	public function actionTimerupdate()
 	{

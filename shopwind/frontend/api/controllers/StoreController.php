@@ -41,7 +41,7 @@ class StoreController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取店铺列表
-	 * @api 接口访问地址: http://api.xxx.com/store/list
+	 * @api 接口访问地址: https://www.xxx.com/api/store/list
 	 */
 	public function actionList()
 	{
@@ -82,7 +82,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取店铺单条信息
-	 * @api 接口访问地址: http://api.xxx.com/store/read
+	 * @api 接口访问地址: https://www.xxx.com/api/store/read
 	 */
 	public function actionRead()
 	{
@@ -133,7 +133,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 插入店铺信息
-	 * @api 接口访问地址: http://api.xxx.com/store/add
+	 * @api 接口访问地址: https://www.xxx.com/api/store/add
 	 */
 	public function actionAdd()
 	{
@@ -161,7 +161,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 更新店铺信息
-	 * @api 接口访问地址: http://api.xxx.com/store/update
+	 * @api 接口访问地址: https://www.xxx.com/api/store/update
 	 */
 	public function actionUpdate()
 	{
@@ -214,7 +214,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 删除店铺信息
-	 * @api 接口访问地址: http://api.xxx.com/store/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/store/delete
 	 */
 	public function actionDelete()
 	{
@@ -222,7 +222,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取店铺轮播图
-	 * @api 接口访问地址: http://api.xxx.com/store/swiper
+	 * @api 接口访问地址: https://www.xxx.com/api/store/swiper
 	 */
 	public function actionSwiper()
 	{
@@ -253,7 +253,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取店铺动态评分
-	 * @api 接口访问地址: http://api.xxx.com/store/dynamiceval
+	 * @api 接口访问地址: https://www.xxx.com/api/store/dynamiceval
 	 */
 	public function actionDynamiceval()
 	{
@@ -272,7 +272,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取店铺主体信息（该信息为隐私数据，只允许获取自己店铺的）
-	 * @api 接口访问地址: http://api.xxx.com/store/privacy
+	 * @api 接口访问地址: https://www.xxx.com/api/store/privacy
 	 */
 	public function actionPrivacy()
 	{
@@ -286,7 +286,7 @@ class StoreController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true);
 
 		$fields = ['identity_front', 'identity_back', 'business_license'];
-		$record = StoreModel::find()->select(implode(',', array_merge($fields, ['owner_name', 'identity_card'])))->where(['store_id' => Yii::$app->user->id])->asArray()->one();
+		$record = StoreModel::find()->select(implode(',', array_merge($fields, ['owner', 'identity_card'])))->where(['store_id' => Yii::$app->user->id])->asArray()->one();
 		if ($record) {
 			foreach ($fields as $field) {
 				$record[$field] = Formatter::path($record[$field]);
@@ -297,7 +297,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 店铺收藏
-	 * @api 接口访问地址: http://api.xxx.com/store/collect
+	 * @api 接口访问地址: https://www.xxx.com/api/store/collect
 	 */
 	public function actionCollect()
 	{
@@ -338,7 +338,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取店铺等级列表
-	 * @api 接口访问地址: http://api.xxx.com/store/grades
+	 * @api 接口访问地址: https://www.xxx.com/api/store/grades
 	 */
 	public function actionGrades()
 	{
@@ -361,7 +361,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取单条店铺等级信息
-	 * @api 接口访问地址: http://api.xxx.com/store/grade
+	 * @api 接口访问地址: https://www.xxx.com/api/store/grade
 	 */
 	public function actionGrade()
 	{
@@ -385,7 +385,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取指定店铺的满优惠信息
-	 * @api 接口访问地址: http://api.xxx.com/store/fullprefer
+	 * @api 接口访问地址: https://www.xxx.com/api/store/fullprefer
 	 */
 	public function actionFullprefer()
 	{
@@ -419,7 +419,7 @@ class StoreController extends \common\base\BaseApiController
 
 	/**
 	 * 获取指定的店铺的满包邮信息
-	 * @api 接口访问地址: http://api.xxx.com/store/fullfree
+	 * @api 接口访问地址: https://www.xxx.com/api/store/fullfree
 	 */
 	public function actionFullfree()
 	{

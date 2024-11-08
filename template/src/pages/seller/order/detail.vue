@@ -29,7 +29,7 @@
                                 }}</span></el-col>
                                 <el-col :span="12">买家名称：{{ order.buyer_name }}</el-col>
                                 <el-col :span="12">配送费用：<span class="f-red f-yahei">{{
-                                    currency(order.shipping_fee)
+                                    currency(order.freight)
                                 }}</span></el-col>
                                 <el-col :span="12">支付方式：{{ order.payment_name }}</el-col>
                                 <el-col :span="12">交易编号：{{ order.tradeNo || '-' }}</el-col>

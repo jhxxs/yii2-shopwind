@@ -27,7 +27,7 @@ class FullfreeController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取满包邮信息
-	 * @api 接口访问地址: http://api.xxx.com/fullfree/read
+	 * @api 接口访问地址: https://www.xxx.com/api/fullfree/read
 	 */
     public function actionRead()
     {
@@ -52,7 +52,7 @@ class FullfreeController extends \common\base\BaseApiController
 
 	/**
 	 * 设置满包邮信息
-	 * @api 接口访问地址: http://api.xxx.com/fullfree/update
+	 * @api 接口访问地址: https://www.xxx.com/api/fullfree/update
 	 */
     public function actionUpdate()
     {

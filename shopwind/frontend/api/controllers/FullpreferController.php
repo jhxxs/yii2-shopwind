@@ -27,7 +27,7 @@ class FullpreferController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取店铺满优惠信息
-	 * @api 接口访问地址: http://api.xxx.com/fullprefer/read
+	 * @api 接口访问地址: https://www.xxx.com/api/fullprefer/read
 	 */
     public function actionRead()
     {
@@ -53,7 +53,7 @@ class FullpreferController extends \common\base\BaseApiController
 
 	/**
 	 * 设置满优惠信息
-	 * @api 接口访问地址: http://api.xxx.com/fullprefer/update
+	 * @api 接口访问地址: https://www.xxx.com/api/fullprefer/update
 	 */
     public function actionUpdate()
     {

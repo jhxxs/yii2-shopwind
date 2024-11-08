@@ -26,7 +26,7 @@ class SiteController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取站点配置参数(该接口为内部使用，不要开放)
-	 * @api 接口访问地址: http://api.xxx.com/site/read
+	 * @api 接口访问地址: https://www.xxx.com/api/site/read
 	 */
 	public function actionRead()
 	{

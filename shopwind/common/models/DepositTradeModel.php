@@ -90,7 +90,6 @@ class DepositTradeModel extends ActiveRecord
 		$payTradeNo = NULL;
 		
 		if(empty($orderInfo)) {
-			
 			$payTradeNo = self::genTradeNo( $length, 'payTradeNo');
 		}
 		else

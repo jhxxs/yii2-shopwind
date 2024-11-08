@@ -30,7 +30,7 @@ class ScategoryController extends \common\base\BaseApiController
 {
 	/**
  	 * @获取店铺分类列表
-	 * @api 接口访问地址: http://api.xxx.com/scategory/list
+	 * @api 接口访问地址: https://www.xxx.com/api/scategory/list
 	 */
     public function actionList()
     {
@@ -60,7 +60,7 @@ class ScategoryController extends \common\base\BaseApiController
 	
 	/**
  	 * @获取店铺分类单条信息
-	 * @api 接口访问地址: http://api.xxx.com/scategory/read
+	 * @api 接口访问地址: https://www.xxx.com/api/scategory/read
 	 */
     public function actionRead()
     {
@@ -83,7 +83,7 @@ class ScategoryController extends \common\base\BaseApiController
 	
 	/**
  	 * @插入店铺分类信息
-	 * @api 接口访问地址: http://api.xxx.com/scategory/add
+	 * @api 接口访问地址: https://www.xxx.com/api/scategory/add
 	 */
     public function actionAdd()
     {
@@ -111,7 +111,7 @@ class ScategoryController extends \common\base\BaseApiController
 	
 	/**
  	 * @更新店铺分类信息
-	 * @api 接口访问地址: http://api.xxx.com/scategory/update
+	 * @api 接口访问地址: https://www.xxx.com/api/scategory/update
 	 */
     public function actionUpdate()
     {
@@ -142,7 +142,7 @@ class ScategoryController extends \common\base\BaseApiController
 	
 	/**
  	 * @删除店铺分类信息
-	 * @api 接口访问地址: http://api.xxx.com/scategory/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/scategory/delete
 	 */
     public function actionDelete()
     {

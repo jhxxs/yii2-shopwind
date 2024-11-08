@@ -34,7 +34,7 @@ class OrderController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取订单管理列表数据
-	 * @api 接口访问地址: http://api.xxx.com/seller/order/list
+	 * @api 接口访问地址: https://www.xxx.com/api/seller/order/list
 	 */
     public function actionList()
 	{
@@ -55,7 +55,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取卖家订单提醒数据
-	 * @api 接口访问地址: http://api.xxx.com/seller/order/remind
+	 * @api 接口访问地址: https://www.xxx.com/api/seller/order/remind
 	 */
     public function actionRemind()
 	{
@@ -74,7 +74,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/** 
 	 * 获取我管理的订单评价列表
-	 * @api 接口访问地址: http://api.xxx.com/seller/order/evaluates
+	 * @api 接口访问地址: https://www.xxx.com/api/seller/order/evaluates
 	 */
     public function actionEvaluates()
 	{

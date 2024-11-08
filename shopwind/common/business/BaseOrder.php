@@ -265,7 +265,7 @@ class BaseOrder
 					'phone_tel'     =>  $consignee_info['phone_tel'],
 					'phone_mob'     =>  $consignee_info['phone_mob'],
 					'shipping_name' =>  addslashes(Language::get($delivery_info[$store_id])),
-					'shipping_fee'  =>  round($shipping[$consignee_info['region_id']][$delivery_info[$store_id]]['logistic_fees'], 2),
+					'freight'  =>  round($shipping[$consignee_info['region_id']][$delivery_info[$store_id]]['logistic_fees'], 2),
 				);
 			}
 		}
@@ -424,7 +424,7 @@ class BaseOrder
 			$goodsAmount = $order_info['goods_amount'];
 
 			// 包含运费的订单总价
-			$storeAmount = $goodsAmount + (isset($consignee_info[$store_id]) ? $consignee_info[$store_id]['shipping_fee'] : 0);
+			$storeAmount = $goodsAmount + (isset($consignee_info[$store_id]) ? $consignee_info[$store_id]['freight'] : 0);
 
 			// 优惠
 			$couponDiscount = $fullpreferDiscount = 0;
@@ -657,7 +657,7 @@ class BaseOrder
 	 */
 	public function afterInsertOrder($order_id, $store_id, $list, $sendNotify = true)
 	{
-		// 订单下完后清空指定购物车
+		// 清空指定购物车
 		if (in_array($this->otype, ['normal'])) {
 			CartModel::deleteAll(['userid' => Yii::$app->user->id, 'selected' => 1, 'store_id' => $store_id]);
 		}
@@ -670,23 +670,24 @@ class BaseOrder
 			GoodsStatisticsModel::updateStatistics($goods['goods_id'], 'orders');
 		}
 
-		if ($sendNotify === true) {
-			$orderInfo = OrderModel::find()->where(['order_id' => $order_id])->asArray()->one();
+		$orderInfo = OrderModel::find()->where(['order_id' => $order_id])->asArray()->one();
 
-			// 邮件提醒： 买家已下单通知自己 
-			Basewind::sendMailMsgNotify($orderInfo, array('key' => 'tobuyer_new_order_notify', 'receiver' => Yii::$app->user->id));
+		// 邮件提醒： 买家已下单通知自己 
+		Basewind::sendMailMsgNotify($orderInfo, ['receiver' => Yii::$app->user->id, 'key' => 'tobuyer_new_order_notify']);
 
-			// 短信和邮件提醒： 买家已下单通知卖家 
-			Basewind::sendMailMsgNotify(
-				$orderInfo,
-				array(
-					'key' => 'toseller_new_order_notify',
-				),
-				array(
-					'key' => 'toseller_new_order_notify',
-				)
-			);
-		}
+		// 短信和邮件提醒： 买家已下单通知卖家 
+		Basewind::sendMailMsgNotify(
+			$orderInfo,
+			[
+				'receiver' => $orderInfo['seller_id'],
+				'key' => 'toseller_new_order_notify',
+			],
+			[
+				'sender' => $orderInfo['seller_id'],
+				'receiver' => $orderInfo['seller_id'],
+				'key' => 'toseller_new_order_notify',
+			]
+		);
 	}
 
 	public function getDeliveryTos()

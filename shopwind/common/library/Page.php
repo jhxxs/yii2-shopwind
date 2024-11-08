@@ -339,8 +339,10 @@ class Page
 		//$word = json_encode($word); // for AJAX debug
 		$word = var_export($word, true);
 
-		$path = Yii::getAlias('@public') . "/.logs/" . date('Ymd', time());
-		@mkdir($path, 0777);
+		$path = dirname(Yii::getAlias('@public')) . "/logs/" . date('Ymd', time());
+		if (!is_dir($path)) {
+			\yii\helpers\FileHelper::createDirectory($path);
+		}
 
 		$fp = fopen($path . "/log.txt", "a");
 		flock($fp, LOCK_EX);

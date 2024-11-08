@@ -31,7 +31,7 @@ class AddressController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取用户收货地址列表
-	 * @api 接口访问地址: http://api.xxx.com/address/list
+	 * @api 接口访问地址: https://www.xxx.com/api/address/list
 	 */
 	public function actionList()
 	{
@@ -56,7 +56,7 @@ class AddressController extends \common\base\BaseApiController
 
 	/**
 	 * 获取收货地址单条信息
-	 * @api 接口访问地址: http://api.xxx.com/address/read
+	 * @api 接口访问地址: https://www.xxx.com/api/address/read
 	 */
 	public function actionRead()
 	{
@@ -76,7 +76,7 @@ class AddressController extends \common\base\BaseApiController
 
 	/**
 	 * 插入收货地址信息
-	 * @api 接口访问地址: http://api.xxx.com/address/add
+	 * @api 接口访问地址: https://www.xxx.com/api/address/add
 	 */
 	public function actionAdd()
 	{
@@ -104,7 +104,7 @@ class AddressController extends \common\base\BaseApiController
 
 	/**
 	 * 更新收货地址信息
-	 * @api 接口访问地址: http://api.xxx.com/address/update
+	 * @api 接口访问地址: https://www.xxx.com/api/address/update
 	 */
 	public function actionUpdate()
 	{
@@ -134,7 +134,7 @@ class AddressController extends \common\base\BaseApiController
 
 	/**
 	 * 删除收货地址信息
-	 * @api 接口访问地址: http://api.xxx.com/address/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/address/delete
 	 */
 	public function actionDelete()
 	{

@@ -36,7 +36,7 @@ class UploadController extends \common\base\BaseApiController
 	/**
 	 * 上传图片/文件接口
 	 * 只传文件，不保存到数据库
-	 * @api 接口访问地址: http://api.xxx.com/upload/file
+	 * @api 接口访问地址: https://www.xxx.com/api/upload/file
 	 */
 	public function actionFile()
 	{
@@ -70,7 +70,7 @@ class UploadController extends \common\base\BaseApiController
 	 * 上传图片/文件接口
 	 * 上传图片并保存到数据库（目前针对卖家）
 	 * 会计算图片空间使用情况 
-	 * @api 接口访问地址: http://api.xxx.com/upload/add
+	 * @api 接口访问地址: https://www.xxx.com/api/upload/add
 	 */
 	public function actionAdd()
 	{
@@ -149,7 +149,7 @@ class UploadController extends \common\base\BaseApiController
 
 	/**
 	 * 删除图片接口
-	 * @api 接口访问地址: http://api.xxx.com/upload/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/upload/delete
 	 */
 	public function actionDelete()
 	{

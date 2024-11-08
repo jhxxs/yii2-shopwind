@@ -33,7 +33,7 @@ class CashierController extends \common\base\BaseApiController
 {
 	/**
 	 * 提交收银台交易订单支付请求
-	 * @api 接口访问地址: http://api.xxx.com/cashier/pay
+	 * @api 接口访问地址: https://www.xxx.com/api/cashier/pay
 	 */
 	public function actionPay()
 	{
@@ -102,7 +102,7 @@ class CashierController extends \common\base\BaseApiController
 
 	/**
 	 * 微信获取CODE后跳回的地址（适用于微信公众号支付）
-	 * @api 接口访问地址: http://api.xxx.com/cashier/wxpay
+	 * @api 接口访问地址: https://www.xxx.com/api/cashier/wxpay
 	 */
 	public function actionWxpay()
 	{
@@ -140,7 +140,7 @@ class CashierController extends \common\base\BaseApiController
 
 	/**
 	 * 获取收银台交易订单数据集合
-	 * @api 接口访问地址: http://api.xxx.com/cashier/build
+	 * @api 接口访问地址: https://www.xxx.com/api/cashier/build
 	 */
 	public function actionBuild()
 	{
@@ -184,7 +184,7 @@ class CashierController extends \common\base\BaseApiController
 
 	/**
 	 * 查询支付交易状态
-	 * @api 接口访问地址: http://api.xxx.com/cashier/checkpay
+	 * @api 接口访问地址: https://www.xxx.com/api/cashier/checkpay
 	 */
 	public function actionCheckpay()
 	{

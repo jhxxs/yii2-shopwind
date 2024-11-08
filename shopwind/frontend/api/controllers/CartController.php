@@ -28,7 +28,7 @@ class CartController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取购物车商品，包含多个店铺的商品
-	 * @api 接口访问地址: http://api.xxx.com/cart/list
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/list
 	 */
 	public function actionList()
 	{
@@ -55,7 +55,7 @@ class CartController extends \common\base\BaseApiController
 
 	/**
 	 * 单个商品插入购物车
-	 * @api 接口访问地址: http://api.xxx.com/cart/add
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/add
 	 */
 	public function actionAdd()
 	{
@@ -79,7 +79,7 @@ class CartController extends \common\base\BaseApiController
 
 	/**
 	 * 批量加入购物车
-	 * @api 接口访问地址: http://api.xxx.com/cart/many
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/many
 	 */
 	public function actionMany()
 	{
@@ -108,7 +108,7 @@ class CartController extends \common\base\BaseApiController
 
 	/**
 	 * 更新购物车商品
-	 * @api 接口访问地址: http://api.xxx.com/cart/update
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/update
 	 */
 	public function actionUpdate()
 	{
@@ -140,7 +140,7 @@ class CartController extends \common\base\BaseApiController
 
 	/**
 	 * 删除整个购物车商品
-	 * @api 接口访问地址: http://api.xxx.com/cart/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/delete
 	 */
 	public function actionDelete()
 	{
@@ -159,7 +159,7 @@ class CartController extends \common\base\BaseApiController
 
 	/**
 	 * 移除购物车商品
-	 * @api 接口访问地址: http://api.xxx.com/cart/remove
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/remove
 	 */
 	public function actionRemove()
 	{
@@ -186,7 +186,7 @@ class CartController extends \common\base\BaseApiController
 
 	/**
 	 * 设置购物车商品为选中/取消状态
-	 * @api 接口访问地址: http://api.xxx.com/cart/chose
+	 * @api 接口访问地址: https://www.xxx.com/api/cart/chose
 	 */
 	public function actionChose()
 	{

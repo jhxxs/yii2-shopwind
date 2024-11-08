@@ -318,11 +318,11 @@ class Basewind
 	{
 		// 发送邮件提醒
 		if ($mail) {
-			$receiver = isset($mail['receiver']) ? intval($mail['receiver']) : $order['seller_id'];
+			$receiver = intval($mail['receiver']);
 			$toEmail = UserModel::find()->select('email')->where(['userid' => $receiver])->scalar();
 
 			try {
-				if ($mailer = self::getMailer($mail['key'], ['order' => $order])) {
+				if ($toEmail && ($mailer = self::getMailer($mail['key'], ['order' => $order]))) {
 					$mailer->setTo($toEmail)->send();
 				}
 			} catch (\Exception $e) {
@@ -334,9 +334,13 @@ class Basewind
 		if ($sms) {
 			try {
 				if ($smser = Plugin::getInstance('sms')->autoBuild()) {
-					$smser->sender = isset($sms['sender']) ? intval($sms['sender']) : $order['seller_id'];
-					$smser->receiver = isset($sms['receiver']) ? $sms['receiver'] : null;
+					$smser->sender =  intval($sms['sender']);
 					$smser->scene = $sms['key'];
+
+					// 获取手机号
+					if (!Basewind::isPhone($sms['receiver'])) { //  receiver = phone || userid
+						$smser->receiver = UserModel::find()->select('phone_mob')->where(['userid' => intval($sms['receiver'])])->scalar();
+					}
 
 					// 去掉Null值，防止短信接口（阿里云）解析JSON有误
 					foreach ($order as $key => $value) {

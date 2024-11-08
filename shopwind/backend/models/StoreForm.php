@@ -57,7 +57,7 @@ class StoreForm extends Model
 		if(!($model = StoreModel::findOne($this->store_id))) {
 			$model = new StoreModel();
 		}
-		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'address', 'tel', 'sgrade', 'joinway','sort_order', 'recommended'];
+		$fields = ['store_name', 'owner', 'identity_card', 'region_id', 'address', 'tel', 'sgrade', 'joinway','sort_order', 'recommended'];
 		foreach($post as $key => $val) {
 			if(in_array($key, $fields)) $model->$key = $val;
 		}
@@ -90,7 +90,7 @@ class StoreForm extends Model
 		// 如果修改了店铺状态，通知店主
 		if($store && ($store->state != $post->state) && in_array($post->state, [Def::STORE_OPEN, Def::STORE_CLOSED])) {
 			
-			$retval = ['store_name' => $model->store_name, 'owner_name' => $model->owner_name];
+			$retval = ['store_name' => $model->store_name, 'owner' => $model->owner];
 			$reason = isset($post->close_reason) ? $post->close_reason : '';
 			 
 			if($post->state == Def::STORE_CLOSED) $notify = 'toseller_store_closed_notify';

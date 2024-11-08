@@ -31,7 +31,7 @@ class MealbuyController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取搭配购列表
-	 * @api 接口访问地址: http://api.xxx.com/mealbuy/list
+	 * @api 接口访问地址: https://www.xxx.com/api/mealbuy/list
 	 */
     public function actionList()
     {
@@ -59,7 +59,7 @@ class MealbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取搭配购单条信息
-	 * @api 接口访问地址: http://api.xxx.com/mealbuy/read
+	 * @api 接口访问地址: https://www.xxx.com/api/mealbuy/read
 	 */
     public function actionRead()
     {
@@ -83,7 +83,7 @@ class MealbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 插入搭配购信息
-	 * @api 接口访问地址: http://api.xxx.com/mealbuy/add
+	 * @api 接口访问地址: https://www.xxx.com/api/mealbuy/add
 	 */
     public function actionAdd()
     {
@@ -106,7 +106,7 @@ class MealbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 更新搭配购信息
-	 * @api 接口访问地址: http://api.xxx.com/mealbuy/update
+	 * @api 接口访问地址: https://www.xxx.com/api/mealbuy/update
 	 */
     public function actionUpdate()
     {
@@ -129,7 +129,7 @@ class MealbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 删除搭配购信息
-	 * @api 接口访问地址: http://api.xxx.com/mealbuy/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/mealbuy/delete
 	 */
     public function actionDelete()
     {

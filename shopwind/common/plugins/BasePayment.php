@@ -350,12 +350,15 @@ class BasePayment extends BasePlugin
 			// 短信和邮件提醒： 买家已付款通知卖家
 			Basewind::sendMailMsgNotify(
 				$order_info,
-				array(
+				[
+					'receiver' => $tradeInfo['seller_id'],
 					'key' => 'toseller_online_pay_success_notify'
-				),
-				array(
+				],
+				[
+					'sender' => $tradeInfo['seller_id'],
+					'receiver' => $tradeInfo['seller_id'],
 					'key' => 'toseller_online_pay_success_notify',
-				)
+				]
 			);
 		}
 

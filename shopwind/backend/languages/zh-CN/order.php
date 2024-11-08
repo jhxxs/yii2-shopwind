@@ -21,7 +21,7 @@ return array(
     'phone_tel'  => '联系电话',
     'phone_mob'  => '手机号码',
     'shipping_name'  => '配送方式',
-    'shipping_fee'  => '配送费用',
+    'freight'  => '配送费用',
     'specification'  => '规格',
     'goods_name'  => '商品名称',
     'goods_image'  => '商品图片',

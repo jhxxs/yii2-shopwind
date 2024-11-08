@@ -48,7 +48,7 @@ class Setting extends Arrayfile
     {
         return [
             'time_zone'         => '8',
-            'price_format'      => '&yen;%s',
+            'price_format'      => '￥%s',
             'site_name'         => Language::get('default_site_name'),
             'site_title'        => Language::get('default_site_title'),
             'site_keywords'     => Language::get('default_site_keywords'),

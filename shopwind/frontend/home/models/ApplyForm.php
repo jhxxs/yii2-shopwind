@@ -40,8 +40,8 @@ class ApplyForm extends Model
 
 	public function valid($post = null)
 	{
-		if (empty($post->owner_name)) {
-			$this->errors = Language::get('owner_name_empty');
+		if (empty($post->owner)) {
+			$this->errors = Language::get('owner_empty');
 			return false;
 		}
 		if ($post->stype != 'company' && empty($post->identity_card)) {
@@ -103,7 +103,7 @@ class ApplyForm extends Model
 		}
 
 		$model->state = SgradeModel::find()->select('need_confirm')->where(['grade_id' => $post->sgrade])->scalar() ? Def::STORE_APPLYING : Def::STORE_OPEN;
-		$fields = ['store_name', 'owner_name', 'identity_card', 'region_id', 'address', 'tel', 'sgrade'];
+		$fields = ['store_name', 'owner', 'identity_card', 'region_id', 'address', 'tel', 'sgrade'];
 		foreach ($fields as $key => $value) {
 			if (isset($post->$value)) {
 				$model->$value = $post->$value;

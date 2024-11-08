@@ -27,7 +27,7 @@
               <ul class="clearfix">
                 <li>订单编号：{$order.order_sn}</li>
                 <li>订单总额：{$order.order_amount|price_format}</li>
-                <li>配送费用：{$order.shipping.shipping_fee|price_format}</li>
+                <li>配送费用：{$order.shipping.freight|price_format}</li>
                 <li>卖家店铺：{$order.seller_name}</li>
                 <li>买家账号：{$order.buyer_name}</li>
               </ul>
@@ -50,9 +50,9 @@
                 </div>
               </li>
               <li>退<ins style="margin:0 7px">运</ins>费：
-                <input type="text" name="refund_shipping_fee" value="{$refund.refund_shipping_fee}" />
+                <input type="text" name="refund_freight" value="{$refund.refund_freight}" />
                 <div class="notice-word mb20" style="margin-left: 75px;">
-                  <p class="layui-font-12 mt10">最多{$refund.shipping_fee}元，如果不是商品质量问题，买家承担寄送运费，则建议为0元。</p>
+                  <p class="layui-font-12 mt10">最多{$refund.freight}元，如果不是商品质量问题，买家承担寄送运费，则建议为0元。</p>
                 </div>
               </li>
               <li>处理意见：

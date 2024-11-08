@@ -32,7 +32,7 @@ class CategoryController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取分类列表
-	 * @api 接口访问地址: http://api.xxx.com/category/list
+	 * @api 接口访问地址: https://www.xxx.com/api/category/list
 	 */
 	public function actionList()
 	{
@@ -62,7 +62,7 @@ class CategoryController extends \common\base\BaseApiController
 
 	/**
 	 * 获取树型结构分类列表
-	 * @api 接口访问地址: http://api.xxx.com/category/tree
+	 * @api 接口访问地址: https://www.xxx.com/api/category/tree
 	 */
 	public function actionTree()
 	{
@@ -82,7 +82,7 @@ class CategoryController extends \common\base\BaseApiController
 
 	/**
 	 * 获取分类单条信息
-	 * @api 接口访问地址: http://api.xxx.com/category/read
+	 * @api 接口访问地址: https://www.xxx.com/api/category/read
 	 */
 	public function actionRead()
 	{
@@ -107,7 +107,7 @@ class CategoryController extends \common\base\BaseApiController
 
 	/**
 	 * 插入分类信息(店铺级)
-	 * @api 接口访问地址: http://api.xxx.com/category/add
+	 * @api 接口访问地址: https://www.xxx.com/api/category/add
 	 */
 	public function actionAdd()
 	{
@@ -134,7 +134,7 @@ class CategoryController extends \common\base\BaseApiController
 
 	/**
 	 * 更新分类信息(店铺级)
-	 * @api 接口访问地址: http://api.xxx.com/category/update
+	 * @api 接口访问地址: https://www.xxx.com/api/category/update
 	 */
 	public function actionUpdate()
 	{
@@ -164,7 +164,7 @@ class CategoryController extends \common\base\BaseApiController
 
 	/**
 	 * 删除分类信息(店铺级)
-	 * @api 接口访问地址: http://api.xxx.com/category/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/category/delete
 	 */
 	public function actionDelete()
 	{
@@ -196,7 +196,7 @@ class CategoryController extends \common\base\BaseApiController
 
 	/**
 	 * 获取类目属性列表信息
-	 * @api 接口访问地址: http://api.xxx.com/category/attributes
+	 * @api 接口访问地址: https://www.xxx.com/api/category/attributes
 	 */
 	public function actionAttributes()
 	{

@@ -31,7 +31,7 @@ class ArticleController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取文章详情
-	 * @api 接口访问地址: http://api.xxx.com/article/list
+	 * @api 接口访问地址: https://www.xxx.com/api/article/list
 	 */
 	public function actionList()
 	{
@@ -68,7 +68,7 @@ class ArticleController extends \common\base\BaseApiController
 
 	/**
 	 * 获取文章详情
-	 * @api 接口访问地址: http://api.xxx.com/article/read
+	 * @api 接口访问地址: https://www.xxx.com/api/article/read
 	 */
 	public function actionRead()
 	{

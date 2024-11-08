@@ -48,7 +48,7 @@ class OrderForm extends Model
 	public function formData($post = null)
 	{
 		$query = OrderModel::find()->alias('o')
-			->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.evaluation_time,o.guider_id,oe.shipping_fee')
+			->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.evaluation_time,o.guider_id,oe.freight')
 			->joinWith('orderExtm oe', false)
 			->where(['>', 'o.order_id', 0])
 			->orderBy(['o.order_id' => SORT_DESC]);

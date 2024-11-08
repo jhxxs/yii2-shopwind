@@ -56,7 +56,7 @@ class StoreController extends \common\base\BaseAdminController
 			return $this->render('../store.index.html', $this->params);
 		} else {
 			$query = StoreModel::find()
-				->select('store_id,store_name,stype,sgrade,owner_name,region_id,add_time,end_time,state,recommended,sort_order,tel')
+				->select('store_id,store_name,stype,sgrade,owner,region_id,add_time,end_time,state,recommended,sort_order,tel')
 				->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
 
 			$query = $this->getConditions($post, $query);
@@ -93,7 +93,7 @@ class StoreController extends \common\base\BaseAdminController
 			return $this->render('../store.verify.html', $this->params);
 		} else {
 			$query = StoreModel::find()
-				->select('store_id,store_name,stype,sgrade,owner_name,region_id,state,add_time')
+				->select('store_id,store_name,stype,sgrade,owner,region_id,state,add_time')
 				->where(['in', 'state', [Def::STORE_APPLYING, Def::STORE_NOPASS]])
 				->orderBy(['store_id' => SORT_DESC]);
 
@@ -272,7 +272,7 @@ class StoreController extends \common\base\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if ($post->id) $post->id = explode(',', $post->id);
 
-		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.stype, s.sgrade,s.owner_name,s.region_id,s.add_time,s.state,s.recommended,s.tel,u.username')
+		$query = StoreModel::find()->alias('s')->select('s.store_id,s.store_name,s.stype, s.sgrade,s.owner,s.region_id,s.add_time,s.state,s.recommended,s.tel,u.username')
 			->joinWith('user u', false)
 			->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
 		if (!empty($post->id)) {
@@ -418,7 +418,7 @@ class StoreController extends \common\base\BaseAdminController
 	{
 		if ($query === null) {
 			foreach (array_keys(ArrayHelper::toArray($post)) as $field) {
-				if (in_array($field, ['store_name', 'stype', 'sgrade', 'owner_name'])) {
+				if (in_array($field, ['store_name', 'stype', 'sgrade', 'owner'])) {
 					return true;
 				}
 			}
@@ -434,8 +434,8 @@ class StoreController extends \common\base\BaseAdminController
 		if ($post->sgrade) {
 			$query->andWhere(['sgrade' => $post->sgrade]);
 		}
-		if ($post->owner_name) {
-			$query->andWhere(['or', ['owner_name' => $post->owner_name], ['username' => $post->owner_name]]);
+		if ($post->owner) {
+			$query->andWhere(['or', ['owner' => $post->owner], ['username' => $post->owner]]);
 		}
 		if (isset($post->state) && $post->state !== '') {
 			$query->andWhere(['state' => intval($post->state)]);

@@ -33,7 +33,7 @@ class CouponController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取优惠券列表
-	 * @api 接口访问地址: http://api.xxx.com/coupon/list
+	 * @api 接口访问地址: https://www.xxx.com/api/coupon/list
 	 */
 	public function actionList()
 	{
@@ -75,7 +75,7 @@ class CouponController extends \common\base\BaseApiController
 
 	/**
 	 * 获取优惠券单条信息
-	 * @api 接口访问地址: http://api.xxx.com/coupon/read
+	 * @api 接口访问地址: https://www.xxx.com/api/coupon/read
 	 */
 	public function actionRead()
 	{
@@ -106,7 +106,7 @@ class CouponController extends \common\base\BaseApiController
 
 	/**
 	 * 插入优惠券信息
-	 * @api 接口访问地址: http://api.xxx.com/coupon/add
+	 * @api 接口访问地址: https://www.xxx.com/api/coupon/add
 	 */
 	public function actionAdd()
 	{
@@ -129,7 +129,7 @@ class CouponController extends \common\base\BaseApiController
 
 	/**
 	 * 更新优惠券信息
-	 * @api 接口访问地址: http://api.xxx.com/coupon/update
+	 * @api 接口访问地址: https://www.xxx.com/api/coupon/update
 	 */
 	public function actionUpdate()
 	{
@@ -152,7 +152,7 @@ class CouponController extends \common\base\BaseApiController
 
 	/**
 	 * 商家删除优惠券信息
-	 * @api 接口访问地址: http://api.xxx.com/coupon/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/coupon/delete
 	 */
 	public function actionDelete()
 	{
@@ -184,7 +184,7 @@ class CouponController extends \common\base\BaseApiController
 
 	/**
 	 * 点击领取优惠券
-	 * @api 接口访问地址: http://api.xxx.com/coupon/receive
+	 * @api 接口访问地址: https://www.xxx.com/api/coupon/receive
 	 */
 	public function actionReceive()
 	{

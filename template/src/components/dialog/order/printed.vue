@@ -21,7 +21,7 @@
                         <th><span>订单金额</span></th>
                         <td><span>{{ currency(order.order_amount) }}</span></td>
                         <th><span>配送费用</span></th>
-                        <td><span>{{ currency(order.shipping_fee) }}</span></td>
+                        <td><span>{{ currency(order.freight) }}</span></td>
                     </tr>
                     <tr>
                         <th><span>支付方式</span></th>

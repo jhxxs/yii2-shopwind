@@ -37,7 +37,7 @@ class LimitbuyController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取进行中的限时秒杀商品列表
-	 * @api 接口访问地址: http://api.xxx.com/limitbuy/list
+	 * @api 接口访问地址: https://www.xxx.com/api/limitbuy/list
 	 */
     public function actionList()
     {
@@ -99,7 +99,7 @@ class LimitbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取限时秒杀商品单条信息
-	 * @api 接口访问地址: http://api.xxx.com/limitbuy/read
+	 * @api 接口访问地址: https://www.xxx.com/api/limitbuy/read
 	 */
     public function actionRead()
     {
@@ -159,7 +159,7 @@ class LimitbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 插入限时秒杀商品信息
-	 * @api 接口访问地址: http://api.xxx.com/limitbuy/add
+	 * @api 接口访问地址: https://www.xxx.com/api/limitbuy/add
 	 */
     public function actionAdd()
     {
@@ -182,7 +182,7 @@ class LimitbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 更新限时秒杀商品信息
-	 * @api 接口访问地址: http://api.xxx.com/limitbuy/update
+	 * @api 接口访问地址: https://www.xxx.com/api/limitbuy/update
 	 */
     public function actionUpdate()
     {
@@ -205,7 +205,7 @@ class LimitbuyController extends \common\base\BaseApiController
 	
 	/**
 	 * 删除限时秒杀商品信息
-	 * @api 接口访问地址: http://api.xxx.com/limitbuy/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/limitbuy/delete
 	 */
     public function actionDelete()
     {

@@ -67,7 +67,8 @@ class DepositAccountModel extends ActiveRecord
 			$model->account = self::createAccountName($query);
 			$model->money = 0;
 			$model->frozen = 0;
-			$model->password = md5('123456789');
+			$model->nodrawal = 0;
+			$model->password = md5('123456');
 			$model->real_name = $query->username;
 			$model->pay_status = 'ON';
 			$model->add_time = Timezone::gmtime();
@@ -102,15 +103,15 @@ class DepositAccountModel extends ActiveRecord
 		return $account;
 	}
 
-	public static function checkEnoughMoney($money, $userid = 0)
+	public static function checkEnoughMoney($money, $userid = 0, $field = 'money')
 	{
 		if (empty($money) || !$userid) return false;
 
-		if (!($query = parent::find()->select('money')->where(['userid' => $userid])->one())) {
+		if (!($query = parent::find()->select($field)->where(['userid' => $userid])->one())) {
 			return false;
-		} else {
-			return ($query->money >= $money);
 		}
+
+		return ($query->$field >= $money);
 	}
 
 	/** 

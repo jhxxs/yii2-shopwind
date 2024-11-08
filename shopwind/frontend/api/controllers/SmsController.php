@@ -32,7 +32,7 @@ class SmsController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取用户手机短信配置
-	 * @api 接口访问地址: http://api.xxx.com/sms/read
+	 * @api 接口访问地址: https://www.xxx.com/api/sms/read
 	 */
 	public function actionRead()
 	{
@@ -57,7 +57,7 @@ class SmsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取手机短信发送场景
-	 * @api 接口访问地址: http://api.xxx.com/sms/scene
+	 * @api 接口访问地址: https://www.xxx.com/api/sms/scene
 	 */
 	public function actionScene()
 	{
@@ -87,7 +87,7 @@ class SmsController extends \common\base\BaseApiController
 
 	/**
 	 * 手机短信配置
-	 * @api 接口访问地址: http://api.xxx.com/sms/update
+	 * @api 接口访问地址: https://www.xxx.com/api/sms/update
 	 */
 	public function actionUpdate()
 	{
@@ -120,7 +120,7 @@ class SmsController extends \common\base\BaseApiController
 
 	/**
 	 * 发送手机短信
-	 * @api 接口访问地址: http://api.xxx.com/sms/send
+	 * @api 接口访问地址: https://www.xxx.com/api/sms/send
 	 */
 	public function actionSend()
 	{

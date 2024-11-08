@@ -29,7 +29,7 @@ class CodController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取指定店铺货到付款
-	 * @api 接口访问地址: http://api.xxx.com/cod/read
+	 * @api 接口访问地址: https://www.xxx.com/api/cod/read
 	 */
 	public function actionRead()
 	{
@@ -55,7 +55,7 @@ class CodController extends \common\base\BaseApiController
 
 	/**
 	 * 获取指定店铺货到付款
-	 * @api 接口访问地址: http://api.xxx.com/cod/update
+	 * @api 接口访问地址: https://www.xxx.com/api/cod/update
 	 */
 	public function actionUpdate()
 	{

@@ -43,7 +43,7 @@ class OrderController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取所有订单列表数据
-	 * @api 接口访问地址: http://api.xxx.com/order/list
+	 * @api 接口访问地址: https://www.xxx.com/api/order/list
 	 */
 	public function actionList()
 	{
@@ -52,7 +52,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取单条订单信息
-	 * @api 接口访问地址: http://api.xxx.com/order/read
+	 * @api 接口访问地址: https://www.xxx.com/api/order/read
 	 */
 	public function actionRead()
 	{
@@ -70,7 +70,7 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::PARAMS_INVALID, Language::get('order_id_sn_empty'));
 		}
 
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.receive_time,o.finished_time,o.evaluation_time,o.guider_id,oe.shipping_fee')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.gtype,o.otype,o.buyer_id,o.buyer_name,o.seller_id,o.seller_name,o.status,o.evaluation_status,o.payment_code,o.payment_name,o.goods_amount,o.order_amount,o.postscript,o.memo,o.add_time,o.pay_time,o.ship_time,o.receive_time,o.finished_time,o.evaluation_time,o.guider_id,oe.freight')
 			->joinWith('orderExtm oe', false)->where(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id]])
 			->andWhere(['o.order_id' => $post->order_id]);
 
@@ -94,7 +94,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 提交预支付购物订单
-	 * @api 接口访问地址: http://api.xxx.com/order/create
+	 * @api 接口访问地址: https://www.xxx.com/api/order/create
 	 */
 	public function actionCreate()
 	{
@@ -150,7 +150,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 更新订单状态
-	 * @api 接口访问地址: http://api.xxx.com/order/update
+	 * @api 接口访问地址: https://www.xxx.com/api/order/update
 	 */
 	public function actionUpdate()
 	{
@@ -223,7 +223,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取预提交订单数据集合
-	 * @api 接口访问地址: http://api.xxx.com/order/build
+	 * @api 接口访问地址: https://www.xxx.com/api/order/build
 	 */
 	public function actionBuild()
 	{
@@ -246,7 +246,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取订单商品数据
-	 * @api 接口访问地址: http://api.xxx.com/order/goods
+	 * @api 接口访问地址: https://www.xxx.com/api/order/goods
 	 */
 	public function actionGoods()
 	{
@@ -278,7 +278,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取订单收货人数据
-	 * @api 接口访问地址: http://api.xxx.com/order/extm
+	 * @api 接口访问地址: https://www.xxx.com/api/order/extm
 	 */
 	public function actionExtm()
 	{
@@ -317,7 +317,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/** 
 	 * 对订单的评价
-	 * @api 接口访问地址: http://api.xxx.com/order/evaluate
+	 * @api 接口访问地址: https://www.xxx.com/api/order/evaluate
 	 */
 	public function actionEvaluate()
 	{
@@ -349,7 +349,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/** 
 	 * 对买家的评价回复
-	 * @api 接口访问地址: http://api.xxx.com/order/replyevaluate
+	 * @api 接口访问地址: https://www.xxx.com/api/order/replyevaluate
 	 */
 	public function actionReplyevaluate()
 	{
@@ -377,7 +377,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取订单发货信息
-	 * @api 接口访问地址: http://api.xxx.com/order/exrpess
+	 * @api 接口访问地址: https://www.xxx.com/api/order/exrpess
 	 */
 	public function actionExpress()
 	{
@@ -401,7 +401,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 获取订单物流跟踪数据
-	 * @api 接口访问地址: http://api.xxx.com/order/logistic
+	 * @api 接口访问地址: https://www.xxx.com/api/order/logistic
 	 */
 	public function actionLogistic()
 	{

@@ -35,7 +35,7 @@ class IntegralController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取当前用户积分记录列表
-	 * @api 接口访问地址: http://api.xxx.com/my/integral/list
+	 * @api 接口访问地址: https://www.xxx.com/api/my/integral/list
 	 */
     public function actionList()
     {

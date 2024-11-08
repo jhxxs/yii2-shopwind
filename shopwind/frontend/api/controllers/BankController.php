@@ -30,7 +30,7 @@ class BankController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取用户银行卡列表
-	 * @api 接口访问地址: http://api.xxx.com/bank/list
+	 * @api 接口访问地址: https://www.xxx.com/api/bank/list
 	 */
 	public function actionList()
 	{
@@ -60,7 +60,7 @@ class BankController extends \common\base\BaseApiController
 
 	/**
 	 * 获取银行卡单条信息
-	 * @api 接口访问地址: http://api.xxx.com/bank/read
+	 * @api 接口访问地址: https://www.xxx.com/api/bank/read
 	 */
 	public function actionRead()
 	{
@@ -80,7 +80,7 @@ class BankController extends \common\base\BaseApiController
 
 	/**
 	 * 插入银行卡信息
-	 * @api 接口访问地址: http://api.xxx.com/bank/add
+	 * @api 接口访问地址: https://www.xxx.com/api/bank/add
 	 */
 	public function actionAdd()
 	{
@@ -107,7 +107,7 @@ class BankController extends \common\base\BaseApiController
 
 	/**
 	 * 更新银行卡信息
-	 * @api 接口访问地址: http://api.xxx.com/bank/update
+	 * @api 接口访问地址: https://www.xxx.com/api/bank/update
 	 */
 	public function actionUpdate()
 	{
@@ -136,7 +136,7 @@ class BankController extends \common\base\BaseApiController
 
 	/**
 	 * 删除银行卡
-	 * @api 接口访问地址: http://api.xxx.com/bank/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/bank/delete
 	 */
 	public function actionDelete()
 	{
@@ -158,7 +158,7 @@ class BankController extends \common\base\BaseApiController
 
 	/**
 	 * 获取银行卡数量
-	 * @api 接口访问地址: http://api.xxx.com/bank/quantity
+	 * @api 接口访问地址: https://www.xxx.com/api/bank/quantity
 	 */
 	public function actionQuantity()
 	{

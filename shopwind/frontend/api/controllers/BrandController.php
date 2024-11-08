@@ -32,7 +32,7 @@ class BrandController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取品牌列表
-	 * @api 接口访问地址: http://api.xxx.com/brand/list
+	 * @api 接口访问地址: https://www.xxx.com/api/brand/list
 	 */
     public function actionList()
     {
@@ -72,7 +72,7 @@ class BrandController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取品牌单条信息
-	 * @api 接口访问地址: http://api.xxx.com/brand/read
+	 * @api 接口访问地址: https://www.xxx.com/api/brand/read
 	 */
     public function actionRead()
     {
@@ -98,7 +98,7 @@ class BrandController extends \common\base\BaseApiController
 	
 	/**
 	 * 插入品牌信息
-	 * @api 接口访问地址: http://api.xxx.com/brand/add
+	 * @api 接口访问地址: https://www.xxx.com/api/brand/add
 	 */
     public function actionAdd()
     {
@@ -107,7 +107,7 @@ class BrandController extends \common\base\BaseApiController
 	
 	/**
 	 * 更新品牌信息
-	 * @api 接口访问地址: http://api.xxx.com/brand/update
+	 * @api 接口访问地址: https://www.xxx.com/api/brand/update
 	 */
     public function actionUpdate()
     {
@@ -116,7 +116,7 @@ class BrandController extends \common\base\BaseApiController
 	
 	/**
 	 * 删除品牌信息
-	 * @api 接口访问地址: http://api.xxx.com/brand/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/brand/delete
 	 */
     public function actionDelete()
     {

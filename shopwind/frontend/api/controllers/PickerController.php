@@ -29,7 +29,7 @@ class PickerController extends \common\base\BaseApiController
 {
 	/**
 	 * 采集商品到本地
-	 * @api 接口访问地址: http://api.xxx.com/picker/add
+	 * @api 接口访问地址: https://www.xxx.com/api/picker/add
 	 */
 	public function actionAdd()
 	{
@@ -61,7 +61,7 @@ class PickerController extends \common\base\BaseApiController
 
 	/**
 	 * 获取采集平台商品列表（目前只有行云货仓有）
-	 * @api 接口访问地址: http://api.xxx.com/picker/goods
+	 * @api 接口访问地址: https://www.xxx.com/api/picker/goods
 	 */
 	public function actionGoods()
 	{
@@ -87,7 +87,7 @@ class PickerController extends \common\base\BaseApiController
 
 	/**
 	 * 获取采集平台商品分类列表（目前只有行云货仓有）
-	 * @api 接口访问地址: http://api.xxx.com/picker/goods
+	 * @api 接口访问地址: https://www.xxx.com/api/picker/goods
 	 */
 	public function actionCategory()
 	{
@@ -113,7 +113,7 @@ class PickerController extends \common\base\BaseApiController
 
 	/**
 	 * 获取已启用的采集平台列表
-	 * @api 接口访问地址: http://api.xxx.com/picker/list
+	 * @api 接口访问地址: https://www.xxx.com/api/picker/list
 	 */
 	public function actionList()
 	{

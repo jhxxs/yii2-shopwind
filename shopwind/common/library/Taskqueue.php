@@ -59,7 +59,7 @@ class Taskqueue
 		$reason = '店铺已到期';
 		foreach ($list as $store) {
 			if (StoreModel::updateAll(['state' => Def::STORE_CLOSED, 'close_reason' => $reason], ['store_id' => $store['store_id']])) {
-				$retval = ['store_name' => $store['store_name'], 'owner_name' => $store['owner_name']];
+				$retval = ['store_name' => $store['store_name'], 'owner' => $store['owner']];
 				// 发站内信
 				$pmer = Basewind::getPmer('toseller_store_closed_notify', ['store' => $retval, 'reason' => $reason]);
 				if ($pmer) {
@@ -116,11 +116,13 @@ class Taskqueue
 	 */
 	private static function autoConfirm($otype = 'normal')
 	{
-		// 排除退款中的订单
+		// 排除退款中的订单且是已付款的订单
 		$query = OrderModel::find()->alias('o')->where(['>', 'o.pay_time', 0])
 			->joinWith(['depositTrade' => function ($model) {
 				$model->alias('dt')->select('dt.tradeNo,dt.buyer_id,dt.bizOrderId,r.status as refund_status')->joinWith('refund r', false)->where(['in', 'r.status', ['CLOSED', null, '']]);
 			}]);
+
+		// 其他条件
 		$query = self::getConditions($query, $otype);
 
 		// 每次仅处理2条记录，注意：处理太多会影响性能

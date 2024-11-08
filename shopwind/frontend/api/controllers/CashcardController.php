@@ -27,7 +27,7 @@ class CashcardController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取充值卡列表
-	 * @api 接口访问地址: http://api.xxx.com/cashcard/list
+	 * @api 接口访问地址: https://www.xxx.com/api/cashcard/list
 	 */
     public function actionList()
     {
@@ -49,7 +49,7 @@ class CashcardController extends \common\base\BaseApiController
 	
 	/**
 	 * 绑定充值卡并充值到余额
-	 * @api 接口访问地址: http://api.xxx.com/cashcard/bind
+	 * @api 接口访问地址: https://www.xxx.com/api/cashcard/bind
 	 */
     public function actionBind()
     {

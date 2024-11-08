@@ -29,7 +29,7 @@ class ExclusiveController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取手机专享配置
-	 * @api 接口访问地址: http://api.xxx.com/exclusive/read
+	 * @api 接口访问地址: https://www.xxx.com/api/exclusive/read
 	 */
     public function actionRead()
     {
@@ -62,7 +62,7 @@ class ExclusiveController extends \common\base\BaseApiController
 
 	/**
 	 * 设置手机专享优惠信息
-	 * @api 接口访问地址: http://api.xxx.com/exclusive/update
+	 * @api 接口访问地址: https://www.xxx.com/api/exclusive/update
 	 */
     public function actionUpdate()
     {

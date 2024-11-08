@@ -30,7 +30,7 @@ class RegionController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取地区列表
-	 * @api 接口访问地址: http://api.xxx.com/region/list
+	 * @api 接口访问地址: https://www.xxx.com/api/region/list
 	 */
     public function actionList()
     {
@@ -61,7 +61,7 @@ class RegionController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取地区单条信息
-	 * @api 接口访问地址: http://api.xxx.com/region/read
+	 * @api 接口访问地址: https://www.xxx.com/api/region/read
 	 */
     public function actionRead()
     {
@@ -84,7 +84,7 @@ class RegionController extends \common\base\BaseApiController
 	
 	/**
 	 * 插入地区信息
-	 * @api 接口访问地址: http://api.xxx.com/region/add
+	 * @api 接口访问地址: https://www.xxx.com/api/region/add
 	 */
     public function actionAdd()
     {
@@ -113,7 +113,7 @@ class RegionController extends \common\base\BaseApiController
 	
 	/**
 	 * 更新地区信息
-	 * @api 接口访问地址: http://api.xxx.com/region/update
+	 * @api 接口访问地址: https://www.xxx.com/api/region/update
 	 */
     public function actionUpdate()
     {
@@ -144,7 +144,7 @@ class RegionController extends \common\base\BaseApiController
 	
 	/**
 	 * 删除地区信息
-	 * @api 接口访问地址: http://api.xxx.com/region/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/region/delete
 	 */
     public function actionDelete()
     {

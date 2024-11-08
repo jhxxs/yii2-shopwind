@@ -116,13 +116,13 @@ class RefundController extends \common\base\BaseAdminController
 
 			// 在此处理退款后的费用问题，将该商品的相关货款退还给买家(卖家)
 			$refund_goods_fee    = $post->refund_goods_fee ? round($post->refund_goods_fee, 2) : 0;
-			$refund_shipping_fee = $post->refund_shipping_fee ? round($post->refund_shipping_fee, 2) : 0;
-			$refund_total_fee    = $refund_goods_fee + $refund_shipping_fee;
+			$refund_freight = $post->refund_freight ? round($post->refund_freight, 2) : 0;
+			$refund_total_fee    = $refund_goods_fee + $refund_freight;
 
 			RefundModel::updateAll([
 				'refund_total_fee' => $refund_total_fee,
 				'refund_goods_fee' => $refund_goods_fee,
-				'refund_shipping_fee' => $refund_shipping_fee,
+				'refund_freight' => $refund_freight,
 				'intervene' => 1
 			], ['refund_id' => $get->id]);
 
@@ -251,12 +251,12 @@ class RefundController extends \common\base\BaseAdminController
 			$this->errors = Language::get('refund_fee_error');
 			return false;
 		}
-		if (!$post->refund_shipping_fee && floatval($post->refund_shipping_fee < 0)) {
-			$this->errors = Language::get('refund_shipping_fee_ge0');
+		if (!$post->refund_freight && floatval($post->refund_freight < 0)) {
+			$this->errors = Language::get('refund_freight_ge0');
 			return false;
 		}
-		if (floatval($post->refund_shipping_fee) > $realShippingFee) {
-			$this->errors = Language::get('refund_shipping_fee_error');
+		if (floatval($post->refund_freight) > $realShippingFee) {
+			$this->errors = Language::get('refund_freight_error');
 			return false;
 		}
 

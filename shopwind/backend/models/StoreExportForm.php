@@ -38,7 +38,7 @@ class StoreExportForm extends Model
 			'store_name'	=> '店铺名称',
 			'stype'			=> '主体类型',
 			'username' 		=> '用户名',
-			'owner_name' 	=> '店主姓名',
+			'owner' 	=> '店主姓名',
 			'tel'			=> '联系电话',
 			'region' 		=> '所在地区',
 			'sgrade' 		=> '店铺等级',

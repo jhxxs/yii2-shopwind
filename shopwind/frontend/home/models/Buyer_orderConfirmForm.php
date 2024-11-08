@@ -102,18 +102,20 @@ class Buyer_orderConfirmForm extends Model
 			GoodsStatisticsModel::updateAllCounters(['sales' => $goods['quantity']], ['goods_id' => $goods['goods_id']]);
 		}
 
-		// 短信和邮件提醒： 买家已确认通知卖家
-		if ($sendNotify === true) {
-			Basewind::sendMailMsgNotify(
-				$orderInfo,
-				array(
-					'key' => 'toseller_finish_notify'
-				),
-				array(
-					'key' => 'toseller_finish_notify'
-				)
-			);
-		}
+		// 短信和邮件提醒： 买家已确认收货通知卖家
+		Basewind::sendMailMsgNotify(
+			$orderInfo,
+			[
+				'receiver' => $model->seller_id,
+				'key' => 'toseller_finish_notify'
+			],
+			[
+				'sender' => $model->seller_id,
+				'receiver' => $model->seller_id,
+				'key' => 'toseller_finish_notify'
+			]
+		);
+
 		return true;
 	}
 }

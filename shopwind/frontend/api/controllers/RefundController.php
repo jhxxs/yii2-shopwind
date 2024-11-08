@@ -34,7 +34,7 @@ class RefundController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取所有退款列表数据
-	 * @api 接口访问地址: http://api.xxx.com/refund/list
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/list
 	 */
 	public function actionList()
 	{
@@ -43,7 +43,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 获取退款单条信息
-	 * @api 接口访问地址: http://api.xxx.com/refund/read
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/read
 	 */
 	public function actionRead()
 	{
@@ -80,7 +80,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 买家创建退款申请
-	 * @api 接口访问地址: http://api.xxx.com/refund/create
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/create
 	 */
 	public function actionCreate()
 	{
@@ -100,7 +100,7 @@ class RefundController extends \common\base\BaseApiController
 		}
 		$post = $this->computedRefundFee($post, $refund);
 
-		$refund = $model->save($post, $post, true, false);
+		$refund = $model->save($post, $post);
 		if ($refund === false) {
 			return $respond->output(Respond::HANDLE_INVALID, $model->errors);
 		}
@@ -110,7 +110,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 更新退款信息
-	 * @api 接口访问地址: http://api.xxx.com/refund/update
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/update
 	 */
 	public function actionUpdate()
 	{
@@ -145,7 +145,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 取消退款申请
-	 * @api 接口访问地址: http://api.xxx.com/refund/cancel
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/cancel
 	 */
 	public function actionCancel()
 	{
@@ -176,7 +176,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 卖家同意退款申请
-	 * @api 接口访问地址: http://api.xxx.com/refund/agree
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/agree
 	 */
 	public function actionAgree()
 	{
@@ -195,7 +195,7 @@ class RefundController extends \common\base\BaseApiController
 		}
 
 		$model = new \frontend\home\models\RefundAgreeForm();
-		if (!$model->submit($post, false)) {
+		if (!$model->submit($post)) {
 			return $respond->output(Respond::HANDLE_INVALID, $model->errors);
 		}
 		$record = RefundModel::find()->select('status,finished')->where(['refund_id' => $post->id])->asArray()->one();
@@ -206,7 +206,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 卖家拒绝退款申请
-	 * @api 接口访问地址: http://api.xxx.com/refund/refuse
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/refuse
 	 */
 	public function actionRefuse()
 	{
@@ -225,7 +225,7 @@ class RefundController extends \common\base\BaseApiController
 		}
 
 		$model = new \frontend\home\models\RefundRefuseForm();
-		if (!$model->save($post, true)) {
+		if (!$model->save($post)) {
 			return $respond->output(Respond::HANDLE_INVALID, $model->errors);
 		}
 		$record = RefundModel::find()->select('status')->where(['refund_id' => $post->id])->asArray()->one();
@@ -235,7 +235,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 买家要求平台介入处理退款争议
-	 * @api 接口访问地址: http://api.xxx.com/refund/intervene
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/intervene
 	 */
 	public function actionIntervene()
 	{
@@ -254,7 +254,7 @@ class RefundController extends \common\base\BaseApiController
 		}
 
 		$model = new \frontend\home\models\RefundInterveneForm();
-		if (!$model->save($post, true)) {
+		if (!$model->save($post)) {
 			return $respond->output(Respond::HANDLE_INVALID, $model->errors);
 		}
 		return $respond->output(true);
@@ -262,7 +262,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 获取退款留言记录
-	 * @api 接口访问地址: http://api.xxx.com/refund/logs
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/logs
 	 */
 	public function actionLogs()
 	{
@@ -289,7 +289,7 @@ class RefundController extends \common\base\BaseApiController
 
 	/**
 	 * 提交退款留言记录
-	 * @api 接口访问地址: http://api.xxx.com/refund/message
+	 * @api 接口访问地址: https://www.xxx.com/api/refund/message
 	 */
 	public function actionMessage()
 	{
@@ -323,6 +323,9 @@ class RefundController extends \common\base\BaseApiController
 		if (isset($post->refund_sn) && !empty($post->refund_sn)) {
 			return RefundModel::find()->select('refund_id')->where(['refund_sn' => $post->refund_sn])->scalar();
 		}
+		if (isset($post->tradeNo) && !empty($post->tradeNo)) {
+			return RefundModel::find()->select('refund_id')->where(['tradeNo' => $post->tradeNo])->scalar();
+		}
 		return false;
 	}
 
@@ -334,10 +337,10 @@ class RefundController extends \common\base\BaseApiController
 	{
 		if ($post->refund_total_fee > $refund['goods_fee']) {
 			$post->refund_goods_fee = $refund['goods_fee'];
-			$post->refund_shipping_fee = $post->refund_total_fee - $refund['goods_fee'];
+			$post->refund_freight = $post->refund_total_fee - $refund['goods_fee'];
 		} else {
 			$post->refund_goods_fee = $post->refund_total_fee;
-			$post->refund_shipping_fee = 0;
+			$post->refund_freight = 0;
 		}
 
 		return $post;

@@ -26,7 +26,7 @@ class RefundController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取所有退款管理列表数据
-	 * @api 接口访问地址: http://api.xxx.com/seller/refund/list
+	 * @api 接口访问地址: https://www.xxx.com/api/seller/refund/list
 	 */
     public function actionList()
 	{

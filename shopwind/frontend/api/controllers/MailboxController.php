@@ -29,7 +29,7 @@ class MailboxController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取用户消息列表
-	 * @api 接口访问地址: http://api.xxx.com/mailbox/list
+	 * @api 接口访问地址: https://www.xxx.com/api/mailbox/list
 	 */
 	public function actionList()
 	{

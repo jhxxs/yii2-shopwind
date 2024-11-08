@@ -53,11 +53,16 @@ class GoodsStatisticsModel extends ActiveRecord
 
 	/*
 	 * 获取商品评价统计数据
-	 * @api API接口用到该数据
 	 */
 	public static function getCommectStatistics($id = 0)
 	{
-		$query = OrderGoodsModel::find()->alias('og')->select('og.evaluation')->joinWith('order o', false)->where(['goods_id' => intval($id), 'o.evaluation_status' => 1, 'is_valid' => 1]);
+		$query = OrderGoodsModel::find()->alias('og')->select('og.evaluation')
+			->joinWith('order o', false)
+			->where(['o.evaluation_status' => 1, 'is_valid' => 1]);
+		if ($id) {
+			$query->andWhere(['goods_id' => intval($id)]);
+		}
+
 		$result = array('total' => $query->count(), 'good' => ['count' => 0], 'middle' => ['count' => 0], 'bad' => ['count' => 0]);
 
 		foreach ($query->asArray()->all() as $record) {

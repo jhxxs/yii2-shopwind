@@ -41,7 +41,7 @@ class DepositController extends \common\base\BaseApiController
 {
 	/**
 	 * 读取用户资产信息
-	 * @api 接口访问地址: http://api.xxx.com/deposit/read
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/read
 	 */
 	public function actionRead()
 	{
@@ -72,7 +72,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 更新用户资产信息
-	 * @api 接口访问地址: http://api.xxx.com/deposit/update
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/update
 	 */
 	public function actionUpdate()
 	{
@@ -110,7 +110,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 获取交易记录信息
-	 * @api 接口访问地址: http://api.xxx.com/deposit/tradelist
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/tradelist
 	 */
 	public function actionTradelist()
 	{
@@ -188,7 +188,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 获取交易单条记录信息
-	 * @api 接口访问地址: http://api.xxx.com/deposit/trade
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/trade
 	 */
 	public function actionTrade()
 	{
@@ -238,7 +238,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 获取收支明细列表信息
-	 * @api 接口访问地址: http://api.xxx.com/deposit/recordlist
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/recordlist
 	 */
 	public function actionRecordlist()
 	{
@@ -285,7 +285,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 获取收支明细单条信息
-	 * @api 接口访问地址: http://api.xxx.com/deposit/record
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/record
 	 */
 	public function actionRecord()
 	{
@@ -317,7 +317,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 充值到余额
-	 * @api 接口访问地址: http://api.xxx.com/deposit/recharge
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/recharge
 	 */
 	public function actionRecharge()
 	{
@@ -355,7 +355,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 余额提现
-	 * @api 接口访问地址: http://api.xxx.com/deposit/drawal
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/drawal
 	 */
 	public function actionDrawal()
 	{
@@ -377,7 +377,7 @@ class DepositController extends \common\base\BaseApiController
 
 	/**
 	 * 获取资金配置
-	 * @api 接口访问地址: http://api.xxx.com/deposit/setting
+	 * @api 接口访问地址: https://www.xxx.com/api/deposit/setting
 	 */
 	public function actionSetting()
 	{

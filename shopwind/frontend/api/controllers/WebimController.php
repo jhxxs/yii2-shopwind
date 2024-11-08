@@ -34,7 +34,7 @@ class WebimController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取会话列表
-	 * @api 接口访问地址: http://api.xxx.com/webim/list
+	 * @api 接口访问地址: https://www.xxx.com/api/webim/list
 	 */
 	public function actionList()
 	{
@@ -76,7 +76,7 @@ class WebimController extends \common\base\BaseApiController
 
 	/**
 	 * 获取客服聊天记录
-	 * @api 接口访问地址: http://api.xxx.com/webim/logs
+	 * @api 接口访问地址: https://www.xxx.com/api/webim/logs
 	 */
 	public function actionLogs()
 	{
@@ -125,7 +125,7 @@ class WebimController extends \common\base\BaseApiController
 
 	/**
 	 * 发送消息
-	 * @api 接口访问地址: http://api.xxx.com/webim/send
+	 * @api 接口访问地址: https://www.xxx.com/api/webim/send
 	 */
 	public function actionSend()
 	{
@@ -172,7 +172,7 @@ class WebimController extends \common\base\BaseApiController
 
 	/**
 	 * 获取未读消息数
-	 * @api 接口访问地址: http://api.xxx.com/webim/unread
+	 * @api 接口访问地址: https://www.xxx.com/api/webim/unread
 	 */
 	public function actionUnread()
 	{

@@ -198,14 +198,23 @@ class Tree
      */
     function getArrayList($root = 0, $layer = 0)
     {
-        $data = array();
+        $data = [];
         $layer = intval($layer);
         foreach ($this->child[$root] as $id) {
-            if ($layer && $this->layer[$this->parent[$id]] > $layer - 1) {
+
+            //if ($layer && $this->layer[$this->parent[$id]] > $layer - 1) {
+            if ($layer && $this->getLayer($id) > $layer) {
                 continue;
             }
-            $data[$id] = array('id' => $id, 'value' => $this->getValue($id), 'parent_id' => $this->parent[$id], 'children' => $this->child[$id] ? $this->getArrayList($id, $layer) : array());
+
+            $data[$id] = [
+                'id' => $id,
+                'value' => $this->getValue($id),
+                'parent_id' => $this->parent[$id],
+                'children' => $this->child[$id] ? $this->getArrayList($id, $layer) : []
+            ];
         }
+
         return array_values($data);
     }
 
@@ -320,7 +329,7 @@ class Recursive
     public function __construct($data = null, $id = 0, $id_field = 'cate_id')
     {
         $this->data = $data;
-        $this->id     = $id;
+        $this->id = $id;
         $this->id_field = $id_field;
     }
 

@@ -113,9 +113,9 @@ return array(
 
 	'phone_code_check_failed'   	=> '手机验证码错误或已失效',
 	'phone_code_check_timeout' 		=> '短信验证码已经过期',
-	'send_limit_frequency_one_time' => '请过%s秒后重试',
-	'send_limit_frequency_five_time' => '发送太频繁请稍后再试',
-	'send_limit_frequency_daytimes' => '同一号码每天最多发送%s次短信',
+	'send_limit_frequency_minute' => '同手机号每分钟最多发送%s条短信',
+	'send_limit_frequency_hour' => '同手机号每小时最多发送%s条短信',
+	'send_limit_frequency_day' => '同手机号每天最多发送%s条短信',
 
 	'buying_has_integral_logtext'  => '购物订单获积分，订单号[%s]',
 	'selling_has_integral_logtext' => '买家使用积分抵扣货款，订单号[%s]',

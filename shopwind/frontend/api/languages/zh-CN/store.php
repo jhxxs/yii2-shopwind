@@ -6,7 +6,7 @@ return array(
 	'input_store_name' 			=> '请输入店铺名称',
 	'note_for_store_name'   	=> '店铺名字符在3个字到20个字之间',
 	'store_name_existed'		=> '该店铺名已存在',
-	'owner_name_empty'			=> '请填写经营者名称',
+	'owner_empty'			=> '请填写经营者名称',
 	'tel_empty' 				=> '请输入联系电话',
 	'identity_card_empty' 		=> '请填写本人身份证号',
 	'identity_empty' 			=> '请上传身份证',

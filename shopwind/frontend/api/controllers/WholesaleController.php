@@ -32,7 +32,7 @@ class WholesaleController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取指定商品批发价格
-	 * @api 接口访问地址: http://api.xxx.com/wholesale/read
+	 * @api 接口访问地址: https://www.xxx.com/api/wholesale/read
 	 */
     public function actionRead()
     {
@@ -57,7 +57,7 @@ class WholesaleController extends \common\base\BaseApiController
 
 	/**
 	 * 新增/编辑批发商品
-	 * @api 接口访问地址: http://api.xxx.com/wholesale/update
+	 * @api 接口访问地址: https://www.xxx.com/api/wholesale/update
 	 */
 	public function actionUpdate()
     {
@@ -80,7 +80,7 @@ class WholesaleController extends \common\base\BaseApiController
 
 	/**
 	 * 删除批发商品
-	 * @api 接口访问地址: http://api.xxx.com/wholesale/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/wholesale/delete
 	 */
 	public function actionDelete()
     {
@@ -106,7 +106,7 @@ class WholesaleController extends \common\base\BaseApiController
 
 	/**
 	 * 获取指定商品批发价格
-	 * @api 接口访问地址: http://api.xxx.com/wholesale/price
+	 * @api 接口访问地址: https://www.xxx.com/api/wholesale/price
 	 */
     public function actionPrice()
     {

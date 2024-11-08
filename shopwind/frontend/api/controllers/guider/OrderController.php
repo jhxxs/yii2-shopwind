@@ -38,7 +38,7 @@ class OrderController extends \common\base\BaseApiController
 	}
 	
 	/* @获取团长订单管理列表数据
-	 * @api 接口访问地址: http://api.xxx.com/guider/order/list
+	 * @api 接口访问地址: https://www.xxx.com/api/guider/order/list
 	 */
     public function actionList()
 	{
@@ -59,7 +59,7 @@ class OrderController extends \common\base\BaseApiController
 
 	/**
 	 * 团长更新订单状态
-	 * @api 接口访问地址: http://api.xxx.com/guider/order/update
+	 * @api 接口访问地址: https://www.xxx.com/api/guider/order/update
 	 */
 	public function actionUpdate()
 	{

@@ -27,7 +27,7 @@ class MealbuyController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取搭配购列表
-	 * @api 接口访问地址: http://api.xxx.com/seller/mealbuy/list
+	 * @api 接口访问地址: https://www.xxx.com/api/seller/mealbuy/list
 	 */
     public function actionList()
     {

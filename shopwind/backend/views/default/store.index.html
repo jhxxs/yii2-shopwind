@@ -7,9 +7,9 @@
 				<form method="get" id="formSearch">
 					<div class="webkit-box box-align-center">
 						<input type="hidden" name="r" value="store/index" />
-						{$lang.owner_name}
-						<input class="queryInput" type="text" name="owner_name"
-							value="{$smarty.get.owner_name|escape}" />
+						{$lang.owner}
+						<input class="queryInput" type="text" name="owner"
+							value="{$smarty.get.owner|escape}" />
 						{$lang.store_name}
 						<input class="infoTableInput mr10 ml10" type="text" name="store_name"
 							value="{$smarty.get.store_name|escape}" />
@@ -77,7 +77,7 @@
 				{ type: 'checkbox', fixed: 'left' }
 				, { field: 'store_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
 				, { field: 'username', title: '用户名', width: 160 }
-				, { field: 'owner_name', title: '店主', width: 100 }
+				, { field: 'owner', title: '店主', width: 100 }
 				, { field: 'store_name', title: '店铺名', width: 200, sort: true }
 				, { field: 'stype', title: '主体类型', width: 120, sort: true, align: 'center' }
 				, { field: 'sgrade', title: '店铺等级', width: 160, sort: true }

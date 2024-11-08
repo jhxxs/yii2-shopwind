@@ -66,7 +66,7 @@
                                             class="f-red f-yahei">{{ currency(order.order_amount) }}</span></el-col>
                                     <el-col :span="12">支付方式：{{ order.payment_name }}</el-col>
                                     <el-col :span="12">配送费用：<span
-                                            class="f-red f-yahei">{{ currency(order.shipping_fee) }}</span></el-col>
+                                            class="f-red f-yahei">{{ currency(order.freight) }}</span></el-col>
                                     <el-col :span="12">下单时间：{{ order.add_time }}</el-col>
                                     <el-col :span="12" v-if="order.pay_time">支付时间：{{ order.pay_time }}</el-col>
                                     <el-col :span="12" v-if="order.ship_time">发货时间：{{ order.ship_time }}</el-col>

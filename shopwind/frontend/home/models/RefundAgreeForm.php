@@ -33,11 +33,10 @@ class RefundAgreeForm extends Model
 
 	/**
 	 * 同意退款申请
-	 * @api API接口用到该数据
 	 */
 	public function submit($post = null, $sendNotify = true)
 	{
-		if (!$post->id || !($refund = RefundModel::find()->alias('r')->select('r.*,dt.tradeNo,dt.payTradeNo,dt.bizOrderId,dt.bizIdentity,rb.phone_mob')->joinWith('depositTrade dt', false)->joinWith('refundBuyerInfo rb', false)->where(['refund_id' => $post->id, 'r.seller_id' => Yii::$app->user->id])->andWhere(['not in', 'r.status', ['SUCCESS', 'CLOSED']])->asArray()->one())) {
+		if (!$post->id || !($refund = RefundModel::find()->alias('r')->select('r.*,dt.tradeNo,dt.payTradeNo,dt.bizOrderId,dt.bizIdentity')->joinWith('depositTrade dt', false)->where(['refund_id' => $post->id, 'r.seller_id' => Yii::$app->user->id])->andWhere(['not in', 'r.status', ['SUCCESS', 'CLOSED']])->asArray()->one())) {
 			$this->errors = Language::get('agree_disallow');
 			return false;
 		}
@@ -78,17 +77,16 @@ class RefundAgreeForm extends Model
 			IntegralModel::returnIntegral($order);
 		}
 
-		if ($sendNotify === true) {
-			// 短信提醒：卖家同意退款，通知买家
-			Basewind::sendMailMsgNotify(
-				$order,
-				array(),
-				array(
-					'receiver'  => $refund['phone_mob'],
-					'key' 		=> 'tobuyer_refund_agree_notify',
-				)
-			);
-		}
+		// 短信提醒：卖家同意退款，通知买家
+		Basewind::sendMailMsgNotify(
+			$order,
+			[],
+			[
+				'sender' => $order['seller_id'],
+				'receiver'  => $order['buyer_id'],
+				'key' 		=> 'tobuyer_refund_agree_notify',
+			]
+		);
 
 		return true;
 	}

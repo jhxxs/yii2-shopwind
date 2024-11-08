@@ -39,7 +39,7 @@
 						<el-input v-model="form.store_name" class="ml20" />
 					</el-form-item>
 					<el-form-item label="主体名称：" :label-width="250">
-						<el-input v-model="form.owner_name" class="ml20"
+						<el-input v-model="form.owner" class="ml20"
 							:placeholder="form.stype == 'personal' ? '申请者姓名' : '企事业单位名称'" />
 					</el-form-item>
 					<el-form-item v-if="form.stype == 'personal'" label="身份证号：" :label-width="250">
@@ -210,7 +210,7 @@ function verifyApply(params) {
 
 				form.value = store
 				storePrivacy(null, (privacy) => {
-					let fields = ['owner_name', 'identity_card', 'identity_front', 'identity_back', 'business_license']
+					let fields = ['owner', 'identity_card', 'identity_front', 'identity_back', 'business_license']
 					for (let index in fields) {
 						form.value[fields[index]] = privacy[fields[index]]
 					}

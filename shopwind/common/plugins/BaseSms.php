@@ -14,7 +14,6 @@ namespace common\plugins;
 use yii;
 use yii\helpers\Url;
 
-use common\models\UserModel;
 use common\models\SmsModel;
 use common\models\SmsLogModel;
 use common\models\SmsTemplateModel;
@@ -74,24 +73,24 @@ class BaseSms extends BasePlugin
 	public $templateId;
 
 	/**
-	 * 一天内允许某个手机号发送的短信数量
+	 * 同手机号每日发送上限[建议通过短信平台控制频率]
 	 */
-	private $dayTimes = 10;
+	private $dayTimes = 100;
 
 	/**
-	 * 半小时内允许某个手机号发送多少条短信
+	 * 同手机号每小时发送上限[建议通过短信平台控制频率]
 	 */
-	private $semihourTimes = 5;
+	private $hourTimes = 40;
 
 	/**
-	 * 某个手机号每次发送短信间隔多少秒
+	 * 同手机号每分钟发送上限[建议通过短信平台控制频率]
 	 */
-	private $interval = 120;
+	private $minuteTimes = 20;
 
 	/**
 	 * 插入发送短信的记录
 	 */
-	public function insert($quantity = 1, $message = null)
+	public function insert($quantity = 0, $message = null)
 	{
 		$model = new SmsLogModel();
 		$model->code = $this->code;
@@ -109,6 +108,12 @@ class BaseSms extends BasePlugin
 			$this->errors = $model->errors;
 			return false;
 		}
+
+		// 短信发送成功，扣除发送者短信量
+		if ($quantity > 0 && ($userid = intval($this->sender)) && $userid > 0) {
+			SmsModel::updateAllCounters(['num' => -$quantity], ['userid' => $userid]);
+		}
+
 		return $model->codekey;
 	}
 
@@ -124,20 +129,11 @@ class BaseSms extends BasePlugin
 			return false;
 		}
 
-		// 如果接收者手机号为空，则从用户ID读取手机号
+		// 接收者手机号不能为空
 		if (!$this->receiver) {
-			if (!$this->sender) {
-				$this->errors = $this->getMessage(-41);
-				$this->insert(0, $this->errors);
-				return false;
-			}
-
-			$query = UserModel::find()->select('phone_mob')->where(['userid' => $this->sender])->one();
-			if (!$query || !$query->phone_mob) {
-				$this->errors = $this->getMessage(-1);
-				return false;
-			}
-			$this->receiver = $query->phone_mob;
+			$this->errors = $this->getMessage(-41);
+			$this->insert(0, $this->errors);
+			return false;
 		}
 
 		if (!Basewind::isPhone($this->receiver)) {
@@ -201,21 +197,21 @@ class BaseSms extends BasePlugin
 		// 当天没有发送过短信
 		if ($count <= 0) return true;
 
-		// 每次发送短信时间间隔控制
-		if (Timezone::gmtime() < $record->add_time + $this->interval) {
-			$this->errors = sprintf(Language::get('send_limit_frequency_one_time'), $this->interval);
+		// 每分钟发送数量控制[间隔多少秒可发送的请在前端控制]
+		if (($count >= $this->minuteTimes) && (Timezone::gmtime() < $record->add_time + 60)) {
+			$this->errors = sprintf(Language::get('send_limit_frequency_minute'), $this->minuteTimes);
 			return false;
 		}
 
-		// 半小时内发送数量控制
-		if (($count % $this->semihourTimes == 0) && (Timezone::gmtime() < $record->add_time + 1800)) {
-			$this->errors = sprintf(Language::get('send_limit_frequency_five_time'), $this->semihourTimes);
+		// 每小时发送数量控制
+		if (($count >= $this->hourTimes) && (Timezone::gmtime() < $record->add_time + 3600)) {
+			$this->errors = sprintf(Language::get('send_limit_frequency_hour'), $this->hourTimes);
 			return false;
 		}
 
-		// 一天内发送数量控制
+		// 每天发送数量控制
 		if ($count >= $this->dayTimes) {
-			$this->errors = sprintf(Language::get('send_limit_frequency_daytimes'), $this->dayTimes);
+			$this->errors = sprintf(Language::get('send_limit_frequency_day'), $this->dayTimes);
 			return false;
 		}
 

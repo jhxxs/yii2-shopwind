@@ -34,7 +34,7 @@ class TeambuyController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取拼团活动列表
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/list
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/list
 	 */
 	public function actionList()
 	{
@@ -92,7 +92,7 @@ class TeambuyController extends \common\base\BaseApiController
 
 	/**
 	 * 获取拼团活动单条信息
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/read
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/read
 	 */
 	public function actionRead()
 	{
@@ -161,7 +161,7 @@ class TeambuyController extends \common\base\BaseApiController
 
 	/**
 	 * 获取拼团订单列表信息
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/logs
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/logs
 	 */
 	public function actionLogs()
 	{
@@ -214,7 +214,7 @@ class TeambuyController extends \common\base\BaseApiController
 
 	/**
 	 * 插入拼团信息
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/add
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/add
 	 */
 	public function actionAdd()
 	{
@@ -237,7 +237,7 @@ class TeambuyController extends \common\base\BaseApiController
 
 	/**
 	 * 更新拼团信息
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/update
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/update
 	 */
 	public function actionUpdate()
 	{
@@ -260,7 +260,7 @@ class TeambuyController extends \common\base\BaseApiController
 
 	/**
 	 * 删除拼团活动
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/delete
 	 */
 	public function actionDelete()
 	{
@@ -282,7 +282,7 @@ class TeambuyController extends \common\base\BaseApiController
 
 	/**
 	 * 关闭拼团活动
-	 * @api 接口访问地址: http://api.xxx.com/teambuy/closed
+	 * @api 接口访问地址: https://www.xxx.com/api/teambuy/closed
 	 */
 	public function actionClosed()
 	{

@@ -30,7 +30,7 @@ class WeixinController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取微信手机号（小程序端），使用<button open-type="getPhoneNumber"/>获取的CODE【未使用，预留】
-	 * @api 接口访问地址: http://api.xxx.com/weixin/phone
+	 * @api 接口访问地址: https://www.xxx.com/api/weixin/phone
 	 */
 	public function actionPhone()
 	{
@@ -52,7 +52,7 @@ class WeixinController extends \common\base\BaseApiController
 
 	/**
 	 * 获取H5端微信分享的签名
-	 * @api 接口访问地址: http://api.xxx.com/weixin/signature
+	 * @api 接口访问地址: https://www.xxx.com/api/weixin/signature
 	 */
 	public function actionSignature()
 	{
@@ -74,7 +74,7 @@ class WeixinController extends \common\base\BaseApiController
 
 	/**
 	 * 获取小程序二维码
-	 * @api 接口访问地址: http://api.xxx.com/weixin/qrcode
+	 * @api 接口访问地址: https://www.xxx.com/api/weixin/qrcode
 	 */
 	public function actionQrcode()
 	{
@@ -96,7 +96,7 @@ class WeixinController extends \common\base\BaseApiController
 
 	/**
 	 * 获取小程序的scheme码
-	 * @api 接口访问地址: http://api.xxx.com/weixin/scheme
+	 * @api 接口访问地址: https://www.xxx.com/api/weixin/scheme
 	 * 适用于短信、邮件、外部网页、微信内等拉起小程序的业务场景，获得到期失效和永久有效的小程序码
 	 * 生成的 URL Scheme 形式如：weixin://dl/business/?t= *TICKET*
 	 * iOS系统支持识别 URL Scheme，Android系统不支持直接识别 URL Scheme，用户无法通过 Scheme 正常打开小程序，开发者需要使用 H5 页面中转，再跳转到 Scheme 实现打开小程序，跳转代码示例如下：location.href = 'weixin://dl/business/?t= *TICKET*'
@@ -118,7 +118,7 @@ class WeixinController extends \common\base\BaseApiController
 
 	/**
 	 * 获取小程序 URL Link
-	 * @api 接口访问地址: http://api.xxx.com/weixin/mpurl
+	 * @api 接口访问地址: https://www.xxx.com/api/weixin/mpurl
 	 * 适用于短信、邮件、网页、微信内等拉起小程序的业务场景，获得到期失效和永久有效的小程序链接
 	 * 生成的 URL Link 形式如：https://wxaurl.cn/*TICKET* 或 https://wxmpurl.cn/*TICKET*
 	 * 在微信内或者安卓手机打开 URL Link 时，默认会先跳转官方 H5 中间页，如果需要定制 H5 内容，可以使用云开发静态网站

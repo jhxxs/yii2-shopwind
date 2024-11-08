@@ -32,7 +32,7 @@ class WholesaleController extends \common\base\BaseApiController
 {
     /**
      * 获取卖家管理的批发商品列表
-     * @api 接口访问地址: http://api.xxx.com/seller/wholesale/list
+     * @api 接口访问地址: https://www.xxx.com/api/seller/wholesale/list
      */
     public function actionList()
     {

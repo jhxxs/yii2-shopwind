@@ -52,31 +52,28 @@ class Buyer_orderCancelForm extends Model
 	 */
 	public function submit($post = null, $orders = [], $sendNotify = true)
 	{
-		foreach ($orders as $order_id => $orderInfo)
- 		{
+		foreach ($orders as $order_id => $orderInfo) {
 			// 修改订单状态
 			OrderModel::updateAll(['status' => Def::ORDER_CANCELED, 'finished_time' => Timezone::gmtime()], ['order_id' => $order_id]);
-				
+
 			// 修改交易状态
 			DepositTradeModel::updateAll(['status' => 'CLOSED', 'end_time' => Timezone::gmtime()], ['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn'], 'buyer_id' => Yii::$app->user->id]);
-				
+
 			// 订单取消后，归还买家之前被预扣积分 
 			IntegralModel::returnIntegral($orderInfo);
-				
-  			// 加回商品库存
+
+			// 加回商品库存
 			OrderModel::changeStock('+', $order_id);
-				
+
 			// 记录订单操作日志
 			OrderLogModel::create($order_id, Def::ORDER_FINISHED, addslashes(Yii::$app->user->identity->username), $post->remark ? $post->remark : $post->cancel_reason);
 
-			// 发送给卖家订单取消通知
-			if($sendNotify === true) {
-				$mailer = Basewind::getMailer('toseller_cancel_order_notify', ['order' => $orderInfo, 'reason' => $post->cancel_reason]);
-				if($mailer && ($toEmail = UserModel::find()->select('email')->where(['userid' => $orderInfo['seller_id']])->scalar())) {
-					$mailer->setTo($toEmail)->send();
-				}
+			// 发送邮件给卖家订单取消通知
+			$mailer = Basewind::getMailer('toseller_cancel_order_notify', ['order' => $orderInfo, 'reason' => $post->cancel_reason]);
+			if ($mailer && ($toEmail = UserModel::find()->select('email')->where(['userid' => $orderInfo['seller_id']])->scalar())) {
+				$mailer->setTo($toEmail)->send();
 			}
-   		}
+		}
 		return true;
 	}
 }

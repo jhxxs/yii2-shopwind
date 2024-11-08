@@ -110,7 +110,7 @@
 						<el-table-column prop="order_amount" label="订单总价" width="150" align="center">
 							<template #default="scope">
 								<strong class="f-yahei">{{ currency(scope.row[scope.column.property]) }}</strong>
-								<p v-if="scope.row.gtype == 'material'" class="f-12">(含运费{{ scope.row.shipping_fee }})</p>
+								<p v-if="scope.row.gtype == 'material'" class="f-12">(含运费{{ scope.row.freight }})</p>
 							</template>
 						</el-table-column>
 						<el-table-column prop="buyer_name" label="买家" width="150" sortable />

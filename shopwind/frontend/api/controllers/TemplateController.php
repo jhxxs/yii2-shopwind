@@ -28,7 +28,7 @@ class TemplateController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取模板拖拽模块配置信息(该接口为内部使用，不要开放)
-	 * @api 接口访问地址: http://api.xxx.com/template/block
+	 * @api 接口访问地址: https://www.xxx.com/api/template/block
 	 */
 	public function actionBlock()
 	{

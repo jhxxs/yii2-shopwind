@@ -37,7 +37,7 @@ class IntegralController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取平台积分设置
-	 * @api 接口访问地址: http://api.xxx.com/integral/setting
+	 * @api 接口访问地址: https://www.xxx.com/api/integral/setting
 	 */
     public function actionSetting()
     {
@@ -56,7 +56,7 @@ class IntegralController extends \common\base\BaseApiController
 
 	/**
 	 * 获取积分用户列表
-	 * @api 接口访问地址: http://api.xxx.com/integral/user
+	 * @api 接口访问地址: https://www.xxx.com/api/integral/user
 	 */
     public function actionUser()
     {
@@ -79,7 +79,7 @@ class IntegralController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取当前用户积分信息
-	 * @api 接口访问地址: http://api.xxx.com/integral/read
+	 * @api 接口访问地址: https://www.xxx.com/api/integral/read
 	 */
     public function actionRead()
     {
@@ -107,7 +107,7 @@ class IntegralController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取积分商品列表
-	 * @api 接口访问地址: http://api.xxx.com/integral/goods
+	 * @api 接口访问地址: https://www.xxx.com/api/integral/goods
 	 */
     public function actionGoods()
     {
@@ -164,7 +164,7 @@ class IntegralController extends \common\base\BaseApiController
 	
 	/**
 	 * 当前用户签到领积分
-	 * @api 接口访问地址: http://api.xxx.com/integral/signin
+	 * @api 接口访问地址: https://www.xxx.com/api/integral/signin
 	 */
     public function actionSignin()
     {

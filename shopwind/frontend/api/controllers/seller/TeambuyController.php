@@ -31,7 +31,7 @@ class TeambuyController extends \common\base\BaseApiController
 {
     /**
      * 获取拼团活动列表
-     * @api 接口访问地址: http://api.xxx.com/seller/teambuy/list
+     * @api 接口访问地址: https://www.xxx.com/api/seller/teambuy/list
      */
     public function actionList()
     {

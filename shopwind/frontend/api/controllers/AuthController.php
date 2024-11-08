@@ -37,7 +37,7 @@ class AuthController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取访问TOKEN
-	 * @api 接口访问地址: http://api.xxx.com/auth/token
+	 * @api 接口访问地址: https://www.xxx.com/api/auth/token
 	 */
 	public function actionToken()
 	{
@@ -58,7 +58,7 @@ class AuthController extends \common\base\BaseApiController
 
 	/**
 	 * 获取用户登录TOKEN
-	 * @api 接口访问地址: http://api.xxx.com/auth/login
+	 * @api 接口访问地址: https://www.xxx.com/api/auth/login
 	 */
 	public function actionLogin()
 	{
@@ -88,7 +88,7 @@ class AuthController extends \common\base\BaseApiController
 
 	/**
 	 * 第三方账号联合登录授权接口[Web端，适合于授权跳转的场景]
-	 * @api 接口访问地址: http://api.xxx.com/auth/connect
+	 * @api 接口访问地址: https://www.xxx.com/api/auth/connect
 	 */
 	public function actionConnect()
 	{

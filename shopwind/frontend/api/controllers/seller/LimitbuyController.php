@@ -32,7 +32,7 @@ class LimitbuyController extends \common\base\BaseApiController
 {
     /**
      * 获取卖家管理的秒杀商品列表
-     * @api 接口访问地址: http://api.xxx.com/seller/limitbuy/list
+     * @api 接口访问地址: https://www.xxx.com/api/seller/limitbuy/list
      */
     public function actionList()
     {

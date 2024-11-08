@@ -36,7 +36,7 @@ class UserController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取用户信息列表
-	 * @api 接口访问地址: http://api.xxx.com/user/list
+	 * @api 接口访问地址: https://www.xxx.com/api/user/list
 	 */
 	public function actionList()
 	{
@@ -69,7 +69,7 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 获取用户单条信息
-	 * @api 接口访问地址: http://api.xxx.com/user/read
+	 * @api 接口访问地址: https://www.xxx.com/api/user/read
 	 */
 	public function actionRead()
 	{
@@ -111,13 +111,13 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 插入用户信息
-	 * @api 接口访问地址: http://api.xxx.com/user/add
+	 * @api 接口访问地址: https://www.xxx.com/api/user/add
 	 */
 	public function actionAdd() {}
 
 	/**
 	 * 更新用户信息
-	 * @api 接口访问地址: http://api.xxx.com/user/update
+	 * @api 接口访问地址: https://www.xxx.com/api/user/update
 	 */
 	public function actionUpdate()
 	{
@@ -148,7 +148,7 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 更新用户登录密码
-	 * @api 接口访问地址: http://api.xxx.com/user/password
+	 * @api 接口访问地址: https://www.xxx.com/api/user/password
 	 */
 	public function actionPassword()
 	{
@@ -192,7 +192,7 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 更新用户手机号
-	 * @api 接口访问地址: http://api.xxx.com/user/phone
+	 * @api 接口访问地址: https://www.xxx.com/api/user/phone
 	 */
 	public function actionPhone()
 	{
@@ -243,13 +243,13 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 删除用户信息
-	 * @api 接口访问地址: http://api.xxx.com/user/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/user/delete
 	 */
 	public function actionDelete() {}
 
 	/**
 	 * 注销当前账号
-	 * @api 接口访问地址: http://api.xxx.com/user/logoff
+	 * @api 接口访问地址: https://www.xxx.com/api/user/logoff
 	 */
 	public function actionLogoff()
 	{
@@ -272,7 +272,7 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 关联账号绑定[已有用户且登录的情况下]
-	 * @api 接口访问地址: http://api.xxx.com/user/bind
+	 * @api 接口访问地址: https://www.xxx.com/api/user/bind
 	 */
 	public function actionBind()
 	{
@@ -311,7 +311,7 @@ class UserController extends \common\base\BaseApiController
 
 	/**
 	 * 关联账号解绑[已有用户且登录的情况下]
-	 * @api 接口访问地址: http://api.xxx.com/user/unbind
+	 * @api 接口访问地址: https://www.xxx.com/api/user/unbind
 	 */
 	public function actionUnbind()
 	{

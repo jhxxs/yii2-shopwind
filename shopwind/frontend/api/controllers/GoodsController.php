@@ -48,7 +48,7 @@ class GoodsController extends \common\base\BaseApiController
 {
 	/**
 	 * 获取商品列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/list
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/list
 	 */
 	public function actionList()
 	{
@@ -125,7 +125,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 搜索商品列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/search
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/search
 	 */
 	public function actionSearch()
 	{
@@ -202,7 +202,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 商品推送/猜你喜欢数据（或感兴趣的商品）
-	 * @api 接口访问地址: http://api.xxx.com/goods/push
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/push
 	 * @var int $limit 需要获取的数量
 	 * @var string|int $cate_id  用逗号隔开的多个id或一个id，如：cate_id=1 或 cate_id=1,2,3
 	 * @var int $store_id
@@ -271,7 +271,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品单条信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/read
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/read
 	 */
 	public function actionRead()
 	{
@@ -294,7 +294,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品描述信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/description
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/description
 	 */
 	public function actionDescription()
 	{
@@ -316,7 +316,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 插入商品信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/add
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/add
 	 */
 	public function actionAdd()
 	{
@@ -339,7 +339,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 更新商品信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/update
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/update
 	 */
 	public function actionUpdate()
 	{
@@ -362,7 +362,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 删除商品信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/delete
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/delete
 	 */
 	public function actionDelete()
 	{
@@ -389,7 +389,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品规格列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/specs
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/specs
 	 */
 	public function actionSpecs()
 	{
@@ -443,7 +443,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品规格单条信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/spec
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/spec
 	 */
 	public function actionSpec()
 	{
@@ -467,7 +467,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品价格单条信息（考虑促销价格）
-	 * @api 接口访问地址: http://api.xxx.com/goods/price
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/price
 	 */
 	public function actionPrice()
 	{
@@ -495,7 +495,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品上下架状态信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/shelfstate
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/shelfstate
 	 */
 	public function actionShelfstate()
 	{
@@ -519,7 +519,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品相册图片列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/images
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/images
 	 */
 	public function actionImages()
 	{
@@ -543,7 +543,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品相册单张图片信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/image
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/image
 	 */
 	public function actionImage()
 	{
@@ -565,7 +565,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品描述图片列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/descimages
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/descimages
 	 */
 	public function actionDescimages()
 	{
@@ -598,7 +598,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品属性列表信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/attributes
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/attributes
 	 */
 	public function actionAttributes()
 	{
@@ -621,7 +621,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品物流运费信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/logistics
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/logistics
 	 * @return 返回多个运费方式(express/ems/post)的运费情况
 	 */
 	public function actionLogistics()
@@ -647,7 +647,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取库存预警商品列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/stockwarn
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/stockwarn
 	 */
 	public function actionStockwarn()
 	{
@@ -687,7 +687,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品销售记录列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/salelogs
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/salelogs
 	 */
 	public function actionSalelogs()
 	{
@@ -721,7 +721,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品评价记录列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/comments
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/comments
 	 * @var boolean $commented 是否只读有评论内容的记录
 	 */
 	public function actionComments()
@@ -779,7 +779,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品问答列表
-	 * @api 接口访问地址: http://api.xxx.com/goods/qas
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/qas
 	 * @var boolean $replied 是否只读有回复内容的记录
 	 */
 	public function actionQas()
@@ -815,7 +815,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 插入商品问答信息
-	 * @api 接口访问地址: http://api.xxx.com/goods/qaadd
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/qaadd
 	 * @var boolean $anonymous 是否匿名咨询
 	 */
 	public function actionQaadd()
@@ -858,7 +858,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 商品收藏
-	 * @api 接口访问地址: http://api.xxx.com/goods/collect
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/collect
 	 * @var int $goods_id
 	 * @var boolean $remove 取消收藏
 	 */
@@ -903,7 +903,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 批量获取指定商品列表 （即将废弃，请改用goods/list接口）
-	 * @api 接口访问地址: http://api.xxx.com/goods/query
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/query
 	 * @var string|int $goods_id
 	 * @example goods_id=1 或 goods_id=1,2,3
 	 * @var string|int $spec_id
@@ -954,7 +954,7 @@ class GoodsController extends \common\base\BaseApiController
 
 	/**
 	 * 获取商品推广海报
-	 * @api 接口访问地址: http://api.xxx.com/goods/qrcode
+	 * @api 接口访问地址: https://www.xxx.com/api/goods/qrcode
 	 */
 	public function actionQrcode()
 	{

@@ -129,7 +129,7 @@ class RefundForm extends Model
 			list($realGoodsAmount, $realShippingFee, $realOrderAmount) = OrderModel::getRealAmount($post->order_id);
 			$refund = array_merge([], ArrayHelper::toArray($trade));
 			$refund['goods_fee'] = $realGoodsAmount;
-			$refund['shipping_fee'] = $realShippingFee;
+			$refund['freight'] = $realShippingFee;
 			$refund['total_fee'] = $realOrderAmount;
 		}
 		
@@ -169,7 +169,7 @@ class RefundForm extends Model
 			$model->buyer_id = Yii::$app->user->id;
 			$model->seller_id = $order->seller_id;
 			$model->goods_fee = $refund['goods_fee'];
-			$model->shipping_fee = $refund['shipping_fee'];
+			$model->freight = $refund['freight'];
 			$model->total_fee = $refund['total_fee'];
 			$model->created = Timezone::gmtime();
 			
@@ -184,8 +184,8 @@ class RefundForm extends Model
 		}
 		
 		$model->refund_goods_fee    = $post->refund_goods_fee ? $post->refund_goods_fee : 0;
-		$model->refund_shipping_fee = $post->refund_shipping_fee ? $post->refund_shipping_fee: 0;
-		$model->refund_total_fee 	= $model->refund_goods_fee + $model->refund_shipping_fee;
+		$model->refund_freight = $post->refund_freight ? $post->refund_freight: 0;
+		$model->refund_total_fee 	= $model->refund_goods_fee + $model->refund_freight;
 		$model->shipped				= $post->shipped;
 		$model->refund_reason		= htmlspecialchars($post->refund_reason);
 		$model->refund_desc			= htmlspecialchars($post->refund_desc);
@@ -198,76 +198,72 @@ class RefundForm extends Model
 		$query->owner_id = Yii::$app->user->id;
 		$query->owner_role = 'buyer';
 		$query->refund_id = $model->refund_id;
-		$query->content = sprintf(Language::get($get->id ? 'refund_content_change' : 'refund_content_apply'), $post->refund_goods_fee, $post->refund_shipping_fee, Language::get('shipped_'.$post->shipped), $post->refund_reason, $post->refund_desc);
+		$query->content = sprintf(Language::get($get->id ? 'refund_content_change' : 'refund_content_apply'), $post->refund_goods_fee, $post->refund_freight, Language::get('shipped_'.$post->shipped), $post->refund_reason, $post->refund_desc);
 		$query->created = Timezone::gmtime();
 		if(!$query->save()) {
 			$this->errors = $model->errors ? $model->errors : Language::get('refund_message_save_fail');
 			return false;
 		}
-		
+
 		// 如果是添加退款申请
-		if(!$get->id && $sendNotify)
-		{
+		if (!$get->id) {
 			// 短信提醒： 买家已申请退款通知卖家
-			Basewind::sendMailMsgNotify(ArrayHelper::toArray($order), array(),
-				array(
+			Basewind::sendMailMsgNotify(
+				ArrayHelper::toArray($order),
+				[],
+				[
+					'sender' => $order->seller_id,
+					'receiver' => $order->seller_id,
 					'key' => 'toseller_refund_apply_notify',
-				)
+				]
 			);
 		}
-		
-		return $model;	
+
+		return $model;
 	}
-	
+
 	/**
 	 * 检测退款信息
 	 */
 	public function checkData($post = null, $refund = array())
 	{
 		$realAmount = [];
-		
+
 		// 订单实际金额信息（考虑折扣，调价的情况） - 其他类型交易的退款，在此拓展
-		if(($refund['bizIdentity'] == Def::TRADE_ORDER) && $refund['bizOrderId']) {
-			if(($order = OrderModel::find()->select('order_id')->where(['order_sn' => $refund['bizOrderId']])->one())) {
+		if (($refund['bizIdentity'] == Def::TRADE_ORDER) && $refund['bizOrderId']) {
+			if (($order = OrderModel::find()->select('order_id')->where(['order_sn' => $refund['bizOrderId']])->one())) {
 				$realAmount = OrderModel::getRealAmount($order->order_id);
 			}
 		}
 		list($realGoodsAmount, $realShippingFee, $realOrderAmount) = $realAmount;
-		
-		if((!$post->refund_goods_fee && !$post->refund_shipping_fee) || (floatval($post->refund_goods_fee) + floatval($post->refund_shipping_fee)) < 0)
-		{
+
+		if ((!$post->refund_goods_fee && !$post->refund_freight) || (floatval($post->refund_goods_fee) + floatval($post->refund_freight)) < 0) {
 			$this->errors = Language::get('refund_fee_ge0');
 			return false;
-		} 
-		elseif(floatval($post->refund_goods_fee) > $realGoodsAmount)
-		{
+		} elseif (floatval($post->refund_goods_fee) > $realGoodsAmount) {
 			$this->errors = Language::get('refund_fee_error');
 			return false;
 		}
-		if($post->refund_shipping_fee && floatval($post->refund_shipping_fee) < 0)
-		{
-			$this->errors = Language::get('refund_shipping_fee_ge0');
+		if ($post->refund_freight && floatval($post->refund_freight) < 0) {
+			$this->errors = Language::get('refund_freight_ge0');
 			return false;
 		}
 
-		if(floatval($post->refund_shipping_fee) > $realShippingFee) 
-		{
-			$this->errors = Language::get('refund_shipping_fee_error');
+		if (floatval($post->refund_freight) > $realShippingFee) {
+			$this->errors = Language::get('refund_freight_error');
 			return false;
 		}
-		if(!in_array($post->shipped, [0,1,2])) 
-		{
-			$this->errors = Language::get('select_refund_shipped');
-			return false;
-		}
-		if(empty($post->refund_reason)) 
-		{
+		// if (!in_array($post->shipped, [0, 1, 2])) {
+		// 	$this->errors = Language::get('select_refund_shipped');
+		// 	return false;
+		// }
+		if (empty($post->refund_reason)) {
 			$this->errors = Language::get('select_refund_reason');
 			return false;
 		}
 		return true;
 	}
-	
+
 	public function getShippedOptions()
 	{
 		return array(Language::get('shipped_0'), Language::get('shipped_1'), Language::get('shipped_2'));
@@ -275,19 +271,18 @@ class RefundForm extends Model
 	public function getRefundReasonOptions()
 	{
 		$reasons = array();
-		for($i = 0; $i <= 7; $i++) {
-			$reasons[$i] = Language::get('reason_'.$i);
+		for ($i = 0; $i <= 7; $i++) {
+			$reasons[$i] = Language::get('reason_' . $i);
 		}
 		return $reasons;
 	}
 
 	/**
 	 * 获取退款标题
-	 * @api API接口用到该数据
 	 */
 	public function getRefundTitle($order_id = 0)
 	{
-		if(($query = OrderGoodsModel::find()->select('goods_name')->where(['order_id' => $order_id])->orderBy(['rec_id' => SORT_DESC]))) {
+		if (($query = OrderGoodsModel::find()->select('goods_name')->where(['order_id' => $order_id])->orderBy(['rec_id' => SORT_DESC]))) {
 			return addslashes($query->one()->goods_name . ($query->count() > 1 ? Language::get('and_more') : ''));
 		}
 		return '';

@@ -135,10 +135,10 @@ class OrderModel extends ActiveRecord
 			$realOrderAmount = $orderInfo->order_amount;
 			$realGoodsAmount = $orderInfo->order_amount; // 无运费情况
 
-			$orderExtm = OrderExtmModel::find()->select('shipping_fee')->where(['order_id' => $order_id])->one();
+			$orderExtm = OrderExtmModel::find()->select('freight')->where(['order_id' => $order_id])->one();
 			if ($orderExtm) { // 注：服务类核销商品没有记录
 				// 如果实际支付的金额还不到运费的总额，那么先扣完商品总价后，剩余为运费分摊的金额
-				$realShippingFee = ($orderExtm->shipping_fee >= $orderInfo->order_amount) ? $orderInfo->order_amount : $orderExtm->shipping_fee;
+				$realShippingFee = ($orderExtm->freight >= $orderInfo->order_amount) ? $orderInfo->order_amount : $orderExtm->freight;
 				$realGoodsAmount = $orderInfo->order_amount - $realShippingFee;
 			}
 		}

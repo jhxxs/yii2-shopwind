@@ -33,7 +33,7 @@ class FavoriteController extends \common\base\BaseApiController
 {
 	/** 
 	 * 获取我收藏的商品列表
-	 * @api 接口访问地址: http://api.xxx.com/favorite/goods
+	 * @api 接口访问地址: https://www.xxx.com/api/favorite/goods
 	 */
     public function actionGoods()
 	{
@@ -67,7 +67,7 @@ class FavoriteController extends \common\base\BaseApiController
 
 	/** 
 	 * 获取我收藏的店铺列表
-	 * @api 接口访问地址: http://api.xxx.com/favorite/store
+	 * @api 接口访问地址: https://www.xxx.com/api/favorite/store
 	 */
     public function actionStore()
 	{
@@ -101,7 +101,7 @@ class FavoriteController extends \common\base\BaseApiController
 	
 	/**
 	 * 获取我的收藏的数量（商品或店铺）
-	 * @api 接口访问地址: http://api.xxx.com/favorite/quantity
+	 * @api 接口访问地址: https://www.xxx.com/api/favorite/quantity
 	 */
     public function actionQuantity()
     {

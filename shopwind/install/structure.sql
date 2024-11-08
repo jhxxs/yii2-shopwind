@@ -1077,7 +1077,7 @@ CREATE TABLE IF NOT EXISTS `swd_order_extm` (
   `phone_tel` varchar(60) DEFAULT '',
   `phone_mob` varchar(20) DEFAULT '',
   `shipping_name` varchar(100) DEFAULT NULL,
-  `shipping_fee` decimal(10,2) DEFAULT '0.00',
+  `freight` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1253,10 +1253,10 @@ CREATE TABLE IF NOT EXISTS `swd_refund` (
   `refund_desc` varchar(255) DEFAULT '',
   `total_fee` decimal(10,2) DEFAULT '0',
   `goods_fee` decimal(10,2) DEFAULT '0',
-  `shipping_fee` decimal(10,2) DEFAULT '0',
+  `freight` decimal(10,2) DEFAULT '0',
   `refund_total_fee` decimal(10,2) DEFAULT '0',
   `refund_goods_fee` decimal(10,2) DEFAULT '0',
-  `refund_shipping_fee` decimal(10,2) DEFAULT '0',
+  `refund_freight` decimal(10,2) DEFAULT '0',
   `buyer_id` int(10) NOT NULL,
   `seller_id` int(10) NOT NULL,
   `status` varchar(100) DEFAULT '',
@@ -1434,7 +1434,7 @@ DROP TABLE IF EXISTS `swd_store`;
 CREATE TABLE IF NOT EXISTS `swd_store` (
   `store_id` int(10) unsigned NOT NULL DEFAULT '0',
   `store_name` varchar(100) NOT NULL DEFAULT '',
-  `owner_name` varchar(60) DEFAULT '',
+  `owner` varchar(60) DEFAULT '',
   `identity_card` varchar(60) DEFAULT '',
   `region_id` int(10) unsigned DEFAULT NULL,
   `address` varchar(255) DEFAULT '',

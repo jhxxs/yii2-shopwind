@@ -31,7 +31,7 @@ class CouponController extends \common\base\BaseApiController
 {
 	/**
  	 * 获取优惠券列表
-	 * @api 接口访问地址: http://api.xxx.com/seller/coupon/list
+	 * @api 接口访问地址: https://www.xxx.com/api/seller/coupon/list
 	 */
     public function actionList()
     {

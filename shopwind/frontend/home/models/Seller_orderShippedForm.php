@@ -36,7 +36,7 @@ class Seller_orderShippedForm extends Model
 	public $errors = null;
 
 	/**
-	 * 供货商 & 门店发货
+	 * 供货商发货
 	 */
 	public function submit($post = null, $orderInfo = [], $sendNotify = true)
 	{
@@ -81,18 +81,6 @@ class Seller_orderShippedForm extends Model
 				$this->errors = $express->errors;
 				return false;
 			}
-
-			// 如果是小程序订单，则上传发货信息给微信（小程序上架要求：实物订单必须上传发货信息）
-			/*if ($model->payment_code == 'wxmppay') {
-				$client = Plugin::getInstance('other')->build('wxship');
-				if ($client->isInstall()) {
-					if ($client->upload($model)) {
-						// 0=未退，1=已推，2=已重推，微信限制发货信息只能推送2次
-						$model->shipwx = $model->shipwx ? $model->shipwx + 1 : 1;
-						$model->save();
-					}
-				}
-			}*/
 		}
 
 		// 更新交易状态
@@ -101,25 +89,20 @@ class Seller_orderShippedForm extends Model
 		// 记录订单操作日志
 		OrderLogModel::create($orderInfo['order_id'], Def::ORDER_SHIPPED, addslashes(Yii::$app->user->identity->username), $post->remark);
 
-		if ($sendNotify === true) {
-
-			// 收货人的手机号
-			$query = OrderExtmModel::find()->select('phone_mob')->where(['order_id' => $orderInfo['order_id']])->one();
-			$phone_mob = $query ? $query->phone_mob : '';
-
 			// 短信和邮件提醒： 已发货通知买家
 			Basewind::sendMailMsgNotify(
 				array_merge($orderInfo, ['express_no' => $post->number]),
-				array(
-					'key' 		=> 'tobuyer_shipped_notify',
-					'receiver' 	=> $orderInfo['buyer_id']
-				),
-				array(
-					'key' 		=> 'tobuyer_shipped_notify',
-					'receiver'  => $phone_mob, // 收货人的手机号
-				)
-			);
-		}
+				[
+				'receiver' 	=> $orderInfo['buyer_id'],
+				'key' 		=> 'tobuyer_shipped_notify'
+			],
+			[
+				'sender' 	=> $orderInfo['seller_id'],
+				'receiver'  => OrderExtmModel::find()->select('phone_mob')->where(['order_id' => $orderInfo['order_id']])->scalar(), // 收货人的手机号
+				'key' 		=> 'tobuyer_shipped_notify',
+			]
+		);
+
 		return true;
 	}
 }
