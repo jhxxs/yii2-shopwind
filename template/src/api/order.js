@@ -330,3 +330,21 @@ export function orderExport(params, callback, loading) {
 		}
 	}, loading)
 }
+
+/**
+ * 订单导出商品明细
+ * @param {Object} params 
+ * @param {Function} callback 
+ * @param {ElLoading} loading 
+ */
+export function orderExportItems(params, callback, loading) {
+	request('order/exportitems', params, (res) => {
+		if (res.code == 0) {
+			if (typeof callback == 'function') {
+				callback(res.data)
+			}
+		} else {
+			ElMessage.warning(res.message)
+		}
+	}, loading)
+}

@@ -172,8 +172,6 @@
 						</el-table-column>
 					</el-table>
 					<div v-if="pagination.total > 0" class="mt20 center">
-						<el-button v-if="form.type == 'accepted'" type="primary" @click="shipClick(mulselection)"
-							:disabled="mulselection.length > 0 ? false : true">批量发货</el-button>
 						<el-button type="primary" @click="dialogPrintVisible = true"
 							:disabled="mulselection.length > 0 ? false : true">打印订单</el-button>
 						<el-button type="primary" @click="dialogExportVisible = true"
@@ -193,9 +191,8 @@
 		</el-row>
 	</div>
 
-	<shipped v-if="gallery.length > 0" :title="mulselection.length > 1 ? '批量发货' : '发货'" :visible="dialogShipVisible"
-		:data="mulselection" @close="dialogClose">
-	</shipped>
+	<shipped v-if="gallery.length > 0" title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]"
+		@close="dialogClose"></shipped>
 	<canceled v-if="gallery.length > 0" title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]"
 		@close="dialogClose"></canceled>
 	<printed v-if="mulselection.length > 0" title="打印订单" :visible="dialogPrintVisible" :data="mulselection"
@@ -251,7 +248,7 @@ const queryClick = () => {
 
 const shipClick = (value) => {
 	dialogShipVisible.value = true
-	mulselection.value = value
+	modifyIndex.value = value
 }
 const cancelClick = (value) => {
 	dialogCancelVisible.value = true
@@ -271,8 +268,7 @@ const dialogClose = (value) => {
 	dialogPrintVisible.value = false
 	dialogExportVisible.value = false
 	dialogExportItemsVisible.value = false
-	//Object.assign(gallery.value[modifyIndex.value], value ? value : {})
-	getList()
+	Object.assign(gallery.value[modifyIndex.value], value ? value : {})
 }
 
 const changeClick = (value, field) => {

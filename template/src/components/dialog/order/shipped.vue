@@ -15,7 +15,7 @@
             </el-form-item>
         </el-form>
         <template #footer>
-            <el-button @click="close">关闭</el-button>
+            <el-button @click="close" :disabled="loading">关闭</el-button>
             <el-button type="primary" @click="submit" :loading="loading">提交</el-button>
         </template>
     </el-dialog>
@@ -87,7 +87,7 @@ const close = () => {
 </script>
 <style scoped>
 .el-form {
-    margin: 0 100px;
+    margin: 0 56px;
 }
 
 .el-form .el-select {
