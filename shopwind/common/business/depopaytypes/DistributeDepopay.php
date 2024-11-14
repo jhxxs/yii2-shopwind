@@ -19,6 +19,7 @@ use common\models\DistributeOrderModel;
 use common\models\OrderGoodsModel;
 use common\models\DepositTradeModel;
 use common\models\DepositRecordModel;
+use common\models\DepositAccountModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -149,7 +150,7 @@ class DistributeDepopay extends IncomeDepopay
 			$query->tradeNo = $model->tradeNo;
 			$query->userid = $model->buyer_id;
 			$query->amount = $model->amount;
-			$query->balance = parent::_update_deposit_money($model->buyer_id, $model->amount, $change);
+			$query->balance = DepositAccountModel::updateDepositMoney($model->buyer_id, $model->amount, $change);
 			$query->tradeType = $this->_tradeType;
 			$query->flow = $model->flow;
 			$query->name = $model->title;

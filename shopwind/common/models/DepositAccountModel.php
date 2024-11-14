@@ -145,32 +145,18 @@ class DepositAccountModel extends ActiveRecord
 		return $query->$fields;
 	}
 
-	/* 更新账户余额，增加（如卖出商品）或者减少，并返回最新的余额 
-	 * @var string $change  add|reduce
-	 */
-	public static function updateDepositMoney($userid = 0, $amount = 0, $change = 'add')
-	{
-		if (($model = self::getAccountInfo($userid))) {
-			if ($amount > 0) {
-				$model->updateCounters(['money' => ($change == 'add') ? $amount : -$amount]);
-			}
-			return $model->money;
-		}
-
-		return false;
-	}
-
 	/**
-	 * 更新冻结金额，增加（如提现）或减少，并返回最新的冻结金额
-	 * @var string $change  add|reduce
+	 * 更新账户余额/冻结金额，并返回最新的值
+	 * @param string $field money|frozen
+	 * @param string $change  add|reduce
 	 */
-	public static function updateDepositFrozen($userid = 0, $amount = 0, $change = 'add')
+	public static function updateDepositMoney($userid = 0, $amount = 0, $change = 'add', $field = 'money')
 	{
 		if (($model = self::getAccountInfo($userid))) {
 			if ($amount > 0) {
-				$model->updateCounters(['frozen' => ($change == 'add') ? $amount : -$amount]);
+				$model->updateCounters([$field => ($change == 'add') ? $amount : -$amount]);
 			}
-			return $model->frozen;
+			return floatval($model->$field);
 		}
 
 		return false;

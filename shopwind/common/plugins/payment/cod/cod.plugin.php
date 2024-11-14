@@ -87,10 +87,10 @@ class Cod extends BasePayment
 				// 邮件提醒：订单已确认，等待安排发货
 				Basewind::sendMailMsgNotify(
 					$orderInfo,
-					array(
+					[
 						'receiver' 	=> $orderInfo['buyer_id'],
 						'key' => 'tobuyer_confirm_cod_order_notify',
-					)
+					]
 				);
 			}
 		}

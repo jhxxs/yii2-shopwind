@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\models\RefundModel;
 use common\models\RefundMessageModel;
 use common\models\UserPrivModel;
@@ -172,7 +173,7 @@ class RefundDepopay extends OutlayDepopay
 			'tradeNo'		=>	$extra_info['tradeNo'],
 			'userid'		=>	$trade_info['party_id'], // 买家
 			'amount'		=>  $trade_info['amount'],
-			'balance'		=>	parent::_update_deposit_money($trade_info['party_id'],  $trade_info['amount']), // 增加后的余额
+			'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['party_id'],  $trade_info['amount']), // 增加后的余额
 			'tradeType' 	=>  $this->_tradeType,
 			'flow'			=>	'income',
 			'name'			=>	Language::get('trade_refund_return'),
@@ -214,7 +215,7 @@ class RefundDepopay extends OutlayDepopay
 			'tradeNo'		=>  $extra_info['tradeNo'],
 			'userid'		=>	$trade_info['userid'], // 卖家
 			'amount'		=>  $extra_info['chajia'],
-			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $extra_info['chajia']), // 增加后的余额
+			'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['userid'],  $extra_info['chajia']), // 增加后的余额
 			'tradeType' 	=>  $this->_tradeType,
 			'flow'			=>	'income',
 			'name'			=>	Language::get('trade_refund_pay'),

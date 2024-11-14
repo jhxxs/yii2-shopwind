@@ -66,6 +66,7 @@ class DepositController extends \common\base\BaseAdminController
 				if (($username = UserModel::find()->select('username')->where(['userid' => $value['userid']])->scalar())) {
 					$list[$key]['username'] = $username;
 				}
+				$list[$key]['trade_rate'] = DepositSettingModel::getDepositSetting($value['userid'], 'trade_rate');
 			}
 
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
@@ -115,8 +116,7 @@ class DepositController extends \common\base\BaseAdminController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
 		if (in_array($post->column, ['pay_status'])) {
-			$model = DepositAccountModel::findOne($post->id);
-			if (!$model) {
+			if (!($model = DepositAccountModel::findOne($post->id))) {
 				return Message::warning(Language::get('no_data'));
 			}
 			$model->{$post->column} = $post->value ? 'ON' : 'OFF';
@@ -144,6 +144,32 @@ class DepositController extends \common\base\BaseAdminController
 		}
 	}
 
+	/* 异步修改数据 */
+	public function actionEditsetcol()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['userid']);
+		if (in_array($post->column, ['trade_rate'])) {
+			if (!($model = DepositSettingModel::find()->where(['userid' => $post->userid])->one())) {
+				$model = new DepositSettingModel();
+				$model->userid = $post->userid;
+			}
+
+			$value = floatval($post->value);
+			if ($value >= 1 || $value < 0) {
+				return Message::warning(Language::get('number_error'));
+			}
+
+			$model->{$post->column} = $value;
+			if (!$model->save()) {
+				return Message::warning($model->errors);
+			}
+			return Message::display(Language::get('edit_ok'));
+		}
+	}
+
+	/**
+	 * 交易记录
+	 */
 	public function actionTradelist()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
@@ -182,11 +208,55 @@ class DepositController extends \common\base\BaseAdminController
 				$list[$key]['buyer'] = UserModel::find()->select('username')->where(['userid' => $value['buyer_id']])->scalar();
 				$list[$key]['status'] = Language::get(strtolower($value['status']));
 
-				if ($value['payment_code']) {
-					$list[$key]['payment'] = Plugin::getInstance('payment')->build($value['payment_code'])->getInfo();
+				if ($value['payment_code'] && ($payment = Plugin::getInstance('payment')->build($value['payment_code']))) {
+					$list[$key]['payment'] = $payment->getInfo();
 				}
 
 				$partyInfo = DepositTradeModel::getPartyInfoByRecord($value['buyer_id'], $value);
+				$list[$key]['party'] = $partyInfo['name'];
+			}
+
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
+		}
+	}
+
+	/**
+	 * 指定用户的收支记录
+	 */
+	public function actionRecordlist()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['userid', 'limit', 'page']);
+
+		if (!Yii::$app->request->isAjax) {
+
+			$this->params['_foot_tags'] = Resource::import([
+				'script' => 'javascript/jquery.ui/jquery.ui.js,javascript/jquery.ui/i18n/' . Yii::$app->language . '.js',
+				'style' => 'javascript/jquery.ui/themes/smoothness/jquery.ui.css'
+			]);
+
+			$this->params['page'] = Page::seo(['title' => Language::get('deposit_recordlist')]);
+			return $this->render('../deposit.recordlist.html', $this->params);
+		} else {
+			$query = DepositRecordModel::find()->alias('dr')
+				->joinWith('depositTrade dt', false)
+				->joinWith('user u', false)
+				->select('dr.userid,dr.amount,dr.balance,dr.name,dr.flow,dt.tradeNo,dt.payTradeNo,dt.bizOrderId,dt.bizIdentity,dt.add_time,dt.pay_time,dt.end_time,dt.payment_code,dt.buyer_id,dt.seller_id,u.username')
+				->where(['dr.userid' => $post->userid])
+				->orderBy(['record_id' => SORT_DESC]);
+
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value) {
+				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
+				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
+				$list[$key]['end_time'] = Timezone::localDate('Y-m-d H:i:s', $value['end_time']);
+
+				if ($value['payment_code'] && ($payment = Plugin::getInstance('payment')->build($value['payment_code']))) {
+					$list[$key]['payment'] = $payment->getInfo();
+				}
+
+				$partyInfo = DepositTradeModel::getPartyInfoByRecord($value['userid'], $value);
 				$list[$key]['party'] = $partyInfo['name'];
 			}
 
@@ -285,23 +355,23 @@ class DepositController extends \common\base\BaseAdminController
 			DepositAccountModel::updateDepositFrozen($record['userid'], $record['amount'], 'reduce');
 
 			// 将冻结金额退回到账户余额（变更账户余额）
-			$quyery = new DepositRecordModel();
-			$quyery->tradeNo = $record['tradeNo'];
-			$quyery->userid = $record['userid'];
-			$quyery->amount = $record['amount'];
-			$quyery->balance = DepositAccountModel::updateDepositMoney($record['userid'], $record['amount']);
-			$quyery->tradeType =  'TRANSFER';
-			$quyery->name = Language::get('draw_return');
-			$quyery->flow = 'income';
-			$quyery->remark = $post->remark;
-			if (!$quyery->save()) {
+			$query = new DepositRecordModel();
+			$query->tradeNo = $record['tradeNo'];
+			$query->userid = $record['userid'];
+			$query->amount = $record['amount'];
+			$query->balance = DepositAccountModel::updateDepositMoney($record['userid'], $record['amount']);
+			$query->tradeType =  'TRANSFER';
+			$query->name = Language::get('draw_return');
+			$query->flow = 'income';
+			$query->remark = $post->remark;
+			if (!$query->save()) {
 				// TODO...
 			}
 		}
 		return Message::display(Language::get('refuse_draw_ok'));
 	}
 
-	/* 管理员手动给账户充值 */
+	/* 管理员手动给账户充值/扣费 */
 	public function actionRecharge()
 	{
 		$id = intval(Yii::$app->request->get('id', 0));

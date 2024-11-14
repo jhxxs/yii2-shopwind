@@ -56,7 +56,7 @@ class StoreController extends \common\base\BaseAdminController
 			return $this->render('../store.index.html', $this->params);
 		} else {
 			$query = StoreModel::find()
-				->select('store_id,store_name,stype,sgrade,owner,region_id,add_time,end_time,state,recommended,sort_order,tel')
+				->select('store_id,store_name,stype,sgrade,owner,region_id,address,add_time,end_time,state,recommended,sort_order,tel')
 				->orderBy(['sort_order' => SORT_ASC, 'store_id' => SORT_DESC]);
 
 			$query = $this->getConditions($post, $query);
@@ -71,7 +71,7 @@ class StoreController extends \common\base\BaseAdminController
 				$list[$key]['state'] = $this->getStatus($value['state']);
 				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['store_id']])->scalar();
 
-				if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+				if ($array = RegionModel::getArray($value['region_id'])) {
 					$list[$key]['region'] = implode('', $array);
 				}
 			}
@@ -106,7 +106,7 @@ class StoreController extends \common\base\BaseAdminController
 				$list[$key]['state'] = $this->getStatus($value['state']);
 				$list[$key]['username'] = UserModel::find()->select('username')->where(['userid' => $value['store_id']])->scalar();
 
-				if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+				if ($array = RegionModel::getArray($value['region_id'])) {
 					$list[$key]['region'] = implode('', $array);
 				}
 			}
@@ -123,7 +123,7 @@ class StoreController extends \common\base\BaseAdminController
 		}
 
 		if (!Yii::$app->request->isPost) {
-			if ($array = RegionModel::getArrayRegion($store['region_id'])) {
+			if ($array = RegionModel::getArray($store['region_id'])) {
 				$store['region'] = implode('', $array);
 			}
 			$this->params['store'] = array_merge($store, ['scate_id' => CategoryStoreModel::find()->select('cate_id')->where(['store_id' => $get->id])->scalar()]);
@@ -188,7 +188,7 @@ class StoreController extends \common\base\BaseAdminController
 			$sgrades = SgradeModel::getOptions();
 			$store['sgrade'] = $sgrades[$store['sgrade']];
 
-			if ($array = RegionModel::getArrayRegion($store['region_id'])) {
+			if ($array = RegionModel::getArray($store['region_id'])) {
 				$store['region'] = implode('', $array);
 			}
 			$this->params['store'] = $store;

@@ -12,7 +12,7 @@
 						<label class="mr5">{$lang.select_acategory}</label>
 						<select class="querySelect" id="cate_id" name="cate_id">
 							<option value="">{$lang.select_pls}</option>
-							{html_options options=$acategories selected=$smarty.get.cate_id}
+							{html_options options=$acategories selected=$smarty.get.cate_id|escape}
 						</select>
 						<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7"
 							value="{$lang.query}" />

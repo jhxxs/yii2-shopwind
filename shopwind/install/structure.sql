@@ -1076,7 +1076,7 @@ CREATE TABLE IF NOT EXISTS `swd_order_extm` (
   `address` varchar(255) NOT NULL DEFAULT '',
   `phone_tel` varchar(60) DEFAULT '',
   `phone_mob` varchar(20) DEFAULT '',
-  `shipping_name` varchar(100) DEFAULT NULL,
+  `deliveryName` varchar(100) DEFAULT NULL,
   `freight` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

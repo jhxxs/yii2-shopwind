@@ -264,7 +264,7 @@ class BaseOrder
 					'address'       =>  $consignee_info['address'],
 					'phone_tel'     =>  $consignee_info['phone_tel'],
 					'phone_mob'     =>  $consignee_info['phone_mob'],
-					'shipping_name' =>  addslashes(Language::get($delivery_info[$store_id])),
+					'deliveryName' =>  addslashes(Language::get($delivery_info[$store_id])),
 					'freight'  =>  round($shipping[$consignee_info['region_id']][$delivery_info[$store_id]]['logistic_fees'], 2),
 				);
 			}

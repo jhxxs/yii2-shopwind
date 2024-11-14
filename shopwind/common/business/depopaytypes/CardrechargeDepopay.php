@@ -120,7 +120,7 @@ class CardrechargeDepopay extends IncomeDepopay
 		$model->tradeNo = $tradeInfo->tradeNo;
 		$model->userid = $tradeInfo->buyer_id;
 		$model->amount = $tradeInfo->amount;
-		$model->balance = parent::_update_deposit_money($tradeInfo->buyer_id, $tradeInfo->amount);
+		$model->balance = DepositAccountModel::updateDepositMoney($tradeInfo->buyer_id, $tradeInfo->amount);
 		$model->tradeType = $this->_tradeType;
 		$model->flow = $this->_flow;
 		

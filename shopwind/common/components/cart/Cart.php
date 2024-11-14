@@ -22,10 +22,10 @@ use common\components\cart\CartItem;
  * @Id Cart.php 2018.7.4 $
  * @author mosir
  */
- 
+
 class Cart extends Component
 {
-	/**
+    /**
      * @var string $storageClass
      */
     public $storageClass = 'common\components\cart\storage\DbSessionStorage';
@@ -47,8 +47,8 @@ class Cart extends Component
      * @var CartItem[]
      */
     private $items;
-	
-	/**
+
+    /**
      * @var \common\library\cart\storage\StorageInterface
      */
     private $storage;
@@ -68,34 +68,34 @@ class Cart extends Component
 
         $this->storage = new $this->storageClass($this->params);
     }
-	
-	/**
-	 * create an cart item
-	 */
-	public function createItem($params = array())
-	{
-		return CartItem::createProduct($params);		
-	}
-	
-	/**
-	 * move item to cart from session
-	 */
-	public function move()
-	{
-		$this->loadItems();
-	}
-	
-	/**
-	 * you can set any identification ID that is considered the same product in a shopping cart  
+
+    /**
+     * create an cart item
+     */
+    public function createItem($params = array())
+    {
+        return CartItem::createProduct($params);
+    }
+
+    /**
+     * move item to cart from session
+     */
+    public function move()
+    {
+        $this->loadItems();
+    }
+
+    /**
+     * you can set any identification ID that is considered the same product in a shopping cart  
      * @param array $params
-	 */
-	public function getId($params = array())
-	{
-		// 注意避免数值型转为字符型的情况,不要加入价格字段
-		return md5(serialize([intval($params['spec_id']), /*floatval($params['price']),*/ intval(Yii::$app->user->id)]));
-	}
-	
-	/**
+     */
+    public function getId($params = array())
+    {
+        // 注意避免数值型转为字符型的情况,不要加入价格字段
+        return md5(serialize([intval($params['spec_id']), /*floatval($params['price']),*/ intval(Yii::$app->user->id)]));
+    }
+
+    /**
      * put an item to the cart
      * @param object $product
      * @param integer $quantity
@@ -104,14 +104,14 @@ class Cart extends Component
     public function put($product, $quantity)
     {
         $this->loadItems();
-		if (isset($this->items[$product->product_id])) {
+        if (isset($this->items[$product->product_id])) {
             $this->plus($product->product_id, $quantity);
         } else {
             $this->add($product, $quantity);
         }
     }
 
-	/**
+    /**
      * Add an item to the cart
      * @param object $product
      * @param integer $quantity
@@ -119,11 +119,11 @@ class Cart extends Component
      */
     private function add($product, $quantity)
     {
-		$this->items[$product->product_id] = new CartItem($product, $quantity, $this->params);
-		$this->saveItems();
+        $this->items[$product->product_id] = new CartItem($product, $quantity, $this->params);
+        $this->saveItems();
     }
 
-	/**
+    /**
      * Adding item quantity in the cart
      * @param integer $id
      * @param integer $quantity
@@ -131,7 +131,7 @@ class Cart extends Component
      */
     private function plus($id, $quantity)
     {
- 		$this->items[$id]->setQuantity($quantity + $this->items[$id]->getQuantity());
+        $this->items[$id]->setQuantity($quantity + $this->items[$id]->getQuantity());
         $this->saveItems();
     }
 
@@ -147,14 +147,14 @@ class Cart extends Component
         $this->loadItems();
         if (isset($this->items[$id])) {
             $this->items[$id]->setQuantity($quantity);
-            if($price !== null) $this->items[$id]->setPrice($price);
-			$this->saveItems();
-			return true;
+            if ($price !== null) $this->items[$id]->setPrice($price);
+            $this->saveItems();
+            return true;
         }
         return false;
     }
-	
-	/**
+
+    /**
      * chose item in the cart
      * @param integer $id
      * @param integer $selected
@@ -165,22 +165,22 @@ class Cart extends Component
         $this->loadItems();
         if (isset($this->items[$id])) {
             $this->items[$id]->getProduct()->selected = intval($selected);
-			$this->saveItems();
-			return true;
+            $this->saveItems();
+            return true;
         }
         return false;
     }
-    
-	/**
+
+    /**
      * unchose all items in the cart
      * @return void
      */
     public function unchoses()
     {
         $this->loadItems();
-		foreach($this->items as $id => $item) {
-			$this->items[$id]->getProduct()->selected = 0;
-		}
+        foreach ($this->items as $id => $item) {
+            $this->items[$id]->getProduct()->selected = 0;
+        }
         $this->saveItems();
     }
 
@@ -194,8 +194,8 @@ class Cart extends Component
         $this->loadItems();
         if (array_key_exists($id, $this->items)) {
             unset($this->items[$id]);
-			$this->saveItems();
-			return true;
+            $this->saveItems();
+            return true;
         }
         return false;
     }
@@ -252,7 +252,7 @@ class Cart extends Component
     public function getTotalPrice()
     {
         $this->loadItems();
-		$cost = 0;
+        $cost = 0;
         foreach ($this->items as $item) {
             $cost += $item->getSubtotal();
         }
@@ -266,18 +266,18 @@ class Cart extends Component
     public function getTotalCount()
     {
         $this->loadItems();
-		$count = 0;
+        $count = 0;
         foreach ($this->items as $item) {
-			$count += $item->getQuantity();
+            $count += $item->getQuantity();
         }
         return $count;
     }
-	
-	public function getTotalKinds()
-	{
-		$this->loadItems();
-		return $this->items ? count($this->items) : 0;
-	}
+
+    public function getTotalKinds()
+    {
+        $this->loadItems();
+        return $this->items ? count($this->items) : 0;
+    }
 
     /**
      * Load all items from the cart
@@ -298,45 +298,48 @@ class Cart extends Component
     {
         $this->storage->save($this->items);
     }
-	
-	/**
-	 * Returns items for cart page 
-	 */
-	public function find()
-	{
-		$products = [];
-		if(($items = $this->getItems())) {
-			foreach($items as $key => $cartItem) {
-				$product = ArrayHelper::toArray($cartItem->getProduct());
-				$product['quantity'] = $cartItem->getQuantity();
-                if($product['quantity'] <= 0)  continue;
-				
-				// don't use object as: $product->subtotal
-				$product['subtotal'] = sprintf('%.2f', round($product['price'] * $product['quantity'], 2));
-				$products[$key] = $product;
-			}
-		}
-		return array(
-			'amount' 	=> $this->getTotalPrice(),
-			'kinds' 	=> count($products), // $this->getTotalKinds() for $products is object
-			'items' 	=> $products
-		);
-	}
-	
-	/**
-	 * Return item for update quantity in cart page
-	 */
-	public function get($id)
-	{
-		if(($cartItem = $this->getItem($id))) {
-			$product = ArrayHelper::toArray($cartItem->getProduct());
-			$product['quantity'] = $cartItem->getQuantity();
-			$product['subtotal'] = sprintf('%.2f', round($product['price'] * $product['quantity'], 2));
-		}
-		return array(
-			'amount'	=> $this->getTotalPrice(),
-			'kinds' 	=> $this->getTotalKinds(),
-			'item' 		=> $product
-		);
-	}
+
+    /**
+     * Returns items for cart page 
+     */
+    public function find()
+    {
+        $total = 0;
+        $products = [];
+        if (($items = $this->getItems())) {
+            foreach ($items as $key => $cartItem) {
+                $product = ArrayHelper::toArray($cartItem->getProduct());
+                $product['quantity'] = $cartItem->getQuantity();
+                if ($product['quantity'] <= 0)  continue;
+
+                // don't use object as: $product->subtotal
+                $product['subtotal'] = sprintf('%.2f', round($product['price'] * $product['quantity'], 2));
+                $products[$key] = $product;
+                $total += intval($product['quantity']);
+            }
+        }
+        return array(
+            'amount'     => $this->getTotalPrice(),
+            'kinds'     => count($products), // $this->getTotalKinds() for $products is object
+            'total'     => $total,
+            'items'     => $products
+        );
+    }
+
+    /**
+     * Return item for update quantity in cart page
+     */
+    public function get($id)
+    {
+        if (($cartItem = $this->getItem($id))) {
+            $product = ArrayHelper::toArray($cartItem->getProduct());
+            $product['quantity'] = $cartItem->getQuantity();
+            $product['subtotal'] = sprintf('%.2f', round($product['price'] * $product['quantity'], 2));
+        }
+        return array(
+            'amount'    => $this->getTotalPrice(),
+            'kinds'     => $this->getTotalKinds(),
+            'item'         => $product
+        );
+    }
 }

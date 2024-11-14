@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\library\Language;
 use common\business\BaseDepopay;
 
@@ -63,7 +64,7 @@ class OutlayDepopay extends BaseDepopay
 				$money += $trade_info['fee'];
 			}
 			
-			if(!parent::_check_enough_money($money, $trade_info['userid'])) {
+			if(!DepositAccountModel::checkEnoughMoney($money, $trade_info['userid'])) {
 				$this->setErrors("50019");
 				return false;
 			}
@@ -85,7 +86,7 @@ class OutlayDepopay extends BaseDepopay
 			'tradeNo'		=>	$extra_info['tradeNo'],
 			'userid'		=>	$trade_info['userid'],
 			'amount'		=> 	$trade_info['amount'],
-			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $trade_info['amount'], 'reduce'), // 同时更新余额
+			'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['userid'],  $trade_info['amount'], 'reduce'), // 同时更新余额
 			'tradeType'		=>  $this->_tradeType,
 			'flow'			=>	$this->_flow,
 			'name'			=>  isset($trade_info['name']) ? $trade_info['name'] : Language::get($this->_tradeType),

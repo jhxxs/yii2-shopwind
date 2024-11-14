@@ -9,7 +9,7 @@
 </template>
 <script setup>
 import { ref, reactive, watch } from 'vue'
-import { orderExport } from '@/api/order.js'
+import { orderExportItems } from '@/api/order.js'
 
 const props = defineProps({
     title: { type: String, default: '' },
@@ -34,7 +34,7 @@ watch(() => props.visible, (value) => {
         gallery.value.forEach((item) => {
             items.push(item.order_id)
         })
-        orderExport({ items: items }, (data) => {
+        orderExportItems({ items: items }, (data) => {
             file.value = data
         })
     }

@@ -54,7 +54,7 @@ class GuideshopExportForm extends Model
 					$value[$k] = self::getStatus($value[$k]);
 				}
 				if ($k == 'address') {
-					if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+					if ($array = RegionModel::getArray($value['region_id'])) {
 						$value[$k]['address'] = implode('', $array) . $value['address'];
 					}
 				}

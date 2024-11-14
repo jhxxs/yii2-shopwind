@@ -207,12 +207,11 @@ class ArticleController extends \common\base\BaseAdminController
 	private function getConditions($post, $query = null)
 	{
 		if ($query === null) {
-			foreach (array_keys(ArrayHelper::toArray($post)) as $field) {
-				if (in_array($field, ['cate_id', 'title'])) {
-					return true;
-				}
+			$params = ArrayHelper::toArray($post);
+			if (!empty($params)) {
+				return $params;
 			}
-			return false;
+			return [];
 		}
 
 		if ($post->title) {

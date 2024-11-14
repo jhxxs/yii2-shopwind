@@ -51,7 +51,7 @@ class NormalOrder extends BaseOrder
 			// API接口数据，把收货地址的省市区格式一下
 			if ($result['my_address']) {
 				foreach ($result['my_address'] as $key => $value) {
-					$result['my_address'][$key] = array_merge($value, RegionModel::getArrayRegion($value['region_id']));
+					$result['my_address'][$key] = array_merge($value, RegionModel::getArray($value['region_id']));
 				}
 			}
 		}

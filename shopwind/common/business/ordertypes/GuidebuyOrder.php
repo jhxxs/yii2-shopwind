@@ -44,7 +44,7 @@ class GuidebuyOrder extends NormalOrder
 		if(isset($this->post->extraParams->shopid) && ($shopid = intval($this->post->extraParams->shopid))) {
 			$record = GuideshopModel::find()->select('id,address,region_id,name,latitude,longitude')->where(['id' => $shopid, 'status' => Def::STORE_OPEN])->asArray()->one();
 			if($record) {
-				$record = array_merge($record, RegionModel::getArrayRegion($record['region_id']));
+				$record = array_merge($record, RegionModel::getArray($record['region_id']));
 			}
 		}
 

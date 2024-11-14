@@ -173,12 +173,13 @@ class CartController extends \common\base\BaseApiController
 		$post = Basewind::trimAll($respond->getParams(), true);
 
 		$model = new \frontend\api\models\CartForm();
-		if (!$post->product_id && $post->spec_id) {
-			$post->product_id = Yii::$app->cart->getId(['spec_id' => $post->spec_id]);
-		}
 
-		if (!$post->product_id || !($product = Yii::$app->cart->getItem($post->product_id)->getProduct()) || ($product->userid != Yii::$app->user->id) || !(Yii::$app->cart->remove($post->product_id))) {
-			return $respond->output(Respond::CURD_FAIL, Language::get('drop_item_failed'));
+		if (empty($post->specs)) $post->specs = [];
+		foreach ($post->specs as $spec_id) {
+			$product_id = Yii::$app->cart->getId(['spec_id' => $spec_id]);
+			if (!$product_id || !($product = Yii::$app->cart->getItem($product_id)->getProduct()) || ($product->userid != Yii::$app->user->id) || !(Yii::$app->cart->remove($product_id))) {
+				return $respond->output(Respond::CURD_FAIL, Language::get('drop_item_failed'));
+			}
 		}
 
 		return $respond->output(true, Language::get('drop_item_successed'), $model->getCart());

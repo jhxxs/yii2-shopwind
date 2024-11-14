@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\models\DepositTradeModel;
 use common\models\DepositSettingModel;
 use common\models\DepositRecordModel;
@@ -113,7 +114,7 @@ class RechargeDepopay extends IncomeDepopay
 			$model->tradeNo = $tradeInfo['tradeNo'];
 			$model->userid = $tradeInfo['buyer_id'];
 			$model->amount =  $tradeInfo['amount'];
-			$model->balance = parent::_update_deposit_money($tradeInfo['buyer_id'], $tradeInfo['amount']);
+			$model->balance = DepositAccountModel::updateDepositMoney($tradeInfo['buyer_id'], $tradeInfo['amount']);
 			$model->tradeType = $this->_tradeType;
 			$model->flow = $this->_flow;
 			$model->name = Language::get($this->_tradeType);
@@ -146,7 +147,7 @@ class RechargeDepopay extends IncomeDepopay
 			}
 
 			// 增加交易记录
-			$trade_info = array(
+			$data_trade = array(
 				'tradeNo'		=> DepositTradeModel::genTradeNo(),
 				'payTradeNo'	=> DepositTradeModel::genPayTradeNo(),
 				'bizOrderId'	=> $tradeInfo['tradeNo'],
@@ -166,16 +167,16 @@ class RechargeDepopay extends IncomeDepopay
 			);
 
 			$model = new DepositTradeModel();
-			foreach ($trade_info as $key => $val) {
-				$model->$key = $val;
-			}
+			foreach ($data_trade as $key => $value) {
+			$model->$key = $value;
+		}
 
 			if ($model->save(false) == true) {
-				$trade_info['userid'] = $trade_info['buyer_id'];
-				$trade_info['tradeType'] = 'REGIVE';
-				$trade_info['name'] = $trade_info['title'];
-				$extra_info['tradeNo'] = $trade_info['tradeNo'];
-				return parent::_insert_record_info($trade_info, $extra_info);
+				$data_trade['userid'] = $data_trade['buyer_id'];
+				$data_trade['tradeType'] = 'REGIVE';
+				$data_trade['name'] = $data_trade['title'];
+				$extra_info['tradeNo'] = $data_trade['tradeNo'];
+				return parent::_insert_record_info($data_trade, $extra_info);
 			}
 		}
 

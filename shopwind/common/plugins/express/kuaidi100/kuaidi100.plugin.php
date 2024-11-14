@@ -70,14 +70,14 @@ class Kuaidi100 extends BaseExpress
 		}
 
 		// 免费版（JSON）
-		if (!$result['done']) {
-			$result = $this->queryApi($post, $order);
-		}
+		// if (!$result['done']) {
+		// 	$result = $this->queryApi($post, $order);
+		// }
 
 		// 免费版（URL）
-		if (!$result['done']) {
-			$result = $this->queryIframe($post, $order);
-		}
+		// if (!$result['done']) {
+		// 	$result = $this->queryIframe($post, $order);
+		// }
 
 		if ($result) {
 			$result = array_merge($result, [
@@ -107,10 +107,11 @@ class Kuaidi100 extends BaseExpress
 		$result = Basewind::curl($this->gateway, 'post', $params);
 		$result = json_decode(str_replace("\"", '"', $result), true);
 
-		// 快递单当前签收状态，包括0在途中、1已揽收、2疑难、3已签收、4退签、5同城派送中、6退回、7转单等7个状态，其中4-7需要另外开通才有效
-		if (isset($result['state']) && in_array($result['state'], array(0, 1, 2, 3, 4, 5, 6, 7))) {
-			$result['status'] = 1; // 兼容免费版接口状态值（企业版：返回200，免费版返回1）
-			$result['done'] = true;
+		// 快递单当前签收状态，包括0在途中、1已揽收、2疑难、3已签收、4退签、5派件、6退回、7转投、8清关、14拒签等10个状态
+		if (isset($result['state']) && in_array($result['state'], array(0, 1, 2, 3, 4, 5, 6, 7, 8, 14))) {
+			$result['label'] = $this->getState($result['state']);
+			//$result['status'] = 1; // 兼容免费版接口状态值（企业版：返回200，免费版返回1）
+			//$result['done'] = true;
 		}
 		return $result;
 	}
@@ -153,6 +154,24 @@ class Kuaidi100 extends BaseExpress
 		}
 
 		return is_string($result) ? ['url' => $result] : $result;
+	}
+
+	/**
+	 * 针对企业版，API接口
+	 */
+	private function getState($state)
+	{
+		if ($state == 0) return '运输中';
+		if ($state == 1) return '已揽收';
+		if ($state == 2) return '派件异常';
+		if ($state == 3) return '已签收';
+		if ($state == 4) return '已退签';
+		if ($state == 5) return '正在派件';
+		if ($state == 6) return '已退回';
+		if ($state == 7) return '已转投';
+		if ($state == 8) return '清关中';
+		if ($state == 14) return '已拒签';
+		return '';
 	}
 
 	/**

@@ -64,6 +64,9 @@ class GselectorController extends \common\base\BaseAdminController
 		}
 	}
 
+	/**
+	 * 商品分类
+	 */
 	public function actionCategory()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);

@@ -68,7 +68,7 @@ class OrderForm extends Model
 		// 卖家获取订单管理数据
 		if ($this->enter == 'seller') {
 			$query->andWhere(['o.seller_id' => Yii::$app->user->id]);
-			$query->addSelect('oe.consignee,oe.phone_mob,region_id,address,phone_tel,shipping_name');
+			$query->addSelect('oe.consignee,oe.phone_mob,region_id,address,phone_tel,deliveryName');
 		}
 		// 团长获取订单管理数据
 		elseif ($this->enter == 'guider') {
@@ -143,7 +143,7 @@ class OrderForm extends Model
 
 			// 对卖家订单和团长订单返回收（取）货人信息
 			if (in_array($this->enter, ['seller', 'guider'])) {
-				$array = RegionModel::getArrayRegion($value['region_id']);
+				$array = RegionModel::getArray($value['region_id']);
 				$shipping = array_merge([
 					'name' => $value['consignee'],
 					'phone_mob' => $value['phone_mob'] ? $value['phone_mob'] : $value['phone_tel'],

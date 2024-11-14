@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\models\DepositTradeModel;
 use common\models\DepositWithdrawModel;
 
@@ -51,7 +52,7 @@ class WithdrawDepopay extends OutlayDepopay
 		}
 
 		// 将提现的金额(加手续费)设置为冻结金额
-		if (!parent::_update_deposit_frozen($trade_info['userid'], $trade_info['amount'] + floatval($trade_info['fee']), 'add')) {
+		if (DepositAccountModel::updateDepositMoney($trade_info['userid'], $trade_info['amount'] + floatval($trade_info['fee']), 'add', 'frozen') === false) {
 			$this->setErrors("50017");
 			return false;
 		}
@@ -99,16 +100,17 @@ class WithdrawDepopay extends OutlayDepopay
 				'tradeNo'		=>	$extra_info['tradeNo'],
 				'userid'		=> 	$trade_info['userid'],
 				'amount'		=>  $trade_info['amount'], // 实际提现金额（不含手续费）
-				'balance'		=>	parent::_update_deposit_money($trade_info['userid'], $trade_info['amount'], 'reduce'), // 扣除后的余额
+				'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['userid'], $trade_info['amount'], 'reduce'), // 扣除后的余额
 				'tradeType'		=>  $this->_tradeType,
 				'flow'			=>	$this->_flow,
+				'name' 			=>  Language::get('withdraw')
 			);
 			if (parent::_insert_deposit_record($data_record, false)) {
 
 				// 如果有手续费
 				if ($fee > 0) {
 					$data_record['amount'] = $trade_info['fee'];
-					$data_record['balance'] = parent::_update_deposit_money($trade_info['userid'], $trade_info['fee'], 'reduce'); // 扣除后的余额
+					$data_record['balance'] = DepositAccountModel::updateDepositMoney($trade_info['userid'], $trade_info['fee'], 'reduce'); // 扣除后的余额
 					$data_record['tradeType'] = 'SERVICE';
 					$data_record['name'] = Language::get('drawalfee');
 					return parent::_insert_deposit_record($data_record, false);

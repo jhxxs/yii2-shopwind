@@ -92,11 +92,10 @@ class DbController extends \common\base\BaseAdminController
 				],
 				'dsn' => "mysql:host={$post->host};port={$post->port};dbname={$post->dbname}"
 			];
-			if(isset($slaves[$key-1])) {
-				$slaves[$key-1] = $slave;
-			} else {
-				$slaves[] = $slave;
-			}
+			if ($key > 0 && isset($slaves[$key - 1])) {
+				$slaves[$key - 1] = $slave;
+			} else $slaves[] = $slave;
+			
 			array_values($slaves);
 			$config['db']['slaves'] = $slaves;
 			$setting = new Arrayfile();
@@ -346,7 +345,7 @@ class DbController extends \common\base\BaseAdminController
 		foreach ($backup_names as $backup_name)
         {
 			$model = new \backend\models\DbForm();
-			if (!$model->deleteBackup($backup_name)) {
+		if (!$model->deleteBackup($backup_name)) {
 				return Message::warning($model->errors);
 			}
         }

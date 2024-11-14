@@ -280,8 +280,7 @@ class SmsController extends \common\base\BaseAdminController
 				return Message::warning(Language::get('content_no_null'));
 			}
 
-			$smser = Plugin::getInstance('sms')->autoBuild();
-			if(!$smser) {
+			if(!($smser = Plugin::getInstance('sms')->autoBuild())) {
 				return Message::warning(Language::get('send_failed'));
 			}
 

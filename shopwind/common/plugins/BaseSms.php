@@ -354,7 +354,8 @@ class BaseSms extends BasePlugin
 		}
 		if ($code == -14) {
 			return '短信内容出现非法字符';
-		} elseif ($code == -21) {
+		}
+		if ($code == -21) {
 			return '密钥不正确';
 		}
 		if ($code == -41) {

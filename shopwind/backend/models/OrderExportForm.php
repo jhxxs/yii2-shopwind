@@ -36,7 +36,7 @@ class OrderExportForm extends Model
 		// 文件数组
 		$record_xls = array();
 		$lang_bill = array(
-			'id'			=> '序号',
+			'id'			=> '编号',
 			'order_sn' 		=> '订单编号',
 			'store_name' 	=> '商家',
 			'buyer_name' 	=> '买家',
@@ -74,7 +74,7 @@ class OrderExportForm extends Model
 					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
 				}
 				if ($k == 'address') {
-					if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+					if ($array = RegionModel::getArray($value['region_id'])) {
 						$value[$k] = implode('', $array) . $value[$k];
 					}
 				}
@@ -94,7 +94,7 @@ class OrderExportForm extends Model
 		}
 
 		$record_xls[] = array('id' => ''); // empty line
-		$record_xls[] = array('id' => sprintf('订单总数：%s笔，订单总额：%s元', $quantity, $amount));
+		$record_xls[] = array('id' => sprintf('订单总数：%s笔，订单总金额：%s元', $quantity, $amount));
 
 		return \common\library\Page::export([
 			'models' 	=> $record_xls,

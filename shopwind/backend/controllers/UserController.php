@@ -184,7 +184,7 @@ class UserController extends \common\base\BaseAdminController
 				return Message::warning(Language::get('username_password_error'));
 			}
 			
-			$identity = UserModel::find()->where(['username' => $post->username])->one();
+			$identity = UserModel::findByUsername($post->username);
 			if(!$identity) {
 				return Message::warning(Language::get('username_password_error'));
 			}

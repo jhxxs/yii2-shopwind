@@ -171,14 +171,21 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<div v-if="mulselection.length > 0" class="mt20 center">
-						<el-button type="primary" @click="dialogPrintVisible = true">打印订单</el-button>
-						<el-button type="primary" @click="dialogExportVisible = true">导出EXCEL</el-button>
+					<div v-if="pagination.total > 0" class="mt20 center">
+						<el-button v-if="form.type == 'accepted'" type="primary" @click="shipClick(mulselection)"
+							:disabled="mulselection.length > 0 ? false : true">批量发货</el-button>
+						<el-button type="primary" @click="dialogPrintVisible = true"
+							:disabled="mulselection.length > 0 ? false : true">打印订单</el-button>
+						<el-button type="primary" @click="dialogExportVisible = true"
+							:disabled="mulselection.length > 0 ? false : true">导出订单</el-button>
+						<el-button type="primary" @click="dialogExportItemsVisible = true"
+							:disabled="mulselection.length > 0 ? false : true">导出商品明细</el-button>
 					</div>
 					<div v-if="pagination.total > 0" class="mt20 mb20">
 						<el-pagination v-model:currentPage="pagination.page" v-model:page-size="pagination.page_size"
-							:page-sizes="[10, 50, 100, 200]" :background="false" layout="total, sizes, prev, pager, next"
-							:total="pagination.total" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+							:page-sizes="[10, 50, 100, 200]" :background="false"
+							layout="total, sizes, prev, pager, next" :total="pagination.total"
+							@size-change="handleSizeChange" @current-change="handleCurrentChange"
 							:hide-on-single-page="false" class="center" />
 					</div>
 				</div>
@@ -186,14 +193,17 @@
 		</el-row>
 	</div>
 
-	<shipped v-if="gallery.length > 0" title="发货" :visible="dialogShipVisible" :data="gallery[modifyIndex]"
-		@close="dialogClose"></shipped>
+	<shipped v-if="gallery.length > 0" :title="mulselection.length > 1 ? '批量发货' : '发货'" :visible="dialogShipVisible"
+		:data="mulselection" @close="dialogClose">
+	</shipped>
 	<canceled v-if="gallery.length > 0" title="取消订单" :visible="dialogCancelVisible" :data="gallery[modifyIndex]"
 		@close="dialogClose"></canceled>
 	<printed v-if="mulselection.length > 0" title="打印订单" :visible="dialogPrintVisible" :data="mulselection"
 		@close="dialogClose"></printed>
-	<exported v-if="mulselection.length > 0" title="导出EXCEL" :visible="dialogExportVisible" :data="mulselection"
+	<exported v-if="mulselection.length > 0" title="导出订单" :visible="dialogExportVisible" :data="mulselection"
 		@close="dialogClose"></exported>
+	<exportitems v-if="mulselection.length > 0" title="导出商品明细" :visible="dialogExportItemsVisible" :data="mulselection"
+		@close="dialogClose"></exportitems>
 
 	<myfoot></myfoot>
 </template>
@@ -212,6 +222,7 @@ import shipped from '@/components/dialog/order/shipped.vue'
 import canceled from '@/components/dialog/order/canceled.vue'
 import printed from '@/components/dialog/order/printed.vue'
 import exported from '@/components/dialog/order/export.vue'
+import exportitems from '@/components/dialog/order/exportitems.vue'
 
 const loading = ref(false)
 const gallery = ref([])
@@ -223,6 +234,7 @@ const dialogShipVisible = ref(false)
 const dialogCancelVisible = ref(false)
 const dialogPrintVisible = ref(false)
 const dialogExportVisible = ref(false)
+const dialogExportItemsVisible = ref(false)
 const modifyIndex = ref(0)
 const route = useRoute()
 
@@ -239,7 +251,7 @@ const queryClick = () => {
 
 const shipClick = (value) => {
 	dialogShipVisible.value = true
-	modifyIndex.value = value
+	mulselection.value = value
 }
 const cancelClick = (value) => {
 	dialogCancelVisible.value = true
@@ -258,7 +270,9 @@ const dialogClose = (value) => {
 	dialogCancelVisible.value = false
 	dialogPrintVisible.value = false
 	dialogExportVisible.value = false
-	Object.assign(gallery.value[modifyIndex.value], value ? value : {})
+	dialogExportItemsVisible.value = false
+	//Object.assign(gallery.value[modifyIndex.value], value ? value : {})
+	getList()
 }
 
 const changeClick = (value, field) => {

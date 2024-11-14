@@ -51,7 +51,6 @@ return array(
 	'command' => '操&nbsp;&nbsp;&nbsp;作',
 	'command_log'    => '操作记录',
 	'adminmsglog' => '手工操作短信数量',
-	'no_such_user' => '没有该用户',
 	'num_invalid' => '数量非法',
 	'err_num_smaller' => '短信数量[%s]条，小于要减少的数量[%s]条',
 	'sign_name' => '短信签名',

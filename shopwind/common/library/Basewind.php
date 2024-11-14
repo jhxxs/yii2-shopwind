@@ -35,7 +35,7 @@ class Basewind
 	 */
 	public static function getVersion()
 	{
-		return '4.7';
+		return '4.8';
 	}
 
 	/**

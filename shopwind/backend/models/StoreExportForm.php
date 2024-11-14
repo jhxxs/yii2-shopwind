@@ -38,7 +38,7 @@ class StoreExportForm extends Model
 			'store_name'	=> '店铺名称',
 			'stype'			=> '主体类型',
 			'username' 		=> '用户名',
-			'owner' 	=> '店主姓名',
+			'owner' 		=> '店主',
 			'tel'			=> '联系电话',
 			'region' 		=> '所在地区',
 			'sgrade' 		=> '店铺等级',
@@ -64,7 +64,7 @@ class StoreExportForm extends Model
 				} elseif ($k == 'stype') {
 					$value[$k] = $value[$k] == 'company' ? Language::get('company') : Language::get('personal');
 				} elseif ($k == 'region') {
-					if ($array = RegionModel::getArrayRegion($value['region_id'])) {
+					if ($array = RegionModel::getArray($value['region_id'])) {
 						$value[$k]  = implode('', $array);
 					}
 				}

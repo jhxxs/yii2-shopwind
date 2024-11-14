@@ -74,7 +74,7 @@ class StoreController extends \common\base\BaseApiController
 			$list[$key]['cate_name'] = ScategoryModel::find()->select('cate_name')->where(['cate_id' => $value['cate_id']])->scalar();
 
 			// 店铺所在地省市区地址信息
-			$list[$key] = array_merge($list[$key], (array) RegionModel::getArrayRegion($value['region_id']));
+			$list[$key] = array_merge($list[$key], (array) RegionModel::getArray($value['region_id']));
 		}
 
 		return $respond->output(true, null, ['list' => $list, 'pagination' => Page::formatPage($page, false)]);
@@ -126,7 +126,7 @@ class StoreController extends \common\base\BaseApiController
 		$record['collects'] = CollectModel::find()->where(['type' => 'store', 'item_id' => $post->store_id])->count();
 
 		// 店铺所在地省市区地址信息
-		$this->params = array_merge($record, (array) RegionModel::getArrayRegion($record['region_id']));
+		$this->params = array_merge($record, (array) RegionModel::getArray($record['region_id']));
 
 		return $respond->output(true, null, $this->params);
 	}

@@ -13,10 +13,8 @@ namespace backend\models;
 
 use Yii;
 use yii\base\Model; 
-use yii\helpers\ArrayHelper;
 
 use common\models\SgradeModel;
-
 use common\library\Language;
 
 /**
@@ -65,8 +63,8 @@ class SgradeForm extends Model
 		}
 		
 		$fields = ['grade_name', 'goods_limit', 'space_limit', 'charge', 'need_confirm', 'description', 'sort_order'];
-		foreach($post as $key => $val) {
-			if(in_array($key, $fields)) $model->$key = $val;
+		foreach($post as $key => $value) {
+			if(in_array($key, $fields)) $model->$key = $value;
 		}
 		if(!$model->save()) {
 			$this->errors = $model->errors;

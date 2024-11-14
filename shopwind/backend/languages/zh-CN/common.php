@@ -195,7 +195,7 @@ return array(
     'auth_failed'           => '密码验证失败',
     'email_error'     => '电子邮箱错误',
     'email_exists'     => '该电子邮箱已被注册',
-    'no_such_user'     => '没有指定的用户',
+    'no_such_user'     => '用户不存在',
     'password_error'     => '密码错误',
     'close_reason' => '店铺已到期',
     'user_notice' => '用户通知',

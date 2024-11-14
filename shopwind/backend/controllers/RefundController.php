@@ -151,12 +151,12 @@ class RefundController extends \common\base\BaseAdminController
 			// 短信提醒：告知买家，客服已处理完毕
 			Basewind::sendMailMsgNotify(
 				$orderInfo,
-				array(),
-				array(
+				[],
+				[
 					'sender'	=> 0, // 系统发送
-					'receiver' => UserModel::find()->select('phone_mob')->where(['userid' => $orderInfo['buyer_id']])->scalar(),
+					'receiver' => $orderInfo['buyer_id'],
 					'key' => 'tobuyer_refund_agree_notify'
-				)
+				]
 			);
 
 			return Message::display(Language::get('system_handle_refund_ok'));

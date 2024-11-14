@@ -174,7 +174,7 @@ const change = (item) => {
  * @param {Object} item
  */
 const remove = (item) => {
-	cartRemove({ product_id: item.product_id }, (data) => {
+	cartRemove({ specs: [item.spec_id] }, (data) => {
 		delete (cart.list[item.store_id].items[item.product_id])
 		if (Object.values(cart.list[item.store_id].items).length == 0) {
 			delete (cart.list[item.store_id])

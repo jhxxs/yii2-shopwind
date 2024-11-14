@@ -27,7 +27,7 @@
                         <th><span>支付方式</span></th>
                         <td><span>{{ order.payment_name }}</span></td>
                         <th><span>配送方式</span></th>
-                        <td><span>{{ order.shipping_name }}</span></td>
+                        <td><span>{{ order.deliveryName }}</span></td>
                     </tr>
                     <tr>
                         <th><span>下单时间</span></th>

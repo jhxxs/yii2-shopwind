@@ -20,6 +20,7 @@ use common\models\OrderGoodsModel;
 use common\models\OrderLogModel;
 use common\models\IntegralModel;
 use common\models\GoodsStatisticsModel;
+use common\models\DepositAccountModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -132,7 +133,7 @@ class CodpayDepopay extends OutlayDepopay
 			'tradeNo'		=>	$extra_info['tradeNo'],
 			'userid'		=>	$trade_info['party_id'], //卖家
 			'amount'		=> 	$trade_info['amount'],
-			'balance'		=>	parent::_update_deposit_money($trade_info['party_id'],  $trade_info['amount'], 'add'), // 同时更新余额
+			'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['party_id'],  $trade_info['amount'], 'add'), // 同时更新余额
 			'tradeType'		=>  $this->_tradeType,
 			'flow'			=>	'income',
 			'name'			=>  $trade_info['name'] ? $trade_info['name'] : Language::get($this->_tradeType),

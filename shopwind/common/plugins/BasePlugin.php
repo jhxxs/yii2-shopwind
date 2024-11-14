@@ -50,6 +50,12 @@ class BasePlugin
 	public $errors = null;
 
 	/**
+	 * 错误代码
+	 * @var int $errCode
+	 */
+	public $errCode = null;
+
+	/**
 	 * 页面提交参数
 	 * @var object $params
 	 */

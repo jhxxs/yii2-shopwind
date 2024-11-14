@@ -335,11 +335,11 @@ class BasePayment extends BasePlugin
 		$depopay_type = Business::getInstance('depopay')->build($orderInfo['payType'] == 'COD' ? 'codpay' : 'buygoods');
 
 		foreach ($orderInfo['tradeList'] as $tradeInfo) {
-			$order_info = $tradeInfo['order_info'];
+			$order = $tradeInfo['order_info'];
 
 			$result = $depopay_type->notify([
 				'trade_info' => ['userid' => $tradeInfo['buyer_id'], 'party_id' => $tradeInfo['seller_id'], 'amount' => $tradeInfo['amount']],
-				'extra_info' => $order_info + ['tradeNo' => $tradeInfo['tradeNo'], 'status' => $tradeInfo['status']],
+				'extra_info' => $order + ['tradeNo' => $tradeInfo['tradeNo'], 'status' => $tradeInfo['status']],
 			]);
 
 			if (!$result) {
@@ -349,7 +349,7 @@ class BasePayment extends BasePlugin
 
 			// 短信和邮件提醒： 买家已付款通知卖家
 			Basewind::sendMailMsgNotify(
-				$order_info,
+				$order,
 				[
 					'receiver' => $tradeInfo['seller_id'],
 					'key' => 'toseller_online_pay_success_notify'
@@ -387,10 +387,10 @@ class BasePayment extends BasePlugin
 
 		// 目前暂不考虑同时支付多个购买APP的交易，所以循环只有一次
 		foreach ($orderInfo['tradeList'] as $tradeInfo) {
-			$order_info = $tradeInfo['order_info'];
+			$order = $tradeInfo['order_info'];
 			$result = $depopay_type->notify([
 				'trade_info' => ['userid' => $tradeInfo['buyer_id'], 'party_id' => 0, 'amount' => $tradeInfo['amount']],
-				'extra_info' => $order_info + ['tradeNo' => $tradeInfo['tradeNo']],
+				'extra_info' => $order + ['tradeNo' => $tradeInfo['tradeNo']],
 			]);
 
 			if (!$result) {

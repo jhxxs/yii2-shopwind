@@ -45,6 +45,8 @@ class RefundExportForm extends Model
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'REFUND_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
 
+		$quantity = 0;
+		$amount = 0;
 		$record_value = array();
 		foreach($list as $key => $value)
     	{

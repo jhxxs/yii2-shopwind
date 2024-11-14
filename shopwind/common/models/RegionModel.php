@@ -134,7 +134,7 @@ class RegionModel extends ActiveRecord
 	 * 参考：http://lbsyun.baidu.com/index.php?title=webapi/address_analyze
 	 * @used：api.map.baidu.com/address_analyzer/v1?address=北京市海淀区信息路甲九号&ak=你的ak
 	 */
-	public static function getArrayRegion($region_id = 0, $address = '')
+	public static function getArray($region_id = 0, $address = '')
 	{
 		if (!$address && $region_id) {
 			$address = self::getRegionName(intval($region_id), true);
@@ -174,7 +174,7 @@ class RegionModel extends ActiveRecord
 	public static function getLastIdByName($address)
 	{
 		if (is_string($address)) {
-			$address = self::getArrayRegion(0, self::replaceAddress($address));
+			$address = self::getArray(0, self::replaceAddress($address));
 		}
 
 		// 如果地址不到区，不做处理

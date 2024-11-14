@@ -8,7 +8,7 @@
  * If you need commercial operation, please contact us to purchase a license.
  * @license https://www.shopwind.net/license/
  */
- 
+
 namespace common\business\depopaytypes;
 
 use yii;
@@ -46,7 +46,7 @@ class GuidebuyDepopay extends IncomeDepopay
 		// 佣金
 		$money = round($order['order_amount'] * DepositSettingModel::getDepositSetting($order['guider_id'], 'guider_rate'), 2);
 
-		if($money < 0 || ($order['guider_id'] <= 0)) {
+		if ($money <= 0 || ($order['guider_id'] <= 0)) {
 			return false;
 		}
 		
@@ -72,7 +72,7 @@ class GuidebuyDepopay extends IncomeDepopay
 			$query->tradeNo = $model->tradeNo;
 			$query->userid = $model->buyer_id;
 			$query->amount = $model->amount;
-			$query->balance = parent::_update_deposit_money($model->buyer_id, $model->amount);
+			$query->balance = DepositAccountModel::updateDepositMoney($model->buyer_id, $model->amount);
 			$query->tradeType = 'REGIVE'; // 返现
 			$query->flow = $model->flow;
 			$query->name = $model->title;

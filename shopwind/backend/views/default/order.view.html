@@ -68,7 +68,7 @@
                 <li>{$lang.consignee}{$lang.colon}{$order.consignee|escape}</li>
                 <!--{if $order.otype eq 'normal'}-->
                 <li>{$lang.region}{$lang.colon}{$order.region|escape} {$order.address|escape}</li>
-                <li>{$lang.shipping_name}{$lang.colon}{$order.express.company|default:$order.shipping_name|escape}</li>
+                <li>{$lang.delivery_name}{$lang.colon}{$order.express.company|default:$order.deliveryName|escape}</li>
                 <li>{$lang.express_no}{$lang.colon}{$order.express.number|default:'-'}</li>
                 <li>{$lang.phone_tel}{$lang.colon}{$order.phone_tel|escape}</li>
                 <!--{/if}-->

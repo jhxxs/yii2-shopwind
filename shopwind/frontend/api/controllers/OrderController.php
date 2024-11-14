@@ -311,7 +311,7 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_order_extm'));
 		}
 
-		$this->params = array_merge($order, $extm, RegionModel::getArrayRegion($extm['region_id']));
+		$this->params = array_merge($order, $extm, RegionModel::getArray($extm['region_id']));
 		return $respond->output(true, null, $this->params);
 	}
 
@@ -577,6 +577,36 @@ class OrderController extends \common\base\BaseApiController
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_data'));
 		}
 		$file = \backend\models\OrderExportForm::download($query->asArray()->all(), true);
+		return $respond->output(true, null, $file);
+	}
+
+	/**
+	 * 订单商品导出
+	 */
+	public function actionExportitems()
+	{
+		// 验证签名
+		$respond = new Respond();
+		if (!$respond->verify(true)) {
+			return $respond->output(false);
+		}
+
+		// 业务参数
+		$post = Basewind::trimAll($respond->getParams(), true);
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.postscript,oe.consignee,oe.region_id,oe.address,oe.phone_mob')
+			->joinWith('orderExtm oe', false)
+			->with(['orderGoods' => function ($q) {
+				$q->select('order_id,goods_id,goods_name,quantity,specification')->orderBy(['rec_id' => SORT_ASC]);
+			}])
+			->orderBy(['o.order_id' => SORT_DESC])
+			->where(['or', ['buyer_id' => Yii::$app->user->id], ['seller_id' => Yii::$app->user->id], ['guider_id' => Yii::$app->user->id]])
+			->andWhere(['in', 'o.order_id', $post->items]);
+
+		if ($query->count() == 0) {
+			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_data'));
+		}
+
+		$file = \backend\models\OrderExportItemsForm::download($query->asArray()->all(), true);
 		return $respond->output(true, null, $file);
 	}
 

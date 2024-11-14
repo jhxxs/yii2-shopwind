@@ -235,8 +235,13 @@ class AuthController extends \common\base\BaseApiController
 	 */
 	private function getUserInfo($identity, $post = null)
 	{
-		// 用户不存在或被锁定（在移动端当做注销处理）
-		if (!$identity || $identity->locked) {
+		// 用户不存在
+		if (!$identity) {
+			$this->errors = Language::get('no_such_user');
+			return false;
+		}
+		// 用户被锁定（在移动端当做注销处理）
+		if ($identity->locked) {
 			$this->errors = Language::get('user_logoff');
 			return false;
 		}
@@ -251,7 +256,7 @@ class AuthController extends \common\base\BaseApiController
 		}
 
 		// 查询是否有店铺
-		if ($arary = StoreModel::find()->select('store_id,store_name')->where(['state' => Def::STORE_OPEN, 'store_id' => $identity['userid']])->asArray()->one()) {
+		if ($arary = StoreModel::find()->select('store_id,store_name,joinway')->where(['state' => Def::STORE_OPEN, 'store_id' => $identity['userid']])->asArray()->one()) {
 			$identity = array_merge($identity, $arary);
 		}
 

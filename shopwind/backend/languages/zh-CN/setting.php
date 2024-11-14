@@ -17,7 +17,7 @@ return array(
     'site_logo' => '网站LOGO',
     'icp_number' => '网站备案号',
     'ibl_number' => 'ICP经营许可证号',
-    'site_phone_tel' => '客服电话',
+    'site_tel' => '客服电话',
     'site_email' => '客服EMail',
     'site_status' => '网站状态',
     'closed_reason' => '关闭原因',

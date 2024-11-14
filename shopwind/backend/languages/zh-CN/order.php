@@ -20,7 +20,7 @@ return array(
     'address'  => '详细地址',
     'phone_tel'  => '联系电话',
     'phone_mob'  => '手机号码',
-    'shipping_name'  => '配送方式',
+    'delivery_name'  => '配送方式',
     'freight'  => '配送费用',
     'specification'  => '规格',
     'goods_name'  => '商品名称',

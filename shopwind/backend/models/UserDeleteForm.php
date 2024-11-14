@@ -17,9 +17,11 @@ use yii\base\Model;
 use common\models\UserModel;
 use common\models\UserPrivModel;
 use common\models\BindModel;
+use common\models\DepositAccountModel;
 use common\models\IntegralModel;
 use common\models\UserEnterModel;
 use common\models\SmsModel;
+use common\models\UserTokenModel;
 
 /**
  * @Id UserDeleteForm.php 2018.8.18 $
@@ -29,32 +31,42 @@ class UserDeleteForm extends Model
 {
 	public $userid = 0;
 	public $errors = null;
-	
+
 	public function valid($post)
 	{
 		return true;
 	}
-	
+
 	public function delete($post, $valid = true)
 	{
-		if($valid === true && !$this->valid($post)) {
+		if ($valid === true && !$this->valid($post)) {
 			return false;
 		}
-	
-		foreach(explode(',', $this->userid) as $id) {
-			if($model = UserModel::findOne($id)) {
-				if($model->delete() === false) {
+
+		foreach (explode(',', $this->userid) as $id) {
+			if ($model = UserModel::findOne($id)) {
+				if ($model->delete() === false) {
 					$this->errors = $model->errors;
 					return false;
 				}
 				// 删除用户权限
 				UserPrivModel::deleteAll(['userid' => $id]);
+
 				// 删除用户绑定
+				//$query = BindModel::find()->select('unionid')->where(['userid' => $id])->one();
 				BindModel::deleteAll(['userid' => $id]);
+
+				// 删除资金账户
+				DepositAccountModel::deleteAll(['userid' => $id]);
+				
+				// 删除用户TOKEN
+				UserTokenModel::deleteAll(['userid' => $id]);
 				// 删除用户积分
 				IntegralModel::deleteAll(['userid' => $id]);
+
 				// 删除用户访问记录
 				UserEnterModel::deleteAll(['userid' => $id]);
+
 				// 删除短信用户
 				SmsModel::deleteAll(['userid' => $id, 'num' => 0]);
 			}

@@ -60,7 +60,7 @@ class BaseDepopay
 	}
 
 	/* 验证账户余额是否足够 */
-	public function _check_enough_money($money, $userid)
+	public function checkEnoughMoney($money, $userid)
 	{
 		return DepositAccountModel::checkEnoughMoney($money, $userid);
 	}
@@ -72,15 +72,9 @@ class BaseDepopay
 	}
 
 	/* 更新账户余额，增加（如卖出商品）或者减少，并返回最新的余额 */
-	public function _update_deposit_money($userid, $amount, $change = 'add')
+	public function updateDepositMoney($userid, $amount, $change = 'add')
 	{
 		return DepositAccountModel::updateDepositMoney($userid, $amount, $change);
-	}
-
-	/* 更新冻结金额，增加（如提现）或减少，并返回最新的金额 */
-	public function _update_deposit_frozen($userid, $amount, $change = 'add')
-	{
-		return DepositAccountModel::updateDepositFrozen($userid, $amount, $change);
 	}
 
 	/*  更新交易状态 */
@@ -127,8 +121,8 @@ class BaseDepopay
 	public function _insert_deposit_record($params = [], $changeBalance = true)
 	{
 		$model = new DepositRecordModel();
-		foreach ($params as $key => $val) {
-			$model->$key = $val;
+		foreach ($params as $key => $value) {
+			$model->$key = $value;
 		}
 		if ($model->save()) {
 			if ($changeBalance == true) {
@@ -187,7 +181,7 @@ class BaseDepopay
 				'tradeNo'		=>	$data_trade['tradeNo'],
 				'userid'		=>	$trade_info['userid'],
 				'amount'		=>  $fee,
-				'balance'		=>	$this->_update_deposit_money($trade_info['userid'], $fee, 'reduce'),
+				'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['userid'], $fee, 'reduce'),
 				'tradeType'		=>  'SERVICE',
 				'flow'			=>	'outlay',
 				'name'			=>	Language::get('chargeback'),

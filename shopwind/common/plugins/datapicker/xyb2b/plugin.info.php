@@ -19,7 +19,7 @@ namespace common\plugins\datapicker\xyb2b;
 return array(
     'code' => 'xyb2b',
     'name' => '行云货仓',
-    'desc' => '行云货仓（https://open.xyb2b.com）为跨境电商合作伙伴提供各类业务数据与服务，<a target="_blank" href="https://open.xyb2b.com/control-platform/app-manage">进入官网申请秘钥</a>',
+    'desc' => '行云货仓（https://open.xyb2b.com）为跨境电商合作伙伴提供各类业务数据与服务，<a target="_blank" href="https://open.xyb2b.com">进入官网申请秘钥</a>',
     'remark' => '创建应用时务必选择应用类型为：行云货仓API',
     'summary' => '跨境电商平台（https://www.xyb2b.com）货仓，支持导入商品标题，主图，规格，库存，描述，价格字段，支持最多两种规格。',
     'author' => 'SHOPWIND',

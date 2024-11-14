@@ -18,6 +18,7 @@ use common\models\DepositAccountModel;
 use common\models\DepositTradeModel;
 use common\models\DepositRechargeModel;
 use common\models\DepositRecordModel;
+use common\models\UserModel;
 
 use common\library\Language;
 use common\library\Timezone;
@@ -42,11 +43,17 @@ class DepositRechargeForm extends Model
 			$this->errors = Language::get('recharge_error');
 			return false;
 		}
-		if($post->money_change == 'reduce' && !DepositAccountModel::checkEnoughMoney($post->money, $this->userid)) {
+		if ($post->money_change == 'reduce' && !DepositAccountModel::checkEnoughMoney($post->money, $this->userid)) {
 			$this->errors = Language::get('money_error');
 			return false;
 		}
-		
+
+		// 如果当前用户不存在了（如删除）则不给充值
+		if (!UserModel::find()->where(['userid' => $this->userid])->exists()) {
+			$this->errors = Language::get('资金账户的所属用户不存在');
+			return false;
+		}
+
 		return true;
 	}
 	
@@ -61,6 +68,7 @@ class DepositRechargeForm extends Model
 		$model = new DepositTradeModel();
 		$model->tradeNo = DepositTradeModel::genTradeNo();
 		$model->bizOrderId = DepositTradeModel::genTradeNo(12, 'bizOrderId');
+		$model->payTradeNo = DepositTradeModel::genTradeNo(12, 'payTradeNo');
 		$model->bizIdentity = Def::TRADE_RECHARGE;
 		$model->buyer_id = $this->userid;
 		$model->seller_id = 0;
@@ -86,7 +94,7 @@ class DepositRechargeForm extends Model
 			$query->orderId = $model->bizOrderId;
 			$query->userid = $model->buyer_id;
 			$query->examine = Yii::$app->user->identity->username;
-			$query->is_online = 1;
+			$query->is_online = 0;
 			if(!$query->save()) {
 				$model->delete();
 				$this->errors = $model->errors;
@@ -100,8 +108,9 @@ class DepositRechargeForm extends Model
 		$record->userid = $model->buyer_id;
 		$record->amount = $model->amount;
 		$record->balance = DepositAccountModel::updateDepositMoney($model->buyer_id, $model->amount, $post->money_change);
-		$record->tradeType = $post->money_change == 'add' ? 'RECHARGE' : 'CHARGE';;
+		$record->tradeType = $post->money_change == 'add' ? 'RECHARGE' : 'CHARGE';
 		$record->flow = $model->flow;
+		$record->name = $model->title;
 		$record->remark = isset($post->remark) ? $post->remark : (($post->money_change == 'add') ? Language::get('system_recharge') : Language::get('system_chargeback'));
 		if(!$record->save()) {
 			DepositAccountModel::updateDepositMoney($model->buyer_id, $model->amount, 'reduce');

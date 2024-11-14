@@ -97,17 +97,14 @@ class UserForm extends Model
 		}
 		$model->email = $post->email;
 		$model->phone_mob = $post->phone_mob;
-
-		if (!$this->userid || ($this->userid && $post->password)) {
-			$model->setPassword($post->password);
-		}
 		$model->gender = $post->gender;
 		$model->qq = $post->qq ? $post->qq : '';
 		$model->nickname = $post->nickname ? $post->nickname : '';
 		$model->real_name = $post->real_name ? $post->real_name : '';
 		$model->locked = $post->locked;
 		if ($post->password) {
-			$model->generateAuthKey(); // 重新登录
+			$model->setPassword($post->password);
+			$model->generateAuthKey(); // 如编辑，重新登录
 		}
 
 		if ($model->save()) {

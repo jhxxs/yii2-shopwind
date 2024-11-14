@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\library\Language;
 use common\business\BaseDepopay;
 
@@ -87,7 +88,7 @@ class IncomeDepopay extends BaseDepopay
 			'tradeNo'		=>	$extra_info['tradeNo'],
 			'userid'		=>	$trade_info['userid'],
 			'amount'		=> 	$trade_info['amount'],
-			'balance'		=>	parent::_update_deposit_money($trade_info['userid'],  $trade_info['amount'], 'add'), // 同时更新余额
+			'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['userid'],  $trade_info['amount'], 'add'), // 同时更新余额
 			'tradeType'		=>  $trade_info['tradeType'] ?  $trade_info['tradeType'] : $this->_tradeType,
 			'flow'			=>	$this->_flow,
 			'name'			=>  $trade_info['name'] ? $trade_info['name'] : Language::get($this->_tradeType),

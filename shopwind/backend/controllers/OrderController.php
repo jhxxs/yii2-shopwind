@@ -79,7 +79,7 @@ class OrderController extends \common\base\BaseAdminController
 		if (!$post->id) {
 			return Message::warning(Language::get('no_such_order'));
 		}
-		if (!($order = OrderModel::find()->alias('o')->select('o.*,oe.consignee,oe.region_id,oe.phone_mob,oe.address,oe.shipping_name')
+		if (!($order = OrderModel::find()->alias('o')->select('o.*,oe.consignee,oe.region_id,oe.phone_mob,oe.address,oe.deliveryName')
 			->where(['o.order_id' => $post->id])
 			->joinWith('orderExtm oe', false)
 			->with('orderGoods')->asArray()->one())) {
@@ -90,12 +90,12 @@ class OrderController extends \common\base\BaseAdminController
 		if ($order['ship_time'] > 0) {
 			$order['express'] = OrderExpressModel::find()->select('company,number')->where(['order_id' => $post->id])->asArray()->one();
 		}
-		if ($address = RegionModel::getArrayRegion($order['region_id'])) {
+		if ($address = RegionModel::getArray($order['region_id'])) {
 			$order['address'] = implode('', $address). $order['address'];
 		}
 
 		if ($order['guider_id'] && ($array = GuideshopModel::find()->select('owner,phone_mob,region_id,address,name,banner')->where(['userid' => $order['guider_id']])->asArray()->one())) {
-			if ($address = RegionModel::getArrayRegion($array['region_id'])) {
+			if ($address = RegionModel::getArray($array['region_id'])) {
 				$array['region'] = implode('', $address);
 			}
 			$this->params['guideshop'] = $array;

@@ -13,6 +13,7 @@ namespace common\business\depopaytypes;
 
 use yii;
 
+use common\models\DepositAccountModel;
 use common\models\DepositTradeModel;
 use common\models\DepositSettingModel;
 
@@ -97,7 +98,7 @@ class TransferDepopay extends OutlayDepopay
 				// 转入的账户
 				$data_record['tradeNo']			= $extra_info['tradeNo'];
 				$data_record['userid'] 			= $trade_info['party_id'];
-				$data_record['balance']			= parent::_update_deposit_money($trade_info['party_id'], $trade_info['amount']); // 增加后的余额
+				$data_record['balance']			= DepositAccountModel::updateDepositMoney($trade_info['party_id'], $trade_info['amount']); // 增加后的余额
 				$data_record['tradeType']		= $this->_tradeType;
 				$data_record['flow']			= 'income';
 				$data_record['amount'] 			= $trade_info['amount'];
