@@ -221,8 +221,8 @@ class OrderForm extends Model
 			$orderInfo['shop_name'] = GuideshopModel::find()->select('name as shop_name')->where(['userid' => Yii::$app->user->id])->scalar();
 			Basewind::sendMailMsgNotify(
 				$orderInfo,
-				['key' => 'tobuyer_deliver_notify'],
-				['key' => 'tobuyer_deliver_notify', 'receiver' => $receiver]
+				['key' => 'tobuyer_pickup_notify'],
+				['key' => 'tobuyer_pickup_notify', 'receiver' => $receiver]
 			);
 		}
 

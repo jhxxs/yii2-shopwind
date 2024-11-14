@@ -6,6 +6,6 @@ return array(
 	'toseller_finish_notify' => '买家收货提醒卖家',
 	'toseller_refund_apply_notify' => '买家退款提醒卖家',
 	'tobuyer_refund_agree_notify' => '退款成功提醒买家',
-	'tobuyer_deliver_notify' => '门店取货通知买家',
+	'tobuyer_pickup_notify' => '门店取货通知买家',
 	'msgkey_not_config' => '短信KEY未配置',
 );

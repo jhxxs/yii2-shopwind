@@ -1398,7 +1398,7 @@ CREATE TABLE IF NOT EXISTS `swd_sms_log` (
   `userid` int(10) unsigned NOT NULL DEFAULT '0',
   `receiver` varchar(20) NOT NULL DEFAULT '',
   `verifycode` int(10) unsigned DEFAULT NULL,
-  `codekey` varchar(32) NOT NULL DEFAULT '',
+  `codekey` varchar(32) DEFAULT NULL,
   `content` text,
   `quantity` int(10) DEFAULT '0',
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',

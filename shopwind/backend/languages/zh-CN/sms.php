@@ -17,7 +17,7 @@ return array(
 	'toseller_finish_notify' => '买家收货通知卖家',
 	'toseller_refund_apply_notify' => '买家退款通知卖家',
 	'tobuyer_refund_agree_notify' => '退款成功通知买家',
-	'tobuyer_deliver_notify' => '门店到货通知买家',
+	'tobuyer_pickup_notify' => '门店到货通知买家',
 
 	'set_ok' => '设置成功',
 	'to_user' => '短信发送者',

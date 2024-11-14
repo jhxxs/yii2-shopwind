@@ -183,7 +183,7 @@ class OrderModel extends ActiveRecord
 
 		// 取得支持货到付款地区的所有下级地区
 		$all = array();
-		foreach ($regions as $id => $name) {
+		foreach ($regions as $id) {
 			$all = array_merge($all, (array)RegionModel::getDescendantIds($id));
 		}
 

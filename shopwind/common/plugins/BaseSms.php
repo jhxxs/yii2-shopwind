@@ -232,7 +232,7 @@ class BaseSms extends BasePlugin
 			'toseller_finish_notify', 				// 买家已确认通知卖家
 			'toseller_refund_apply_notify', 		// 买家退款申请，通知卖家
 			'tobuyer_refund_agree_notify', 			// 卖家同意退款成功，通知买家
-			'tobuyer_deliver_notify'				// 货到门店可以取货，通知买家
+			'tobuyer_pickup_notify'				// 货到门店可以取货，通知买家
 		];
 		if ($all) {
 			$array = array_merge(
