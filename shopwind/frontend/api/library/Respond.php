@@ -38,10 +38,11 @@ class Respond
 	// TOKEN过期时间
 	public $expired = 604800;
 
-	/*
+	/**
 	 * 返回的CODE值统一规范：
 	 * CODE必须是数字型，非字符型，以下是系统级验证的CODE值
-	 * 秘钥问题使用1000-2000的值
+	 * 秘钥问题使用1000-1999的值
+	 * 用户问题使用2000-2999的值
 	 * 		0: 代表成功
 	 *   1001：表示APPID为空
 	 *   1002：表示APPID非法
@@ -51,6 +52,7 @@ class Respond
 	 *   1041：表示签名（sign）为空
 	 *   1042：表示签名（sign）不正确
 	 *   2001：表示用户不存在
+	 *   2002：表示用户余额（钱包，保证金等）不足
 	 *   3001：表示要操作的数据不存在，比如查询/删除/更新操作，没有对应的数据
 	 *   3002：表示请求的参数不能为空或参数不合法等导致的数据错误
 	 *   3003：表示有相关数据，但在对数据进行查询/更新/删除的操作失败
@@ -58,7 +60,7 @@ class Respond
 	 *   4001：表示获取TOKEN失败
 	 *   4002: 表示TOKEN无效
 	 *   4003：表示TOKEN已过期
-	 * 	 4004: 表示TOKEN无权限（用户无权限，或未登录）
+	 *   4004: 表示TOKEN无权限（用户无权限，或未登录）
 	 */
 	const SUCCESS 				= 0;
 	const APPID_EMPTY 			= 1001;
@@ -69,6 +71,7 @@ class Respond
 	const SIGN_EMPTY 			= 1041;
 	const SIGN_INVALID 			= 1042;
 	const USER_NOTEXIST 		= 2001;
+	const USER_MONEYLACK 		= 2002;
 	const RECORD_NOTEXIST 		= 3001;
 	const PARAMS_INVALID 		= 3002;
 	const CURD_FAIL 			= 3003;
@@ -150,12 +153,15 @@ class Respond
 			return false;
 		}
 
-		// 如果是获取TOKEN的请求
-		if ($auth == true) {
-			return true;
-		}
-
 		// 此时，签名认证通过，可以认为除TOKEN外所有参数的都是合法的
+
+		// 如果是获取TOKEN的请求直接通过
+		if ($auth) return true;
+
+		// 如果只限制访问用户级的接口需要TOKEN，则启用
+		// 相对应的，如果需要所有接口都需要TOKEN校验，则关闭
+		if (!$force && empty($this->post['token'])) return true;
+
 		// 接下来，验证访客，并设置访客状态
 		return $this->verifyUser($force);
 	}
@@ -183,7 +189,7 @@ class Respond
 			return false;
 		}
 
-		$identity = UserModel::find()->where(['userid' => $query->userid])->one();
+		$identity = UserModel::findIdentity($query->userid);
 		if ($identity && Yii::$app->user->login($identity)) {
 
 			// 修改过期时间，以达到延长登录时效的效果 (但是7天内没有登录的，会过期)
