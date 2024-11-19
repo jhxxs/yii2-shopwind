@@ -52,7 +52,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * <a href="https://www.shopwind.net/forum/portal.html" target="_blank"> 查看常见问题/安装教程 </a>
 
 #### 多商户旗舰版体验（商业版）
-* 前台体验：<a href="https://v4.shopwind.net" target="_blank"> https://v4.shopwind.net </a> 自行微信登录、QQ、支付宝登 (或使用账号：18978189162  密码：111111  支付密码：111111)
+* 前台体验：<a href="https://v4.shopwind.net" target="_blank"> https://v4.shopwind.net </a> 自行微信登录、QQ、支付宝登录 (或使用账号：18978189162  密码：111111  支付密码：111111)
 * 商家后台：<a href="https://v4.shopwind.net/seller/index" target="_blank"> https://v4.shopwind.net/seller/index </a> 商家测试账号：18978189171 密码：111111
 * 平台后台：<a href="https://v4.shopwind.net/admin" target="_blank">  https://v4.shopwind.net/admin </a> 平台管理员账号：admin 密码：111111
 
