@@ -1169,9 +1169,9 @@ CREATE TABLE IF NOT EXISTS `swd_plugin` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `instance` varchar(20) NOT NULL,
   `code` varchar(20) NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `subname` varchar(50) NOT NULL,
-  `desc` varchar(255) NOT NULL,
+  `summary` varchar(100) NOT NULL,
   `config` text NOT NULL,
   `enabled` int(11) NOT NULL,
   PRIMARY KEY (`id`)

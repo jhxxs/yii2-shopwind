@@ -12,7 +12,7 @@
 namespace backend\models;
 
 use Yii;
-use yii\base\Model; 
+use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 use common\models\PluginModel;
@@ -65,7 +65,6 @@ class PluginForm extends Model
 			$pluginInfo = Plugin::getInstance($this->instance)->build($this->code)->getInfo();
 			$model->name = $pluginInfo['name'];
 			$model->subname = isset($pluginInfo['subname']) ? $pluginInfo['subname'] : '';
-			$model->desc = $pluginInfo['desc'];
 		}
 		$model->instance = $this->instance;
 		$model->code = $this->code;
