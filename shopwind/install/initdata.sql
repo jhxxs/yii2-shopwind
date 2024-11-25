@@ -934,7 +934,7 @@ INSERT INTO `swd_goods_spec` (`spec_id`, `goods_id`, `spec_1`, `spec_2`, `price`
 -- 转存表中的数据 `swd_plugin`
 --
 delete from `swd_plugin`;
-INSERT INTO `swd_plugin` (`id`, `instance`, `code`, `name`, `desc`, `config`, `enabled`) VALUES(1, 'payment', 'deposit', '余额支付', '余额支付是您在网站上的虚拟资金帐户', '', 1);
+INSERT INTO `swd_plugin` (`id`, `instance`, `code`, `name`, `summary`, `config`, `enabled`) VALUES(1, 'payment', 'deposit', '余额支付', '余额支付是您在网站上的虚拟资金帐户', '', 1);
 
 --
 -- 转存表中的数据 `swd_region`
