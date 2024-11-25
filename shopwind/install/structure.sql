@@ -1170,10 +1170,10 @@ CREATE TABLE IF NOT EXISTS `swd_plugin` (
   `instance` varchar(20) NOT NULL,
   `code` varchar(20) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `subname` varchar(50) NOT NULL,
-  `summary` varchar(100) NOT NULL,
-  `config` text NOT NULL,
-  `enabled` int(11) NOT NULL,
+  `subname` varchar(50) DEFAULT '',
+  `summary` varchar(100) DEFAULT '',
+  `config` text DEFAULT '',
+  `enabled` int(11) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
