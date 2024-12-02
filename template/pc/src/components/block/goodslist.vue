@@ -63,7 +63,7 @@ const loading = ref(true)
 const gallery = ref([])
 const height = ref('')
 onMounted(() => {
-    goodsList({ items: props.options.source == 'choice' ? props.options.items : '', orderby: props.options.orderby || 'add_time|desc', cate_id: props.options.source == 'category' ? props.options.cate_id : 0, page_size: props.options.quantity }, (data) => {
+    goodsList({ items: props.options.source == 'choice' ? props.options.items : '', orderby: props.options.orderby || '', cate_id: props.options.source == 'category' ? props.options.cate_id : 0, page_size: props.options.quantity }, (data) => {
         gallery.value = data.list
     }, loading)
 })

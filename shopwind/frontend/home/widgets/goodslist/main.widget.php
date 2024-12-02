@@ -61,10 +61,8 @@ class GoodslistWidget extends BaseWidget
 
         if ($this->options['orderby']) {
             $orderBy = explode('|', $this->options['orderby']);
-            $query->orderBy([$orderBy[0]  => $orderBy[1] == 'desc' ? SORT_DESC : SORT_ASC]);
-        } else {
-            $query->orderBy(['g.goods_id' => SORT_DESC]);
-        }
+            $query->orderBy([(in_array($orderBy[0], ['add_time', 'price']) ? 'g.' . $orderBy[0] : $orderBy[0]) => strtolower($orderBy[1]) == 'asc' ? SORT_ASC : SORT_DESC, 'g.goods_id' => SORT_DESC]);
+        } else $query->orderBy(['g.recommended' => SORT_DESC, 'gst.sales' => SORT_DESC, 'g.goods_id' => SORT_DESC]);
 
         if (empty($list = $query->asArray()->all())) {
             $list = array([], [], [], [], [], [], [], []);

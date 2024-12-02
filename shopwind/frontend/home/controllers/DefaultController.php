@@ -57,10 +57,8 @@ class DefaultController extends \common\base\BaseController
 
 	private function getTkd()
 	{
-		return [
-			'title' => Yii::$app->params['site_title'],
-			'keywords' => Yii::$app->params['site_keywords'],
-			'description' => Yii::$app->params['site_description']
-		];
+		$array = Page::seo();
+		unset($array['menu']);
+		return $array;
 	}
 }
