@@ -25,12 +25,12 @@
 					{$lang.smsplat}
 					<select class="querySelect" name="code">
 						<option value="">{$lang.select_pls}</option>
-						{html_options options=$smslist selected=$smarty.get.code}
+						{html_options options=$smslist selected=$smarty.get.code|escape}
 					</select>
 					{$lang.status}
 					<select class="querySelect" name="status">
 						<option value="">{$lang.select_pls}</option>
-						{html_options options=$status_list selected=$smarty.get.status}
+						{html_options options=$status_list selected=$smarty.get.status|escape}
 					</select>
 					<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7" value="{$lang.query}" />
 					<!--{if $filtered}-->

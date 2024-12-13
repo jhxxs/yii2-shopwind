@@ -43,29 +43,25 @@ class SmsController extends \common\base\BaseAdminController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 
-		if(!Yii::$app->request->isAjax) 
-		{
+		if (!Yii::$app->request->isAjax) {
 			// 发送平台列表数组，从这里读取平台名称
-			foreach(Plugin::getInstance('sms')->build()->getList() as $key => $value) {
+			foreach (Plugin::getInstance('sms')->build()->getList() as $key => $value) {
 				$this->params['smslist'][$key] = $value['name'];
 			}
 
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['status_list'] = array(Language::get('send_failed'), Language::get('send_success'));
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('sendlog')]);
 			return $this->render('../sms.index.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$query = SmsLogModel::find()->select('id,userid,quantity,status,message,add_time,content,receiver,code')->where(['type' => 0]);
 			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
-			
+
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach ($list as $key => $value)
-			{
-				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
+			foreach ($list as $key => $value) {
+				if (($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
 					$list[$key] = array_merge($value, $array);
 				}
 
@@ -84,23 +80,19 @@ class SmsController extends \common\base\BaseAdminController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 
-		if(!Yii::$app->request->isAjax) 
-		{
+		if (!Yii::$app->request->isAjax) {
 			$this->params['filtered'] = $this->getConditions($post);
 
 			$this->params['page'] = Page::seo(['title' => Language::get('smsrecharge')]);
 			return $this->render('../sms.recharge.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$query = SmsLogModel::find()->select('id,userid,quantity,status,message,add_time')->where(['type' => 1]);
 			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
-			
+
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach ($list as $key => $value)
-			{
-				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
+			foreach ($list as $key => $value) {
+				if (($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
 					$list[$key] = array_merge($value, $array);
 				}
 
@@ -110,72 +102,65 @@ class SmsController extends \common\base\BaseAdminController
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
-	
+
 	public function actionUser()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
-		
-		if(!Yii::$app->request->isAjax) 
-		{
+
+		if (!Yii::$app->request->isAjax) {
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['status_list'] = array(Language::get('closed'), Language::get('enable'));
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('smsuser')]);
 			return $this->render('../sms.user.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$query = SmsModel::find()->select('id,num,state,userid,functions');
 			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
-			
+
 			// 发送短信的场景
 			$functions = Plugin::getInstance('sms')->build()->getFunctions();
 
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach ($list as $key => $value)
-			{
-				foreach($functions as $v) {
+			foreach ($list as $key => $value) {
+				foreach ($functions as $v) {
 					$list[$key][$v] = in_array($v, explode(',', $value['functions'])) ? 1 : 0;
 				}
 
-				if(($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
+				if (($array = UserModel::find()->select('username,phone_mob')->where(['userid' => $value['userid']])->asArray()->one())) {
 					$list[$key] = array_merge($list[$key], $array);
 				}
 			}
-			
+
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
-	
+
 	/* 分配短信 */
 	public function actionAdd()
 	{
-		if(!Yii::$app->request->isPost)
-		{
+		if (!Yii::$app->request->isPost) {
 			$post = Basewind::trimAll(Yii::$app->request->get(), true, ['userid']);
 			$this->params['user'] = UserModel::find()->select('userid,username')->where(['userid' => $post->userid])->asArray()->one();
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('smsadd')]);
 			return $this->render('../sms.form.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['num']);
-			
+
 			$model = new \backend\models\SmsForm();
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('handle_ok'), ['sms/recharge']);
 		}
 	}
-	
+
 	public function actionDelete()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		$post->id = explode(',', $post->id);
-		if(is_array($post->id) && !empty($post->id)) {
+		if (is_array($post->id) && !empty($post->id)) {
 			SmsLogModel::deleteAll(['in', 'id', $post->id]);
 		}
 		return Message::display(Language::get('drop_ok'));
@@ -188,22 +173,18 @@ class SmsController extends \common\base\BaseAdminController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page']);
 
-		if(!Yii::$app->request->isAjax) 
-		{
+		if (!Yii::$app->request->isAjax) {
 			$this->params['filtered'] = $this->getConditions($post);
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('smstemplate')]);
 			return $this->render('../sms.template.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$query = SmsTemplateModel::find()->select('id,code,templateId,content,signName,scene,add_time');
 			$query = $this->getConditions($post, $query)->orderBy(['id' => SORT_DESC]);
 
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-			foreach ($list as $key => $value)
-			{
+			foreach ($list as $key => $value) {
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['name'] = Plugin::getInstance('sms')->build()->getInfo($value['code'])['name'];
 				$list[$key]['scene'] = Language::get($value['scene']);
@@ -221,32 +202,29 @@ class SmsController extends \common\base\BaseAdminController
 	{
 		$id = Yii::$app->request->get('id', 0);
 
-		if(!Yii::$app->request->isPost)
-		{
-			if($id && ($template = SmsTemplateModel::find()->where(['id' => $id])->asArray()->one())) {
+		if (!Yii::$app->request->isPost) {
+			if ($id && ($template = SmsTemplateModel::find()->where(['id' => $id])->asArray()->one())) {
 				$this->params['template'] = $template;
 			}
 
 			$smser = Plugin::getInstance('sms')->build();
 
 			// 发送平台列表数组，从这里读取平台名称
-			foreach($smser->getList() as $key => $value) {
+			foreach ($smser->getList() as $key => $value) {
 				$this->params['smslist'][$key] = $value['name'];
 			}
 
 			// 发送短信的场景
 			$this->params['scenelist'] = $smser->getFunctions(true);
-			
+
 			$this->params['page'] = Page::seo(['title' => Language::get('addtemplate')]);
 			return $this->render('../sms.template.form.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-			
+
 			$model = new \backend\models\SmsTemplateForm();
 			$model->id = $id;
-			if(!$model->save($post, true)) {
+			if (!$model->save($post, true)) {
 				return Message::warning($model->errors);
 			}
 			return Message::display(Language::get('handle_ok'), ['sms/template']);
@@ -260,94 +238,106 @@ class SmsController extends \common\base\BaseAdminController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		$post->id = explode(',', $post->id);
-		if(is_array($post->id) && !empty($post->id)) {
+		if (is_array($post->id) && !empty($post->id)) {
 			SmsTemplateModel::deleteAll(['in', 'id', $post->id]);
 		}
 		return Message::display(Language::get('drop_ok'));
 	}
-	
+
+	/* 异步修改数据 */
+	public function actionEditcol()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);
+		if (in_array($post->column, ['signName', 'templateId'])) {
+
+			if ($model = SmsTemplateModel::findOne($post->id)) {
+				$model->{$post->column} = $post->value;
+				if (!$model->save()) {
+					return Message::warning($model->errors);
+				}
+			}
+			return Message::display(Language::get('edit_ok'));
+		}
+	}
+
 	public function actionSend()
 	{
-		if(!Yii::$app->request->isPost)
-		{
+		if (!Yii::$app->request->isPost) {
 			$this->params['page'] = Page::seo(['title' => Language::get('sendtest')]);
 			return $this->render('../sms.send.html', $this->params);
-		}
-		else
-		{
+		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-			if(empty($post->content)) {
+			if (empty($post->content)) {
 				return Message::warning(Language::get('content_no_null'));
 			}
 
-			if(!($smser = Plugin::getInstance('sms')->autoBuild())) {
+			if (!($smser = Plugin::getInstance('sms')->autoBuild())) {
 				return Message::warning(Language::get('send_failed'));
 			}
 
 			$smser->receiver = $post->receiver;
-			if(!$smser->testsend($post->content)) {
+			if (!$smser->testsend($post->content)) {
 				return Message::warning($smser->errors);
 			}
 
 			return Message::display(Language::get('send_success'), ['sms/index']);
 		}
 	}
-	
+
 	public function actionExport()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
-		if($post->id) $post->id = explode(',', $post->id);
-		
+		if ($post->id) $post->id = explode(',', $post->id);
+
 		$query = SmsLogModel::find()->alias('ml')->select('ml.*,u.username')->joinWith('user u', false)->indexBy('id')->where(['ml.type' => 0])->orderBy(['id' => SORT_DESC]);
-		if(!empty($post->id)) {
+		if (!empty($post->id)) {
 			$query->andWhere(['in', 'id', $post->id]);
-		}
-		else {
+		} else {
 			$query = $this->getConditions($post, $query);
 		}
-		if($query->count() == 0) {
+		if ($query->count() == 0) {
 			return Message::warning(Language::get('no_such_msg'));
 		}
-		return \backend\models\SmsLogExportForm::download($query->asArray()->all());		
+		return \backend\models\SmsLogExportForm::download($query->asArray()->all());
 	}
-	
+
 	private function getConditions($post, $query = null)
 	{
-		if($query === null) {
-			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
-				if(in_array($field, ['username', 'receiver', 'code', 'status', 'phone_mob', 'type', 'templateId'])) {
+		if ($query === null) {
+			foreach (array_keys(ArrayHelper::toArray($post)) as $field) {
+				if (in_array($field, ['username', 'receiver', 'code', 'status', 'phone_mob', 'type', 'templateId'])) {
 					return true;
 				}
 			}
 			return false;
 		}
-		if($post->username) {
+		if ($post->username) {
 			$userid = UserModel::find()->select('userid')->where(['username' => $post->username])->scalar();
 			$query->andWhere(['userid' => $userid]);
 		}
 		// 针对发送记录才有
-		if(isset($post->receiver) && $post->receiver) {
+		if (isset($post->receiver) && $post->receiver) {
 			$query->andWhere(['like', 'receiver', $post->receiver]);
 		}
 		// 针对发送记录才有
-		if(isset($post->status) && $post->status !== '') {
+		if (isset($post->status) && $post->status !== '') {
 			$query->andWhere(['status' => ($post->status == 1) ? 1 : 0]);
 		}
 		// 针对发送记录才有
-		if($post->code) {
+		if ($post->code) {
 			$query->andWhere(['code' => $post->code]);
 		}
 		// 针对短信用户才有
-		if(isset($post->phone_mob) && $post->phone_mob) {
+		if (isset($post->phone_mob) && $post->phone_mob) {
 			$userid = UserModel::find()->select('userid')->where(['phone_mob' => $post->phone_mob])->scalar();
 			$query->andWhere(['userid' => $userid]);
 		}
 		// 针对短信用户才有
-		if(isset($post->state) && $post->state != '') {
+		if (isset($post->state) && $post->state != '') {
 			$query->andWhere(['state' => ($post->state == 1) ? 1 : 0]);
 		}
 		// 针对新增/编辑短信模板才有
-		if($post->templateId) {
+		if ($post->templateId) {
 			$query->andWhere(['templateId' => $post->templateId]);
 		}
 

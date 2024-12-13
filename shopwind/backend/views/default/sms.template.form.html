@@ -35,7 +35,7 @@
                             <th class="paddingT15"><label>{$lang.smsplat}</label></th>
                             <td class="paddingT15 wordSpacing5">
                                 <select class="querySelect" name="code">
-                                    {html_options options=$smslist selected=$smarty.get.code}
+                                    {html_options options=$smslist selected=$smarty.get.code|escape}
                                 </select>
                             </td>
                         </tr>

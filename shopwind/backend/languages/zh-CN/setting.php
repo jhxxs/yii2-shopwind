@@ -55,7 +55,6 @@ return array(
     'edit_store_setting_successed' => '编辑开店设置成功',
 	'edit_api_setting_successed' => '编辑API设置成功',
     'copyright' => '版权信息',
-    'statistics_code' => '流量统计代码',
     'default_goods_image_desc' => '默认商品图片，建议尺寸为800*800像素',
 	'default_store_logo_desc' => '默认店铺标志，建议尺寸为200*200像素',
 	'default_user_portrait_desc' => '默认用户头像，建议尺寸为100*100像素',

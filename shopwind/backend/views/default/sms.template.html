@@ -18,9 +18,9 @@
           <div class="webkit-box box-align-center">
             <input type="hidden" name="r" value="sms/template" />
             {$lang.template_id}
-            <input class="infoTableInput mr10 ml10" type="text" name="templateId" value="{$smarty.get.templateId|escape}" />
-            <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7"
-              value="{$lang.query}" />
+            <input class="infoTableInput mr10 ml10" type="text" name="templateId"
+              value="{$smarty.get.templateId|escape}" />
+            <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7" value="{$lang.query}" />
             <!--{if $filtered}-->
             <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center"
               href="{url route='sms/template'}">{$lang.cancel_query}</a>
@@ -63,8 +63,8 @@
         , { field: 'id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
         , { field: 'name', title: '短信平台', width: 120, sort: true }
         , { field: 'scene', title: '短信场景', width: 150, sort: true }
-        , { field: 'signName', title: '短信签名', width: 110, sort: true }
-        , { field: 'templateId', title: '短信模板ID', width: 160, sort: true }
+        , { field: 'signName', title: '短信签名', width: 110, sort: true, edit: 'text' }
+        , { field: 'templateId', title: '短信模板ID', width: 160, sort: true, edit: 'text' }
         , { field: 'content', title: '短信模板', width: 370 }
         , { field: 'add_time', title: '创建时间', width: 180, sort: true }
         , { fixed: 'right', title: '操作', toolbar: '#colBar', width: 140, align: 'center' }
@@ -106,6 +106,13 @@
       } else if (obj.event === 'edit') {
         window.location.href = url(['sms/addtemplate', { id: data.id, code: data.code }]);
       }
+    });
+    //监听行单元格编辑事件
+    table.on('edit(tablegrid)', function (obj) {
+      var fieldObj = $(obj.tr).find('[data-field="' + obj.field + '"]');
+      ajaxRequest(fieldObj, url(['sms/editcol', { id: obj.data.id, column: obj.field, value: obj.value }]), function () {
+        obj.update();
+      });
     });
   });
 </script>
