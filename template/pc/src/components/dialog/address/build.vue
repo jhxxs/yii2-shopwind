@@ -20,7 +20,7 @@
                 <el-input v-model="address.phone_tel" />
             </el-form-item>
             <el-form-item label="设为默认" :label-width="85" style="width:100%">
-                <el-switch v-model="address.defaddr" active-value="1" inactive-value="0" />
+                <el-switch v-model="address.defaddr" :active-value="1" :inactive-value="0" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -56,7 +56,7 @@ watch(() => props.visible, (value) => {
     dialogVisible.value = value
 })
 watch(() => props.data, (value) => {
-    address.value = value
+    address.value = Object.assign(value, { defaddr: parseInt(value.defaddr) })
 })
 
 const emit = defineEmits(['close'])

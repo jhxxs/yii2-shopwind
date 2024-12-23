@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, getCurrentInstance } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElScrollbar } from 'element-plus'
 //import { Editor } from '@wangeditor/editor-for-vue'
@@ -201,18 +201,16 @@ const gallery = reactive({ touser: '', list: [], logs: [] })
 const form = reactive({ content: '' })
 const store = ref({})
 const orders = ref({})
+const timer = ref(null)
 
 onMounted(() => {
 	visitor.value = JSON.parse(localStorage.getItem('visitor')) || {}
 
-	setInterval(() => {
-		getList()
-	}, 2000)
-
 	getlogs()
-	setInterval(() => {
+	timer.value = setInterval(() => {
+		getList()
 		getlogs()
-	}, 1000)
+	}, 2000)
 
 	if (route.params.store_id > 0) {
 		storeRead(route.params, (data) => {
@@ -232,6 +230,10 @@ onMounted(() => {
 			}, loading)
 		})
 	}
+})
+
+onUnmounted(() => {
+	clearInterval(timer.value)
 })
 
 const send = () => {

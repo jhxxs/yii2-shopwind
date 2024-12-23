@@ -6,9 +6,9 @@
 
                 <div v-for="(item, index) in list"
                     :class="['uni-flex uni-row width-between  flex-middle pl10 pr10', item.current ? 'current' : '']">
-                    <el-checkbox @change="(value) => {queryClick(layer, item)}" v-model="item.checked"
+                    <el-checkbox @change="(value) => { queryClick(layer, item) }" v-model="item.checked"
                         :label="item.region_id" :indeterminate="item.indeterminate" :disabled="item.disabled">
-                        {{item.name}}</el-checkbox>
+                        {{ item.name }}</el-checkbox>
                     <p @click="queryClick(layer, item)" class="width-surplus" style="text-align:right">
                         <el-icon v-if="layer == 0">
                             <ArrowRight />

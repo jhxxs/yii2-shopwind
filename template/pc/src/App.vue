@@ -6,10 +6,12 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-//import { useMeta } from 'vue-meta'
 
 import zhCN from 'element-plus/lib/locale/lang/zh-cn'
+// 如果Node版本是v16的话，可能引入路径为
+// import zhCN from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
+
 </script>
 
 <style>

@@ -126,6 +126,7 @@ class DefaultController extends Controller
 			'../backend/runtime',
 			'../frontend/home/runtime',
 			'../frontend/api/runtime',
+			'../frontend/mob/runtime',
 		));
 
 		$this->params['check_env'] = $check_env;
@@ -162,7 +163,6 @@ class DefaultController extends Controller
 			if (Yii::$app->session->get('install_config') !== true) {
 				return Message::warning(Language::get('accept'));
 			}
-
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 
 			if (!$post->accept) {

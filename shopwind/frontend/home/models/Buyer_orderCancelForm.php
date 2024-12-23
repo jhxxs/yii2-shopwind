@@ -12,7 +12,7 @@
 namespace frontend\home\models;
 
 use Yii;
-use yii\base\Model; 
+use yii\base\Model;
 
 use common\models\OrderModel;
 use common\models\OrderLogModel;
@@ -32,21 +32,21 @@ use common\library\Def;
 class Buyer_orderCancelForm extends Model
 {
 	public $errors = null;
-	
+
 	public function formData($post = null)
 	{
-		if(!$post->order_id || !($orders = OrderModel::find()
-				->where(['in', 'order_id', explode(',', $post->order_id)])
-				->andWhere(['buyer_id' => Yii::$app->user->id])
-				->andWhere(['pay_time' => 0, 'ship_time' => 0]) // 未付款，未发货（货到付款）
-				->indexBy('order_id')->asArray()->all())) {
+		if (!$post->order_id || !($orders = OrderModel::find()
+			->where(['in', 'order_id', explode(',', $post->order_id)])
+			->andWhere(['buyer_id' => Yii::$app->user->id])
+			->andWhere(['pay_time' => 0, 'ship_time' => 0]) // 未付款，未发货（货到付款）
+			->indexBy('order_id')->asArray()->all())) {
 
 			$this->errors = Language::get('no_such_order');
 			return false;
 		}
 		return $orders;
 	}
-	
+
 	/**
 	 * 买家取消订单
 	 */

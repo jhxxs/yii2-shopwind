@@ -1,0 +1,13 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["pages-trade-order-logistic"],{"016c":function(t,i,e){"use strict";e.r(i);var n=e("611f"),u=e("c714");for(var a in u)["default"].indexOf(a)<0&&function(t){e.d(i,t,(function(){return u[t]}))}(a);var s=e("828b"),c=Object(s["a"])(u["default"],n["b"],n["c"],!1,null,null,null,!1,n["a"],void 0);i["default"]=c.exports},"611f":function(t,i,e){"use strict";e.d(i,"b",(function(){return n})),e.d(i,"c",(function(){return u})),e.d(i,"a",(function(){}));var n=function(){var t=this,i=t.$createElement,e=t._self._c||i;return e("v-uni-view",[t.logistic.length>0?e("v-uni-view",t._l(t.logistic,(function(i,n){return e("v-uni-view",{key:n},[i.number?e("v-uni-view",{staticClass:"uni-flex uni-column mb10 pd10 bgr f-white"},[t.logistic.length>1?e("v-uni-text",[t._v("快件"+t._s(n+1))]):t._e(),e("v-uni-text",[t._v("物流公司："+t._s(i.company))]),e("v-uni-text",[t._v("物流单号："+t._s(i.number))])],1):t._e(),i.details&&i.details.length>0?e("v-uni-view",{staticClass:"pb10"},[e("v-uni-view",{staticClass:"round-edge ml10 mr10 bgf pd10 mt10 mb10"},t._l(i.details,(function(i,n){return e("v-uni-view",{key:n,class:["pb10",0==n?"f-red":"pt10 bt"]},[e("v-uni-view",{staticClass:"f-gray f-15"},[t._v(t._s(i.time))]),e("v-uni-view",[t._v(t._s(i.context))])],1)})),1)],1):e("v-uni-view",{staticClass:"uni-center"},[e("v-uni-view",{staticClass:"iconfont iconmeiyoudingdan-01 f-gray flex-center empty-icons"}),e("v-uni-view",{staticClass:"uni-text-gray"},[t._v("暂无物流跟踪信息")])],1)],1)})),1):e("v-uni-view",{staticClass:"mb10 pd10 bgr f-white"},[t._v("无需物流")])],1)},u=[]},8270:function(t,i,e){"use strict";var n=e("f5bd").default,u=n(e("8e1d"));t.exports={logistic:
+/**
+ * @link https://www.shopwind.net/
+ * @copyright Copyright (c) 2018 ShopWind Inc. All Rights Reserved.
+ *
+ * This is not free software. Do not use it for commercial purposes. 
+ * If you need commercial operation, please contact us to purchase a license.
+ * @license https://www.shopwind.net/license/
+ *
+ * @Id logistic.js 2019.10.26 $
+ * @author winder
+ */
+function(t,i){u.default.request("order/logistic",{order_id:i},(function(i){0==i.code&&(t.logistic=i.data||[],t.logistic.details&&t.logistic.details.length>0&&uni.setNavigationBarColor({backgroundColor:"#F1F1F1"}))}))}}},c714:function(t,i,e){"use strict";e.r(i);var n=e("d276"),u=e.n(n);for(var a in n)["default"].indexOf(a)<0&&function(t){e.d(i,t,(function(){return n[t]}))}(a);i["default"]=u.a},d276:function(t,i,e){"use strict";e("6a54");var n=e("f5bd").default;Object.defineProperty(i,"__esModule",{value:!0}),i.default=void 0;var u=n(e("a03c")),a=n(e("8270")),s={data:function(){return{logistic:[]}},onLoad:function(t){u.default.verifyLogin(!0,this.$mp.page.route)&&a.default.logistic(this,t.id)}};i.default=s}}]);

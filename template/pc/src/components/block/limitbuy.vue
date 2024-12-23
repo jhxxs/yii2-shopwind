@@ -10,9 +10,9 @@
                 <div class="rp width-surplus pl10 bgf">
                     <div class="uni-flex uni-row">
 
-                        <div v-for="item in gallery" ref="goods" class="bgf mr10 center item pd15">
+                        <div v-for="(item, index) in gallery" ref="goods" class="bgf mr10 center item pd15">
                             <router-link :to="'/goods/detail/' + item.goods_id" class="pic rlink">
-                                <img @load="onload" :src="item.goods_image" class="w-full block" />
+                                <img @load="onload(index)" :src="item.goods_image" class="w-full block" />
                             </router-link>
                             <router-link :to="'/goods/detail/' + item.goods_id" class="desc line-clamp-2 mt10 rlink">
                                 {{ item.goods_name }}
@@ -55,9 +55,11 @@ onMounted(() => {
     }, loading)
 })
 
-const onload = () => {
-    if (gallery.value.length > 0) {
-        height.value = proxy.$refs.goods[0].clientHeight
+const onload = (index) => {
+    if (gallery.value.length > 0 && index == 0) {
+        setTimeout(() => {
+            height.value = proxy.$refs.goods[0].clientHeight
+        }, 100);
     }
 }
 
@@ -82,4 +84,3 @@ const onload = () => {
     width: calc(20% - 30px);
 }
 </style>
-

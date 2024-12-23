@@ -1044,6 +1044,7 @@ CREATE TABLE IF NOT EXISTS `swd_order` (
   `memo` varchar(255) DEFAULT '',
   `adjust_amount` decimal(10,2) DEFAULT '0.00',
   `guider_id` int(10) unsigned DEFAULT '0',
+  `shipwx` tinyint(1) unsigned DEFAULT '0' COMMENT '发货信息推送至微信0=未推1=已推2=二推',
   PRIMARY KEY (`order_id`),
   KEY `order_sn` (`order_sn`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

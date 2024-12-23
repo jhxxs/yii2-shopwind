@@ -145,9 +145,17 @@
 location /home {
   try_files $uri $uri/ /home/index.php$is_args$args;
 }
+
+location /mob {
+  try_files $uri $uri/ /mob/index.php$is_args$args;
+}
           
 location /api {
   try_files $uri $uri/ /api/index.php$is_args$args;
+}
+
+location /h5 {
+  try_files $uri $uri/ /h5/index.html;
 }
           
 location / {

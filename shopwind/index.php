@@ -62,14 +62,25 @@ location /home {
   try_files $uri $uri/ /home/index.php$is_args$args;
 }
 
+location /mob {
+  try_files $uri $uri/ /mob/index.php$is_args$args;
+}
+
+location /install {
+  try_files $uri $uri/ /install/index.php$is_args$args;
+}
+
 location /api {
   try_files $uri $uri/ /api/index.php$is_args$args;
 }
 
+location /h5 {
+  try_files $uri $uri/ /h5/index.html;
+}
+
 location / {
   try_files $uri $uri/ /index.php$is_args$args;
-}
-</pre><span>注：其他Web环境的伪静态规则查看 根目录/*.rewrite</span>
+}</pre><span>注：其他Web环境的伪静态规则查看 根目录/*.rewrite</span>
   </div>
 </body>
 

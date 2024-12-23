@@ -42,6 +42,7 @@ class ClearCacheAction extends Action
 		foreach ($folders as $folder) {
 			FileHelper::removeDirectory(Yii::getAlias('@backend') . '/runtime/' . $folder);
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/home/runtime/' . $folder);
+			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/mob/runtime/' . $folder);
 			FileHelper::removeDirectory(Yii::getAlias('@frontend') . '/api/runtime/' . $folder);
 			FileHelper::removeDirectory(Yii::getAlias('@install') . '/runtime/' . $folder);
 			FileHelper::removeDirectory(Yii::getAlias('@console') . '/runtime/' . $folder);
@@ -74,6 +75,7 @@ class ClearCacheAction extends Action
 		$folders = [
 			Yii::getAlias('@public') . '/admin/assets',
 			Yii::getAlias('@public') . '/home/assets',
+			Yii::getAlias('@public') . '/mob/assets',
 			Yii::getAlias('@public') . '/install/assets',
 		];
 

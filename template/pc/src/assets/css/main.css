@@ -431,6 +431,13 @@ ul {
 }
 
 /**
+ * 不换行
+ */
+.nowrap {
+	white-space: nowrap;
+}
+
+/**
  * 自动占满余量
  */
 .width-surplus {

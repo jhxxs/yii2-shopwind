@@ -69,6 +69,9 @@ location /home {
 location /api {
   try_files $uri $uri/ /api/index.php$is_args$args;
 }
+location /h5 {
+  try_files $uri $uri/ /h5/index.html;
+}
 location / {
   try_files $uri $uri/ /index.php$is_args$args;
 }

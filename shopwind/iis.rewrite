@@ -18,6 +18,30 @@
   </conditions>
   <action type="Rewrite" url="home/index.php" appendQueryString="true"/>
  </rule>
+ <rule name="rewrite_mob_rewrite" stopProcessing="true">
+  <match url="mob/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="mob/index.php" appendQueryString="true"/>
+ </rule>
+ <rule name="rewrite_install_rewrite" stopProcessing="true">
+  <match url="install/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="install/index.php" appendQueryString="true"/>
+ </rule>
+ <rule name="rewrite_h5_rewrite" stopProcessing="true">
+  <match url="h5/?(.*)"/>
+  <conditions>
+   <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true"/>
+   <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true"/>
+  </conditions>
+  <action type="Rewrite" url="h5/index.html" appendQueryString="true"/>
+ </rule>
  <rule name="rewrite_rewrite" stopProcessing="true">
   <match url="." ignoreCase="false"/>
   <conditions>

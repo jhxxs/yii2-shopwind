@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { redirect } from '@/common/util.js'
 import { webimUnread, webimList } from '@/api/webim.js'
@@ -21,12 +21,13 @@ import { webimUnread, webimList } from '@/api/webim.js'
 const route = useRoute()
 const visitor = ref({})
 const message = reactive({ unread: 0, lastid: 0 })
+const timer = ref(null)
 
 onMounted(() => {
 	visitor.value = JSON.parse(localStorage.getItem('visitor')) || {}
 
 	if (visitor.value.userid && route.path.indexOf('/webim/chat') < 0) {
-		setInterval(() => {
+		timer.value = setInterval(() => {
 			webimUnread(null, (data) => {
 				if (data > message.unread) {
 					webimList(null, (res) => {
@@ -40,8 +41,12 @@ onMounted(() => {
 					message.unread = data
 				}
 			})
-		}, 4000)
+		}, 5000)
 	}
+})
+
+onUnmounted(() => {
+	clearInterval(timer.value)
 })
 
 </script>

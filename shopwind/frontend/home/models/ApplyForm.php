@@ -40,6 +40,26 @@ class ApplyForm extends Model
 
 	public function valid($post = null)
 	{
+		if (empty($post->store_name)) {
+			$this->errors = Language::get('input_store_name');
+			return false;
+		}
+		if (($store = StoreModel::find()->select('store_id')->where(['store_name' => $post->store_name])->one())) {
+			if (!$this->store_id || ($this->store_id != $store->store_id)) {
+				$this->errors = Language::get('store_name_existed');
+				return false;
+			}
+		}
+
+		if (!$post->region_id) {
+			$this->errors = Language::get('所在地区不能为空');
+			return false;
+		}
+		if (!$post->address) {
+			$this->errors = Language::get('详细地址不能为空');
+			return false;
+		}
+
 		if (empty($post->owner)) {
 			$this->errors = Language::get('owner_empty');
 			return false;
@@ -51,17 +71,6 @@ class ApplyForm extends Model
 		if (empty($post->tel)) {
 			$this->errors = Language::get('tel_empty');
 			return false;
-		}
-
-		if (empty($post->store_name)) {
-			$this->errors = Language::get('input_store_name');
-			return false;
-		}
-		if (($store = StoreModel::find()->select('store_id')->where(['store_name' => $post->store_name])->one())) {
-			if (!$this->store_id || ($this->store_id != $store->store_id)) {
-				$this->errors = Language::get('store_name_existed');
-				return false;
-			}
 		}
 
 		return true;

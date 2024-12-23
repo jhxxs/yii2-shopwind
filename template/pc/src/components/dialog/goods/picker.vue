@@ -2,7 +2,7 @@
     <el-dialog v-model="dialogVisible" :title="title" :width="500" :center="true" :draggable="true"
         :destroy-on-close="false" :close-on-click-modal="false" :show-close="progress.total == progress.number"
         :before-close="close">
-        <div class="mb20 center">
+        <div class="mb20 pb20 center">
             <p v-if="progress.total > progress.number">
                 正在采集第<span class="f-green">{{ progress.number + 1 }}</span>
                 / {{ progress.total }}个商品
@@ -11,6 +11,7 @@
                 商品采集完毕，
                 成功<span class="f-green">{{ progress.success }}</span>个，
                 失败<span class="f-red">{{ progress.fail }}</span>个
+                <router-link to="/seller/goods/list" class="rlink f-red ml10">查看采集的商品</router-link>
             </p>
         </div>
     </el-dialog>
@@ -72,7 +73,7 @@ function picker(params) {
         } else {
             setTimeout(() => {
                 emit('close')
-            }, 8000);
+            }, 10000);
         }
     })
 }

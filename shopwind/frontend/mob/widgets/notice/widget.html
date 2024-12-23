@@ -1,0 +1,42 @@
+<div class="noticebox" id="noticebox-{$widget_data.uniqueid}">
+  <div class="content round-edge bgf ml10 mr10 uni-flex uni-row {$widget_data.radius}">
+    <div class="uni-flex uni-row center style{$widget_data.style}">
+      <!--{if $widget_data.style eq 2}-->
+      <img src="{res file='images/notice_style2.png' baseUrl=$mobileUrl}" />
+      <!--{else}-->
+      <img src="{res file='images/notice_style1.png' baseUrl=$mobileUrl}" />
+      <!--{/if}-->
+    </div>
+    <div class="width-surplus f-12 split pl10 ml10 overflow">{$widget_data.list.0.title|default:'文章标题'}</div>
+  </div>
+</div>
+
+<style>
+  .noticebox .content {
+    padding: 15px 10px;
+  }
+
+  .noticebox .content.square {
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .noticebox .content img {
+    display: inline-block;
+    height: 16px;
+  }
+
+  .noticebox .split {
+    border-left: 1px #f1f1f1 solid;
+  }
+
+  .noticebox .style2 img {
+    height: 19px;
+  }
+</style>
+<script>
+  $(function () {
+    $('#noticebox-{$widget_data.uniqueid} .content').css('background-color', '{$widget_data.bgcolor|default:"#ffffff"}');
+    $('#noticebox-{$widget_data.uniqueid}').css('margin', '{$widget_data.space|default:0}px 0');
+  });
+</script>

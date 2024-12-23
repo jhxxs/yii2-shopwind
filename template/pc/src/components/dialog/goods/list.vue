@@ -38,7 +38,7 @@
         </div>
         <div v-loading="loading">
             <el-table ref="multipleTableRef" :data="gallery" :border="false" :stripe="false" @select="selectClick"
-                @selectAll="selectAllClick">
+                @selectAll="selectAllClick" :header-cell-style="{ 'background': '#f3f8fe' }">
                 <el-table-column fixed="left" type="selection" />
                 <el-table-column width="70" label="图片" align="center">
                     <template #default="scope">

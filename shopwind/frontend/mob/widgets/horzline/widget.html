@@ -1,0 +1,22 @@
+<div class="horzline" id="horzline-{$widget_data.uniqueid}">
+  <div class="content {$options.line}"></div>
+</div>
+<style>
+  .horzline .content {
+    border-top-width: 1px;
+    border-top-style: solid;
+  }
+
+  .horzline .dashed {
+    border-top-style: dashed;
+  }
+</style>
+<script>
+  $(function () {
+    $('#horzline-{$widget_data.uniqueid} .content').css('border-top-color', '{$options.color|default:"#0d6fb8"}');
+    $('#horzline-{$widget_data.uniqueid} .content').css('margin', '0 {$options.margin|default:10}px');
+
+    $('#horzline-{$widget_data.uniqueid}').css('background', '{$widget_data.bgcolor|default:""}');
+    $('#horzline-{$widget_data.uniqueid}').css('padding', '{$options.space|default:10}px 0');
+  });
+</script>
