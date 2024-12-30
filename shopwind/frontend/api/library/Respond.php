@@ -97,8 +97,11 @@ class Respond
 		}
 
 		foreach ($post as $key => $value) {
-			if ($key == 'params') continue;
+		    if ($key == 'params' && !is_string($value)) continue;
 			$post[$key] = urldecode($value);
+		}
+		if (isset($post['params']) && is_string($post['params'])) {
+			$post['params'] = json_decode($post['params'], true);
 		}
 
 		return $post;
