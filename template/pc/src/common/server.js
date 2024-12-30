@@ -140,7 +140,6 @@ function http(api, params, callback, loading) {
 
 /**
  * 创建请求BODY
- * @param {Object} params 
  */
 function build(params) {
 
@@ -157,6 +156,6 @@ function build(params) {
 	obj.token = localStorage.getItem('access_token') || ''
 
 	// 业务级参数
-	obj.params = JSON.stringify(params)
+	obj.params = params
 	return obj
 }

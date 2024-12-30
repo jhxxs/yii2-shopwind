@@ -92,16 +92,13 @@ class Respond
 	 */
 	public function input()
 	{
-		$post = Yii::$app->request->post();
-		if (!$post) {
+		if (!($post = Yii::$app->request->post())) {
 			$post = Yii::$app->request->get();
 		}
 
-		foreach ($post as $key => $val) {
-			$post[$key] = urldecode($val);
-		}
-		if (isset($post['params'])) {
-			$post['params'] = json_decode($post['params'], true);
+		foreach ($post as $key => $value) {
+			if ($key == 'params') continue;
+			$post[$key] = urldecode($value);
 		}
 
 		return $post;
@@ -194,7 +191,6 @@ class Respond
 
 			// 修改过期时间，以达到延长登录时效的效果 (但是7天内没有登录的，会过期)
 			$query->update(['expire_time' => Timezone::gmtime() + $this->expired]);
-
 		} else {
 			Yii::$app->user->logout(); // 与客户端保持同步
 			if ($force) {
