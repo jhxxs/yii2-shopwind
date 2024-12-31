@@ -81,7 +81,7 @@ class DepositWithdrawModel extends ActiveRecord
 			}
 
 			// 扣减当前用户的冻结金额
-			if (DepositAccountModel::updateDepositFrozen($model->buyer_id, $model->amount, 'reduce') !== false) {
+			if (DepositAccountModel::updateDepositMoney($model->buyer_id, $model->amount, 'reduce', 'frozen') !== false) {
 				// TODO...
 
 				return true;

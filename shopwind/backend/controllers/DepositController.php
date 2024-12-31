@@ -352,7 +352,7 @@ class DepositController extends \common\base\BaseAdminController
 			DepositRecordModel::updateAll(['remark' => $post->remark], ['tradeNo' => $record['tradeNo'], 'userid' => $record['userid'], 'tradeType' => 'WITHDRAW']);
 
 			// 扣减当前用户的冻结金额
-			DepositAccountModel::updateDepositFrozen($record['userid'], $record['amount'], 'reduce');
+			DepositAccountModel::updateDepositMoney($record['userid'], $record['amount'], 'reduce', 'frozen');
 
 			// 将冻结金额退回到账户余额（变更账户余额）
 			$query = new DepositRecordModel();

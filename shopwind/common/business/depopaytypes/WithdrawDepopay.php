@@ -103,7 +103,7 @@ class WithdrawDepopay extends OutlayDepopay
 				'balance'		=>	DepositAccountModel::updateDepositMoney($trade_info['userid'], $trade_info['amount'], 'reduce'), // 扣除后的余额
 				'tradeType'		=>  $this->_tradeType,
 				'flow'			=>	$this->_flow,
-				'name' 			=>  Language::get('withdraw')
+				'name' 			=>  $data_trade['title']
 			);
 			if (parent::_insert_deposit_record($data_record, false)) {
 
