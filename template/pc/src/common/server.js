@@ -156,6 +156,6 @@ function build(params) {
 	obj.token = localStorage.getItem('access_token') || ''
 
 	// 业务级参数
-	obj.params = params
+	obj.params = JSON.stringify(params)
 	return obj
 }

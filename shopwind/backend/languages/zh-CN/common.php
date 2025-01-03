@@ -17,6 +17,7 @@ return array(
 	'pending'				=>	'等待付款',
 	'withdraw'				=>	'提现',
 	'recharge'				=>	'充值',
+	'verify'				=>  '审核中',
 	'handle_ok'				=>  '操作成功',
 	'handle_fail' 			=>  '操作失败',
 	'edit_ok'				=> 	'编辑成功',

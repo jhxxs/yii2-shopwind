@@ -97,11 +97,10 @@ class Respond
 		}
 
 		foreach ($post as $key => $value) {
-		    if ($key == 'params' && !is_string($value)) continue;
-			$post[$key] = urldecode($value);
-		}
-		if (isset($post['params']) && is_string($post['params'])) {
-			$post['params'] = json_decode($post['params'], true);
+			// 当参数值中有JSON字符串，如{"aa":"bb"}时，urldecode有影响
+			if ($key == 'params') {
+				$post[$key] = json_decode($value, true);
+			} else $post[$key] = urldecode($value);
 		}
 
 		return $post;
