@@ -51,20 +51,21 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 #### 安装教程
 * <a href="https://www.shopwind.net/forum/portal.html" target="_blank"> 查看常见问题/安装教程 </a>
 
-#### 多商户旗舰版体验（商业版）
+#### 多商户高级版（商业版）🔥🔥🔥
+* 前台体验：<a href="https://pro.shopwind.net" target="_blank"> https://pro.shopwind.net </a> 自行微信登录、QQ、支付宝登录 (或使用账号：18978189192  密码：111111  支付密码：111111)
+* 商家后台：<a href="https://pro.shopwind.net/seller/index" target="_blank"> https://pro.shopwind.net/seller/index </a> 商家测试账号：18978189171 密码：111111
+* 平台后台：<a href="https://pro.shopwind.net/admin" target="_blank">  https://pro.shopwind.net/admin </a> 平台管理员账号：admin 密码：111111
+* H5端体验：<a href="https://pro.shopwind.net/h5" target="_blank"> https://pro.shopwind.net/h5 </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
+* Android（安卓版）体验：<a href="https://pro.shopwind.net/shopwind.apk" target="_blank"> https://pro.shopwind.net/shopwind.apk </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
+
+#### 多商户旗舰版（商业版）
 * 前台体验：<a href="https://v4.shopwind.net" target="_blank"> https://v4.shopwind.net </a> 自行微信登录、QQ、支付宝登录 (或使用账号：18978189192  密码：111111  支付密码：111111)
 * 商家后台：<a href="https://v4.shopwind.net/seller/index" target="_blank"> https://v4.shopwind.net/seller/index </a> 商家测试账号：18978189171 密码：111111
 * 平台后台：<a href="https://v4.shopwind.net/admin" target="_blank">  https://v4.shopwind.net/admin </a> 平台管理员账号：admin 密码：111111
-
-#### 移动端体验（商业版）
 * H5端体验：<a href="https://v4.shopwind.net/h5" target="_blank"> https://v4.shopwind.net/h5 </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
-
-#### 小程序/APP体验（商业版）
 * 微信小程序：<a href="https://www.shopwind.net/static/images/20210507181842.jpg" target="_blank"> https://www.shopwind.net/static/images/20210507181842.jpg </a> 
 * Android（安卓版）体验：<a href="https://www.shopwind.net/static/images/qr-android.jpg" target="_blank"> https://www.shopwind.net/static/images/qr-android.jpg </a>
 * iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
-* 商家端体验（小程序）：<a href="https://www.shopwind.net/static/images/gh_fea54cf5a4a8_258.jpg" target="_blank"> https://www.shopwind.net/static/images/gh_fea54cf5a4a8_258.jpg </a>
-* 通用体验账号：买家（账号：18978189192   密码：111111  支付密码：111111）、商家（账号：18978189171  密码：111111）
 
 #### 社区团购独立版（商业版）
 * H5端体验： <a href="https://cgb.shopwind.net/h5" target="_blank">https://cgb.shopwind.net/h5</a> 买家测试账号：18978189192 密码：111111 支付密码：111111
