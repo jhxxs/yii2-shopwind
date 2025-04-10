@@ -57,6 +57,7 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * 平台后台：<a href="https://pro.shopwind.net/admin" target="_blank">  https://pro.shopwind.net/admin </a> 平台管理员账号：admin 密码：111111
 * H5端体验：<a href="https://pro.shopwind.net/h5" target="_blank"> https://pro.shopwind.net/h5 </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
 * Android（安卓版）体验：<a href="https://pro.shopwind.net/shopwind.apk" target="_blank"> https://pro.shopwind.net/shopwind.apk </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
+* iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
 
 #### 多商户旗舰版（商业版）
 * 前台体验：<a href="https://v4.shopwind.net" target="_blank"> https://v4.shopwind.net </a> 自行微信登录、QQ、支付宝登录 (或使用账号：18978189192  密码：111111  支付密码：111111)
@@ -65,15 +66,14 @@ ShopWind是2018年公司正式启用的电商系统品牌，并将其定位为�
 * H5端体验：<a href="https://v4.shopwind.net/h5" target="_blank"> https://v4.shopwind.net/h5 </a> 买家测试账号：18978189192 密码：111111  支付密码：111111
 * 微信小程序：<a href="https://www.shopwind.net/static/images/20210507181842.jpg" target="_blank"> https://www.shopwind.net/static/images/20210507181842.jpg </a> 
 * Android（安卓版）体验：<a href="https://www.shopwind.net/static/images/qr-android.jpg" target="_blank"> https://www.shopwind.net/static/images/qr-android.jpg </a>
-* iOS（苹果版）体验：<a href="https://apps.apple.com/cn/app/id1548625748" target="_blank"> https://apps.apple.com/cn/app/id1548625748 </a>
 
-#### 社区团购独立版（商业版）
+#### 社区团购版（商业版）
 * H5端体验： <a href="https://cgb.shopwind.net/h5" target="_blank">https://cgb.shopwind.net/h5</a> 买家测试账号：18978189192 密码：111111 支付密码：111111
 * 商家后台： <a href="https://cgb.shopwind.net" target="_blank">https://cgb.shopwind.net</a> 商家测试账号：18978189171 密码：111111 
 * 平台后台： <a href="https://cgb.shopwind.net/admin" target="_blank">https://cgb.shopwind.net/admin</a> 平台管理员账号：admin 密码：111111 
 * 团长登录： <a href="https://cgb.shopwind.net/h5/pages/guider/index/index" target="_blank">https://cgb.shopwind.net/h5/pages/guider/index/index</a> 团长账号：18999999999 密码：111111 
 
-#### 开源版体验
+#### 标准版体验（免费版）
 * 前台体验：<a href="https://test.shopwind.net" target="_blank"> https://test.shopwind.net </a> 买家测试账号：账号：18978189192 密码：111111 支付密码：111111
 * 商家后台：<a href="https://test.shopwind.net/seller/login" target="_blank"> https://test.shopwind.net/seller/login </a> 商家测试账号：18978189171 密码：111111
 * 平台后台：<a href="https://test.shopwind.net/admin" target="_blank">  https://test.shopwind.net/admin </a> 平台管理员账号：admin 密码：123456

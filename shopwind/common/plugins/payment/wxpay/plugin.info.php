@@ -59,10 +59,16 @@ return array(
             'placeholder' => 'cacert/apiclient_key.pem',
             'type'  => 'text',
         ),
-        'wechatKey'     => array(        // 微信平台证书文件
+        'wechatKey'     => array(        // 微信证书文件 & 微信公钥文件
             'text'  => Language::get('wechatkey'),
             'desc'  => Language::get('wxpemPath_desc'),
             'placeholder' => 'cacert/wechatpay.pem',
+            'type'  => 'text',
+        ),
+        'publicKeyId' => array(        // 微信公钥ID
+            'text'  => Language::get('publicKeyId'),
+            'desc'  => Language::get('publicKeyId_desc'),
+            'placeholder' => 'PUB_KEY...',
             'type'  => 'text',
         )
     )

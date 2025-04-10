@@ -82,10 +82,15 @@ class SDK
 	public $clientKey;
 
 	/**
-	 * 微信证书文件
+	 * 微信证书文件 & 微信公钥文件
 	 * @var string $wechatKey
 	 */
 	public $wechatKey;
+
+	/**
+	 * 微信公钥ID
+	 */
+	public $publicKeyId;
 
 	/**
 	 * 支付交易号
@@ -405,19 +410,23 @@ class SDK
 		// 从本地文件中加载商户API私钥，商户API私钥会用来生成请求的签名
 		$merchantPrivateKeyInstance = Rsa::from($merchantPrivateKeyFilePath, Rsa::KEY_TYPE_PRIVATE);
 
-		// 从本地文件中加载微信支付平台证书，用来验证微信支付应答的签名
+		// 从本地文件中加载微信证书文件 或 微信公钥文件
 		$platformCertificateFilePath = file_get_contents($this->wechatKey);
 		$platformPublicKeyInstance = Rsa::from($platformCertificateFilePath, Rsa::KEY_TYPE_PUBLIC);
 
-		// 获取微信支付平台证书序列号
-		$platformCertificateSerial = PemUtil::parseCertificateSerialNo($platformCertificateFilePath);
+		// 获取微信支付平台证书序列号【微信证书模式用】
+		//$platformCertificateSerial = PemUtil::parseCertificateSerialNo($platformCertificateFilePath);
+
+		// 微信支付公钥【微信公钥模式】
+		$platformPublicKeyId = $this->publicKeyId;
 
 		$instance = Builder::factory([
 			'mchid'      => $this->mchId,
 			'serial'     => $this->serialNo, // 商户API证书序列号
 			'privateKey' => $merchantPrivateKeyInstance,
 			'certs'      => [
-				$platformCertificateSerial => $platformPublicKeyInstance
+				//$platformCertificateSerial => $platformPublicKeyInstance, //【微信证书模式】
+				$platformPublicKeyId => $platformPublicKeyInstance // 【微信公钥模式】
 			]
 		]);
 
