@@ -1,7 +1,6 @@
 <template>
 	<myhead :exclude="['category', 'imagead']"></myhead>
 	<div class="main bgf">
-		<div class="banner" :style="{ 'background-image': store.pcbanner ? 'url(' + store.pcbanner + ')' : '' }"></div>
 		<div class="menus">
 			<ul class="uni-flex uni-row w f-white">
 				<li @click="redirect('/store/index/' + goods.store_id)" class="pointer pl20 pr20"><span
