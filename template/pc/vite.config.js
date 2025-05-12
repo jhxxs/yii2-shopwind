@@ -27,5 +27,15 @@ export default defineConfig({
   },
   envDir: "env",
   //transpileDependencies: [/node_modules/]
-  base: process.env.NODE_ENV === 'production' ? "/pc/" : "/"
+  base: process.env.NODE_ENV === 'production' ? "/pc/" : "/",
+  server: {
+    port: 8080,
+    open: true,
+    proxy: {
+      '/api': {
+        target: 'http://192.168.1.41/',
+        changeOrigin: true,
+      } 
+    }
+  }
 })
