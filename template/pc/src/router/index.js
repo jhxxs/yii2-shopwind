@@ -10,7 +10,7 @@
  * @author mosir
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 /**
  * 登录后可访问控制：https://router.vuejs.org/zh/guide/advanced/meta.html
@@ -20,10 +20,16 @@ const router = createRouter({
 	history: createWebHistory(''), // 编译部署到线上服务器（public/pc目录下）需要
 	routes: [{
 		path: '/',
-		component: () => import('@/pages/index/index.vue')
+		component: () => import('@/pages/index/index.vue'),
+		meta: {
+			title: '商城首页'
+		}
 	}, {
 		path: '/index/index',
-		component: () => import('@/pages/index/index.vue')
+		component: () => import('@/pages/index/index.vue'),
+		meta: {
+			title: '商城首页'
+		}
 	}, {
 		path: '/my/index',
 		component: () => import('@/pages/my/index/index.vue'),
@@ -596,6 +602,6 @@ const router = createRouter({
 			title: '自定义页'
 		}
 	}]
-})
+});
 
-export default router
+export default router;
