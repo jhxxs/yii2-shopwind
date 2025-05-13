@@ -36,7 +36,7 @@
 						<label v-else @click="form.logintype = 'password'" class="pointer">账号密码登录</label>
 					</p>
 				</el-form-item>
-				<el-form-item label=" " :label-width="100" class="partner flex-middle mb5">
+				<el-form-item v-if="false" label=" " :label-width="100" class="partner flex-middle mb5">
 					<p class="w-full center">
 						<i @click="connect('qq')" class="iconfont icon-QQ-circle-fill f-blue ml10 mr10 pointer qq" />
 						<i @click="connect('weixin')" class="iconfont icon-weixin1 f-green ml10 mr10 pointer" />
