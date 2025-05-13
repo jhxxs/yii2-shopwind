@@ -44,20 +44,26 @@
 							<swiper-slide :class="[myswiper.selected == index ? 'selected' : '']"
 								v-for="(item, index) in goods.images"><img :src="item" /></swiper-slide>
 						</swiper>
-						<div class="uni-flex uni-row pd10 f-12 f-gray mt20 flex-center">
-							<p @click="preview = true" class="vertical-middle mr20 pointer">
+						<div class="uni-flex uni-row pd10 f-12 f-gray mt20 flex-center" style="justify-content:space-between;">
+							<p @click="preview = true" class="vertical-middle pointer">
 								<el-icon :size="14">
 									<Search />
 								</el-icon><span class="ml5">查看大图</span>
 							</p>
 							<p @click="collect('goods')"
-								:class="['vertical-middle ml20 mr20 pointer', goods.becollected ? 'f-red' : '']">
+								:class="['vertical-middle pointer', goods.becollected ? 'f-red' : '']">
 								<el-icon :size="14">
 									<Star />
 								</el-icon><span class="ml5">加入收藏</span>
 							</p>
 							<p @click="redirect('/webim/chat/' + goods.store_id + '/' + goods.store_id)"
-								class="vertical-middle ml20 pointer">
+								class="vertical-middle pointer">
+								<el-icon :size="14">
+									<Service />
+								</el-icon><span class="ml5">联系客服</span>
+							</p>
+							<p @click="redirect('/webim/chat/' + goods.store_id + '/' + goods.store_id)"
+								class="vertical-middle pointer">
 								<el-icon :size="14">
 									<Service />
 								</el-icon><span class="ml5">联系客服</span>
