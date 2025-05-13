@@ -10,7 +10,7 @@
             </div>
             <div class="info f-gray center f-13 pb10">
                 <span v-if="options.copyright">{{ options.copyright }}</span>
-                <span v-else>Copyright © 2015-{{ new Date().getFullYear() }} SHOPWIND.NET 版权所有</span>
+                <span v-else>Copyright © 2015-{{ new Date().getFullYear() }} 万佳安智能科技有限公司 版权所有</span>
                 <span v-if="site.icp" class="ml10">网站备案号：
                     <a class="rlink f-gray" href="https://beian.miit.gov.cn" target="_blank">{{ site.icp }}</a>
                 </span>
