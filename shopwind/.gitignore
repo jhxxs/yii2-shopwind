@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-assets/*
-!assets/.gitignore
-=======
 # yii console commands
 /yii
 /yii_test
@@ -48,4 +44,3 @@ phpunit.phar
 /.logs
 /.git
 
->>>>>>> 1e791e0... v
