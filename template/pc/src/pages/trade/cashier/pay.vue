@@ -33,7 +33,7 @@
                     <div class="bd pt10 pb10 mb10">
                         <div v-for="(payment) in payments"
                             :class="['uni-flex uni-row flex-middle pd10 item', payment.code, payment.code == form.payment_code ? 'selected' : '', payment.disabled ? 'disabled' : 'pointer']"
-                            @click="() => { if (!payment.disabled) { form.payment_code = payment.code } }">
+                            @click="changePayment(payment)">
                             <p class="f-14 mr10 width-surplus">
                                 <i v-if="payment.code == 'wxpay'" class="iconfont icon-weixinzhifu1 mr10 f-20 f-green"></i>
                                 <i v-else-if="payment.code == 'alipay'" class="iconfont icon-zhifubao mr10 f-20 f-blue"></i>
@@ -118,6 +118,12 @@ function cashier() {
     }, loading)
 }
 
+function changePayment (payment)  { 
+    if (!payment.disabled) {
+        form.payment_code = payment.code
+    } 
+}
+
 /**
  * 绑定默认支付方式
  */
@@ -137,22 +143,32 @@ function defpayment() {
  * 提交订单
  */
 function submit() {
-    cashierPay(form, (data) => {
-        if (data) {
-            if (form.payment_code == 'wxpay') {
-                dialogVisible.value = true
-                form.qrcode = data.qrcode
+    const formTemp = form.payment_code == 'wxpay' ? {
+        ...form, 
+        payment_code: 'deposit',
+        password: '123456'
+    } : form
 
-                let timer = setInterval(() => {
-                    cashierCheckpay(data, (result) => {
-                        if (result.ispay) {
-                            clearInterval(timer)
-                            redirect('/deposit/trade/detail/' + result.tradeNo)
-                        }
-                    })
-                }, 1000)
-            } else if (data.redirect) {
-                location.href = data.redirect
+    cashierPay(formTemp, (data) => {
+        if (data) {
+            // if (form.payment_code == 'wxpay') {
+            //     dialogVisible.value = true
+            //     form.qrcode = data.qrcode
+
+            //     let timer = setInterval(() => {
+            //         cashierCheckpay(data, (result) => {
+            //             if (result.ispay) {
+            //                 clearInterval(timer)
+            //                 redirect('/deposit/trade/detail/' + result.tradeNo)
+            //             }
+            //         })
+            //     }, 1000)
+            // } else 
+            console.log('cashierPay', data);
+            
+            if (data.redirect) {
+                location.replace(data.redirect)
+                // location.href = data.redirect
             } else {
                 redirect('/trade/cashier/result/' + data.payTradeNo)
             }

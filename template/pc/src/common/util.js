@@ -10,7 +10,12 @@
  * @author mosir
  */
 
-import router from '@/router'
+import _router from '@/router'
+
+/**
+ * @type {import('vue-router').Router}
+ */
+const router = _router
 
 /**
  * 获取页面域名
@@ -164,7 +169,9 @@ export function redirect(url, status = '', title = '', content = '') {
 	if (url.substring(0, 1) != '/') {
 		url = '/' + url
 	}
-	router.push(url)
+	console.log('redirect', url);
+	
+	router.replace(url)
 }
 
 /**
