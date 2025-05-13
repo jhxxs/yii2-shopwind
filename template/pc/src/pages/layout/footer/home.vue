@@ -1,7 +1,7 @@
 <template>
 	<blocks :page="page" :footer="true" :exclude="exclude"></blocks>
 	<el-backtop :right="10" :bottom="100" :visibility-height="500" />
-	<chat></chat>
+	<chat />
 </template>
 
 <script setup>

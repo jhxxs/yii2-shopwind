@@ -28,6 +28,10 @@ export default defineConfig({
   envDir: "env",
   //transpileDependencies: [/node_modules/]
   base: process.env.NODE_ENV === 'production' ? "/pc/" : "/",
+  build: {
+    outDir: path.resolve(__dirname, '../../shopwind/public/pc'),
+    emptyOutDir: true,
+  },
   server: {
     port: 8080,
     open: true,
