@@ -1,26 +1,15 @@
 <template>
 	<blocks :page="page" :footer="true" :exclude="exclude"></blocks>
-
-
-	<el-popover :virtual-ref="buttonRef" trigger="hover" virtual-triggering placement="top" width="300px">
-		<img src="@/assets/images/wechat_qrcopde.png" style="width: 300px;" />
-	</el-popover>
-
-	<el-backtop :right="10" :bottom="200" :visibility-height="0" class="wechat-backtop">
-
-		<div class="wechat-icon-wrapper" @click.stop="openWechatQRcode" ref="buttonRef">
-			<img src="@/assets/images/wechat_en.png" />
-		</div>
-	</el-backtop>
-
-	<el-backtop :right="10" :bottom="100" :visibility-height="500" />
+	<wechat />
 	<chat />
+	<el-backtop :right="10" :bottom="100" :visibility-height="500" />
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import blocks from '@/components/datagrid/blocks.vue';
 import chat from '@/components/datagrid/chat.vue';
+import wechat from '@/components/datagrid/wechat.vue';
 
 const props = defineProps({
 	page: {
@@ -34,12 +23,6 @@ const props = defineProps({
 		}
 	}
 });
-
-const buttonRef = ref()
-
-function openWechatQRcode() {
-
-}
 </script>
 <style lang="scss">
 .wechat-backtop {

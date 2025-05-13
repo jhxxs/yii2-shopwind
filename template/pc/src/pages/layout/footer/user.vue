@@ -1,12 +1,14 @@
 <template>
 	<blocks :page="page" :footer="true" :exclude="exclude"></blocks>
+	<wechat />
+	<chat />
 	<el-backtop :right="10" :bottom="100" :visibility-height="50" />
-	<chat></chat>
 </template>
 
 <script setup>
 import blocks from '@/components/datagrid/blocks.vue'
 import chat from '@/components/datagrid/chat.vue'
+import wechat from '@/components/datagrid/wechat.vue'
 
 const props = defineProps({
 	page: {
