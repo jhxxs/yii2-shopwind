@@ -1,6 +1,6 @@
 <template>
 
-	<el-backtop v-if="route.path.indexOf('/webim/chat') < 0" @click="redirect('/webim/chat' + (message.lastid > 0 ? '/' + message.lastid : ''))" :right="10"
+	<el-backtop v-if="route.path.indexOf('/webim/chat') < 0" @click="$router.push('/webim/chat' + (message.lastid > 0 ? '/' + message.lastid : ''))" :right="10"
 		:bottom="150" :visibility-height="0">
 		<div class="relative">
 			<el-icon>
