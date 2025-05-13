@@ -7,16 +7,20 @@
 						class="pl10 pr10">店铺首页</span></li>
 				<li @click="redirect('/store/list/' + goods.store_id)" class="pointer pl20 pr20"><span
 						class="pl10 pr10">所有商品</span></li>
-				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=sales|desc')" class="pointer pl20 pr20">
+				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=sales|desc')"
+					class="pointer pl20 pr20">
 					<span class="pl10 pr10">镇店之宝</span>
 				</li>
-				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=add_time|desc')" class="pointer pl20 pr20">
+				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=add_time|desc')"
+					class="pointer pl20 pr20">
 					<span class="pl10 pr10">新款上市</span>
 				</li>
-				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=views|desc')" class="pointer pl20 pr20">
+				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=views|desc')"
+					class="pointer pl20 pr20">
 					<span class="pl10 pr10">人气热款</span>
 				</li>
-				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=comments|desc')" class="pointer pl20 pr20">
+				<li @click="redirect('/store/list/' + goods.store_id + '?orderby=comments|desc')"
+					class="pointer pl20 pr20">
 					<span class="pl10 pr10">好评返购</span>
 				</li>
 				<li class="selected pl20 pr20"><span class="pl10 pr10">商品详情</span> </li>
@@ -44,7 +48,8 @@
 							<swiper-slide :class="[myswiper.selected == index ? 'selected' : '']"
 								v-for="(item, index) in goods.images"><img :src="item" /></swiper-slide>
 						</swiper>
-						<div class="uni-flex uni-row pd10 f-12 f-gray mt20 flex-center" style="justify-content:space-between;">
+						<div class="uni-flex uni-row pd10 f-12 f-gray mt20 flex-center"
+							style="justify-content:space-between;">
 							<p @click="preview = true" class="vertical-middle pointer">
 								<el-icon :size="14">
 									<Search />
@@ -55,12 +60,6 @@
 								<el-icon :size="14">
 									<Star />
 								</el-icon><span class="ml5">加入收藏</span>
-							</p>
-							<p @click="redirect('/webim/chat/' + goods.store_id + '/' + goods.store_id)"
-								class="vertical-middle pointer">
-								<el-icon :size="14">
-									<Service />
-								</el-icon><span class="ml5">联系客服</span>
 							</p>
 							<p @click="redirect('/webim/chat/' + goods.store_id + '/' + goods.store_id)"
 								class="vertical-middle pointer">
@@ -86,7 +85,8 @@
 									<Clock />
 								</el-icon>
 								<span class="ml5">还剩</span>
-								<countdown :second="goods.promotion.timestamp" :showColon="false" splitorColor="#ffffff">
+								<countdown :second="goods.promotion.timestamp" :showColon="false"
+									splitorColor="#ffffff">
 								</countdown>
 							</div>
 						</div>
@@ -163,7 +163,8 @@
 								<dd class="uni-flex uni-row flex-wrap">
 									<p v-on:click="changeSpec(item, fields.thefield.value, fields.field.value)"
 										:class="['bgf mr10 mb10 item pointer', specs.disabled[item[fields.thefield.value]] ? 'disabled' : '', specs.selected[fields.thefield.value] == item[fields.thefield.value] ? 'selected' : '']"
-										v-for="(item, index) in Object.values(specs[fields.thefield.value])" :key="index">
+										v-for="(item, index) in Object.values(specs[fields.thefield.value])"
+										:key="index">
 										<span
 											:class="['pl10 pr10', specs.destroy[item[fields.thefield.value]] ? 'destroy' : '']">
 											{{ item[fields.thefield.value] }}
@@ -269,144 +270,144 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
-import { currency, isEmpty, redirect } from '@/common/util.js'
-import { goodsRead, goodsImages, goodsSpecs, goodsAttributes, goodsComments } from '@/api/goods.js'
-import { storeRead } from '@/api/store.js'
-import { storeFullprefer } from '@/api/store.js'
-import { collectGoods } from '@/api/favorite.js'
-import { cartAdd } from '@/api/cart.js'
-import { templateList } from '@/api/delivery.js'
+import { ref, reactive, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import { currency, isEmpty, redirect } from '@/common/util.js';
+import { goodsRead, goodsImages, goodsSpecs, goodsAttributes, goodsComments } from '@/api/goods.js';
+import { storeRead } from '@/api/store.js';
+import { storeFullprefer } from '@/api/store.js';
+import { collectGoods } from '@/api/favorite.js';
+import { cartAdd } from '@/api/cart.js';
+import { templateList } from '@/api/delivery.js';
 
-import { Navigation } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import 'swiper/css'
-import 'swiper/css/navigation'
+import { Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
-import countdown from '@/components/datagrid/countdown.vue'
-import myhead from '@/pages/layout/header/home.vue'
-import myfoot from '@/pages/layout/footer/home.vue'
+import countdown from '@/components/datagrid/countdown.vue';
+import myhead from '@/pages/layout/header/home.vue';
+import myfoot from '@/pages/layout/footer/home.vue';
 
-const route = useRoute()
-const loading = ref(true)
-const store = ref({})
-const goods = reactive({ integral: {}, images: [], attributes: [], fullprefer: {} })
-const specs = reactive({ list: {}, spec_name_1: '', spec_name_2: '', spec_1: {}, spec_2: {}, selected: {}, disabled: {}, destroy: {} })
-const fields = reactive({ field: { name: 'spec_name_1', value: 'spec_1' }, thefield: { name: 'spec_name_2', value: 'spec_2' } })
-const selected = ref({})
-const cart = reactive({ quantity: 1, spec_id: 0 })
-const historys = ref([])
-const modules = ref([Navigation])
-const preview = ref(false)
-const closePreview = () => { preview.value = false }
-const myswiper = reactive({ selected: 0 })
-const comments = reactive({ list: [], page_size: 10 })
-const shipping = reactive({})
+const route = useRoute();
+const loading = ref(true);
+const store = ref({});
+const goods = reactive({ integral: {}, images: [], attributes: [], fullprefer: {} });
+const specs = reactive({ list: {}, spec_name_1: '', spec_name_2: '', spec_1: {}, spec_2: {}, selected: {}, disabled: {}, destroy: {} });
+const fields = reactive({ field: { name: 'spec_name_1', value: 'spec_1' }, thefield: { name: 'spec_name_2', value: 'spec_2' } });
+const selected = ref({});
+const cart = reactive({ quantity: 1, spec_id: 0 });
+const historys = ref([]);
+const modules = ref([Navigation]);
+const preview = ref(false);
+const closePreview = () => { preview.value = false; };
+const myswiper = reactive({ selected: 0 });
+const comments = reactive({ list: [], page_size: 10 });
+const shipping = reactive({});
 
 onMounted(() => {
 	goodsRead({ goods_id: route.params.id, querydesc: true, if_show: 1 }, (data) => {
 		if (data) {
-			Object.assign(goods, data)
+			Object.assign(goods, data);
 
 			storeRead({ store_id: data.store_id }, (res) => {
-				store.value = res
-			})
+				store.value = res;
+			});
 			goodsImages({ goods_id: route.params.id }, (res) => {
 				res.list.forEach((item) => {
-					goods.images.push(item.thumbnail)
-				})
-			})
+					goods.images.push(item.thumbnail);
+				});
+			});
 			goodsSpecs({ goods_id: route.params.id }, (res) => {
 
 				// 获取不重复的规格数组
-				specs[fields.field.value] = uniqueSpecs(res.list, fields.field.value)
+				specs[fields.field.value] = uniqueSpecs(res.list, fields.field.value);
 
 				// 全量规格数组
-				specs.list = {}
+				specs.list = {};
 				res.list.forEach((item, index) => {
 					if (index == 0) {
-						specs[fields.field.name] = item[fields.field.name]
-						specs[fields.thefield.name] = item[fields.thefield.name]
+						specs[fields.field.name] = item[fields.field.name];
+						specs[fields.thefield.name] = item[fields.thefield.name];
 
-						Object.assign(goods, item)
+						Object.assign(goods, item);
 					}
-					specs.list[item.spec_id] = item
-				})
+					specs.list[item.spec_id] = item;
+				});
 
 				for (let index in specs.list) {
-					let item = specs.list[index]
+					let item = specs.list[index];
 					if (item.stock > 0) {
-						changeSpec(item, fields.field.value, fields.thefield.value, true)
-						break
+						changeSpec(item, fields.field.value, fields.thefield.value, true);
+						break;
 					}
 				}
-			})
+			});
 
 			storeFullprefer({ store_id: data.store_id }, (res) => {
-				goods.fullprefer = res
-			})
+				goods.fullprefer = res;
+			});
 
 			goodsAttributes({ goods_id: data.goods_id }, (res) => {
-				goods.attributes = res.list
-			})
+				goods.attributes = res.list;
+			});
 
 			// 实物商品才需要配送
 			if (goods.type == 'material') {
 				templateList({ store_id: data.store_id }, (data) => {
 					if (data.list.length > 0) {
-						let express = data.list[0].area_fee.express
-						shipping.name = express.name
-						shipping.freight = express.default_fee.start_fees
+						let express = data.list[0].area_fee.express;
+						shipping.name = express.name;
+						shipping.freight = express.default_fee.start_fees;
 					}
-				})
+				});
 			}
 
-			getcomments()
-			sethistorys()
+			getcomments();
+			sethistorys();
 		}
 
-	}, loading, true)
+	}, loading, true);
 
 
-})
+});
 
 const collect = (target) => {
 	if (target == 'goods') {
 		collectGoods({ goods_id: goods.goods_id }, (data) => {
-			goods.becollected = true
-			ElMessage.success('收藏成功')
-		})
+			goods.becollected = true;
+			ElMessage.success('收藏成功');
+		});
 	}
-}
+};
 
 const slideClick = (swiper, event) => {
-	myswiper.selected = swiper.clickedIndex
+	myswiper.selected = swiper.clickedIndex;
 	if (!isEmpty(goods.images[myswiper.selected])) {
-		goods.default_image = goods.images[myswiper.selected]
+		goods.default_image = goods.images[myswiper.selected];
 	}
-}
+};
 
 const addCart = (target) => {
 	cartAdd(Object.assign(cart, { spec_id: selected.value.spec_id, selected: (target == 'buy') ? 1 : 0 }), (data) => {
 		if (target == 'buy') {
-			return redirect('/trade/order/normal')
+			return redirect('/trade/order/normal');
 		}
-		ElMessage.success('已加入购物车')
-	})
-}
+		ElMessage.success('已加入购物车');
+	});
+};
 
 const loadcomments = () => {
-	comments.page_size += 2
-	getcomments()
-}
+	comments.page_size += 2;
+	getcomments();
+};
 
 function getcomments() {
 	goodsComments({ goods_id: goods.goods_id, page_size: comments.page_size }, (data) => {
-		comments.list = data.list
-		goods.comments = data.statistics.total
-	})
+		comments.list = data.list;
+		goods.comments = data.statistics.total;
+	});
 }
 
 /**
@@ -414,16 +415,16 @@ function getcomments() {
  */
 function sethistorys() {
 	//localStorage.clear()
-	historys.value = JSON.parse(localStorage.getItem('historys')) || []
+	historys.value = JSON.parse(localStorage.getItem('historys')) || [];
 	for (let i = 0; i < historys.value.length; i++) {
 		if ((historys.value[i].goods_id == goods.goods_id) || (i > 8)) {
-			historys.value.splice(i, 1)
+			historys.value.splice(i, 1);
 		}
 	}
 
-	if (!Array.isArray(historys.value)) historys.value = []
-	historys.value.unshift({ goods_id: goods.goods_id, goods_name: goods.goods_name, goods_image: goods.default_image, store_id: goods.store_id, price: goods.price })
-	localStorage.setItem('historys', JSON.stringify(historys.value))
+	if (!Array.isArray(historys.value)) historys.value = [];
+	historys.value.unshift({ goods_id: goods.goods_id, goods_name: goods.goods_name, goods_image: goods.default_image, store_id: goods.store_id, price: goods.price });
+	localStorage.setItem('historys', JSON.stringify(historys.value));
 }
 
 /**
@@ -436,71 +437,71 @@ function sethistorys() {
 function changeSpec(current, field, thefield, autoclick) {
 
 	if (specs.disabled[current[field]]) {
-		return false
+		return false;
 	}
 
 	// 将当前点击的规格设置为选中
-	specs.selected[field] = current[field]
+	specs.selected[field] = current[field];
 
 	// 选中后，加载第二列的数据
-	secondColumn(field, thefield)
+	secondColumn(field, thefield);
 
 	// 不可用的规格暂存数组
-	specs.disabled = {}
-	specs.destroy = {}
+	specs.disabled = {};
+	specs.destroy = {};
 
 	// 如果只有一个规格
 	if (!current[thefield]) {
 		for (let index in specs[field]) {
-			let item = specs[field][index]
+			let item = specs[field][index];
 			if (item.stock == 0) {
-				specs.disabled[item[field]] = true
+				specs.disabled[item[field]] = true;
 			}
 		}
-		selected.value = current
+		selected.value = current;
 	}
 	//  如果有二个规格
 	else {
 
 		// 根据一个规格，筛选另外一个规格的属性列表
-		let object = {}
+		let object = {};
 		for (let index in specs.list) {
-			let item = specs.list[index]
+			let item = specs.list[index];
 			if (item[field] == current[field]) {
-				object[item[thefield]] = item
+				object[item[thefield]] = item;
 			}
 		}
 
 		// 把不可用的第二规格做处理
 		for (let index in specs[thefield]) {
-			let item = specs[thefield][index]
+			let item = specs[thefield][index];
 			if (!object[item[thefield]] || object[item[thefield]].stock < 1) {
-				specs.disabled[item[thefield]] = true
-				specs.destroy[item[thefield]] = !object[item[thefield]] ? true : false
+				specs.disabled[item[thefield]] = true;
+				specs.destroy[item[thefield]] = !object[item[thefield]] ? true : false;
 
 				// 如果上次选中的规格属于不可用的，则删除已选中
 				if (item[thefield] == specs.selected[thefield]) {
-					delete (specs.selected[thefield])
+					delete (specs.selected[thefield]);
 				}
 			}
 		}
 
-		selected.value = {}
+		selected.value = {};
 		for (let index in specs.list) {
-			let item = specs.list[index]
+			let item = specs.list[index];
 			if (specs.selected[field] == item[field] && specs.selected[thefield] == item[
 				thefield]) {
-				selected.value = item
-				break
+				selected.value = item;
+				break;
 			}
 		}
 	}
 
-	Object.assign(goods, selected.value)
+	Object.assign(goods, selected.value);
 
 	if (!autoclick && current.image) {
-		myswiper.selected = -1
-		goods.default_image = current.image
+		myswiper.selected = -1;
+		goods.default_image = current.image;
 	}
 }
 
@@ -510,14 +511,14 @@ function changeSpec(current, field, thefield, autoclick) {
  * @param {Object} field
  */
 function uniqueSpecs(list, field) {
-	let object = {}
+	let object = {};
 	for (let index in list) {
-		let item = list[index]
+		let item = list[index];
 		if (isEmpty(object[item[field]])) {
-			object[item[field]] = item
+			object[item[field]] = item;
 		}
 	}
-	return object
+	return object;
 }
 /**
  * 点击其中一列，获取另一列的数据
@@ -525,14 +526,14 @@ function uniqueSpecs(list, field) {
  * @param {Object} thefield
  */
 function secondColumn(field, thefield) {
-	let list = []
+	let list = [];
 	for (let index in specs.list) {
-		let item = specs.list[index]
+		let item = specs.list[index];
 		if (item[field] == specs.selected[field]) {
-			list[item[thefield]] = item
+			list[item[thefield]] = item;
 		}
 	}
-	Object.assign(specs[thefield], list)
+	Object.assign(specs[thefield], list);
 }
 </script>
 
